@@ -1,0 +1,12 @@
+node_modules
+.DS_Store
+dist
+dist-ssr
+build
+*.local
+node_modules/*
+public/*
+coverage
+src/graphql/generated/*
+.eslintcache
+./lint-staged.config.cjs
