@@ -6,6 +6,7 @@ import type { IResponseApi } from '@/configs/axios';
 import type { ITokenStorage } from '@/libs/helpers';
 import type { MutationConfig } from '@/libs/react-query';
 
+import { DEFAULT_MESSAGE } from '@/configs';
 import { clearStoredAuth, notify, setStoredAuth } from '@/libs/helpers';
 import { makeRequest } from '@/libs/react-query';
 import { APP_PATHS } from '@/routes/paths/app.paths';
@@ -41,7 +42,7 @@ export function useLoginMutation({ configs }: IAuthLoginMutationProps = {}) {
     },
     onSuccess: (data) => {
       if (data.statusCode !== 200) {
-        notify({ type: 'error', message: 'Something went wrong!' });
+        notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
         return;
       }
       const result = data?.data;
