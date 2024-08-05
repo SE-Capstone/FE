@@ -64,3 +64,9 @@ export const ROLES_LABEL: Record<Exclude<RolesEnum, RolesEnum.User>, string> = {
   [RolesEnum.Staff]: `Nhân viên hệ thống BGP - ${RolesEnum.Staff}`,
   [RolesEnum.Agency]: `Chủ cửa hàng - ${RolesEnum.Agency}`,
 };
+
+export const DEFAULT_MESSAGE = {
+  SUCCESS: 'Thành công',
+  ERROR: 'Lỗi',
+  SOMETHING_WRONG: 'Có lỗi xảy ra, vui lòng thử lại',
+};
