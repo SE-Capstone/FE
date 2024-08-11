@@ -18,7 +18,7 @@ import { API_URL, TIMEOUT } from '@/configs';
 
 logger.info('API_URL: ', API_URL);
 
-export const baseURL = `${API_URL}api/v1/`;
+export const baseURL = `${API_URL}/api/`;
 const accessToken = getAccessToken();
 
 export const axiosClient = axios.create({

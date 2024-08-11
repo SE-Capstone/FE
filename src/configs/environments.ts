@@ -9,7 +9,7 @@ export const isDevelopment = MODE === 'development';
 export const isClient = typeof window !== 'undefined';
 
 // env
-export const API_URL = (import.meta.env.VITE_API_ENDPOINT as string) || '/api/v1';
+export const API_URL = import.meta.env.VITE_API_ENDPOINT as string;
 
 export const TIMEOUT = import.meta.env.VITE_API_TIMEOUT as number;
 

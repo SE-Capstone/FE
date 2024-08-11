@@ -1,16 +1,5 @@
-import { LoginOtpWidget, LoginPhoneNumberWidget } from '../widgets';
-
-import { useIsOpen } from '@/libs/hooks';
+import { LoginWidget } from '../widgets';
 
 export function LoginPage() {
-  const { isOpen, open, close } = useIsOpen();
-  return (
-    <>
-      {isOpen ? (
-        <LoginOtpWidget onShowPhone={close} />
-      ) : (
-        <LoginPhoneNumberWidget onShowOTP={open} />
-      )}
-    </>
-  );
+  return <LoginWidget />;
 }

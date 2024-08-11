@@ -14,7 +14,8 @@ import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 
 interface IAuthLoginRequest {
   body: {
-    phone: string;
+    email: string;
+    password: string;
   };
 }
 
@@ -52,6 +53,10 @@ export function useLoginMutation({ configs }: IAuthLoginMutationProps = {}) {
         refreshToken: result.refreshToken,
       });
 
+      notify({
+        type: 'success',
+        message: `Đăng nhập thành công`,
+      });
       navigate(APP_PATHS.HOME);
     },
 

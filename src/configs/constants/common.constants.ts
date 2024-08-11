@@ -67,6 +67,5 @@ export const ROLES_LABEL: Record<Exclude<RolesEnum, RolesEnum.User>, string> = {
 
 export const DEFAULT_MESSAGE = {
   SUCCESS: 'Thành công',
-  ERROR: 'Lỗi',
   SOMETHING_WRONG: 'Có lỗi xảy ra, vui lòng thử lại',
 };
