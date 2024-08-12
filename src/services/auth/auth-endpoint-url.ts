@@ -3,7 +3,7 @@ const ENDPOINT_QUERIES = {
 } as const;
 
 const ENDPOINT_MUTATIONS = {
-  signIn: 'login',
+  signIn: 'account/auth',
   signUp: 'signup',
   resetPassword: 'reset-password',
   logout: 'logout',

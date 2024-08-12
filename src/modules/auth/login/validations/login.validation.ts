@@ -1,26 +1,20 @@
 import { z } from 'zod';
 
-import { regexPhone } from '@/validations';
+import { regexEmail } from '@/validations';
 
-export const loginPhoneNumberValidationSchema = z.object({
-  phoneNumber: z
+export const loginValidationSchema = z.object({
+  email: z
     .string({
-      invalid_type_error: 'Số điện thoại không được để trống',
-      required_error: 'Số điện thoại không được để trống',
+      invalid_type_error: 'Email không được để trống',
+      required_error: 'Email không được để trống',
     })
-    .regex(regexPhone, `Số điện thoại không hợp lệ`),
+    .regex(regexEmail, `Email không hợp lệ`),
+  password: z
+    .string({
+      invalid_type_error: 'Mật khẩu không được để trống',
+      required_error: 'Mật khẩu không được để trống',
+    })
+    .min(3, 'Mật khẩu phải có ít nhất 3 ký tự'),
 });
 
-export type LoginPhoneNumberValidationSchemaType = z.infer<typeof loginPhoneNumberValidationSchema>;
-
-export const loginOtpValidationSchema = z.object({
-  otpCode: z
-    .string({
-      invalid_type_error: 'Otp không được để trống',
-      required_error: 'Otp không được để trống',
-    })
-    .min(6, 'Otp ít nhất 6 ký tự')
-    .max(6, 'Otp ít nhất 6 ký tự'),
-});
-
-export type LoginOtpValidationSchemaType = z.infer<typeof loginOtpValidationSchema>;
+export type LoginValidationSchemaType = z.infer<typeof loginValidationSchema>;

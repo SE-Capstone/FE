@@ -120,7 +120,9 @@ export const CustomInput = forwardRef<CustomInputProps, 'input'>((props, ref) =>
         )}
         {type === 'password' && (
           <InputRightElement h="full" cursor="pointer">
-            <Icon onClick={handleClick}>{show ? <AiFillEyeInvisible /> : <AiFillEye />}</Icon>
+            <Icon style={{ width: '3em', height: '2em', alignSelf: 'end' }} onClick={handleClick}>
+              {show ? <AiFillEyeInvisible /> : <AiFillEye />}
+            </Icon>
           </InputRightElement>
         )}
 
