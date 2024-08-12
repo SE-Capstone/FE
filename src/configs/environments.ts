@@ -18,3 +18,7 @@ export const NODE_ENV = import.meta.env.VITE_NODE_ENV as string;
 export const PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL as string;
 
 export const STORAGE_URL = import.meta.env.VITE_STORAGE_URL as string;
+
+export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;
+
+export const GOOGLE_SECRET_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;

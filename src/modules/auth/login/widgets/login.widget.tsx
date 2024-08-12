@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Button, Icon as ChakraIcon, Stack } from '@chakra-ui/react';
+import { GoogleLogin } from '@react-oauth/google';
 import { MdLockOpen } from 'react-icons/md';
 
 import { useLoginMutation } from '../../apis/login.api';
@@ -52,7 +53,6 @@ export function LoginWidget() {
             isRequired
             placeholder="Nhập email"
             registration={register('email')}
-            className="mb-2"
             error={errors.email}
           />
           <CustomInput
@@ -69,8 +69,15 @@ export function LoginWidget() {
             </Checkbox>
             <CustomLink to="/forgot-password">Forgot password?</CustomLink>
           </HStack> */}
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              console.log(credentialResponse);
+            }}
+            onError={() => {
+              console.log('Login Failed');
+            }}
+          />
         </Stack>
-
         <Button
           isLoading={loading || loadingMutation}
           isDisabled={loading || loadingMutation}
