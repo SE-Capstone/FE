@@ -4,11 +4,17 @@ export enum GenderEnum {
   other = 'other',
 }
 
+export enum UserStatusEnum {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
 export enum RolesEnum {
-  User = 'USER',
   Admin = 'ADMIN',
-  Agency = 'AGENCY',
-  Staff = 'STAFF',
+  HR = 'HR',
+  Accountant = 'ACCOUNTANT',
+  Employee = 'EMPLOYEE',
+  TeamLead = 'TEAM_LEAD',
 }
 
 export const GENDER_VALUES: Record<keyof typeof GenderEnum, string> = {

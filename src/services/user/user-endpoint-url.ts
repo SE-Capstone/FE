@@ -1,7 +1,7 @@
 import type { StringNumeric } from '@/types';
 
 const ENDPOINT_QUERIES = {
-  currentUserInfo: 'current-user-info',
+  currentUserInfo: 'user/profile',
 } as const;
 
 const ENDPOINT_MUTATIONS = {

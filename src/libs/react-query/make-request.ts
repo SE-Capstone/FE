@@ -19,7 +19,6 @@ import { API_URL, TIMEOUT } from '@/configs';
 logger.info('API_URL: ', API_URL);
 
 export const baseURL = `${API_URL}/api/`;
-const accessToken = getAccessToken();
 
 export const axiosClient = axios.create({
   baseURL,
@@ -106,6 +105,7 @@ interface IMakeRequestOptions<TDataReq> extends Omit<AxiosRequestConfig<TDataReq
 export const makeRequest = async <TDataReq = any, TDataRes = any, TDataErr = IResponseErrorApi>(
   options: IMakeRequestOptions<TDataReq>
 ) => {
+  const accessToken = await getAccessToken();
   // axiosClient.defaults.withCredentials = true;  //if using cookies
   const { isFormData = false, ...axiosOptions } = options;
 
