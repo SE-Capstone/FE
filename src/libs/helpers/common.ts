@@ -441,18 +441,12 @@ export function isValidTimestamp(timestamp: TimeStampType) {
   return isNumeric(newTimestamp as unknown as string);
 }
 
-const ENDPOINT_STORAGE = {
-  image: '/image/upload',
-  video: '/video/upload',
-} as const;
-
 /**
  * Returns the url for a given file in the storage
  * @param fileName the name of the file
- * @param type the type of the file
  * @returns the url of the file
  */
-export function getStorageUrl(fileName: string, _type: keyof typeof ENDPOINT_STORAGE) {
+export function getStorageUrl(fileName: string) {
   if (!fileName) return '';
 
   fileName = fileName.startsWith('/') ? fileName : `/${fileName}`;

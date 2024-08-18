@@ -20,12 +20,10 @@ export function useAuthentication() {
   const isLogged = !!user && !!accessToken;
 
   const isAdmin = isLogged && user?.role === RolesEnum.Admin;
-  const isStaff = isLogged && user?.role === RolesEnum.Staff;
-  const isAgency = isLogged && user?.role === RolesEnum.Agency;
 
-  const isAdminOrStaff = isAdmin || isStaff;
-
-  const role = (user?.role as RolesEnum) || '';
+  // TODO remove ADMIN after BE role is added
+  const role = (user?.role as RolesEnum) || 'ADMIN';
+  // const role = (user?.role as RolesEnum) || '';
 
   const currentUserId = user?.id || 0;
 
@@ -34,11 +32,8 @@ export function useAuthentication() {
   return {
     isLogged,
     isAdmin,
-    isStaff,
-    isAgency,
     role,
     currentUserId,
-    isAdminOrStaff,
     data: user,
     fullName: user?.fullName || '',
     currentUser,

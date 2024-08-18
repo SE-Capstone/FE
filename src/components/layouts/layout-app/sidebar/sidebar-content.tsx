@@ -36,7 +36,7 @@ interface SidebarContentProps extends BoxProps {
 }
 
 export const SidebarContent = ({ onClose, ...rest }: SidebarContentProps) => {
-  const { currentUserId, isAdminOrStaff } = useAuthentication();
+  const { currentUserId, isAdmin } = useAuthentication();
   const { handleLogout: handleLogoutMutation, isPending: logoutMutationResult } =
     useLogoutMutation();
 
@@ -60,12 +60,12 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarContentProps) => {
         //   icon: MdOutlineDashboard,
         //   path: APP_PATHS.HOME,
         // },
-        isAdminOrStaff && {
+        isAdmin && {
           name: 'Home',
           icon: MdOutlineHome,
           path: '/homes/products',
         },
-        isAdminOrStaff && {
+        isAdmin && {
           name: 'Người dùng',
           icon: MdOutlinePeopleAlt,
           path: undefined,
@@ -95,18 +95,18 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarContentProps) => {
           ],
         },
 
-        isAdminOrStaff && {
+        isAdmin && {
           name: 'Cấu hình',
           icon: MdOutlineSettings,
           path: '/configs',
         },
-        isAdminOrStaff && {
+        isAdmin && {
           name: 'Thông báo',
           icon: MdOutlineNotificationsNone,
           path: '/notifications',
         },
       ].filter(Boolean),
-    [isAdminOrStaff]
+    [isAdmin]
   );
 
   return (

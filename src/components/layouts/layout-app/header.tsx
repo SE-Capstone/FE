@@ -54,7 +54,7 @@ export function HeaderApp() {
             <Tooltip label="Đi đến trang cá nhân">
               <Avatar
                 name={fullName}
-                src={getStorageUrl(currentUser?.avatar as string, 'image')}
+                src={getStorageUrl(currentUser?.avatar as string)}
                 boxSize="12"
                 objectFit="cover"
                 showBorder

@@ -11,9 +11,9 @@ import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
 
 function query() {
-  return makeRequest<never, IResponseApi<{ currentUser: ICurrentUserResponse }>>({
+  return makeRequest<never, IResponseApi<ICurrentUserResponse>>({
     method: 'GET',
-    url: ALL_ENDPOINT_URL_STORE.auth.currentUserInfo,
+    url: ALL_ENDPOINT_URL_STORE.user.currentUserInfo,
   });
 }
 
@@ -25,16 +25,15 @@ export type UseGetCurrentUserOptionsType = {
 
 export function useGetCurrentUser({ configs }: UseGetCurrentUserOptionsType = {}) {
   const token = getAccessToken();
-
   const { data, ...queryInfo } = useQuery({
     enabled: !!token,
     placeholderData: (previousData) => previousData,
-    ...allQueryKeysStore.auth['current-user-info'],
+    ...allQueryKeysStore.user['user/profile'],
     queryFn: query,
     ...configs,
   });
 
-  const user = useMemo(() => data?.data?.currentUser, [data?.data.currentUser]);
+  const user = useMemo(() => data?.data, [data?.data]);
 
   return { user, ...queryInfo };
 }

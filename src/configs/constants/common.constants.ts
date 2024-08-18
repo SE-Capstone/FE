@@ -29,16 +29,24 @@ export const DEFAULT_PAGINATION = {
 
 export const ROLE_OPTIONS: Array<{ label: string; value: `${RolesEnum}` }> = [
   {
-    label: 'Người dùng',
-    value: RolesEnum.User,
+    label: 'Quản trị viên',
+    value: RolesEnum.Admin,
   },
   {
-    label: 'Agency - Chủ cửa hàng',
-    value: RolesEnum.Agency,
+    label: 'Kế toán',
+    value: RolesEnum.Accountant,
   },
   {
-    label: 'Nhân viên hệ thống',
-    value: RolesEnum.Staff,
+    label: 'Nhân viên',
+    value: RolesEnum.Employee,
+  },
+  {
+    label: 'HR',
+    value: RolesEnum.HR,
+  },
+  {
+    label: 'Team lead',
+    value: RolesEnum.TeamLead,
   },
 ];
 
@@ -57,12 +65,19 @@ export const GENDER_OPTIONS = [
   },
 ] as const;
 
-export const ROLES_ACCESS: RolesEnum[] = [RolesEnum.Admin, RolesEnum.Staff, RolesEnum.Agency];
+export const ROLES_ACCESS: RolesEnum[] = [
+  RolesEnum.Admin,
+  RolesEnum.Accountant,
+  RolesEnum.TeamLead,
+  RolesEnum.HR,
+  RolesEnum.Employee,
+];
 
-export const ROLES_LABEL: Record<Exclude<RolesEnum, RolesEnum.User>, string> = {
+export const ROLES_LABEL: Record<Exclude<RolesEnum, RolesEnum.Employee>, string> = {
   [RolesEnum.Admin]: `Quản trị viên - ${RolesEnum.Admin}`,
-  [RolesEnum.Staff]: `Nhân viên hệ thống BGP - ${RolesEnum.Staff}`,
-  [RolesEnum.Agency]: `Chủ cửa hàng - ${RolesEnum.Agency}`,
+  [RolesEnum.Accountant]: `Kế toán - ${RolesEnum.Accountant}`,
+  [RolesEnum.TeamLead]: `Team lead - ${RolesEnum.TeamLead}`,
+  [RolesEnum.HR]: `HR - ${RolesEnum.HR}`,
 };
 
 export const DEFAULT_MESSAGE = {

@@ -1,12 +1,10 @@
-const ENDPOINT_QUERIES = {
-  currentUserInfo: 'current-user-info',
-} as const;
+const ENDPOINT_QUERIES = {} as const;
 
 const ENDPOINT_MUTATIONS = {
-  signIn: 'account/auth',
+  signIn: 'user/auth',
   signUp: 'signup',
   resetPassword: 'reset-password',
-  logout: 'logout',
+  logout: 'user/logout',
   changePassword: 'change-password',
 } as const;
 
