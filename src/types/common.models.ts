@@ -8,8 +8,8 @@ export interface IBaseResponse<TData = unknown> {
 
 export interface IBaseEntity {
   id: string;
-  created_at: Date | string;
-  updated_at: Date | string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
 
 export interface IBasePagination {

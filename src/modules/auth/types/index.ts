@@ -1,4 +1,4 @@
-import type { GenderEnum, RolesEnum } from '@/configs';
+import type { GenderEnum, RolesEnum, UserStatusEnum } from '@/configs';
 import type { IBaseEntity } from '@/types';
 
 export interface IUserSignIn {
@@ -9,10 +9,16 @@ export interface IUserSignIn {
 }
 
 export interface ICurrentUserResponse extends IBaseEntity {
-  avatar: string;
+  id: string;
+  avatar?: string;
   fullName: string;
-  phone: string;
+  phone?: string;
+  address?: string;
   email: string;
-  role: RolesEnum;
-  gender: GenderEnum;
+  role?: RolesEnum;
+  gender?: GenderEnum;
+  dob?: Date;
+  bankAccount?: string;
+  bankAccountName?: string;
+  status?: UserStatusEnum;
 }

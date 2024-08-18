@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react';
 
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 
-import { authRoutes, profileRoutes, publicRoutes } from './elements';
+import { authRoutes, dashboardRoutes, profileRoutes, publicRoutes } from './elements';
 import { APP_PATHS } from './paths/app.paths';
 
 import { AlertDialogConfirmStore } from '@/components/elements/alert-dialog-confirm-store';
@@ -29,8 +29,8 @@ const allRoutes = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { index: true, element: <Navigate to={APP_PATHS.listUsers} /> },
-      // dashboardRoutes(),
+      { index: true, element: <Navigate to={APP_PATHS.HOME} /> },
+      dashboardRoutes(),
       profileRoutes(),
     ],
   },
