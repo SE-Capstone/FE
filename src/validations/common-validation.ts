@@ -74,13 +74,13 @@ export const getBirthdayField = () =>
       },
       z.date({
         errorMap: (issue) => {
-          if (issue.code === 'invalid_date') return { message: 'The birthday required' };
+          if (issue.code === 'invalid_date') return { message: 'Required' };
 
           return { message: issue.message ?? '' };
         },
       })
     )
-    .refine((date) => isDateBeforeToday(date), 'The birthday must be before today');
+    .refine((date) => isDateBeforeToday(date), 'Ngày sinh phải trước hôm nay');
 
 export const numericStringField = (schema: ZodTypeAny) =>
   z.preprocess((a) => {

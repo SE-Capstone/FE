@@ -108,7 +108,6 @@ export const makeRequest = async <TDataReq = any, TDataRes = any, TDataErr = IRe
   const accessToken = await getAccessToken();
   // axiosClient.defaults.withCredentials = true;  //if using cookies
   const { isFormData = false, ...axiosOptions } = options;
-
   logger.debug('Axios options', JSON.stringify(options));
 
   const onSuccess = (response: AxiosResponse<TDataRes>) => {
@@ -142,9 +141,8 @@ export const makeRequest = async <TDataReq = any, TDataRes = any, TDataErr = IRe
 
   return axiosClient({
     ...options,
-    headers,
     method: options.method as Method,
-    ...(accessToken && { headers: { ...options.headers, Authorization: `Bearer ${accessToken}` } }),
+    ...(accessToken && { headers: { ...headers, Authorization: `Bearer ${accessToken}` } }),
   })
     .then(onSuccess)
     .catch(onError);

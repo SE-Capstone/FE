@@ -1,16 +1,21 @@
 import { z } from 'zod';
 
-export const profileFormSchemaBase = z.object({
-  firstname: z.string().trim().max(50, 'Tối đa 50 ký tự ').nullish(),
-  lastname: z.string().trim().max(50, 'Tối đa 50 ký tự').nullish(),
-  avatar: z.instanceof(File).nullish().or(z.string().trim().nullish()),
-  address: z.string().trim().nullish(),
+import { GenderEnum } from '@/configs';
+import { getBirthdayField } from '@/validations';
+
+export const profileUpdateFormSchema = z.object({
+  fullName: z.string().trim().min(1).max(100),
+  phone: z.string().trim().min(8).max(15),
+  gender: z.nativeEnum(GenderEnum, { message: 'Invalid gender' }),
+  dob: getBirthdayField().or(z.string()),
+  address: z.string().trim().min(1).max(255),
+  avatarFile: z.instanceof(File).optional(),
+  avatar: z.string().optional(),
+  bankAccount: z
+    .string()
+    .max(30, { message: 'Invalid bank account number' })
+    .refine((val) => /^[0-9]+$/.test(val), { message: 'Invalid bank account number' }),
+  bankAccountName: z.string().min(1).max(100),
 });
 
-export const profileUpdateFormSchema = profileFormSchemaBase.deepPartial();
-
 export type ProfileUpdateFormType = z.infer<typeof profileUpdateFormSchema>;
-
-export const profileCreateFormSchema = profileFormSchemaBase;
-
-export type ProfileCreateFormType = z.infer<typeof profileCreateFormSchema>;

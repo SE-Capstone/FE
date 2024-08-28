@@ -74,12 +74,12 @@ export interface TableComponentProps<ObjectType> {
   handleReorderRow?: DraggableRowProps<ObjectType>['reorderRow'];
 }
 
-type FiltersProps<ObjectType extends { id?: number | null } = {}> = {
+type FiltersProps<ObjectType extends { id?: string | null } = {}> = {
   sortBy: 'asc' | 'desc' | 'all';
   accessor: keyof ObjectType;
 }[];
 
-function TableComponent<ObjectType extends { id?: number | null } = {}>({
+function TableComponent<ObjectType extends { id?: string | null } = {}>({
   data,
   groupColumns,
   totalCount = 0,

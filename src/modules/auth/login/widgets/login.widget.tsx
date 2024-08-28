@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Icon as ChakraIcon, Stack } from '@chakra-ui/react';
+import { Button, Icon as ChakraIcon, HStack, Stack } from '@chakra-ui/react';
 import { GoogleLogin } from '@react-oauth/google';
 import { MdLockOpen } from 'react-icons/md';
 
@@ -9,7 +9,7 @@ import { loginValidationSchema } from '../validations';
 
 import type { LoginValidationSchemaType } from '../validations';
 
-import { CustomFormProvider, CustomInput } from '@/components/elements';
+import { CustomFormProvider, CustomInput, CustomLink } from '@/components/elements';
 import { notify } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 import { LayoutAuth } from '@/modules/auth/layouts';
@@ -63,12 +63,14 @@ export function LoginWidget() {
             registration={register('password')}
             error={errors.password}
           />
-          {/* <HStack alignItems="center" justifyContent="space-between">
-            <Checkbox size="lg" value="remember">
+          <HStack alignItems="center" justifyContent="space-between">
+            {/* <Checkbox size="lg" value="remember">
               Remember me
-            </Checkbox>
-            <CustomLink to="/forgot-password">Forgot password?</CustomLink>
-          </HStack> */}
+            </Checkbox> */}
+            <CustomLink style={{ marginLeft: 'auto' }} to="/forgot-password">
+              Forgot password?
+            </CustomLink>
+          </HStack>
           <GoogleLogin
             onSuccess={(credentialResponse) => {
               console.log(credentialResponse);

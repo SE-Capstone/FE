@@ -21,9 +21,7 @@ export function useAuthentication() {
 
   const isAdmin = isLogged && user?.role === RolesEnum.Admin;
 
-  // TODO remove ADMIN after BE role is added
-  const role = (user?.role as RolesEnum) || 'ADMIN';
-  // const role = (user?.role as RolesEnum) || '';
+  const role = user?.role;
 
   const currentUserId = user?.id || 0;
 
