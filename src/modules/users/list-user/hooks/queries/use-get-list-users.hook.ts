@@ -8,19 +8,11 @@ import type { QueryListUserInput } from '../../types/users.types';
 import type { IResponseApi } from '@/configs/axios';
 import type { DeepPartial, IBaseQueryParams } from '@/types';
 
+import { calculatePrevAndNext } from '@/libs/helpers';
 import { usePaginateReq } from '@/libs/hooks/use-paginate';
 import { makeRequest, type QueryConfig } from '@/libs/react-query';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
-
-const FAKE_META = {
-  currentPage: 1,
-  lastPage: 6,
-  next: 2,
-  perPage: 1,
-  prev: null,
-  total: 6,
-};
 
 interface Filter {
   search: string;
@@ -74,14 +66,10 @@ export function useGetListUserQuery(props: UseGetListUserQueryProps = {}) {
     () =>
       merge(
         {
-          paginate: {
-            pageSize,
-            pageIndex,
-          },
-          filter: {
-            search,
-            status,
-          },
+          status,
+          pageIndex,
+          search,
+          pageSize,
         },
         defaultParams
       ),
@@ -103,17 +91,27 @@ export function useGetListUserQuery(props: UseGetListUserQueryProps = {}) {
     ...configs,
   });
 
+  const { prev, next } = calculatePrevAndNext(
+    pageIndex,
+    pageSize,
+    query.data?.meta?.totalPages,
+    query.data?.meta?.totalCount
+  );
+
+  const meta = {
+    ...query.data?.meta,
+    prev,
+    next,
+  };
+
   function handlePaginate(pageIndex: number, pageSize: number) {
     setPaginate({ pageIndex, pageSize });
   }
 
   return {
     ...query,
-    pageIndex,
-    pageSize,
     listUser: query.data?.data || [],
-    meta: FAKE_META,
-    search,
+    meta,
     onChangeDebounce,
     changeStatus,
     handlePaginate,

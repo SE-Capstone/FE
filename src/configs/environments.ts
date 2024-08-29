@@ -21,4 +21,4 @@ export const STORAGE_URL = import.meta.env.VITE_STORAGE_URL as string;
 
 export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;
 
-export const GOOGLE_SECRET_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;
+export const GOOGLE_SECRET_ID = import.meta.env.VITE_GOOGLE_SECRET_ID as string;

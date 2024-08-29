@@ -4,6 +4,7 @@ import { Avatar, Container } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 
 import { BadgeRole } from '../../detail-user/components';
+import { BadgeStatus } from '../../detail-user/components/badge-status';
 import { useUsersQueryFilterStateContext } from '../contexts';
 import { useGetListUserQuery } from '../hooks/queries';
 import { ActionMenuTableUsers, ActionTableUsersWidget } from '../widgets';
@@ -39,8 +40,8 @@ export function ListUsersPage() {
               return (
                 <>
                   {getNumericalOrder({
-                    page: meta?.currentPage,
-                    perPage: meta?.perPage,
+                    page: meta.pageIndex,
+                    perPage: meta.pageSize,
                     index,
                   })}
                 </>
@@ -124,10 +125,18 @@ export function ListUsersPage() {
               return <BadgeRole role={roleName as unknown as RolesEnum} />;
             },
           },
+          {
+            key: 'status',
+            title: 'Status',
+            hasSort: false,
+            Cell({ status }) {
+              return <BadgeStatus role={status as unknown as RolesEnum} />;
+            },
+          },
         ],
       },
     ],
-    [isAdmin, meta?.currentPage, meta?.perPage, pathname]
+    [isAdmin, meta.pageIndex, meta.pageSize, pathname]
   );
 
   return (
@@ -136,11 +145,11 @@ export function ListUsersPage() {
       <Container maxW="container.2xl" centerContent>
         <ActionTableUsersWidget />
         <TableComponent
-          currentPage={meta?.currentPage}
-          perPage={meta?.perPage}
+          currentPage={meta.pageIndex}
+          perPage={meta.pageSize}
           data={listUser}
           groupColumns={columns}
-          totalCount={meta.total}
+          totalCount={meta.totalCount}
           isLoading={isLoading}
           isError={!!isError}
           additionalFeature={(user) => <ActionMenuTableUsers user={user} />}

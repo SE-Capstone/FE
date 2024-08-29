@@ -4,7 +4,7 @@ export interface IMetaResponse {
   pageIndex: number;
   totalPages: number;
   next: number | null;
-  perPage: number;
+  pageSize: number;
   prev: number | null;
   totalCount: number;
 }

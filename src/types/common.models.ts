@@ -1,8 +1,6 @@
 export interface IBaseResponse<TData = unknown> {
   data: TData;
-
   message?: string;
-
   locale?: string;
 }
 
@@ -22,13 +20,8 @@ export type IErrorValidation = {
   message: string;
 }[];
 
-export type IBaseQueryParams<TFilter = any, TOrder = any> = {
-  paginate: {
-    pageIndex: number;
-    pageSize?: number;
-  };
+export type IBaseQueryParams<TFilter = any> = {
+  pageIndex: number;
+  pageSize: number;
   filter?: TFilter;
-  order?: TOrder & {
-    createdAt?: 'asc' | 'desc';
-  };
 };
