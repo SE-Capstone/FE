@@ -4,19 +4,19 @@ import { Switch, Tooltip } from '@chakra-ui/react';
 
 import type { SwitchProps } from '@chakra-ui/react';
 
-import { StatusEnum } from '@/configs';
+import { UserStatusEnum } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
 
 interface ChangeStatusProps extends SwitchProps {
-  initStatus: StatusEnum;
-  onChangeStatus(status: StatusEnum, onSuccess: () => void): void;
+  initStatus: UserStatusEnum;
+  onChangeStatus(status: UserStatusEnum, onSuccess: () => void): void;
   reset: () => void;
   isLoading?: boolean;
 }
 
 export function ChangeStatus(props: ChangeStatusProps) {
   const { initStatus, onChangeStatus, reset, isLoading, ...rest } = props;
-  const [isInactive, setIsInactive] = useState(initStatus === StatusEnum.Inactive);
+  const [isInactive, setIsInactive] = useState(initStatus === UserStatusEnum.Inactive);
 
   const { openAlert, closeAlert } = useAlertDialogStore(isLoading);
 
@@ -26,7 +26,7 @@ export function ChangeStatus(props: ChangeStatusProps) {
       title: 'Xác nhận thay đổi trạng thái',
       description: `Bạn có chắc chắn muốn ${isInactive ? 'Hiển thị' : 'ẩn'} không?`,
       onHandleConfirm() {
-        onChangeStatus?.(isInactive ? StatusEnum.Inactive : StatusEnum.Active, () => {
+        onChangeStatus?.(isInactive ? UserStatusEnum.Inactive : UserStatusEnum.Active, () => {
           closeAlert();
           setIsInactive((prev) => !prev);
         });

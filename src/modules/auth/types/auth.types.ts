@@ -1,14 +1,8 @@
-export interface IAuthUserLogin {
-  id: number;
-  email: string;
-  role: string;
-}
-
 export interface IAuthUserLoginResponse {
-  user: IAuthUserLogin;
+  userId: string;
+  role: string;
   accessToken: string;
   refreshToken: string;
-  expiredAt: number;
 }
 
 export interface IAuthLogoutResponse {

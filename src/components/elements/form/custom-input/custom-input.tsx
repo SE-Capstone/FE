@@ -87,7 +87,7 @@ export const CustomInput = forwardRef<CustomInputProps, 'input'>((props, ref) =>
           focusBorderColor="primary"
           maxLength={255}
           max={
-            type === 'date' && registration?.name === 'birthday'
+            type === 'date' && registration?.name === 'dob'
               ? formatDate({
                   date: YESTERDAY,
                   format: 'YYYY-MM-DD',

@@ -2,14 +2,17 @@ import { Badge } from '@chakra-ui/react';
 
 import type { ThemingProps, BadgeProps } from '@chakra-ui/react';
 
-import { ROLES_LABEL, type RolesEnum } from '@/configs';
+import { ROLES_LABEL, RolesEnum } from '@/configs';
 
-const BADGE_ROLE_COLOR_MAP: Record<`${RolesEnum}`, ThemingProps['colorScheme']> = {
-  ADMIN: 'blue',
+const BADGE_ROLE_COLOR_MAP: Record<string, ThemingProps['colorScheme']> = {
+  ...Object.fromEntries(
+    Object.values(RolesEnum)
+      .filter((role) => role !== 'ADMIN')
+      .map((role) => [role, 'blue'])
+  ),
+  ADMIN: 'green',
   HR: 'purple',
-  ACCOUNTANT: 'teal',
-  EMPLOYEE: 'orange',
-  TEAM_LEAD: 'green',
+  ACCOUNTANT: 'orange',
 };
 
 interface BadgeRoleProps extends BadgeProps {

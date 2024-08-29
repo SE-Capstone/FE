@@ -28,7 +28,7 @@ export function useGetCurrentUser({ configs }: UseGetCurrentUserOptionsType = {}
   const { data, ...queryInfo } = useQuery({
     enabled: !!token,
     placeholderData: (previousData) => previousData,
-    ...allQueryKeysStore.user['user/profile'],
+    queryKey: allQueryKeysStore.user['user/profile'].queryKey,
     queryFn: query,
     ...configs,
   });

@@ -13,11 +13,22 @@ export interface IBaseEntity {
 }
 
 export interface IBasePagination {
-  page: number;
-  perPage: number;
+  pageIndex: number;
+  pageSize: number;
 }
 
 export type IErrorValidation = {
   field: string;
   message: string;
 }[];
+
+export type IBaseQueryParams<TFilter = any, TOrder = any> = {
+  paginate: {
+    pageIndex: number;
+    pageSize?: number;
+  };
+  filter?: TFilter;
+  order?: TOrder & {
+    createdAt?: 'asc' | 'desc';
+  };
+};

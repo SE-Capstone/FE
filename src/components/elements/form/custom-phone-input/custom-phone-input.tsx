@@ -74,7 +74,7 @@ export const CustomPhoneInput = <TFormValues extends FieldValues>(
       }}
     >
       <PhoneInput
-        specialLabel="Số điện thoại"
+        specialLabel="Phone number"
         onlyCountries={['vn']}
         disableDropdown
         showDropdown={false}

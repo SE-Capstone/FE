@@ -1,0 +1,29 @@
+import { Outlet } from 'react-router-dom';
+
+import type { RouteObject } from 'react-router-dom';
+
+import { lazyImport } from '@/libs/utils';
+import { UsersQueryProvider } from '@/modules/users/list-user/contexts';
+
+const { ListUsersPage } = lazyImport(() => import('@/modules/users/list-user'), 'ListUsersPage');
+
+export function usersRoutes(): RouteObject {
+  return {
+    path: '/users',
+    element: <Outlet />,
+    children: [
+      {
+        index: true,
+        element: (
+          <UsersQueryProvider>
+            <ListUsersPage />
+          </UsersQueryProvider>
+        ),
+      },
+      // {
+      //   path: ':userId',
+      //   element: <DetailUserPage />,
+      // },
+    ],
+  };
+}

@@ -3,6 +3,7 @@ import type { PropsWithChildren } from 'react';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 
 import { authRoutes, dashboardRoutes, profileRoutes, publicRoutes } from './elements';
+import { usersRoutes } from './elements/users.route';
 import { APP_PATHS } from './paths/app.paths';
 
 import { AlertDialogConfirmStore } from '@/components/elements/alert-dialog-confirm-store';
@@ -32,6 +33,7 @@ const allRoutes = createBrowserRouter([
       { index: true, element: <Navigate to={APP_PATHS.HOME} /> },
       dashboardRoutes(),
       profileRoutes(),
+      usersRoutes(),
     ],
   },
   {

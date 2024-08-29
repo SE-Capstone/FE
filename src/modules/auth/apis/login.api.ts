@@ -7,7 +7,7 @@ import type { ITokenStorage } from '@/libs/helpers';
 import type { MutationConfig } from '@/libs/react-query';
 
 import { DEFAULT_MESSAGE } from '@/configs';
-import { clearStoredAuth, notify, setStoredAuth } from '@/libs/helpers';
+import { clearStoredAuth, getErrorMessage, notify, setStoredAuth } from '@/libs/helpers';
 import { makeRequest } from '@/libs/react-query';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
@@ -51,6 +51,8 @@ export function useLoginMutation({ configs }: IAuthLoginMutationProps = {}) {
       setStoredAuth<ITokenStorage>({
         accessToken: result.accessToken,
         refreshToken: result.refreshToken,
+        userId: result.userId,
+        role: result.role,
       });
 
       notify({
@@ -61,7 +63,7 @@ export function useLoginMutation({ configs }: IAuthLoginMutationProps = {}) {
     },
 
     onError(error) {
-      notify({ type: 'error', message: error?.message });
+      notify({ type: 'error', message: getErrorMessage(error) });
       if (error.statusCode === 401) {
         clearStoredAuth();
       }

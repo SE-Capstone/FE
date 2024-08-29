@@ -1,12 +1,12 @@
 export enum GenderEnum {
-  male = 'male',
-  female = 'female',
-  other = 'other',
+  male = 1,
+  female = 2,
+  other = 3,
 }
 
 export enum UserStatusEnum {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
+  Active = 1,
+  Inactive = 2,
 }
 
 export enum RolesEnum {
@@ -17,18 +17,30 @@ export enum RolesEnum {
   TeamLead = 'TEAM_LEAD',
 }
 
-export const GENDER_VALUES: Record<keyof typeof GenderEnum, string> = {
-  female: 'Nữ',
-  male: 'Nam',
-  other: 'Khác',
+export const defaultRoles = [
+  RolesEnum.Admin,
+  RolesEnum.HR,
+  RolesEnum.Accountant,
+  RolesEnum.Employee,
+  RolesEnum.TeamLead,
+];
+
+export const GENDER_VALUES: Record<GenderEnum, string> = {
+  [GenderEnum.male]: 'Nam',
+  [GenderEnum.female]: 'Nữ',
+  [GenderEnum.other]: 'Khác',
 };
 
-export enum StatusEnum {
-  Active = 'ACTIVE',
-  Inactive = 'INACTIVE',
-}
+export const USER_STATUS_VALUES: Record<UserStatusEnum, string> = {
+  [UserStatusEnum.Active]: 'Hoạt động',
+  [UserStatusEnum.Inactive]: 'Không hoạt động',
+};
 
 export enum OrderInput {
   DESC = 'desc',
   ASC = 'asc',
+}
+
+export function getGender(gender?: GenderEnum) {
+  return gender ? GENDER_VALUES[gender] : '';
 }

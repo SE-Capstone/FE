@@ -10,6 +10,9 @@ export const FILE_TYPES_IMAGES = ['jpeg', 'png', 'jpg', 'heic', 'heif'];
 
 export const REGEX_FILE_TYPE_IMAGES = /([a-zA-Z0-9\s_\\.\-\(\):])+(.jpeg|.png|.jpg|.heic|.heif)$/i;
 
+export const REGEX_PASSWORD =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
 export const REGEX_FILE_TYPE_VIDEO = /([a-zA-Z0-9\s_\\.\-\(\):])+(.mp4)$/i;
 
 export const REGEX_URL =
@@ -29,15 +32,15 @@ export const DEFAULT_PAGINATION = {
 
 export const ROLE_OPTIONS: Array<{ label: string; value: `${RolesEnum}` }> = [
   {
-    label: 'Quản trị viên',
+    label: 'Admin',
     value: RolesEnum.Admin,
   },
   {
-    label: 'Kế toán',
+    label: 'Accountant',
     value: RolesEnum.Accountant,
   },
   {
-    label: 'Nhân viên',
+    label: 'Employee',
     value: RolesEnum.Employee,
   },
   {
@@ -52,15 +55,15 @@ export const ROLE_OPTIONS: Array<{ label: string; value: `${RolesEnum}` }> = [
 
 export const GENDER_OPTIONS = [
   {
-    label: 'Nam',
+    label: 'Male',
     value: GenderEnum.male,
   },
   {
-    label: 'Nữ',
+    label: 'Female',
     value: GenderEnum.female,
   },
   {
-    label: 'Khác',
+    label: 'Others',
     value: GenderEnum.other,
   },
 ] as const;
@@ -74,13 +77,15 @@ export const ROLES_ACCESS: RolesEnum[] = [
 ];
 
 export const ROLES_LABEL: Record<Exclude<RolesEnum, RolesEnum.Employee>, string> = {
-  [RolesEnum.Admin]: `Quản trị viên - ${RolesEnum.Admin}`,
-  [RolesEnum.Accountant]: `Kế toán - ${RolesEnum.Accountant}`,
-  [RolesEnum.TeamLead]: `Team lead - ${RolesEnum.TeamLead}`,
-  [RolesEnum.HR]: `HR - ${RolesEnum.HR}`,
+  [RolesEnum.Admin]: `${RolesEnum.Admin}`,
+  [RolesEnum.Accountant]: `${RolesEnum.Accountant}`,
+  [RolesEnum.TeamLead]: `${RolesEnum.TeamLead}`,
+  [RolesEnum.HR]: `${RolesEnum.HR}`,
 };
 
 export const DEFAULT_MESSAGE = {
-  SUCCESS: 'Thành công',
-  SOMETHING_WRONG: 'Có lỗi xảy ra, vui lòng thử lại',
+  SUCCESS: 'Success',
+  SOMETHING_WRONG: 'Something went wrong, please try again',
+  UPDATE_SUCCESS: 'Update successfully',
+  CREATE_SUCCESS: 'Create successfully',
 };
