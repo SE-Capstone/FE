@@ -2,8 +2,7 @@ import type { UserStatusEnum } from '@/configs';
 import type { ICurrentUserResponse } from '@/modules/auth/types';
 
 export type QueryListUserInput = {
-  search?: string;
-  phone?: string;
+  fullName?: string;
   status?: UserStatusEnum;
   role?: string;
 };

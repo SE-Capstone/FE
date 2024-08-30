@@ -51,7 +51,9 @@ export function BaseInformationUserWidget({ detailUserData }: { detailUserData?:
   const { roles: listRole } = useGetRoles({});
 
   useEffect(() => {
-    setRoles(listRole);
+    if (JSON.stringify(roles) !== JSON.stringify(listRole)) {
+      setRoles(listRole);
+    }
   }, [listRole]);
 
   const { formState, register, reset, control } = form;

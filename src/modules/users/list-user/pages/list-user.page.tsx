@@ -24,7 +24,9 @@ export function ListUsersPage() {
   const { usersQueryState } = useUsersQueryFilterStateContext();
   const { pathname } = useLocation();
 
-  const { listUser, meta, isError, isLoading, handlePaginate } = useGetListUserQuery({});
+  const { listUser, meta, isError, isLoading, handlePaginate } = useGetListUserQuery({
+    params: usersQueryState.filters,
+  });
 
   const columns = useMemo<ColumnsProps<IUser>>(
     () => [

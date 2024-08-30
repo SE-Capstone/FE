@@ -14,21 +14,14 @@ import { makeRequest, type QueryConfig } from '@/libs/react-query';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
 
-interface Filter {
-  search: string;
-  role: string;
-  status: string;
-}
-
-export type IParamsGetListUser = IBaseQueryParams<Filter>;
+export type IParamsGetListUser = IBaseQueryParams<QueryListUserInput>;
 
 interface IGetListUserRequest {
   params: IParamsGetListUser;
 }
 
 export const defaultFilterUsers: QueryListUserInput = {
-  search: undefined,
-  phone: undefined,
+  fullName: undefined,
   role: undefined,
   status: undefined,
 };
@@ -44,38 +37,25 @@ export function getListUserRequest(req: IGetListUserRequest) {
 
 interface UseGetListUserQueryProps {
   configs?: QueryConfig<typeof getListUserRequest>;
-  defaultParams?: DeepPartial<IParamsGetListUser>;
+  params?: DeepPartial<QueryListUserInput>;
 }
-// TODO: fix file
+
 export function useGetListUserQuery(props: UseGetListUserQueryProps = {}) {
   const { pageIndex, pageSize, setPaginate } = usePaginateReq();
-  const { configs, defaultParams } = props;
-
-  const [search, setSearch] = useState(undefined);
-  const [status, setStatus] = useState(undefined);
-
-  function onChangeDebounce(newValue) {
-    setSearch(newValue);
-  }
-
-  function changeStatus(tStatus) {
-    setStatus(tStatus);
-  }
+  const { configs, params } = props;
 
   const currentParams = useMemo(
     () =>
       merge(
         {
-          status,
           pageIndex,
-          search,
           pageSize,
           orderBy: 'createDate',
           orderByDesc: 'desc',
         },
-        defaultParams
+        params
       ),
-    [pageIndex, pageSize, search, status, defaultParams]
+    [pageIndex, pageSize, params]
   );
 
   const queryKey = useMemo(
@@ -114,23 +94,6 @@ export function useGetListUserQuery(props: UseGetListUserQueryProps = {}) {
     ...query,
     listUser: query.data?.data || [],
     meta,
-    onChangeDebounce,
-    changeStatus,
     handlePaginate,
   };
-
-  // const hasMoreUsers = useMemo(
-  //   () => !!listUsersMeta.next && listUsersMeta.currentPage !== listUsersMeta.lastPage,
-  //   [listUsersMeta.currentPage, listUsersMeta.lastPage, listUsersMeta.next]
-  // );
-
-  // return {
-  //   listUsersData,
-  //   listUsersMeta,
-  //   hasMoreUsers,
-  //   fetchMore,
-  //   variables,
-  //   handlePaginateListUsers,
-  //   ...restGetListUsersQuery,
-  // };
 }
