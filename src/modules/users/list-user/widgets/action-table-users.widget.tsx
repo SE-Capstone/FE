@@ -57,7 +57,7 @@ export function ActionTableUsersWidget() {
             </Box>
             <Spacer />
             <AddNewUserWidget>
-              <Button leftIcon={<>+</>}>Tạo mới</Button>
+              <Button leftIcon={<>+</>}>Create</Button>
             </AddNewUserWidget>
           </>
         )}

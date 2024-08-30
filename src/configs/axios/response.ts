@@ -22,6 +22,12 @@ export interface Request {
   method: Uppercase<Method>;
 }
 
+export interface IRequest {
+  params: {
+    id: string;
+  };
+}
+
 export interface IResponseApi<TData = unknown> {
   data: TData;
   meta?: IMetaResponse;

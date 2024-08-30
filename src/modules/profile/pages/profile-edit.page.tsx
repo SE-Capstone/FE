@@ -23,7 +23,7 @@ import {
 } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
 import { GENDER_OPTIONS, GenderEnum } from '@/configs';
-import { formatDate, getStorageUrl, phoneNumberAutoFormat } from '@/libs/helpers';
+import { formatDate, phoneNumberAutoFormat } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export const EditProfilePage: React.FC = () => {
@@ -37,12 +37,12 @@ export const EditProfilePage: React.FC = () => {
     if (banks) {
       setBanks(listBank);
     }
-  }, [banks]);
+  }, [banks, listBank]);
 
   const form = useFormWithSchema({
     schema: profileUpdateFormSchema,
   });
-  const initUrl = form.getValues('avatarFile') instanceof File ? '' : form.getValues('avatarFile');
+  const initUrl = form.getValues('avatar') instanceof File ? '' : form.getValues('avatar');
 
   const { formState, register, reset, control } = form;
   const { errors, isSubmitting, isDirty } = formState;
@@ -50,10 +50,7 @@ export const EditProfilePage: React.FC = () => {
   function onSubmit(values: ProfileUpdateFormType) {
     if (isLoading) return;
 
-    if (!values?.avatarFile) {
-      delete values.avatarFile;
-      values.avatar = currentUser?.avatar;
-    } else {
+    if (!values?.avatar) {
       values.avatar = currentUser?.avatar;
     }
 
@@ -72,7 +69,7 @@ export const EditProfilePage: React.FC = () => {
     if (currentUser) {
       reset(
         {
-          avatar: getStorageUrl(currentUser.avatar as string) || undefined,
+          avatar: currentUser.avatar || undefined,
           address: currentUser.address || '',
           fullName: currentUser.fullName || '',
           phone: currentUser.phone || '',
@@ -106,7 +103,7 @@ export const EditProfilePage: React.FC = () => {
           <LayoutBack w={{ base: 'full', xl: '70%' }}>
             <Stack direction="column" spacing="24px">
               <Heading variant="title" mt="12px">
-                Cập nhật thông tin cá nhân
+                Update personal information
               </Heading>
               <Stack spacing={5}>
                 <SimpleGrid
@@ -195,8 +192,8 @@ export const EditProfilePage: React.FC = () => {
           <FileUpload
             initUrl={initUrl instanceof File ? undefined : initUrl || undefined}
             control={control}
-            name="avatarFile"
-            error={errors?.avatarFile}
+            name="avatar"
+            error={errors?.avatar}
             trigger={() => (
               <Button
                 color="secondary"

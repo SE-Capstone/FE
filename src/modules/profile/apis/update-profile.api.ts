@@ -16,8 +16,7 @@ import { allQueryKeysStore } from '@/services/query-keys-store';
 export interface IUpdateProfileRequest {
   body: {
     address: string;
-    avatarFile?: File | string;
-    avatar?: string;
+    avatar?: File | string;
     fullName: string;
     gender: GenderEnum;
     dob: Date | string;

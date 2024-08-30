@@ -15,7 +15,7 @@ import type { RolesEnum } from '@/configs';
 
 import { CustomLink, Head, TableComponent } from '@/components/elements';
 import { GENDER_VALUES } from '@/configs';
-import { getNumericalOrder, getStorageUrl } from '@/libs/helpers';
+import { getNumericalOrder } from '@/libs/helpers';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
@@ -48,26 +48,26 @@ export function ListUsersPage() {
               );
             },
           },
-          {
-            key: 'avatar',
-            title: 'Avatar',
-            hasSort: false,
-            Cell({ avatar, fullName }) {
-              return avatar ? (
-                <Avatar
-                  src={getStorageUrl(avatar)}
-                  name={fullName || ''}
-                  boxSize={16}
-                  rounded="full"
-                  showBorder
-                  borderColor="gray.200"
-                  borderWidth="1px"
-                />
-              ) : (
-                <>Chưa có ảnh</>
-              );
-            },
-          },
+          // {
+          //   key: 'avatar',
+          //   title: 'Avatar',
+          //   hasSort: false,
+          //   Cell({ avatar, fullName }) {
+          //     return avatar ? (
+          //       <Avatar
+          //         src={avatar}
+          //         name={fullName || ''}
+          //         boxSize={16}
+          //         rounded="full"
+          //         showBorder
+          //         borderColor="gray.200"
+          //         borderWidth="1px"
+          //       />
+          //     ) : (
+          //       <>No image</>
+          //     );
+          //   },
+          // },
           {
             key: 'fullName',
             title: 'Full name',
@@ -84,6 +84,14 @@ export function ListUsersPage() {
                   {fullName || ''}
                 </CustomLink>
               );
+            },
+          },
+          {
+            key: 'aliasName',
+            title: 'Alias name',
+            hasSort: false,
+            Cell({ userName }) {
+              return <>{userName || ''}</>;
             },
           },
           {
@@ -141,7 +149,7 @@ export function ListUsersPage() {
 
   return (
     <>
-      <Head title="Danh sách người dùng" />
+      <Head title="Users" />
       <Container maxW="container.2xl" centerContent>
         <ActionTableUsersWidget />
         <TableComponent
