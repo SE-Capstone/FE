@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { useGetDetailUser } from '../apis/detail-user.api';
 import { BaseInformationUserWidget } from '../widgets';
+import { AdminChangePasswordWidget } from '../widgets/admin-change-password.widget';
 
 import { Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
@@ -19,6 +20,7 @@ export function DetailUserPage() {
           <LayoutBack>
             <BaseInformationUserWidget detailUserData={user} />
           </LayoutBack>
+          <AdminChangePasswordWidget userId={userId || ''} />
         </StateHandler>
       </Container>
     </>

@@ -2,9 +2,8 @@ import { z } from 'zod';
 
 import { REGEX_PASSWORD } from '@/configs';
 
-export const changePasswordSchema = z
+export const adminChangePasswordSchema = z
   .object({
-    oldPassword: z.string().min(1),
     newPassword: z
       .string()
       .trim()
@@ -29,4 +28,4 @@ export const changePasswordSchema = z
     path: ['confirmPassword'],
   });
 
-export type ChangePasswordFormType = z.infer<typeof changePasswordSchema>;
+export type AdminChangePasswordFormType = z.infer<typeof adminChangePasswordSchema>;

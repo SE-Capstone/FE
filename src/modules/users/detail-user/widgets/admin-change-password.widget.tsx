@@ -2,30 +2,33 @@ import type React from 'react';
 
 import { Button, Heading, Stack } from '@chakra-ui/react';
 
-import { useChangePasswordMutation } from '../apis/change-password.api';
-import { changePasswordSchema } from '../validation/change-password.validation';
+import { useAdminChangePasswordMutation } from '../apis/admin-change-password.api';
+import { adminChangePasswordSchema } from '../validations/admin-change-password.validation';
 
-import type { ChangePasswordFormType } from '../validation/change-password.validation';
+import type { AdminChangePasswordFormType } from '../validations/admin-change-password.validation';
 
-import { CustomFormProvider, CustomInput, Head } from '@/components/elements';
+import { CustomFormProvider, CustomInput } from '@/components/elements';
 import { useFormWithSchema } from '@/libs/hooks';
 
-export const ChangePasswordWidget: React.FC = () => {
+export function AdminChangePasswordWidget({ userId }: { userId: string }) {
   const form = useFormWithSchema({
-    schema: changePasswordSchema,
+    schema: adminChangePasswordSchema,
   });
 
   const { formState, register, reset } = form;
   const { errors, isDirty } = formState;
-  const { mutate: changePasswordMutation, isPending: isLoading } = useChangePasswordMutation({
+  const { mutate: changePasswordMutation, isPending: isLoading } = useAdminChangePasswordMutation({
     reset,
   });
 
-  function onSubmit(values: ChangePasswordFormType) {
+  function onSubmit(values: AdminChangePasswordFormType) {
     if (isLoading) return;
 
     changePasswordMutation({
-      body: values,
+      body: {
+        userId,
+        ...values,
+      },
     });
   }
 
@@ -52,19 +55,15 @@ export const ChangePasswordWidget: React.FC = () => {
           </Heading>
           <Stack spacing={5}>
             <CustomInput
-              label="Mật khẩu hiện tại"
-              type="password"
-              registration={register('oldPassword')}
-              error={errors?.oldPassword}
-            />
-            <CustomInput
               label="New password"
+              isRequired
               type="password"
               registration={register('newPassword')}
               error={errors?.newPassword}
             />
             <CustomInput
               label="Confirm password"
+              isRequired
               type="password"
               registration={register('confirmPassword')}
               error={errors?.confirmPassword}
@@ -85,4 +84,4 @@ export const ChangePasswordWidget: React.FC = () => {
       </Stack>
     </CustomFormProvider>
   );
-};
+}

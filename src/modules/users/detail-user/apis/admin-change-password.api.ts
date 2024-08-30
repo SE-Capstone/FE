@@ -10,7 +10,7 @@ import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 
 interface IChangePasswordRequest {
   body: {
-    oldPassword: string;
+    userId: string;
     newPassword: string;
     confirmPassword: string;
   };
@@ -20,7 +20,7 @@ function mutation(req: IChangePasswordRequest) {
   const { body } = req;
   return makeRequest<typeof body, IResponseApi<{}>>({
     method: 'POST',
-    url: ALL_ENDPOINT_URL_STORE.auth.changePassword,
+    url: ALL_ENDPOINT_URL_STORE.auth.adminChangePassword,
     data: body,
   });
 }
@@ -30,7 +30,7 @@ interface IProps {
   reset?: () => void;
 }
 
-export function useChangePasswordMutation({ configs, reset }: IProps = {}) {
+export function useAdminChangePasswordMutation({ configs, reset }: IProps = {}) {
   return useMutation({
     mutationFn: mutation,
 

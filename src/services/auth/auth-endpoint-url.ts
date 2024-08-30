@@ -6,6 +6,7 @@ const ENDPOINT_MUTATIONS = {
   resetPassword: 'auth/reset-password',
   logout: 'auth/logout',
   changePassword: 'auth/change-password',
+  adminChangePassword: 'auth/admin-change-password',
 } as const;
 
 export const AUTH_ENDPOINT_URL = {

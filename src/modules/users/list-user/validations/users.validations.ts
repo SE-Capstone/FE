@@ -18,6 +18,7 @@ export const userFormSchema = z.object({
     ),
   phone: z.string().trim().min(8).max(15),
   gender: z.nativeEnum(GenderEnum, { message: 'Invalid gender' }),
+  role: z.string().trim().min(1),
   dob: getBirthdayField(),
   status: z.nativeEnum(UserStatusEnum, { message: 'Invalid status' }).optional(),
   address: z.string().trim().min(1).max(255),

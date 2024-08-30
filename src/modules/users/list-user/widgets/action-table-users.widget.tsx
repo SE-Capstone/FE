@@ -57,7 +57,7 @@ export function ActionTableUsersWidget() {
               />
             </Box>
             <Spacer />
-            <AddNewUserWidget>
+            <AddNewUserWidget roles={listRole}>
               <Button leftIcon={<>+</>}>Create</Button>
             </AddNewUserWidget>
           </>

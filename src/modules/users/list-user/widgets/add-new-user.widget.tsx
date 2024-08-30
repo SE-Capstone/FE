@@ -3,6 +3,8 @@ import { AiOutlineQuestionCircle } from 'react-icons/ai';
 
 import { useCreateUserHook } from '../hooks/mutations';
 
+import type { IRole } from '../apis/get-roles.api';
+
 import {
   CustomChakraReactSelect,
   CustomFormProvider,
@@ -14,10 +16,11 @@ import { GENDER_OPTIONS } from '@/configs';
 
 export interface AddNewUserWidgetProps {
   children: React.ReactElement;
+  roles: IRole[];
 }
 
 export function AddNewUserWidget(props: AddNewUserWidgetProps) {
-  const { children } = props;
+  const { children, roles } = props;
 
   const { data, formCreateUser, handleCreateUser, isLoading, reset } = useCreateUserHook();
 
@@ -38,7 +41,6 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
           Save
         </Button>
       )}
-      // TODO: Check form reset or not
       onCloseComplete={reset}
     >
       <CustomFormProvider id="form-create-user" form={formCreateUser} onSubmit={handleCreateUser}>
@@ -101,25 +103,19 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
             error={errors.address}
           />
           <HStack align="stretch">
-            {/* <CustomChakraReactSelect
+            <CustomChakraReactSelect
               isSearchable={false}
               isRequired
+              placeholder="Choose role"
               label="Role"
               size="lg"
-              options={ROLE_OPTIONS}
+              options={roles.map((role) => ({
+                label: role.name,
+                value: role.id,
+              }))}
               control={control}
               name="role"
-            /> */}
-            {/* <Center>
-              <Tooltip
-                label="Role nhân viên có thể tạo cửa hàng"
-                placement="top"
-                shouldWrapChildren
-                hasArrow
-              >
-                <Icon as={AiOutlineQuestionCircle} boxSize={5} />
-              </Tooltip>
-            </Center> */}
+            />
           </HStack>
         </Stack>
       </CustomFormProvider>

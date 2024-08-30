@@ -23,17 +23,17 @@ export function ActionMenuTableUsers({ user }: ActionMenuTableUsersProps) {
 
   const menuOptions = [
     {
-      label: 'Xem chi tiết',
+      label: 'View detail',
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/users/${user.id}`),
     },
     {
-      label: 'Xoá',
+      label: 'Delete',
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {
         openAlert({
-          title: 'Xoá người dùng',
-          description: `Bạn có chắc chắn muốn xoá người dùng "${user.fullName}"?`,
+          title: 'Delete',
+          description: `Are you sure to delete user "${user.fullName}"?`,
           onHandleConfirm() {
             // TODO
             // if (!user.id) return;

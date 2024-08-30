@@ -5,47 +5,50 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Heading,
   HStack,
   Image,
   SimpleGrid,
   Stack,
   Text,
 } from '@chakra-ui/react';
+import { Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 import { useGetRoles, type IRole } from '../../list-user/apis/get-roles.api';
+import { useUpdateUserMutation } from '../apis/update-user.api';
+import { updateUserFormSchema } from '../validations/update-user.validation';
 
 import type { IUser } from '../../list-user/types';
+import type { UpdateUserFormType } from '../validations/update-user.validation';
+import type { IBank } from '@/modules/profile/apis/get-banks.api';
 
-import {
-  CustomChakraReactSelect,
-  CustomFormProvider,
-  CustomInput,
-  CustomPhoneInput,
-  Head,
-} from '@/components/elements';
+import { CustomChakraReactSelect, CustomFormProvider, CustomInput } from '@/components/elements';
 import { PreviewImage } from '@/components/elements/preview-image';
+import { LayoutBack } from '@/components/layouts';
 import { EditRow } from '@/components/widgets';
-import { getStorageUrl } from '@/libs/helpers';
+import { GENDER_OPTIONS } from '@/configs';
+import { formatDate, phoneNumberAutoFormat } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
-import { useUpdateProfileMutation } from '@/modules/profile/apis/update-profile.api';
-import { profileUpdateFormSchema } from '@/modules/profile/validation';
+import { useGetBanks } from '@/modules/profile/apis/get-banks.api';
 
 export function BaseInformationUserWidget({ detailUserData }: { detailUserData?: IUser }) {
-  const userId = detailUserData?.id || 0;
+  const userId = detailUserData?.id;
 
-  // const { handleUpdateUser, formUpdateUser, updateUserResult } = useUpdateProfileMutation();
-  const { mutate: updateProfileMutation, isPending: isLoading } = useUpdateProfileMutation();
-  // const {
-  //   reset,
-  //   register,
-  //   control,
-  //   formState: { errors, isDirty },
-  // } = profileUpdateFormSchema;
+  const { mutate: updateUserMutation, isPending: isLoading } = useUpdateUserMutation();
 
   const form = useFormWithSchema({
-    schema: profileUpdateFormSchema,
+    schema: updateUserFormSchema,
   });
+  const [banks, setBanks] = useState<IBank[]>([]);
+  const { banks: listBank } = useGetBanks();
+
+  useEffect(() => {
+    if (banks) {
+      setBanks(listBank);
+    }
+  }, [banks, listBank]);
+
   const [roles, setRoles] = useState<IRole[]>([]);
 
   const { roles: listRole } = useGetRoles({});
@@ -54,15 +57,37 @@ export function BaseInformationUserWidget({ detailUserData }: { detailUserData?:
     if (JSON.stringify(roles) !== JSON.stringify(listRole)) {
       setRoles(listRole);
     }
-  }, [listRole]);
+  }, [listRole, roles]);
 
   const { formState, register, reset, control } = form;
   const { errors, isDirty } = formState;
+
+  function onSubmit(values: UpdateUserFormType) {
+    if (isLoading) return;
+
+    updateUserMutation({
+      body: {
+        ...values,
+        id: userId || '',
+        dob: formatDate({
+          date: values.dob,
+          format: 'YYYY-MM-DD',
+        }),
+      },
+    });
+  }
 
   useEffect(() => {
     reset(
       {
         ...detailUserData,
+        role: detailUserData?.roleId,
+        dob: detailUserData?.dob
+          ? formatDate({
+              date: detailUserData?.dob,
+              format: 'YYYY-MM-DD',
+            })
+          : undefined,
       },
       {
         keepDirty: false,
@@ -71,10 +96,110 @@ export function BaseInformationUserWidget({ detailUserData }: { detailUserData?:
   }, [reset, detailUserData]);
 
   return (
-    <Box bg="white" rounded={2} w="full" p={4}>
-      <CustomFormProvider form={form} isDisabled={isLoading} onSubmit={() => undefined}>
-        <Stack spacing={5}>
-          <EditRow title="Hình ảnh người dùng">
+    <Box bg="white" rounded={2} w="full">
+      <CustomFormProvider form={form} style={{ height: 'fit-content' }} onSubmit={onSubmit}>
+        <Stack
+          direction={{ base: 'column-reverse', xl: 'row' }}
+          spacing="24px"
+          w="100%"
+          alignItems="flex-start"
+        >
+          <Stack direction="column" w="100%" spacing="24px">
+            <Stack spacing={5}>
+              <SimpleGrid
+                columns={{ base: 1, md: 2 }}
+                spacing={{ base: 2, md: 6 }}
+                alignItems="start"
+              >
+                <CustomInput
+                  label="Full name"
+                  isRequired
+                  placeholder="Enter full name"
+                  registration={register('fullName')}
+                  error={errors?.fullName}
+                />
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field: { value, onChange, ...field } }) => (
+                    <CustomInput
+                      label="Phone number"
+                      placeholder="012-345-6789"
+                      isRequired
+                      error={errors?.phone}
+                      value={value ?? ''}
+                      maxLength={12}
+                      onChange={(e) => {
+                        onChange(phoneNumberAutoFormat(e.target.value));
+                      }}
+                      {...field}
+                    />
+                  )}
+                />
+                <CustomChakraReactSelect
+                  isRequired
+                  isSearchable={false}
+                  label="Gender"
+                  options={GENDER_OPTIONS}
+                  control={control}
+                  name="gender"
+                />
+                <CustomInput
+                  label="Birthday"
+                  isRequired
+                  type="date"
+                  registration={register('dob')}
+                  error={errors.dob}
+                />
+                <CustomInput
+                  label="Bank account number"
+                  isRequired
+                  registration={register('bankAccount')}
+                  error={errors?.bankAccount}
+                />
+                <CustomChakraReactSelect
+                  isRequired
+                  isSearchable
+                  label="Bank account name"
+                  options={banks.map((bank) => ({
+                    label: `${bank.code} - ${bank.name}`,
+                    value: bank.short_name,
+                  }))}
+                  control={control}
+                  name="bankAccountName"
+                />
+              </SimpleGrid>
+            </Stack>
+            <CustomInput
+              label="Address"
+              isRequired
+              registration={register('address')}
+              error={errors?.address}
+            />
+            <CustomChakraReactSelect
+              isRequired
+              isSearchable
+              label="Choose role"
+              options={roles.map((role) => ({
+                label: role.name,
+                value: role.id,
+              }))}
+              control={control}
+              name="role"
+            />
+            <Stack align="center">
+              <Button
+                w="150px"
+                maxW="100%"
+                type="submit"
+                isDisabled={isLoading || !isDirty}
+                isLoading={isLoading}
+              >
+                Save
+              </Button>
+            </Stack>
+          </Stack>
+          <EditRow title="Avatar">
             {detailUserData?.avatar ? (
               <PreviewImage>
                 {({ openPreview }) => (
@@ -85,56 +210,16 @@ export function BaseInformationUserWidget({ detailUserData }: { detailUserData?:
                     rounded={1}
                     onClick={() => {
                       if (!detailUserData?.avatar) return;
-                      openPreview(getStorageUrl(detailUserData?.avatar), 'nkjdafb');
+                      openPreview(detailUserData?.avatar, '');
                     }}
                   />
                 )}
               </PreviewImage>
             ) : (
-              <Text color="red.300">Chưa có ảnh</Text>
+              <Text color="red.300">No image</Text>
             )}
           </EditRow>
-
-          <EditRow title="Tên người dùng">
-            <SimpleGrid columns={2} w="70%" spacing={5}>
-              <CustomInput
-                inputLeftAddon="Họ: "
-                registration={register('fullName')}
-                error={errors.fullName}
-              />
-            </SimpleGrid>
-          </EditRow>
-
-          <EditRow title="Số điện thoại">
-            <Box w="40%">
-              <CustomPhoneInput control={control} name="phone" />
-            </Box>
-          </EditRow>
-
-          <Box w="70%" minW="200px">
-            <EditRow title="Vai trò">
-              <CustomChakraReactSelect
-                isSearchable
-                placeholder="Choose role"
-                options={roles.map((role) => ({
-                  label: role.name,
-                  value: role.id,
-                }))}
-                control={control}
-                name="role"
-              />
-            </EditRow>
-          </Box>
-
-          <EditRow title="">{/* <Text>{detailUserData?.customerOnShop?.name}</Text> */}</EditRow>
         </Stack>
-        <HStack justify="flex-end" my={10}>
-          <ButtonGroup spacing={2}>
-            <Button type="submit" isDisabled={!isDirty || isLoading}>
-              Cập nhật
-            </Button>
-          </ButtonGroup>
-        </HStack>
       </CustomFormProvider>
     </Box>
   );
