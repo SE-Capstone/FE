@@ -17,11 +17,11 @@ export function Error404Page() {
       >
         <AlertIcon boxSize="40px" mr={0} />
         <AlertTitle mt={4} mb={1} fontSize="lg">
-          Trang bạn tìm kiếm không tồn tại
+          Page not found
         </AlertTitle>
         <AlertDescription maxWidth="md" />
         <Button mt={4} as={Link} to={-1 as To} size="sm">
-          Quay lại
+          Back
         </Button>
       </Alert>
     </Stack>

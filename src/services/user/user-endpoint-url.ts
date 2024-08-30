@@ -5,7 +5,8 @@ const ENDPOINT_QUERIES = {
 } as const;
 
 const ENDPOINT_MUTATIONS = {
-  updateUser: (userId: StringNumeric) => `users/${userId}`,
+  updateUser: 'users',
+  detail: (userId: StringNumeric) => `users/${userId}`,
   updateProfile: 'user/update-profile',
   createUser: 'user',
   listUser: 'users',

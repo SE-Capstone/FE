@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
 
-import { getStorageUrl } from '@/libs/helpers';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
@@ -22,9 +21,8 @@ export function HeaderApp() {
   const { pathname } = location;
 
   const TITLE_ROUTES = {
-    [APP_PATHS.HOME]: 'Trang chủ',
-    [APP_PATHS.listUsers]: 'Người dùng',
-    [APP_PATHS.listProducts]: 'Sản phẩm',
+    [APP_PATHS.HOME]: 'Home',
+    [APP_PATHS.listUsers]: 'Users',
   } as const;
 
   const title = TITLE_ROUTES[pathname];
@@ -51,10 +49,10 @@ export function HeaderApp() {
       <HStack spacing={{ base: 4, md: 8 }}>
         <HStack spacing={4} as={Link} to="/profile">
           <SkeletonCircle size="11" rounded="full" isLoaded={!isLoading}>
-            <Tooltip label="Đi đến trang cá nhân">
+            <Tooltip label="Go to profile">
               <Avatar
                 name={fullName}
-                src={getStorageUrl(currentUser?.avatar as string)}
+                src={currentUser?.avatar}
                 boxSize="12"
                 objectFit="cover"
                 showBorder
@@ -67,7 +65,7 @@ export function HeaderApp() {
             <Tooltip
               label={
                 <Stack spacing={0.5}>
-                  <Text color="white">Tài khoản bách gia phát</Text>
+                  <Text color="white">Account</Text>
                   <Text color="#a4a8ac">{fullName}</Text>
                   <Text color="#a4a8ac">{currentUser?.phone}</Text>
                 </Stack>

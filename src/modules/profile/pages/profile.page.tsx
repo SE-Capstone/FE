@@ -51,7 +51,7 @@ export function ProfilePage() {
 
   return (
     <>
-      <Head title="Trang cá nhân" />
+      <Head title="Personal page" />
       <Stack
         direction={{ base: 'column-reverse', xl: 'row' }}
         alignItems="stretch"
@@ -70,7 +70,7 @@ export function ProfilePage() {
                 borderColor: 'neutral.500',
               }}
             >
-              Thông tin cá nhân
+              Personal information
             </Text>
             <InfoCard data={infoData} />
             <Stack />
@@ -109,7 +109,7 @@ export function ProfilePage() {
             variant="ghost"
             leftIcon={<Icon as={MdModeEditOutline} boxSize={5} />}
           >
-            Chỉnh sửa
+            Edit
           </Button>
         </Stack>
       </Stack>

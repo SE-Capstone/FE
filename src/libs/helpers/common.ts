@@ -533,3 +533,25 @@ export function getNumericalOrder(data: { page?: number; perPage?: number; index
 
   return (page - 1) * perPage + index + 1;
 }
+
+export function calculatePrevAndNext(page, perpage, totalPage, totalCounts) {
+  let prev: number | null = null;
+  let next = null;
+
+  // Calculate totalPages based on totalCounts and perpage if not given
+  if (totalPage === undefined) {
+    totalPage = Math.ceil(totalCounts / perpage);
+  }
+
+  // Calculate prev page
+  if (page > 1) {
+    prev = page - 1;
+  }
+
+  // Calculate next page
+  if (page < totalPage) {
+    next = page + 1;
+  }
+
+  return { prev, next };
+}

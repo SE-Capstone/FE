@@ -5,6 +5,7 @@ export interface ICurrentUserResponse extends IBaseEntity {
   id: string;
   avatar?: string;
   fullName: string;
+  userName: string;
   phone?: string;
   address?: string;
   email: string;

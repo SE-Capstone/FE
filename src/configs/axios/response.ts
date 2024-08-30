@@ -4,7 +4,7 @@ export interface IMetaResponse {
   pageIndex: number;
   totalPages: number;
   next: number | null;
-  perPage: number;
+  pageSize: number;
   prev: number | null;
   totalCount: number;
 }
@@ -20,6 +20,12 @@ export type RequestApiConfigType = Record<
 export interface Request {
   path: string;
   method: Uppercase<Method>;
+}
+
+export interface IRequest {
+  params: {
+    id: string;
+  };
 }
 
 export interface IResponseApi<TData = unknown> {

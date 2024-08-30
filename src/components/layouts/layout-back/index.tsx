@@ -32,7 +32,7 @@ export const LayoutBack: React.FC<LayoutBackProps> = ({ children, path, ...stack
         }}
         _groupHover={{ color: 'primary' }}
       >
-        Quay lại
+        Back
       </Text>
     </Link>
     {children}

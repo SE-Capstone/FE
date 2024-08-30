@@ -1,4 +1,4 @@
-import { GenderEnum, RolesEnum } from './common.enums';
+import { GenderEnum, RolesEnum, UserStatusEnum } from './common.enums';
 
 export const YESTERDAY = new Date(new Date().valueOf() - 1000 * 60 * 60 * 24);
 
@@ -25,33 +25,9 @@ export const FILES_TYPE_CSV_EXCEL = [
 ];
 
 export const DEFAULT_PAGINATION = {
-  page: 1,
-  perPage: 10,
-  createAt: 'desc',
+  pageIndex: 1,
+  perSize: 10,
 };
-
-export const ROLE_OPTIONS: Array<{ label: string; value: `${RolesEnum}` }> = [
-  {
-    label: 'Admin',
-    value: RolesEnum.Admin,
-  },
-  {
-    label: 'Accountant',
-    value: RolesEnum.Accountant,
-  },
-  {
-    label: 'Employee',
-    value: RolesEnum.Employee,
-  },
-  {
-    label: 'HR',
-    value: RolesEnum.HR,
-  },
-  {
-    label: 'Team lead',
-    value: RolesEnum.TeamLead,
-  },
-];
 
 export const GENDER_OPTIONS = [
   {
@@ -82,6 +58,29 @@ export const ROLES_LABEL: Record<Exclude<RolesEnum, RolesEnum.Employee>, string>
   [RolesEnum.TeamLead]: `${RolesEnum.TeamLead}`,
   [RolesEnum.HR]: `${RolesEnum.HR}`,
 };
+
+export const USER_STATUS_LABEL: Record<UserStatusEnum, string> = {
+  [UserStatusEnum.Active]: `Active`,
+  [UserStatusEnum.Inactive]: `Inactive`,
+};
+
+export const defaultRoles = [
+  RolesEnum.Admin,
+  RolesEnum.HR,
+  RolesEnum.Accountant,
+  RolesEnum.Employee,
+  RolesEnum.TeamLead,
+];
+
+export const GENDER_VALUES: Record<GenderEnum, string> = {
+  [GenderEnum.male]: 'Male',
+  [GenderEnum.female]: 'Female',
+  [GenderEnum.other]: 'Others',
+};
+
+export function getGender(gender?: GenderEnum) {
+  return gender ? GENDER_VALUES[gender] : '';
+}
 
 export const DEFAULT_MESSAGE = {
   SUCCESS: 'Success',

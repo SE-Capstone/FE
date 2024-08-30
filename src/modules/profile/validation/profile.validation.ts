@@ -9,8 +9,7 @@ export const profileUpdateFormSchema = z.object({
   gender: z.nativeEnum(GenderEnum, { message: 'Invalid gender' }),
   dob: getBirthdayField().or(z.string()),
   address: z.string().trim().min(1).max(255),
-  avatarFile: z.instanceof(File).optional(),
-  avatar: z.string().optional(),
+  avatar: z.instanceof(File).optional().or(z.string().optional()),
   bankAccount: z
     .string()
     .max(30, { message: 'Invalid bank account number' })

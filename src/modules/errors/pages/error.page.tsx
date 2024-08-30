@@ -24,7 +24,7 @@ export function ErrorPage() {
 
       <Stack w="200px">
         <Button as={Link} to={-1 as To}>
-          Quay lại to home page
+          Back to home page
         </Button>
       </Stack>
 

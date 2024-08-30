@@ -1,17 +1,14 @@
 import { useMemo } from 'react';
 
 import { Box, CloseButton, Flex, HStack, Icon, Image, Stack, Text } from '@chakra-ui/react';
-import { FiUsers } from 'react-icons/fi';
 import {
   MdLogout,
   MdOutlineCategory,
-  MdOutlineContactPhone,
   MdOutlineHome,
-  MdOutlineNotificationsNone,
   MdOutlinePeopleAlt,
   MdOutlineSettings,
+  MdOutlineNewspaper,
 } from 'react-icons/md';
-import { SiAdguard } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 
 import { NavItem } from './nav-item';
@@ -55,55 +52,32 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarContentProps) => {
   const LINK_ITEMS: Array<LinkItemProps> = useMemo(
     () =>
       [
-        // {
-        //   name: 'Trang chủ',
-        //   icon: MdOutlineDashboard,
-        //   path: APP_PATHS.HOME,
-        // },
-        isAdmin && {
+        {
           name: 'Home',
           icon: MdOutlineHome,
-          path: '/homes/products',
+          path: APP_PATHS.HOME,
         },
         isAdmin && {
-          name: 'Người dùng',
+          name: 'Users',
           icon: MdOutlinePeopleAlt,
           path: undefined,
           children: [
             {
-              name: 'Danh sách người dùng',
+              name: 'List User',
               icon: MdOutlineCategory,
               path: APP_PATHS.listUsers,
             },
           ],
         },
-        {
-          name: 'Bảo hành',
-          icon: SiAdguard,
-          path: undefined,
-          children: [
-            {
-              name: 'Danh sách bảo hành sản phẩm',
-              icon: MdOutlineContactPhone,
-              path: APP_PATHS.listGuarantees,
-            },
-            {
-              name: 'Danh sách người dùng yêu cầu bảo hành',
-              icon: FiUsers,
-              path: APP_PATHS.listRequestGuarantees,
-            },
-          ],
-        },
-
         isAdmin && {
-          name: 'Cấu hình',
+          name: 'Roles',
           icon: MdOutlineSettings,
-          path: '/configs',
+          path: '/roles',
         },
         isAdmin && {
-          name: 'Thông báo',
-          icon: MdOutlineNotificationsNone,
-          path: '/notifications',
+          name: 'News',
+          icon: MdOutlineNewspaper,
+          path: '/news',
         },
       ].filter(Boolean),
     [isAdmin]
