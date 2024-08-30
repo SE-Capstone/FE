@@ -1,11 +1,12 @@
 import { useCallback } from 'react';
 
 import type { QueryListUserInput } from '../types';
+import type { DeepPartial } from '@/types';
 
 import { createStoreContext } from '@/libs/utils';
 
 interface IUsersQueryState {
-  filters: QueryListUserInput;
+  filters: DeepPartial<QueryListUserInput>;
 }
 
 const initialState: IUsersQueryState = {
@@ -19,6 +20,7 @@ function useUsersQueryFilterStateContext() {
 
   const handleSetFilter = useCallback(
     (newFilters: Partial<IUsersQueryState['filters']>) => {
+      console.log(state);
       setState({
         filters: {
           ...state.filters,

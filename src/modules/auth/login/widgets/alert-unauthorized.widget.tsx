@@ -34,7 +34,7 @@ export function AlertUnauthorizedWidget(props: AlertUnauthorizedWidgetProps) {
           variant="solid"
           onClick={onCancel}
         >
-          Quay lại
+          Back
         </Button>
       </Center>
     </Box>

@@ -10,7 +10,6 @@ import { useUsersQueryFilterStateContext } from '../contexts';
 import type { IRole } from '../apis/get-roles.api';
 
 import { CustomChakraReactSelect, SearchInput } from '@/components/elements';
-// import { ModalAddShopStaffWidget } from '@/modules/shop-profiles/widgets/modal-add-shop-staff.widget';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ActionTableUsersWidget() {
@@ -23,8 +22,10 @@ export function ActionTableUsersWidget() {
   const { roles: listRole } = useGetRoles({});
 
   useEffect(() => {
-    setRoles(listRole);
-  }, [listRole]);
+    if (JSON.stringify(roles) !== JSON.stringify(listRole)) {
+      setRoles(listRole);
+    }
+  }, [listRole, roles]);
 
   return (
     <Box p={5} mb={6} rounded={2.5} bg="white" w="full" shadow="0 1px 4px 0 #0002">
@@ -32,9 +33,9 @@ export function ActionTableUsersWidget() {
         <Stack flexBasis="50%">
           <SearchInput
             placeholder="Enter value..."
-            initValue={usersQueryState.filters.phone || ''}
+            initValue={usersQueryState.filters.fullName || ''}
             onHandleSearch={(keyword) => {
-              setUsersQueryFilterState({ phone: keyword });
+              setUsersQueryFilterState({ fullName: keyword });
             }}
           />
         </Stack>
@@ -57,11 +58,10 @@ export function ActionTableUsersWidget() {
             </Box>
             <Spacer />
             <AddNewUserWidget>
-              <Button leftIcon={<>+</>}>Tạo mới</Button>
+              <Button leftIcon={<>+</>}>Create</Button>
             </AddNewUserWidget>
           </>
         )}
-        {/* {isShopFilterShopStaff && shopId && <ModalAddShopStaffWidget shopId={shopId} />} */}
       </HStack>
     </Box>
   );
