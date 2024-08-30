@@ -3,7 +3,10 @@ import toast from 'react-hot-toast';
 import { getErrorValidateMsgFromApi } from './common';
 
 import type { TErrorResponse } from '../react-query';
+import type { IResponseErrorApi } from '@/configs/axios';
 import type { ToasterProps, ToastOptions, ToastType } from 'react-hot-toast';
+
+import { DEFAULT_MESSAGE } from '@/configs';
 
 export const defaultToasterOptions: ToasterProps = {
   position: 'top-center',
@@ -59,4 +62,12 @@ export function showErrorFromApi(error: TErrorResponse) {
   }
 
   return notify({ type: 'error', message: msg });
+}
+
+export function getErrorMessage(error: IResponseErrorApi) {
+  return error.message
+    ? error.message
+    : error?.errors
+    ? Object.values(error?.errors)[0][0]
+    : error?.title || DEFAULT_MESSAGE.SOMETHING_WRONG;
 }

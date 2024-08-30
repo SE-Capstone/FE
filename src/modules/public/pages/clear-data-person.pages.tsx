@@ -75,7 +75,7 @@ export function ClearDataPersonPage() {
                 error={errors.lastName}
               />
 
-              <CustomPhoneInput specialLabel="Số điện thoại" control={control} name="phoneNumber" />
+              <CustomPhoneInput specialLabel="Phone number" control={control} name="phoneNumber" />
 
               <Button type="submit">Gửi</Button>
             </Stack>
@@ -95,7 +95,7 @@ export function ClearDataPersonPage() {
                 Gửi thành công
               </AlertTitle>
               <AlertDescription maxWidth="sm">
-                Nhân viên Bách Gia Phát sẽ liên hệ tới số điện thoại của bạn trong thời gian sớm
+                Nhân viên Bách Gia Phát sẽ liên hệ tới Phone number của bạn trong thời gian sớm
                 nhất.
               </AlertDescription>
             </Alert>

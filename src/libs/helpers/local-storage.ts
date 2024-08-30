@@ -3,6 +3,8 @@ import { isClient, isProduction } from '@/configs';
 export interface ITokenStorage {
   accessToken: string;
   refreshToken: string;
+  userId: string;
+  role: string;
 }
 
 const SIGNATURE = isProduction ? 'signature-web' : 'signature-web-dev';

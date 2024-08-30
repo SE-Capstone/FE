@@ -5,38 +5,53 @@ import { Link } from 'react-router-dom';
 import { InfoCard } from '../components';
 import { useAuthentication } from '../hooks';
 
-import type { RolesEnum } from '@/configs';
-
 import { Head } from '@/components/elements';
 import { PreviewImage } from '@/components/elements/preview-image';
-import { getStorageUrl } from '@/libs/helpers';
+import { getGender, type RolesEnum } from '@/configs';
+import { formatDate } from '@/libs/helpers';
 import { BadgeRole } from '@/modules/users/detail-user/components';
 
 export function ProfilePage() {
-  const { currentUser, role } = useAuthentication();
+  const { currentUser } = useAuthentication();
 
   const infoData = [
     {
-      label: 'Tên',
+      label: 'Full name',
       text: currentUser?.fullName || '',
     },
     {
-      label: 'Số điện thoại',
+      label: 'Phone number',
       text: currentUser?.phone || '',
     },
     {
-      label: 'Địa chỉ',
+      label: 'Address',
       text: currentUser?.address || '',
     },
     {
-      label: 'Vai trò',
-      text: <BadgeRole role={role as unknown as RolesEnum} />,
+      label: 'Role',
+      text: <BadgeRole role={currentUser?.role as unknown as RolesEnum} />,
+    },
+    {
+      label: 'Gender',
+      text: getGender(currentUser?.gender),
+    },
+    {
+      label: 'Birthday',
+      text: currentUser?.dob ? formatDate({ date: currentUser?.dob, format: 'DD-MM-YYYY' }) : '',
+    },
+    {
+      label: 'Bank account number',
+      text: currentUser?.bankAccount || '',
+    },
+    {
+      label: 'Bank account name',
+      text: currentUser?.bankAccountName || '',
     },
   ];
 
   return (
     <>
-      <Head title="Trang cá nhân" />
+      <Head title="Personal page" />
       <Stack
         direction={{ base: 'column-reverse', xl: 'row' }}
         alignItems="stretch"
@@ -55,7 +70,7 @@ export function ProfilePage() {
                 borderColor: 'neutral.500',
               }}
             >
-              Thông tin cá nhân
+              Personal information
             </Text>
             <InfoCard data={infoData} />
             <Stack />
@@ -77,15 +92,11 @@ export function ProfilePage() {
               <Avatar
                 boxSize={40}
                 objectFit="cover"
-                src={getStorageUrl(currentUser?.avatar as string)}
+                src={currentUser?.avatar}
                 cursor={currentUser?.avatar ? 'pointer' : 'default'}
                 onClick={
                   currentUser?.avatar
-                    ? () =>
-                        openPreview(
-                          getStorageUrl(currentUser?.avatar as string),
-                          currentUser.fullName || ''
-                        )
+                    ? () => openPreview(currentUser?.avatar || '', currentUser.fullName || '')
                     : undefined
                 }
               />
@@ -98,7 +109,7 @@ export function ProfilePage() {
             variant="ghost"
             leftIcon={<Icon as={MdModeEditOutline} boxSize={5} />}
           >
-            Chỉnh sửa
+            Edit
           </Button>
         </Stack>
       </Stack>

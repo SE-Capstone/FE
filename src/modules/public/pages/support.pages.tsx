@@ -42,8 +42,8 @@ export function SupportPage() {
           <CustomFormProvider form={formSupport} onSubmit={handleSubmit}>
             <Stack spacing={5}>
               <CustomPhoneInput
-                placeholder="Số điện thoại"
-                specialLabel="Số điện thoại (*)"
+                placeholder="Phone number"
+                specialLabel="Phone number (*)"
                 control={control}
                 name="phoneNumber"
               />

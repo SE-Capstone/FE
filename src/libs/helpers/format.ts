@@ -23,7 +23,7 @@ enum FormatDateTimeEnum {
 
 type FormatDateTimeType = {
   date: Date | string | Dayjs | number;
-  format: keyof typeof FormatDateTimeEnum;
+  format?: keyof typeof FormatDateTimeEnum;
 };
 
 /**
@@ -35,7 +35,10 @@ type FormatDateTimeType = {
  * @key {Date|string|Dayjs} date - The date you want to format.
  * @key {FormatDateTimeEnum} format - The format you want to use to format the date.
  */
-export function formatDate({ date, format }: FormatDateTimeType) {
+export function formatDate({
+  date,
+  format = FormatDateTimeEnum['YYYY-MM-DD'],
+}: FormatDateTimeType) {
   const maybeDate = isValidTimestamp(Number(date)) ? Number(date) : date;
 
   return dayjs(new Date(maybeDate as Date)).format(FormatDateTimeEnum[format]);

@@ -1,4 +1,4 @@
-import { GenderEnum, RolesEnum } from './common.enums';
+import { GenderEnum, RolesEnum, UserStatusEnum } from './common.enums';
 
 export const YESTERDAY = new Date(new Date().valueOf() - 1000 * 60 * 60 * 24);
 
@@ -9,6 +9,9 @@ export const MAX_SIZE_VIDEO = 10 * 1024 * 1024;
 export const FILE_TYPES_IMAGES = ['jpeg', 'png', 'jpg', 'heic', 'heif'];
 
 export const REGEX_FILE_TYPE_IMAGES = /([a-zA-Z0-9\s_\\.\-\(\):])+(.jpeg|.png|.jpg|.heic|.heif)$/i;
+
+export const REGEX_PASSWORD =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
 export const REGEX_FILE_TYPE_VIDEO = /([a-zA-Z0-9\s_\\.\-\(\):])+(.mp4)$/i;
 
@@ -22,45 +25,21 @@ export const FILES_TYPE_CSV_EXCEL = [
 ];
 
 export const DEFAULT_PAGINATION = {
-  page: 1,
-  perPage: 10,
-  createAt: 'desc',
+  pageIndex: 1,
+  perSize: 10,
 };
-
-export const ROLE_OPTIONS: Array<{ label: string; value: `${RolesEnum}` }> = [
-  {
-    label: 'Quản trị viên',
-    value: RolesEnum.Admin,
-  },
-  {
-    label: 'Kế toán',
-    value: RolesEnum.Accountant,
-  },
-  {
-    label: 'Nhân viên',
-    value: RolesEnum.Employee,
-  },
-  {
-    label: 'HR',
-    value: RolesEnum.HR,
-  },
-  {
-    label: 'Team lead',
-    value: RolesEnum.TeamLead,
-  },
-];
 
 export const GENDER_OPTIONS = [
   {
-    label: 'Nam',
+    label: 'Male',
     value: GenderEnum.male,
   },
   {
-    label: 'Nữ',
+    label: 'Female',
     value: GenderEnum.female,
   },
   {
-    label: 'Khác',
+    label: 'Others',
     value: GenderEnum.other,
   },
 ] as const;
@@ -74,13 +53,38 @@ export const ROLES_ACCESS: RolesEnum[] = [
 ];
 
 export const ROLES_LABEL: Record<Exclude<RolesEnum, RolesEnum.Employee>, string> = {
-  [RolesEnum.Admin]: `Quản trị viên - ${RolesEnum.Admin}`,
-  [RolesEnum.Accountant]: `Kế toán - ${RolesEnum.Accountant}`,
-  [RolesEnum.TeamLead]: `Team lead - ${RolesEnum.TeamLead}`,
-  [RolesEnum.HR]: `HR - ${RolesEnum.HR}`,
+  [RolesEnum.Admin]: `${RolesEnum.Admin}`,
+  [RolesEnum.Accountant]: `${RolesEnum.Accountant}`,
+  [RolesEnum.TeamLead]: `${RolesEnum.TeamLead}`,
+  [RolesEnum.HR]: `${RolesEnum.HR}`,
 };
 
+export const USER_STATUS_LABEL: Record<UserStatusEnum, string> = {
+  [UserStatusEnum.Active]: `Active`,
+  [UserStatusEnum.Inactive]: `Inactive`,
+};
+
+export const defaultRoles = [
+  RolesEnum.Admin,
+  RolesEnum.HR,
+  RolesEnum.Accountant,
+  RolesEnum.Employee,
+  RolesEnum.TeamLead,
+];
+
+export const GENDER_VALUES: Record<GenderEnum, string> = {
+  [GenderEnum.male]: 'Male',
+  [GenderEnum.female]: 'Female',
+  [GenderEnum.other]: 'Others',
+};
+
+export function getGender(gender?: GenderEnum) {
+  return gender ? GENDER_VALUES[gender] : '';
+}
+
 export const DEFAULT_MESSAGE = {
-  SUCCESS: 'Thành công',
-  SOMETHING_WRONG: 'Có lỗi xảy ra, vui lòng thử lại',
+  SUCCESS: 'Success',
+  SOMETHING_WRONG: 'Something went wrong, please try again',
+  UPDATE_SUCCESS: 'Update successfully',
+  CREATE_SUCCESS: 'Create successfully',
 };

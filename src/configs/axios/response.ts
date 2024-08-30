@@ -1,12 +1,12 @@
 import type { Method } from 'axios';
 
 export interface IMetaResponse {
-  currentPage: number;
-  lastPage: number;
+  pageIndex: number;
+  totalPages: number;
   next: number | null;
-  perPage: number;
+  pageSize: number;
   prev: number | null;
-  total: number;
+  totalCount: number;
 }
 
 export type RequestApiConfigType = Record<
@@ -22,13 +22,17 @@ export interface Request {
   method: Uppercase<Method>;
 }
 
+export interface IRequest {
+  params: {
+    id: string;
+  };
+}
+
 export interface IResponseApi<TData = unknown> {
   data: TData;
-  request: Request;
+  meta?: IMetaResponse;
   message: string;
   statusCode: number;
-  timestamp: string;
-  status: string;
 }
 
 export type IResponseListApi<TData = unknown> = IResponseApi<{
@@ -37,12 +41,11 @@ export type IResponseListApi<TData = unknown> = IResponseApi<{
 }>;
 
 export interface IResponseErrorApi {
-  statusCode: number;
-  status: string;
+  status: number;
   error: string;
-  request: Request;
   message: string;
-  messages?: Array<{ field: string; errors: Array<string> }>; // for error validation
+  title: string;
+  errors?: Record<string, Array<string>>; // for error validation
 }
 
 export interface IBaseEntity {

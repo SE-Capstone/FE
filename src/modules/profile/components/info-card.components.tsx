@@ -15,7 +15,7 @@ export const InfoCard: React.FC<InfoCardProps> = ({ data }) => (
             color="neutral.300"
             sx={{
               fontWeight: 'medium',
-              w: { base: '100px', md: '150px' },
+              w: { base: '100px', md: '200px' },
             }}
           >
             {`${label}:`}

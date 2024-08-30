@@ -5,10 +5,14 @@ const ENDPOINT_QUERIES = {
 } as const;
 
 const ENDPOINT_MUTATIONS = {
+  updateUser: 'users',
   detail: (userId: StringNumeric) => `users/${userId}`,
+  updateProfile: 'user/update-profile',
+  createUser: 'user',
+  listUser: 'users',
 } as const;
 
-export const USER_ENDPOINT_URL = {
+export const USERS_ENDPOINT_URL = {
   ...ENDPOINT_QUERIES,
   ...ENDPOINT_MUTATIONS,
 } as const;

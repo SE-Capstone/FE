@@ -1,12 +1,12 @@
 export enum GenderEnum {
-  male = 'male',
-  female = 'female',
-  other = 'other',
+  male = 1,
+  female = 2,
+  other = 3,
 }
 
 export enum UserStatusEnum {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
+  Active = 1,
+  Inactive = 2,
 }
 
 export enum RolesEnum {
@@ -15,17 +15,6 @@ export enum RolesEnum {
   Accountant = 'ACCOUNTANT',
   Employee = 'EMPLOYEE',
   TeamLead = 'TEAM_LEAD',
-}
-
-export const GENDER_VALUES: Record<keyof typeof GenderEnum, string> = {
-  female: 'Nữ',
-  male: 'Nam',
-  other: 'Khác',
-};
-
-export enum StatusEnum {
-  Active = 'ACTIVE',
-  Inactive = 'INACTIVE',
 }
 
 export enum OrderInput {

@@ -5,6 +5,7 @@ import type { IAuthLogoutResponse } from '../types/auth.types';
 import type { IResponseApi } from '@/configs/axios';
 import type { MutationConfig } from '@/libs/react-query';
 
+import { DEFAULT_MESSAGE } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
 import { clearStoredAuth, notify } from '@/libs/helpers';
 import { makeRequest } from '@/libs/react-query';
@@ -30,11 +31,11 @@ export function useLogoutMutation({ configs }: IAuthLogoutMutationProps = {}) {
     mutationFn: logoutMutation,
 
     onMutate: () => {
-      queryClient.clear();
       clearStoredAuth();
+      queryClient.clear();
     },
     onError: async () => {
-      notify({ type: 'error', message: 'Logout failed! Try Again' });
+      notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
     },
     onSuccess: async () => {
       notify({ type: 'success', message: 'Logout successfully!' });
