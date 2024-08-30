@@ -70,11 +70,8 @@ export function useGetListUserQuery(props: UseGetListUserQueryProps = {}) {
           pageIndex,
           search,
           pageSize,
-<<<<<<< HEAD
           orderBy: 'createDate',
           orderByDesc: 'desc',
-=======
->>>>>>> 4a8394c (a)
         },
         defaultParams
       ),
