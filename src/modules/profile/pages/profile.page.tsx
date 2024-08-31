@@ -8,7 +8,7 @@ import { useAuthentication } from '../hooks';
 import { Head } from '@/components/elements';
 import { PreviewImage } from '@/components/elements/preview-image';
 import { getGender, type RolesEnum } from '@/configs';
-import { formatDate } from '@/libs/helpers';
+import { formatDate, phoneNumberAutoFormat } from '@/libs/helpers';
 import { BadgeRole } from '@/modules/users/detail-user/components';
 
 export function ProfilePage() {
@@ -21,7 +21,7 @@ export function ProfilePage() {
     },
     {
       label: 'Phone number',
-      text: currentUser?.phone || '',
+      text: phoneNumberAutoFormat(currentUser?.phone || ''),
     },
     {
       label: 'Address',

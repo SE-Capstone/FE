@@ -17,7 +17,7 @@ export const updateUserFormSchema = z.object({
     .refine((val) => /^[0-9]+$/.test(val), { message: 'Invalid bank account number' }),
   bankAccountName: z.string().min(1).max(100),
   status: z.nativeEnum(UserStatusEnum, { message: 'Invalid status' }).optional(),
-  role: z.string().trim().min(1),
+  roleId: z.string().trim().min(1),
 });
 
 export type UpdateUserFormType = z.infer<typeof updateUserFormSchema>;

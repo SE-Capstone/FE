@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
 
+import { phoneNumberAutoFormat } from '@/libs/helpers';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
@@ -67,7 +68,7 @@ export function HeaderApp() {
                 <Stack spacing={0.5}>
                   <Text color="white">Account</Text>
                   <Text color="#a4a8ac">{fullName}</Text>
-                  <Text color="#a4a8ac">{currentUser?.phone}</Text>
+                  <Text color="#a4a8ac">{phoneNumberAutoFormat(currentUser?.phone || '')}</Text>
                 </Stack>
               }
             >

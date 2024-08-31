@@ -14,13 +14,13 @@ export interface IUpdateUserRequest {
   body: {
     id: string;
     address: string;
-    avatar?: File | string;
     fullName: string;
     gender: GenderEnum;
     dob: Date | string;
     phone: string;
     bankAccount: string;
     bankAccountName: string;
+    roleId?: string;
   };
 }
 

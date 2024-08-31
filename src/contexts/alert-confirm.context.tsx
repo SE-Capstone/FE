@@ -5,9 +5,9 @@ import type { AlertDialogProps } from '@chakra-ui/react';
 import { createStoreContext } from '@/libs/utils';
 
 const initialState = {
-  title: 'Xác nhận?' as React.ReactNode,
+  title: 'Confirm?' as React.ReactNode,
   description:
-    `Bạn có chắc thực hiện hành động này? Bạn không thể hoàn tác hành động này sau đó.` as React.ReactNode,
+    `Are you sure to do this action? You can't undo this action afterwards.` as React.ReactNode,
   textConfirm: 'OK',
   type: 'error' as 'error' | 'info',
   isOpenAlert: false,

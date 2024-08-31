@@ -60,11 +60,13 @@ export const ChangePasswordWidget: React.FC = () => {
             <CustomInput
               label="New password"
               type="password"
+              isRequired
               registration={register('newPassword')}
               error={errors?.newPassword}
             />
             <CustomInput
               label="Confirm password"
+              isRequired
               type="password"
               registration={register('confirmPassword')}
               error={errors?.confirmPassword}

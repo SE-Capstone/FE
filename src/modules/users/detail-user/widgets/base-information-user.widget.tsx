@@ -1,19 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import {
-  Avatar,
-  Box,
-  Button,
-  ButtonGroup,
-  Heading,
-  HStack,
-  Image,
-  SimpleGrid,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Button, Image, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
-import { Link } from 'react-router-dom';
 
 import { useGetRoles, type IRole } from '../../list-user/apis/get-roles.api';
 import { useUpdateUserMutation } from '../apis/update-user.api';
@@ -25,15 +13,15 @@ import type { IBank } from '@/modules/profile/apis/get-banks.api';
 
 import { CustomChakraReactSelect, CustomFormProvider, CustomInput } from '@/components/elements';
 import { PreviewImage } from '@/components/elements/preview-image';
-import { LayoutBack } from '@/components/layouts';
 import { EditRow } from '@/components/widgets';
 import { GENDER_OPTIONS } from '@/configs';
-import { formatDate, phoneNumberAutoFormat } from '@/libs/helpers';
+import { useAlertDialogStore } from '@/contexts';
+import { cleanPhoneNumber, formatDate, phoneNumberAutoFormat } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 import { useGetBanks } from '@/modules/profile/apis/get-banks.api';
 
-export function BaseInformationUserWidget({ detailUserData }: { detailUserData?: IUser }) {
-  const userId = detailUserData?.id;
+export function BaseInformationUserWidget({ user }: { user?: IUser }) {
+  const userId = user?.id;
 
   const { mutate: updateUserMutation, isPending: isLoading } = useUpdateUserMutation();
 
@@ -62,17 +50,28 @@ export function BaseInformationUserWidget({ detailUserData }: { detailUserData?:
   const { formState, register, reset, control } = form;
   const { errors, isDirty } = formState;
 
+  const { openAlert, closeAlert } = useAlertDialogStore(isLoading);
+
   function onSubmit(values: UpdateUserFormType) {
     if (isLoading) return;
 
-    updateUserMutation({
-      body: {
-        ...values,
-        id: userId || '',
-        dob: formatDate({
-          date: values.dob,
-          format: 'YYYY-MM-DD',
-        }),
+    openAlert({
+      title: 'Update',
+      description: `Are you sure to update user "${user?.fullName}"?`,
+      onHandleConfirm() {
+        updateUserMutation({
+          body: {
+            ...values,
+            id: userId || '',
+            phone: cleanPhoneNumber(values.phone),
+            dob: formatDate({
+              date: values.dob,
+              format: 'YYYY-MM-DD',
+            }),
+          },
+        });
+
+        closeAlert();
       },
     });
   }
@@ -80,11 +79,11 @@ export function BaseInformationUserWidget({ detailUserData }: { detailUserData?:
   useEffect(() => {
     reset(
       {
-        ...detailUserData,
-        role: detailUserData?.roleId,
-        dob: detailUserData?.dob
+        ...user,
+        roleId: user?.roleId,
+        dob: user?.dob
           ? formatDate({
-              date: detailUserData?.dob,
+              date: user?.dob,
               format: 'YYYY-MM-DD',
             })
           : undefined,
@@ -93,13 +92,13 @@ export function BaseInformationUserWidget({ detailUserData }: { detailUserData?:
         keepDirty: false,
       }
     );
-  }, [reset, detailUserData]);
+  }, [reset, user]);
 
   return (
     <Box bg="white" rounded={2} w="full">
       <CustomFormProvider form={form} style={{ height: 'fit-content' }} onSubmit={onSubmit}>
         <Stack
-          direction={{ base: 'column-reverse', xl: 'row' }}
+          direction={{ base: 'column-reverse' }}
           spacing="24px"
           w="100%"
           alignItems="flex-start"
@@ -185,7 +184,7 @@ export function BaseInformationUserWidget({ detailUserData }: { detailUserData?:
                 value: role.id,
               }))}
               control={control}
-              name="role"
+              name="roleId"
             />
             <Stack align="center">
               <Button
@@ -200,17 +199,17 @@ export function BaseInformationUserWidget({ detailUserData }: { detailUserData?:
             </Stack>
           </Stack>
           <EditRow title="Avatar">
-            {detailUserData?.avatar ? (
+            {user?.avatar ? (
               <PreviewImage>
                 {({ openPreview }) => (
                   <Image
                     cursor="pointer"
-                    src={detailUserData?.avatar ? detailUserData?.avatar : undefined}
+                    src={user?.avatar ? user?.avatar : undefined}
                     boxSize={30}
                     rounded={1}
                     onClick={() => {
-                      if (!detailUserData?.avatar) return;
-                      openPreview(detailUserData?.avatar, '');
+                      if (!user?.avatar) return;
+                      openPreview(user?.avatar, '');
                     }}
                   />
                 )}

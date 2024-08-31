@@ -47,8 +47,8 @@ export function useLogoutMutation({ configs }: IAuthLogoutMutationProps = {}) {
 
   const handleLogout = () => {
     openAlert({
-      title: 'Đăng xuất',
-      description: 'Bạn có chắc chắn muốn đăng xuất?',
+      title: 'Logout',
+      description: 'Are you sure to logout?',
       onHandleConfirm() {
         mutation.mutate();
         closeAlert();

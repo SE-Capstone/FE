@@ -341,6 +341,8 @@ export const phoneNumberAutoFormat = (phoneNumber: string): string => {
   return number.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
 };
 
+export const cleanPhoneNumber = (phone: string) => phone.replace(/-/g, '');
+
 interface IGetFullName {
   firstName?: string;
   lastName?: string;

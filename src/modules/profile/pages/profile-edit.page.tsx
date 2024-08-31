@@ -23,7 +23,7 @@ import {
 } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
 import { GENDER_OPTIONS, GenderEnum } from '@/configs';
-import { formatDate, phoneNumberAutoFormat } from '@/libs/helpers';
+import { cleanPhoneNumber, formatDate, phoneNumberAutoFormat } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export const EditProfilePage: React.FC = () => {
@@ -57,6 +57,7 @@ export const EditProfilePage: React.FC = () => {
     updateProfileMutation({
       body: {
         ...values,
+        phone: cleanPhoneNumber(values.phone),
         dob: formatDate({
           date: values.dob,
           format: 'YYYY-MM-DD',

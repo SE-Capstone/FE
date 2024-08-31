@@ -18,9 +18,9 @@ export function DetailUserPage() {
       <Container maxW="container.2xl" centerContent>
         <StateHandler showLoader={isLoading} showError={!!isError}>
           <LayoutBack>
-            <BaseInformationUserWidget detailUserData={user} />
+            <BaseInformationUserWidget user={user} />
           </LayoutBack>
-          <AdminChangePasswordWidget userId={userId || ''} />
+          <AdminChangePasswordWidget user={user} />
         </StateHandler>
       </Container>
     </>

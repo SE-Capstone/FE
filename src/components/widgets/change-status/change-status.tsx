@@ -23,8 +23,8 @@ export function ChangeStatus(props: ChangeStatusProps) {
   function handleChangeSwitch() {
     reset();
     openAlert({
-      title: 'Xác nhận thay đổi trạng thái',
-      description: `Bạn có chắc chắn muốn ${isInactive ? 'Hiển thị' : 'ẩn'} không?`,
+      title: 'Confirm update status',
+      description: `Are you sure to ${isInactive ? 'hide' : 'show'} user?`,
       onHandleConfirm() {
         onChangeStatus?.(isInactive ? UserStatusEnum.Inactive : UserStatusEnum.Active, () => {
           closeAlert();
@@ -35,7 +35,7 @@ export function ChangeStatus(props: ChangeStatusProps) {
   }
 
   return (
-    <Tooltip label={isInactive ? 'Hiển thị' : 'Ẩn'} hasArrow placement="top" shouldWrapChildren>
+    <Tooltip label={isInactive ? 'Show' : 'Hide'} hasArrow placement="top" shouldWrapChildren>
       <Switch
         key={initStatus}
         size="lg"

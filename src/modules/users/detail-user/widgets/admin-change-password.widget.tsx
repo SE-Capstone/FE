@@ -1,16 +1,16 @@
-import type React from 'react';
-
 import { Button, Heading, Stack } from '@chakra-ui/react';
 
 import { useAdminChangePasswordMutation } from '../apis/admin-change-password.api';
 import { adminChangePasswordSchema } from '../validations/admin-change-password.validation';
 
+import type { IUser } from '../../list-user/types';
 import type { AdminChangePasswordFormType } from '../validations/admin-change-password.validation';
 
 import { CustomFormProvider, CustomInput } from '@/components/elements';
+import { useAlertDialogStore } from '@/contexts';
 import { useFormWithSchema } from '@/libs/hooks';
 
-export function AdminChangePasswordWidget({ userId }: { userId: string }) {
+export function AdminChangePasswordWidget({ user }: { user?: IUser }) {
   const form = useFormWithSchema({
     schema: adminChangePasswordSchema,
   });
@@ -20,14 +20,23 @@ export function AdminChangePasswordWidget({ userId }: { userId: string }) {
   const { mutate: changePasswordMutation, isPending: isLoading } = useAdminChangePasswordMutation({
     reset,
   });
+  const { openAlert, closeAlert } = useAlertDialogStore(isLoading);
 
   function onSubmit(values: AdminChangePasswordFormType) {
     if (isLoading) return;
 
-    changePasswordMutation({
-      body: {
-        userId,
-        ...values,
+    openAlert({
+      title: 'Update',
+      description: `Are you sure to update password for user "${user?.fullName}"?`,
+      onHandleConfirm() {
+        changePasswordMutation({
+          body: {
+            userId: user?.id || '',
+            ...values,
+          },
+        });
+
+        closeAlert();
       },
     });
   }
