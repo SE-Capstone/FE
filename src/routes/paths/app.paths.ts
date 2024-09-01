@@ -1,8 +1,6 @@
 import { authPaths } from './auth.paths';
-import { guaranteesPaths } from './guarantees.paths';
-import { productsPaths } from './products.path';
 import { profilePaths } from './profile.paths';
-import { requestGuaranteesPaths } from './request-guarantee';
+import { rolesPaths } from './roles.path';
 import { usersPaths } from './users.paths';
 
 export const APP_PATHS = {
@@ -11,7 +9,5 @@ export const APP_PATHS = {
   ...authPaths,
   ...profilePaths,
   ...usersPaths,
-  ...productsPaths,
-  ...guaranteesPaths,
-  ...requestGuaranteesPaths,
+  ...rolesPaths,
 } as const;

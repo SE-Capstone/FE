@@ -16,11 +16,9 @@ import type { RolesEnum } from '@/configs';
 import { CustomLink, Head, TableComponent } from '@/components/elements';
 import { GENDER_VALUES } from '@/configs';
 import { getNumericalOrder } from '@/libs/helpers';
-import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListUsersPage() {
-  const { isAdmin } = useAuthentication();
   const { usersQueryState } = useUsersQueryFilterStateContext();
   const { pathname } = useLocation();
 

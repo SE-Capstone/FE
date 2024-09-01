@@ -3,10 +3,13 @@ import { Outlet } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 
 import { lazyImport } from '@/libs/utils';
-import { DetailUserPage } from '@/modules/users/detail-user/pages';
 import { UsersQueryProvider } from '@/modules/users/list-user/contexts';
 
 const { ListUsersPage } = lazyImport(() => import('@/modules/users/list-user'), 'ListUsersPage');
+const { DetailUserPage } = lazyImport(
+  () => import('@/modules/users/detail-user/pages'),
+  'DetailUserPage'
+);
 
 export function usersRoutes(): RouteObject {
   return {
