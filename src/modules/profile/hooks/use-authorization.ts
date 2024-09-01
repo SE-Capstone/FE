@@ -13,9 +13,9 @@ export function useAuthorization() {
 
       if (isAdmin) return true;
 
-      return accessRoles.includes(currentUser?.role as RolesEnum);
+      return accessRoles.includes(currentUser?.roleName as RolesEnum);
     },
-    [currentUser?.role, isAdmin, isLogged]
+    [currentUser?.roleName, isAdmin, isLogged]
   );
 
   return {

@@ -19,8 +19,9 @@ interface ICreateUserRequest {
     fullName: string;
     address: string;
     gender: GenderEnum;
-    dob: Date;
+    dob: Date | string;
     phone: string;
+    roleId: string;
   };
 }
 

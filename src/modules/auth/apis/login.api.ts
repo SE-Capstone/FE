@@ -52,7 +52,7 @@ export function useLoginMutation({ configs }: IAuthLoginMutationProps = {}) {
         accessToken: result.accessToken,
         refreshToken: result.refreshToken,
         userId: result.userId,
-        role: result.role,
+        roleName: result.roleName,
       });
 
       notify({

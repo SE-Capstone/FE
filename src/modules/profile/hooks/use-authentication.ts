@@ -19,9 +19,9 @@ export function useAuthentication() {
 
   const isLogged = !!user && !!accessToken;
 
-  const isAdmin = isLogged && user?.role === RolesEnum.Admin;
+  const isAdmin = isLogged && user?.roleName === RolesEnum.Admin;
 
-  const role = user?.role;
+  const role = user?.roleName;
 
   const currentUserId = user?.id || 0;
 

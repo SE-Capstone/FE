@@ -1,6 +1,7 @@
 export interface IAuthUserLoginResponse {
   userId: string;
-  role: string;
+  roleId: string;
+  roleName: string;
   accessToken: string;
   refreshToken: string;
 }

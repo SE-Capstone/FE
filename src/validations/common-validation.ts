@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import type { ZodTypeAny } from 'zod';
 
-import { isDateBeforeToday } from '@/libs/helpers';
+import { isDateBeforeToday, isOlderThan18Years } from '@/libs/helpers';
 
 // export const regexEmail =
 //   /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -80,7 +80,8 @@ export const getBirthdayField = () =>
         },
       })
     )
-    .refine((date) => isDateBeforeToday(date), 'Ngày sinh phải trước hôm nay');
+    .refine((date) => isDateBeforeToday(date), 'Birthday must be before today')
+    .refine((date) => isOlderThan18Years(date), 'Birthday must be older than 18 years');
 
 export const numericStringField = (schema: ZodTypeAny) =>
   z.preprocess((a) => {

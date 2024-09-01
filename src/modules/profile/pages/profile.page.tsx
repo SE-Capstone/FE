@@ -29,7 +29,7 @@ export function ProfilePage() {
     },
     {
       label: 'Role',
-      text: <BadgeRole role={currentUser?.role as unknown as RolesEnum} />,
+      text: <BadgeRole role={currentUser?.roleName as unknown as RolesEnum} />,
     },
     {
       label: 'Gender',

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { Avatar, Container } from '@chakra-ui/react';
+import { Container } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 
 import { BadgeRole } from '../../detail-user/components';
@@ -79,9 +79,6 @@ export function ListUsersPage() {
                 <CustomLink
                   to={pathname.includes(APP_PATHS.listUsers) ? String(id) : '#'}
                   noOfLines={1}
-                  onClick={(e) => {
-                    !isAdmin && e.preventDefault();
-                  }}
                 >
                   {fullName || ''}
                 </CustomLink>
@@ -105,9 +102,6 @@ export function ListUsersPage() {
                 <CustomLink
                   to={pathname.includes(APP_PATHS.listUsers) ? String(id) : '#'}
                   noOfLines={1}
-                  onClick={(e) => {
-                    !isAdmin && e.preventDefault();
-                  }}
                 >
                   {email}
                 </CustomLink>
@@ -146,7 +140,7 @@ export function ListUsersPage() {
         ],
       },
     ],
-    [isAdmin, meta.pageIndex, meta.pageSize, pathname]
+    [meta.pageIndex, meta.pageSize, pathname]
   );
 
   return (

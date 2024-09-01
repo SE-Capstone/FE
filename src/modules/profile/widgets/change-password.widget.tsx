@@ -7,7 +7,7 @@ import { changePasswordSchema } from '../validation/change-password.validation';
 
 import type { ChangePasswordFormType } from '../validation/change-password.validation';
 
-import { CustomFormProvider, CustomInput, Head } from '@/components/elements';
+import { CustomFormProvider, CustomInput } from '@/components/elements';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export const ChangePasswordWidget: React.FC = () => {

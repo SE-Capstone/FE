@@ -382,6 +382,15 @@ export function isDateBeforeToday(date: Date) {
   return new Date(date.toDateString()) < new Date(new Date().toDateString());
 }
 
+export function isOlderThan18Years(date: Date | undefined): boolean {
+  if (!date) return false;
+
+  const today = new Date();
+  const eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+
+  return date <= eighteenYearsAgo;
+}
+
 /**
  * Custom toFixed method
  * @param val - Number to be converted

@@ -4,7 +4,7 @@ export interface ITokenStorage {
   accessToken: string;
   refreshToken: string;
   userId: string;
-  role: string;
+  roleName: string;
 }
 
 const SIGNATURE = isProduction ? 'signature-web' : 'signature-web-dev';

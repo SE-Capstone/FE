@@ -5,6 +5,7 @@ import { userFormSchema } from '../../validations/users.validations';
 
 import type { UserFormValues } from '../../validations/users.validations';
 
+import { cleanPhoneNumber, formatDate } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export function useCreateUserHook() {
@@ -26,7 +27,14 @@ export function useCreateUserHook() {
 
       try {
         await loginMutation({
-          body: values,
+          body: {
+            ...values,
+            phone: cleanPhoneNumber(values.phone),
+            dob: formatDate({
+              date: values.dob,
+              format: 'YYYY-MM-DD',
+            }),
+          },
         });
       } catch (error) {}
     },

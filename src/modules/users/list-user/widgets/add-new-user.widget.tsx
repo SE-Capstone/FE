@@ -1,5 +1,7 @@
-import { Button, HStack, SimpleGrid, Stack, Tooltip, Icon, Center } from '@chakra-ui/react';
-import { AiOutlineQuestionCircle } from 'react-icons/ai';
+import { useEffect } from 'react';
+
+import { Button, HStack, SimpleGrid, Stack } from '@chakra-ui/react';
+import { Controller } from 'react-hook-form';
 
 import { useCreateUserHook } from '../hooks/mutations';
 
@@ -9,10 +11,10 @@ import {
   CustomChakraReactSelect,
   CustomFormProvider,
   CustomInput,
-  CustomPhoneInput,
   ModalBase,
 } from '@/components/elements';
 import { GENDER_OPTIONS } from '@/configs';
+import { phoneNumberAutoFormat } from '@/libs/helpers';
 
 export interface AddNewUserWidgetProps {
   children: React.ReactElement;
@@ -90,11 +92,23 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
               error={errors.dob}
             />
           </SimpleGrid>{' '}
-          <CustomPhoneInput
-            specialLabel="Phone number *"
-            placeholder="Phone number "
-            control={control}
+          <Controller
             name="phone"
+            control={control}
+            render={({ field: { value, onChange, ...field } }) => (
+              <CustomInput
+                label="Phone number"
+                placeholder="012-345-6789"
+                isRequired
+                error={errors?.phone}
+                value={value ?? ''}
+                maxLength={12}
+                onChange={(e) => {
+                  onChange(phoneNumberAutoFormat(e.target.value));
+                }}
+                {...field}
+              />
+            )}
           />
           <CustomInput
             label="Address"
@@ -114,7 +128,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
                 value: role.id,
               }))}
               control={control}
-              name="role"
+              name="roleId"
             />
           </HStack>
         </Stack>
