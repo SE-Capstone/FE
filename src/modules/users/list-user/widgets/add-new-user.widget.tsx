@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import { Button, HStack, SimpleGrid, Stack } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
 

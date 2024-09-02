@@ -4,7 +4,7 @@ import type { ICurrentUserResponse } from '@/modules/auth/types';
 export type QueryListUserInput = {
   fullName?: string;
   status?: UserStatusEnum;
-  role?: string;
+  roleId?: string;
 };
 
 export type IUser = ICurrentUserResponse & {

@@ -211,7 +211,7 @@ const TableHeader = <T extends object>({
               lineHeight: '120%',
             }}
           >
-            Hành động
+            Actions
           </Th>
         )}
         {hasDraggable && (
@@ -227,7 +227,7 @@ const TableHeader = <T extends object>({
               lineHeight: '120%',
             }}
           >
-            Sắp xếp
+            Order
           </Th>
         )}
       </Tr>

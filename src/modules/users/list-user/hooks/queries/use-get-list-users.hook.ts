@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { merge } from 'lodash-es';
@@ -22,7 +22,7 @@ interface IGetListUserRequest {
 
 export const defaultFilterUsers: QueryListUserInput = {
   fullName: undefined,
-  role: undefined,
+  roleId: undefined,
   status: undefined,
 };
 

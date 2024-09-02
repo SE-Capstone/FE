@@ -1,20 +1,24 @@
 import { z } from 'zod';
 
+import { REGEX_PASSWORD } from '@/configs';
 import { regexEmail } from '@/validations';
 
 export const loginValidationSchema = z.object({
   email: z
     .string({
-      invalid_type_error: 'Email không được để trống',
-      required_error: 'Email không được để trống',
+      invalid_type_error: 'Email is required',
+      required_error: 'Email is required',
     })
-    .regex(regexEmail, `Email không hợp lệ`),
+    .regex(regexEmail, `Invalid email`),
   password: z
-    .string({
-      invalid_type_error: 'Mật khẩu không được để trống',
-      required_error: 'Mật khẩu không được để trống',
-    })
-    .min(3, 'Mật khẩu phải có ít nhất 3 ký tự'),
+    .string()
+    .trim()
+    .min(6)
+    .max(255)
+    .regex(
+      REGEX_PASSWORD,
+      'Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character'
+    ),
 });
 
 export type LoginValidationSchemaType = z.infer<typeof loginValidationSchema>;

@@ -51,7 +51,7 @@ export function ActionTableUsersWidget() {
                 }))}
                 onChange={(opt) => {
                   setUsersQueryFilterState({
-                    role: opt?.value ? opt.value : undefined,
+                    roleId: opt?.value ? opt.value : undefined,
                   });
                 }}
               />

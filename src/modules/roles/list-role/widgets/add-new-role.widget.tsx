@@ -15,7 +15,6 @@ export function AddNewRoleWidget(props: AddNewRoleWidgetProps) {
 
   const {
     register,
-    control,
     formState: { errors },
   } = formCreateRole;
 

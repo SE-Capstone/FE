@@ -57,7 +57,7 @@ export function useLoginMutation({ configs }: IAuthLoginMutationProps = {}) {
 
       notify({
         type: 'success',
-        message: `Đăng nhập thành công`,
+        message: `Login successfully`,
       });
       navigate(APP_PATHS.HOME);
     },

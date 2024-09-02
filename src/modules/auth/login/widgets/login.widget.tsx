@@ -13,6 +13,7 @@ import { CustomFormProvider, CustomInput, CustomLink } from '@/components/elemen
 import { notify } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 import { LayoutAuth } from '@/modules/auth/layouts';
+import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function LoginWidget() {
   const [loading, setLoading] = React.useState(false);
@@ -33,7 +34,7 @@ export function LoginWidget() {
     } catch (error) {
       notify({
         type: 'error',
-        message: 'Đăng nhập thất bại, vui lòng thử lại',
+        message: 'Login failed, Please try again!',
       });
     } finally {
       setLoading(false);
@@ -41,13 +42,13 @@ export function LoginWidget() {
   }
 
   return (
-    <LayoutAuth title="Đăng nhập" Icon={<ChakraIcon as={MdLockOpen} w={8} h={8} />}>
+    <LayoutAuth title="Login" Icon={<ChakraIcon as={MdLockOpen} w={8} h={8} />}>
       <CustomFormProvider
         isDisabled={loading || loadingMutation}
         form={formLogin}
         onSubmit={handleSubmitLogin}
       >
-        <Stack spacing={5}>
+        <Stack spacing={3}>
           <CustomInput
             label="Email"
             isRequired
@@ -56,10 +57,10 @@ export function LoginWidget() {
             error={errors.email}
           />
           <CustomInput
-            label="Mật khẩu"
+            label="Password"
             isRequired
             type="password"
-            placeholder="Nhập mật khẩu"
+            placeholder="Enter password"
             registration={register('password')}
             error={errors.password}
           />
@@ -67,7 +68,7 @@ export function LoginWidget() {
             {/* <Checkbox size="lg" value="remember">
               Remember me
             </Checkbox> */}
-            <CustomLink style={{ marginLeft: 'auto' }} to="/forgot-password">
+            <CustomLink style={{ marginLeft: 'auto' }} to={APP_PATHS.forgotPassword}>
               Forgot password?
             </CustomLink>
           </HStack>
@@ -88,7 +89,7 @@ export function LoginWidget() {
           variant="solid"
           sx={{ mt: 3, mb: 2 }}
         >
-          Gửi
+          Login
         </Button>
       </CustomFormProvider>
     </LayoutAuth>
