@@ -39,6 +39,7 @@ export function ResetPasswordPage() {
     if (code) {
       await checkCodeMutation({ body: { code } });
       setCode(code);
+      return;
     }
 
     navigate(APP_PATHS.login);
