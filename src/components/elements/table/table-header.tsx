@@ -170,6 +170,7 @@ const TableHeader = <T extends object>({
               defaultChecked={false}
               isChecked={isCheckAll}
               isIndeterminate={isIndeterminate}
+              py={3}
               size="lg"
               variant="normal"
               onChange={
@@ -187,6 +188,7 @@ const TableHeader = <T extends object>({
           <HeaderCell<T>
             key={String(col.key)}
             isNumeric={col.isNumeric}
+            py={3}
             accessor={String(col.key) as keyof T}
             // ref={refs[index]}
             handleSortBy={handleSortBy}
@@ -204,6 +206,7 @@ const TableHeader = <T extends object>({
             _hover={{
               cursor: 'pointer',
             }}
+            py={3}
             sx={{
               userSelect: 'none',
               fontWeight: '700',
@@ -219,6 +222,7 @@ const TableHeader = <T extends object>({
             width="8"
             textAlign="center"
             textTransform="uppercase"
+            py={3}
             color="neutral.300"
             sx={{
               userSelect: 'none',

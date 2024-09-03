@@ -8,6 +8,7 @@ const ENDPOINT_MUTATIONS = {
   logout: 'auth/logout',
   changePassword: 'auth/change-password',
   adminChangePassword: 'auth/admin-change-password',
+  checkResetCode: 'auth/check-code',
 } as const;
 
 export const AUTH_ENDPOINT_URL = {

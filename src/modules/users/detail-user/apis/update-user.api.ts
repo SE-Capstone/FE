@@ -18,8 +18,6 @@ export interface IUpdateUserRequest {
     gender: GenderEnum;
     dob: Date | string;
     phone: string;
-    bankAccount: string;
-    bankAccountName: string;
     roleId?: string;
   };
 }

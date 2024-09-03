@@ -268,6 +268,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                               <Td
                                 key={String(column.key)}
                                 border="none"
+                                py={2}
                                 isNumeric={
                                   // typeof object[column.key] === 'number' && column.key === 'id'
                                   false
@@ -291,7 +292,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                         ))}
 
                         {additionalFeature && (
-                          <Td border="none" textAlign="right" pos="relative">
+                          <Td py={2} border="none" textAlign="right" pos="relative">
                             {additionalFeature(object)}
                           </Td>
                         )}

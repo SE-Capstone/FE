@@ -23,7 +23,12 @@ import {
 } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
 import { GENDER_OPTIONS, GenderEnum } from '@/configs';
-import { cleanPhoneNumber, formatDate, phoneNumberAutoFormat } from '@/libs/helpers';
+import {
+  cleanPhoneNumber,
+  formatDate,
+  getCurrentDate,
+  phoneNumberAutoFormat,
+} from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export const EditProfilePage: React.FC = () => {
@@ -75,11 +80,11 @@ export const EditProfilePage: React.FC = () => {
           fullName: currentUser.fullName || '',
           phone: currentUser.phone || '',
           dob: currentUser.dob
-            ? formatDate({
+            ? (formatDate({
                 date: currentUser.dob,
                 format: 'YYYY-MM-DD',
-              })
-            : undefined,
+              }) as unknown as Date)
+            : (getCurrentDate() as unknown as Date),
           gender: currentUser.gender || GenderEnum.male,
           bankAccount: currentUser.bankAccount || '',
           bankAccountName: currentUser.bankAccountName || '',

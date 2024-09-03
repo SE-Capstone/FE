@@ -14,9 +14,14 @@ import type { IBank } from '@/modules/profile/apis/get-banks.api';
 import { CustomChakraReactSelect, CustomFormProvider, CustomInput } from '@/components/elements';
 import { PreviewImage } from '@/components/elements/preview-image';
 import { EditRow } from '@/components/widgets';
-import { GENDER_OPTIONS } from '@/configs';
+import { GENDER_OPTIONS, USER_STATUS_OPTIONS } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
-import { cleanPhoneNumber, formatDate, phoneNumberAutoFormat } from '@/libs/helpers';
+import {
+  cleanPhoneNumber,
+  formatDate,
+  getCurrentDate,
+  phoneNumberAutoFormat,
+} from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 import { useGetBanks } from '@/modules/profile/apis/get-banks.api';
 
@@ -82,11 +87,11 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
         ...user,
         roleId: user?.roleId,
         dob: user?.dob
-          ? formatDate({
+          ? (formatDate({
               date: user?.dob,
               format: 'YYYY-MM-DD',
-            })
-          : undefined,
+            }) as unknown as Date)
+          : (getCurrentDate() as unknown as Date),
       },
       {
         keepDirty: false,
@@ -117,6 +122,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                   registration={register('fullName')}
                   error={errors?.fullName}
                 />
+                <CustomInput label="Email" value={user?.email} disabled />
                 <Controller
                   name="phone"
                   control={control}
@@ -150,23 +156,16 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                   registration={register('dob')}
                   error={errors.dob}
                 />
-                <CustomInput
-                  label="Bank account number"
-                  isRequired
-                  registration={register('bankAccount')}
-                  error={errors?.bankAccount}
-                />
                 <CustomChakraReactSelect
                   isRequired
                   isSearchable
-                  label="Bank account name"
-                  options={banks.map((bank) => ({
-                    label: `${bank.code} - ${bank.name}`,
-                    value: bank.short_name,
-                  }))}
+                  label="Choose status"
+                  options={USER_STATUS_OPTIONS}
                   control={control}
-                  name="bankAccountName"
+                  name="status"
                 />
+                <CustomInput label="Bank account number" value={user?.bankAccount} disabled />
+                <CustomInput label="Bank account name" value={user?.bankAccountName} disabled />
               </SimpleGrid>
             </Stack>
             <CustomInput

@@ -20,6 +20,10 @@ export function ProfilePage() {
       text: currentUser?.fullName || '',
     },
     {
+      label: 'Email',
+      text: currentUser?.email || '',
+    },
+    {
       label: 'Phone number',
       text: phoneNumberAutoFormat(currentUser?.phone || ''),
     },

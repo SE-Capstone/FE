@@ -43,3 +43,7 @@ export function formatDate({
 
   return dayjs(new Date(maybeDate as Date)).format(FormatDateTimeEnum[format]);
 }
+
+export function getCurrentDate() {
+  return dayjs().format(FormatDateTimeEnum['YYYY-MM-DD']);
+}

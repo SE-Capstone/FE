@@ -8,14 +8,9 @@ export const updateUserFormSchema = z.object({
   fullName: z.string().trim().min(1).max(100),
   phone: z.string().trim().min(8).max(15),
   gender: z.nativeEnum(GenderEnum, { message: 'Invalid gender' }),
-  dob: getBirthdayField().or(z.string()),
+  dob: getBirthdayField(),
   address: z.string().trim().min(1).max(255),
   avatar: z.instanceof(File).optional().or(z.string().optional()),
-  bankAccount: z
-    .string()
-    .max(30, { message: 'Invalid bank account number' })
-    .refine((val) => /^[0-9]+$/.test(val), { message: 'Invalid bank account number' }),
-  bankAccountName: z.string().min(1).max(100),
   status: z.nativeEnum(UserStatusEnum, { message: 'Invalid status' }).optional(),
   roleId: z.string().trim().min(1),
 });

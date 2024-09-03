@@ -59,6 +59,17 @@ export const ROLES_LABEL: Record<Exclude<RolesEnum, RolesEnum.Employee>, string>
   [RolesEnum.HR]: `${RolesEnum.HR}`,
 };
 
+export const USER_STATUS_OPTIONS = [
+  {
+    label: 'Active',
+    value: UserStatusEnum.Active,
+  },
+  {
+    label: 'Inactive',
+    value: UserStatusEnum.Inactive,
+  },
+];
+
 export const USER_STATUS_LABEL: Record<UserStatusEnum, string> = {
   [UserStatusEnum.Active]: `Active`,
   [UserStatusEnum.Inactive]: `Inactive`,

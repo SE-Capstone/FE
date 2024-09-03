@@ -20,7 +20,6 @@ function useUsersQueryFilterStateContext() {
 
   const handleSetFilter = useCallback(
     (newFilters: Partial<IUsersQueryState['filters']>) => {
-      console.log(state);
       setState({
         filters: {
           ...state.filters,
