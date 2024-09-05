@@ -1,40 +1,9 @@
-import { useEffect, useMemo } from 'react';
+import { useContext } from 'react';
 
-import { RolesEnum } from '@/configs';
-import { clearStoredAuth, getAccessToken } from '@/libs/helpers';
-import { useGetCurrentUser } from '@/modules/auth/apis/current-user.api';
+import { AuthContext } from './auth-context';
 
-export function useAuthentication() {
-  const accessToken = getAccessToken();
+export const useAuthentication = () => {
+  const context = useContext(AuthContext);
 
-  const { user, isError, error, ...restGetProfileQuery } = useGetCurrentUser();
-
-  useEffect(() => {
-    if (isError) {
-      if (error?.code === 401 || error?.statusCode === 401) {
-        clearStoredAuth();
-      }
-    }
-  }, [isError, error]);
-
-  const isLogged = !!user && !!accessToken;
-
-  const isAdmin = isLogged && user?.roleName === RolesEnum.Admin;
-
-  const role = user?.roleName;
-
-  const currentUserId = user?.id || 0;
-
-  const currentUser = useMemo(() => user, [user]);
-
-  return {
-    isLogged,
-    isAdmin,
-    role,
-    currentUserId,
-    data: user,
-    fullName: user?.fullName || '',
-    currentUser,
-    ...restGetProfileQuery,
-  };
-}
+  return context;
+};

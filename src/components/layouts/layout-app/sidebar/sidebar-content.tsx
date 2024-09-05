@@ -33,12 +33,12 @@ interface SidebarContentProps extends BoxProps {
 }
 
 export const SidebarContent = ({ onClose, ...rest }: SidebarContentProps) => {
-  const { currentUserId, isAdmin } = useAuthentication();
+  const { isLogged, isAdmin } = useAuthentication();
   const { handleLogout: handleLogoutMutation, isPending: logoutMutationResult } =
     useLogoutMutation();
 
   async function handleLogout() {
-    if (!currentUserId) return;
+    if (!isLogged) return;
 
     try {
       handleLogoutMutation();
