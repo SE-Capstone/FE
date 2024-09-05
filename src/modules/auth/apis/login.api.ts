@@ -9,6 +9,7 @@ import type { MutationConfig } from '@/libs/react-query';
 import { DEFAULT_MESSAGE } from '@/configs';
 import { clearStoredAuth, getErrorMessage, notify, setStoredAuth } from '@/libs/helpers';
 import { makeRequest } from '@/libs/react-query';
+import { useAuth } from '@/modules/profile/hooks/auth-context';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 
@@ -34,6 +35,7 @@ interface IAuthLoginMutationProps {
 
 export function useLoginMutation({ configs }: IAuthLoginMutationProps = {}) {
   const navigate = useNavigate();
+  const { handleInitializeLogin } = useAuth();
 
   return useMutation({
     mutationFn: authLoginRequest,
@@ -47,6 +49,7 @@ export function useLoginMutation({ configs }: IAuthLoginMutationProps = {}) {
         return;
       }
       const result = data?.data;
+      handleInitializeLogin && handleInitializeLogin();
 
       setStoredAuth<ITokenStorage>({
         accessToken: result.accessToken,

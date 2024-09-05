@@ -13,6 +13,7 @@ import { GlobalLoading } from './components/elements';
 import { GOOGLE_CLIENT_ID } from './configs';
 import { AlertDialogProvider } from './contexts';
 import { queryClientOptions } from './libs/react-query';
+import { AuthProvider } from './modules/profile/hooks/auth-context';
 import { AppRouter } from './routes/router';
 
 import theme from '@/themes';
@@ -30,7 +31,9 @@ export default function App() {
             <ChakraProvider theme={theme}>
               <Suspense fallback={<GlobalLoading isLoading />}>
                 <AlertDialogProvider>
-                  <AppRouter />
+                  <AuthProvider>
+                    <AppRouter />
+                  </AuthProvider>
                 </AlertDialogProvider>
                 <Box
                   __css={{
