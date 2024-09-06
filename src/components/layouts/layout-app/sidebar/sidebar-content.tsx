@@ -74,7 +74,7 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarContentProps) => {
           icon: MdOutlineSettings,
           path: '/roles',
         },
-        isAdmin && {
+        {
           name: 'News',
           icon: MdOutlineNewspaper,
           path: '/news',

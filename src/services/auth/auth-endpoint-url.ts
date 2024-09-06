@@ -1,6 +1,7 @@
 const ENDPOINT_QUERIES = {} as const;
 
 const ENDPOINT_MUTATIONS = {
+  googleSignIn: 'auth/google-login',
   signIn: 'auth/login',
   signUp: 'auth/register',
   forgotPassword: 'auth/forgot-password',
