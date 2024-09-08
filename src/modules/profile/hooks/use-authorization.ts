@@ -5,7 +5,7 @@ import { useAuthentication } from './use-authentication';
 import type { RolesEnum } from '@/configs';
 
 export function useAuthorization() {
-  const { currentUser, isAdmin, isLogged } = useAuthentication();
+  const { roleName, isAdmin, isLogged } = useAuthentication();
 
   const checkAccess = useCallback(
     function ({ accessRoles }: { accessRoles: RolesEnum[] }) {
@@ -13,9 +13,9 @@ export function useAuthorization() {
 
       if (isAdmin) return true;
 
-      return accessRoles.includes(currentUser?.roleName as RolesEnum);
+      return accessRoles.includes(roleName as RolesEnum);
     },
-    [currentUser?.roleName, isAdmin, isLogged]
+    [roleName, isAdmin, isLogged]
   );
 
   return {
