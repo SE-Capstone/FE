@@ -1,5 +1,8 @@
+import type { StringNumeric } from '@/types';
+
 const ENDPOINT_QUERIES = {
   listRole: 'roles',
+  detail: (roleId: StringNumeric) => `roles/${roleId}`,
 } as const;
 
 const ENDPOINT_MUTATIONS = {

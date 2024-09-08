@@ -9,6 +9,7 @@ import { allQueryKeysStore } from '@/services/query-keys-store';
 export interface IRole {
   id: string;
   name: string;
+  permissionsIds: string[];
 }
 
 function query() {

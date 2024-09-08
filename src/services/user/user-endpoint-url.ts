@@ -2,11 +2,12 @@ import type { StringNumeric } from '@/types';
 
 const ENDPOINT_QUERIES = {
   currentUserInfo: 'user/profile',
+  detail: (userId: StringNumeric) => `users/${userId}`,
 } as const;
 
 const ENDPOINT_MUTATIONS = {
   updateUser: 'users',
-  detail: (userId: StringNumeric) => `users/${userId}`,
+
   updateProfile: 'user/update-profile',
   createUser: 'user',
   listUser: 'users',

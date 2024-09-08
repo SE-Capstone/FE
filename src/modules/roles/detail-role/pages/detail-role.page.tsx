@@ -1,128 +1,95 @@
-import React, { useState } from 'react';
+import {
+  Button,
+  ButtonGroup,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  Flex,
+  IconButton,
+  Stack,
+  useEditableControls,
+} from '@chakra-ui/react';
+import { RiEditFill } from 'react-icons/ri';
+import { useParams } from 'react-router-dom';
 
-import { Button, Checkbox, Stack } from '@chakra-ui/react';
+import { useGetGroupPermissions } from '../apis/get-permissions.api';
+import { useGetRole } from '../apis/get-role-detail.api';
+import { ListPermissionWidget } from '../widgets/list-permission.widget';
 
-function PermissionGroup({ group, onPermissionChange, initiallySelectedPermissions }) {
-  // Initialize checked permissions based on initiallySelectedPermissions
-  const [checkedPermissions, setCheckedPermissions] = React.useState(
-    group.permissions.map((permission) => initiallySelectedPermissions.includes(permission.id))
-  );
+import { CustomInput } from '@/components/elements';
+import { EditRow } from '@/components/widgets';
 
-  const allChecked = checkedPermissions.every(Boolean);
-  const isIndeterminate = checkedPermissions.some(Boolean) && !allChecked;
+function EditableControls() {
+  const { isEditing, getSubmitButtonProps, getCancelButtonProps, getEditButtonProps } =
+    useEditableControls();
 
-  // Handle the change in parent checkbox
-  const handleParentChange = (e) => {
-    const { checked } = e.target;
-    const newCheckedPermissions = group.permissions.map(() => checked);
-    setCheckedPermissions(newCheckedPermissions);
-
-    // Update selected permissions in parent component
-    onPermissionChange(
-      group.permissions.map((permission) => permission.id),
-      checked
-    );
-  };
-
-  // Handle the change in child checkboxes
-  const handleChildChange = (index) => (e) => {
-    const newCheckedPermissions = [...checkedPermissions];
-    newCheckedPermissions[index] = e.target.checked;
-    setCheckedPermissions(newCheckedPermissions);
-
-    // Update selected permissions in parent component
-    onPermissionChange([group.permissions[index].id], e.target.checked);
-  };
-
-  return (
-    <>
-      <Checkbox
-        isChecked={allChecked}
-        isIndeterminate={isIndeterminate}
-        onChange={handleParentChange}
+  return isEditing ? (
+    <ButtonGroup mt={2} justifyContent="start" size="sm">
+      <Button
+        // bg={type === 'error' ? 'red.600' : 'primary'}
+        // _hover={{
+        //   bg: type === 'error' ? 'red.600' : 'primary',
+        //   opacity: 0.8,
+        // }}
+        // ml={3}
+        // isLoading={isLoading}
+        // isDisabled={isLoading}
+        {...getSubmitButtonProps()}
       >
-        {group.name}
-      </Checkbox>
-      <Stack pl={6} mt={1} spacing={1}>
-        {group.permissions.map((permission, index) => (
-          <Checkbox
-            key={permission.id}
-            isChecked={checkedPermissions[index]}
-            onChange={handleChildChange(index)}
-          >
-            {permission.name}
-          </Checkbox>
-        ))}
-      </Stack>
-    </>
+        Save
+      </Button>
+      <Button
+        variant="ghost"
+        border="1px"
+        borderColor="transparent"
+        color="textColor"
+        _hover={{
+          borderColor: 'primary',
+        }}
+        // isDisabled={isLoading}
+        {...getCancelButtonProps()}
+      >
+        Close
+      </Button>
+    </ButtonGroup>
+  ) : (
+    <Flex justifyContent="start">
+      <IconButton aria-label="edit" size="sm" icon={<RiEditFill />} {...getEditButtonProps()} />
+    </Flex>
   );
 }
 
 export function DetailRolePage() {
-  const groups = [
-    {
-      id: '3fa85f64-5717-4562-b3fc-2c963f66afaz',
-      name: 'Group 1',
-      permissions: [
-        { id: '3fa85f64-5717-4562-b3fc-2c963f66afa6', name: 'Permission 1' },
-        { id: '3fa85f64-5717-4562-b3fc-2c963f66afaa', name: 'Permission 2' },
-      ],
-    },
-    {
-      id: '3fa85f64-5717-4562-b3fc-2c963f66afaw',
-      name: 'Group 2',
-      permissions: [
-        { id: '3fa85f64-5717-4562-b3fc-2c963f66afae', name: 'Permission 3' },
-        { id: '3fa85f64-5717-4562-b3fc-2c963f66afax', name: 'Permission 4' },
-      ],
-    },
-  ];
-
-  const initiallySelectedPermissions = [
-    '3fa85f64-5717-4562-b3fc-2c963f66afaa', // Permission 2
-    '3fa85f64-5717-4562-b3fc-2c963f66afax', // Permission 4
-  ];
-
-  // Initialize selectedPermissions with initiallySelectedPermissions
-  const [selectedPermissions, setSelectedPermissions] = React.useState(
-    new Set(initiallySelectedPermissions)
-  );
-
-  // Handle changes to the selected permissions
-  const handlePermissionChange = (permissionIds, isChecked) => {
-    setSelectedPermissions((prevSelectedPermissions) => {
-      const updatedPermissions = new Set(prevSelectedPermissions);
-
-      permissionIds.forEach((id) => {
-        if (isChecked) {
-          updatedPermissions.add(id);
-        } else {
-          updatedPermissions.delete(id);
-        }
-      });
-
-      return updatedPermissions;
-    });
-  };
-
-  // Handle form submission
-  const handleSubmit = () => {
-    console.log('Submitted Permission IDs:', Array.from(selectedPermissions));
-  };
+  const { roleId } = useParams();
+  const {
+    role,
+    isError: isRoleDetailError,
+    isLoading: isRoleDetailLoading,
+  } = useGetRole({ roleId: roleId || '' });
+  const { groupPermissions, isError, isLoading } = useGetGroupPermissions();
 
   return (
-    <>
-      {groups.map((group) => (
-        <PermissionGroup
-          key={group.id}
-          group={group}
-          initiallySelectedPermissions={Array.from(selectedPermissions)}
-          onPermissionChange={handlePermissionChange}
-        />
-      ))}
-      <Button mt={4} colorScheme="teal" onClick={handleSubmit}>
-        Submit
-      </Button>
-    </>
+    <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} justify="center" spacing={2}>
+      <EditRow title="Name">
+        <Editable textAlign="start" defaultValue={role?.name || ''} isPreviewFocusable={false}>
+          <EditablePreview />
+
+          <CustomInput
+            isRequired
+            placeholder="Enter full name"
+            as={EditableInput}
+            // registration={register('fullName')}
+            // error={errors?.fullName}
+          />
+          <EditableControls />
+        </Editable>
+      </EditRow>
+      <ListPermissionWidget
+        role={role}
+        groupPermissions={groupPermissions}
+        isLoading={isLoading || isRoleDetailLoading}
+        isError={!!isError || !!isRoleDetailError}
+      />
+    </Stack>
   );
 }

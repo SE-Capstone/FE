@@ -10,11 +10,16 @@ const { DetailUserPage } = lazyImport(
   () => import('@/modules/users/detail-user/pages'),
   'DetailUserPage'
 );
+const { ProtectedRoute } = lazyImport(() => import('../protected-route'), 'ProtectedRoute');
 
 export function usersRoutes(): RouteObject {
   return {
     path: '/users',
-    element: <Outlet />,
+    element: (
+      <ProtectedRoute>
+        <Outlet />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
