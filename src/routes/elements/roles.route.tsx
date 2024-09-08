@@ -1,6 +1,4 @@
-import { Outlet } from 'react-router-dom';
-
-import type { RouteObject } from 'react-router-dom';
+import { Outlet, type RouteObject } from 'react-router-dom';
 
 import { lazyImport } from '@/libs/utils';
 
@@ -9,11 +7,16 @@ const { DetailRolePage } = lazyImport(
   () => import('@/modules/roles/detail-role/pages'),
   'DetailRolePage'
 );
+const { ProtectedRoute } = lazyImport(() => import('../protected-route'), 'ProtectedRoute');
 
 export function rolesRoutes(): RouteObject {
   return {
     path: '/roles',
-    element: <Outlet />,
+    element: (
+      <ProtectedRoute>
+        <Outlet />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,

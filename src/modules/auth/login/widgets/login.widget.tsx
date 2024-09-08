@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Icon as ChakraIcon, HStack, Stack } from '@chakra-ui/react';
+import { Button, Center, Icon as ChakraIcon, HStack, Stack } from '@chakra-ui/react';
 import { GoogleLogin } from '@react-oauth/google';
 import { MdLockOpen } from 'react-icons/md';
 
@@ -99,17 +99,19 @@ export function LoginWidget() {
               Forgot password?
             </CustomLink>
           </HStack>
-          <GoogleLogin
-            onSuccess={(credentialResponse) =>
-              handleSubmitGoogleLogin(credentialResponse.credential)
-            }
-            onError={() => {
-              notify({
-                type: 'error',
-                message: DEFAULT_MESSAGE.SOMETHING_WRONG,
-              });
-            }}
-          />
+          <Center>
+            <GoogleLogin
+              onSuccess={(credentialResponse) =>
+                handleSubmitGoogleLogin(credentialResponse.credential)
+              }
+              onError={() => {
+                notify({
+                  type: 'error',
+                  message: DEFAULT_MESSAGE.SOMETHING_WRONG,
+                });
+              }}
+            />
+          </Center>
         </Stack>
         <Button
           isLoading={loading || loadingMutation}

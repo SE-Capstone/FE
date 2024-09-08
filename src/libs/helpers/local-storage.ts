@@ -1,10 +1,11 @@
+import type { ICurrentUserResponse } from '@/modules/auth/types';
+
 import { isClient, isProduction } from '@/configs';
 
 export interface ITokenStorage {
   accessToken: string;
   refreshToken: string;
-  userId: string;
-  roleName: string;
+  user: ICurrentUserResponse;
 }
 
 const SIGNATURE = isProduction ? 'signature-web' : 'signature-web-dev';

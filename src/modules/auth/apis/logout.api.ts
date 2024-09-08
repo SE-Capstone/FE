@@ -7,9 +7,9 @@ import type { MutationConfig } from '@/libs/react-query';
 
 import { DEFAULT_MESSAGE } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
-import { clearStoredAuth, notify } from '@/libs/helpers';
+import { notify } from '@/libs/helpers';
 import { makeRequest } from '@/libs/react-query';
-import { useAuth } from '@/modules/profile/hooks/auth-context';
+import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 
@@ -27,7 +27,7 @@ interface IAuthLogoutMutationProps {
 export function useLogoutMutation({ configs }: IAuthLogoutMutationProps = {}) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { resetAuthContext } = useAuth();
+  const { resetAuthContext } = useAuthentication();
 
   const mutation = useMutation({
     mutationFn: logoutMutation,
@@ -36,14 +36,12 @@ export function useLogoutMutation({ configs }: IAuthLogoutMutationProps = {}) {
       queryClient.clear();
     },
     onError: async () => {
-      resetAuthContext && resetAuthContext();
-      clearStoredAuth();
+      resetAuthContext();
       notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
       navigate(APP_PATHS.login);
     },
     onSuccess: async () => {
-      resetAuthContext && resetAuthContext();
-      clearStoredAuth();
+      resetAuthContext();
       notify({ type: 'success', message: 'Logout successfully!' });
       navigate(APP_PATHS.login);
     },

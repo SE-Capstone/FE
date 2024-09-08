@@ -12,8 +12,8 @@ import { Toaster } from 'react-hot-toast';
 import { GlobalLoading } from './components/elements';
 import { GOOGLE_CLIENT_ID } from './configs';
 import { AlertDialogProvider } from './contexts';
+import { AuthProvider } from './contexts/auth/auth-context';
 import { queryClientOptions } from './libs/react-query';
-import { AuthProvider } from './modules/profile/hooks/auth-context';
 import { AppRouter } from './routes/router';
 
 import theme from '@/themes';
