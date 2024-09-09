@@ -113,12 +113,14 @@ export function ListPermissionWidget({
 }) {
   // Initialize selectedPermissions with initiallySelectedPermissions
   const [selectedPermissions, setSelectedPermissions] = useState(new Set<string>());
+  const [initialPermissions, setInitialPermissions] = useState<Set<string>>(new Set());
   const [permissionsLoaded, setPermissionsLoaded] = useState(false);
 
   useEffect(() => {
     if (role) {
-      const permissions = role.permissions.map((permission) => permission.id);
-      setSelectedPermissions(new Set(permissions));
+      const permissions = new Set(role.permissions.map((permission) => permission.id));
+      setSelectedPermissions(permissions);
+      setInitialPermissions(permissions); // Set the initial permissions
       setPermissionsLoaded(true);
     }
   }, [role]);
@@ -140,8 +142,13 @@ export function ListPermissionWidget({
     });
   };
 
+  const hasChanges = () =>
+    selectedPermissions.size !== initialPermissions.size ||
+    [...selectedPermissions].some((id) => !initialPermissions.has(id));
+
   const handleSubmit = () => {
     console.log('Submitted Permission IDs:', Array.from(selectedPermissions));
+    setInitialPermissions(new Set(selectedPermissions)); // Reset initial state after saving
   };
 
   return (
@@ -182,7 +189,13 @@ export function ListPermissionWidget({
                   onPermissionChange={handlePermissionChange}
                 />
               ))}
-              <Button hidden={isLoading} w="fit-content" mt={4} onClick={handleSubmit}>
+              <Button
+                hidden={isLoading}
+                w="fit-content"
+                mt={4}
+                isDisabled={!hasChanges()} // Disable if no changes
+                onClick={handleSubmit}
+              >
                 Save
               </Button>
             </>

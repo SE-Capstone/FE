@@ -7,7 +7,6 @@ const ENDPOINT_QUERIES = {
 
 const ENDPOINT_MUTATIONS = {
   updateUser: 'users',
-
   updateProfile: 'user/update-profile',
   createUser: 'user',
   listUser: 'users',
