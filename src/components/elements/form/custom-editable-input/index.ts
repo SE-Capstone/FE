@@ -1,1 +1,1 @@
-export * from './custom-input';
+export * from './custom-editable-input';

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
 import type { IResponseApi } from '@/configs/axios';
 
@@ -33,6 +33,7 @@ export type UseGetGroupPermissionsOptionsType = {
 export function useGetGroupPermissions({ configs }: UseGetGroupPermissionsOptionsType = {}) {
   const { data, ...queryInfo } = useQuery({
     queryKey: allQueryKeysStore.permission['group-permissions'].queryKey,
+    placeholderData: keepPreviousData,
     queryFn: query,
     ...configs,
   });

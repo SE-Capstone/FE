@@ -9,7 +9,6 @@ import {
   IconButton,
   forwardRef,
   useEditableControls,
-  useMediaQuery,
 } from '@chakra-ui/react';
 import { RiEditFill } from 'react-icons/ri';
 
@@ -24,7 +23,7 @@ function EditableControls({ isLoading }: { isLoading: boolean }) {
 
   return isEditing ? (
     <ButtonGroup mt={2} justifyContent="start" size="sm">
-      <Button ml={3} isLoading={isLoading} isDisabled={isLoading} {...getSubmitButtonProps()}>
+      <Button isLoading={isLoading} isDisabled={isLoading} {...getSubmitButtonProps()}>
         Save
       </Button>
       <Button
@@ -73,17 +72,29 @@ export const CustomEditableInput = forwardRef<CustomEditableInputProps, 'input'>
     <EditRow
       title={title}
       stackProps={{
-        maxW: 20,
+        maxW: 25,
         justifyContent: 'end',
+        alignSelf: 'start',
       }}
     >
       <Editable textAlign="start" defaultValue={initialValue} isPreviewFocusable={false}>
         {({ isEditing }) => (
           <>
-            <EditablePreview />
+            <EditablePreview
+              maxW={{
+                base: '100%',
+                md: '100%',
+                lg: '60%',
+              }}
+            />
             {isEditing &&
               React.cloneElement(inputChildren, {
                 as: EditableInput,
+                maxW: {
+                  base: '100%',
+                  md: '100%',
+                  lg: '60%',
+                },
               })}
             <EditableControls isLoading={isLoading} />
           </>

@@ -1,20 +1,26 @@
 import { useEffect, useState } from 'react';
 
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
   Button,
   Checkbox,
-  Container,
   Flex,
+  IconButton,
   SkeletonCircle,
   SkeletonText,
   Stack,
   Text,
 } from '@chakra-ui/react';
 import { GrUserExpert } from 'react-icons/gr';
+import { RiEditFill } from 'react-icons/ri';
 
 import type { IRole } from '../../list-role/types';
-import type { IGroupPermission } from '../apis/get-permissions.api';
+import type { IGroupPermission, IPermission } from '../apis/get-permissions.api';
 
 import { Head } from '@/components/elements';
 
@@ -22,17 +28,27 @@ export interface PermissionsGroupComponentProps {
   group: IGroupPermission;
   initiallySelectedPermissions: string[];
   onPermissionChange(permissions: string[], isChecked: boolean): void;
+  isEditing: boolean;
 }
 
 function PermissionGroup({
   group,
   initiallySelectedPermissions,
   onPermissionChange,
+  isEditing,
 }: PermissionsGroupComponentProps) {
   // Initialize checked permissions based on initiallySelectedPermissions
   const [checkedPermissions, setCheckedPermissions] = useState(
     group.permissions.map((permission) => initiallySelectedPermissions.includes(permission.id))
   );
+  const [initPermissions, setInitPermissions] = useState<IPermission[]>();
+
+  useEffect(() => {
+    const filteredPermissions = group.permissions.filter((permission) =>
+      initiallySelectedPermissions.includes(permission.id)
+    );
+    setInitPermissions(filteredPermissions);
+  }, []);
 
   if (!group.permissions || group.permissions.length === 0) {
     // If no child permissions, don't render the group
@@ -67,35 +83,57 @@ function PermissionGroup({
 
   return (
     <>
-      <Stack direction="row" alignItems="center">
-        <Checkbox
-          isChecked={allChecked}
-          borderColor="gray.300"
-          isIndeterminate={isIndeterminate}
-          onChange={handleParentChange}
-        >
+      {isEditing ? (
+        <>
+          <Stack direction="row" alignItems="center">
+            <Checkbox
+              isChecked={allChecked}
+              borderColor="gray.300"
+              isIndeterminate={isIndeterminate}
+              onChange={handleParentChange}
+            >
+              <Stack direction="row" alignItems="center">
+                <GrUserExpert color="gray" size={16} />
+                <Text>{group.name}</Text>
+              </Stack>
+            </Checkbox>
+          </Stack>
+          <Stack pl={8} mt={1} spacing={2} direction="row" alignItems="stretch">
+            <Box width="1px" bg="gray.300" />
+            <Stack spacing={1}>
+              {group.permissions.map((permission, index) => (
+                <Checkbox
+                  key={permission.id}
+                  borderColor="gray.300"
+                  paddingLeft={3}
+                  isChecked={checkedPermissions[index]}
+                  onChange={handleChildChange(index)}
+                >
+                  {permission.name}
+                </Checkbox>
+              ))}
+            </Stack>
+          </Stack>
+        </>
+      ) : (
+        <Stack direction="column" alignItems="start">
           <Stack direction="row" alignItems="center">
             <GrUserExpert color="gray" size={16} />
             <Text>{group.name}</Text>
           </Stack>
-        </Checkbox>
-      </Stack>
-      <Stack pl={8} mt={1} spacing={2} direction="row" alignItems="stretch">
-        <Box width="1px" bg="gray.300" />
-        <Stack spacing={1}>
-          {group.permissions.map((permission, index) => (
-            <Checkbox
-              key={permission.id}
-              borderColor="gray.300"
-              paddingLeft={3}
-              isChecked={checkedPermissions[index]}
-              onChange={handleChildChange(index)}
-            >
-              {permission.name}
-            </Checkbox>
-          ))}
+
+          <Stack pl={8} mt={1} spacing={2} direction="row" alignItems="stretch">
+            <Box width="1px" bg="gray.300" />
+            <Stack spacing={1}>
+              {initPermissions?.map((permission) => (
+                <Text key={permission.id} paddingLeft={3}>
+                  {permission.name}
+                </Text>
+              ))}
+            </Stack>
+          </Stack>
         </Stack>
-      </Stack>
+      )}
     </>
   );
 }
@@ -115,6 +153,7 @@ export function ListPermissionWidget({
   const [selectedPermissions, setSelectedPermissions] = useState(new Set<string>());
   const [initialPermissions, setInitialPermissions] = useState<Set<string>>(new Set());
   const [permissionsLoaded, setPermissionsLoaded] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (role) {
@@ -154,54 +193,103 @@ export function ListPermissionWidget({
   return (
     <>
       <Head title="Detail role" />
-      <Container maxW="container.2xl">
-        <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} justify="center" spacing={2}>
-          {!isLoading && isError ? (
-            <Flex my={4} justify="center">
-              <Text>No data</Text>
-            </Flex>
-          ) : isLoading || !permissionsLoaded ? (
-            <>
-              {[...Array(3)].map((_, index) => (
-                <Stack key={index}>
-                  <Stack direction="row" alignItems="center" spacing={4}>
-                    <SkeletonCircle size="5" />
-                    <SkeletonText noOfLines={1} width="100px" />
-                  </Stack>
-                  <Stack pl={12} mt={2} spacing={2}>
-                    {[...Array(3)].map((_, index) => (
-                      <Stack key={index} direction="row" alignItems="center" spacing={4}>
-                        <SkeletonCircle size="5" />
-                        <SkeletonText noOfLines={1} width="80px" />
-                      </Stack>
-                    ))}
-                  </Stack>
+      <Stack bg="white" pt={2} flex={1} flexBasis="10%" rounded={2.5} justify="center" spacing={2}>
+        {!isLoading && isError ? (
+          <Flex my={4} justify="center">
+            <Text>No data</Text>
+          </Flex>
+        ) : isLoading || !permissionsLoaded ? (
+          <>
+            {[...Array(3)].map((_, index) => (
+              <Stack key={index}>
+                <Stack direction="row" alignItems="center" spacing={4}>
+                  <SkeletonCircle size="5" />
+                  <SkeletonText noOfLines={1} width="100px" />
                 </Stack>
-              ))}
-            </>
-          ) : (
-            <>
-              {groupPermissions.map((group) => (
-                <PermissionGroup
-                  key={group.id}
-                  group={group}
-                  initiallySelectedPermissions={Array.from(selectedPermissions)}
-                  onPermissionChange={handlePermissionChange}
-                />
-              ))}
+                <Stack pl={12} mt={2} spacing={2}>
+                  {[...Array(3)].map((_, index) => (
+                    <Stack key={index} direction="row" alignItems="center" spacing={4}>
+                      <SkeletonCircle size="5" />
+                      <SkeletonText noOfLines={1} width="80px" />
+                    </Stack>
+                  ))}
+                </Stack>
+              </Stack>
+            ))}
+          </>
+        ) : (
+          <>
+            <Accordion
+              allowToggle
+              defaultIndex={0}
+              maxW={{
+                base: '100%',
+                md: '100%',
+                lg: '60%',
+              }}
+              display="flex"
+            >
+              <AccordionItem border="1px solid" borderColor="gray.300" borderRadius="md" flex={1}>
+                <h2>
+                  <AccordionButton bg="gray.100" borderBottom="1px solid" borderColor="gray.300">
+                    <Box as="span" flex="1" textAlign="left">
+                      Permissions
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb={4} maxH="800px" overflow="scroll">
+                  <Box p={3}>
+                    {groupPermissions.map((group) => (
+                      <PermissionGroup
+                        key={group.id}
+                        group={group}
+                        initiallySelectedPermissions={Array.from(selectedPermissions)}
+                        isEditing={isEditing}
+                        onPermissionChange={handlePermissionChange}
+                      />
+                    ))}
+                  </Box>
+                </AccordionPanel>
+              </AccordionItem>
+              <IconButton
+                aria-label="edit"
+                bg="transparent"
+                size="sm"
+                ml={2}
+                display="inline-block"
+                color="gray.400"
+                _hover={{
+                  color: 'gray.500',
+                  background: 'transparent',
+                }}
+                icon={<RiEditFill />}
+                hidden={isEditing}
+                onClick={() => setIsEditing(!isEditing)}
+              />
+            </Accordion>
+
+            <Stack direction="row" mt={4}>
               <Button
-                hidden={isLoading}
+                hidden={isLoading || !isEditing}
                 w="fit-content"
-                mt={4}
                 isDisabled={!hasChanges()} // Disable if no changes
                 onClick={handleSubmit}
               >
                 Save
               </Button>
-            </>
-          )}
-        </Stack>
-      </Container>
+              <Button
+                variant="ghost"
+                hidden={isLoading || !isEditing}
+                w="fit-content"
+                onClick={() => setIsEditing(!isEditing)}
+              >
+                Close
+              </Button>
+            </Stack>
+          </>
+        )}
+      </Stack>
     </>
   );
 }
