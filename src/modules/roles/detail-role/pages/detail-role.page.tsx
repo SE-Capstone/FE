@@ -22,13 +22,13 @@ export function DetailRolePage() {
     <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} justify="center" spacing={2}>
       <CustomEditableInput
         title="Role name"
-        isLoading={false}
+        isLoading={isRoleDetailLoading}
         initialValue={role?.name || ''}
         inputChildren={<CustomInput isRequired placeholder="Enter role name" />}
       />
       <CustomEditableInput
         title="Description"
-        isLoading={false}
+        isLoading={isRoleDetailLoading}
         initialValue={role?.description || ''}
         inputChildren={
           <CustomTextArea

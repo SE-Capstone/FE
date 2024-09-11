@@ -7,6 +7,7 @@ import {
   EditableInput,
   EditablePreview,
   IconButton,
+  SkeletonText,
   forwardRef,
   useEditableControls,
 } from '@chakra-ui/react';
@@ -77,29 +78,33 @@ export const CustomEditableInput = forwardRef<CustomEditableInputProps, 'input'>
         alignSelf: 'start',
       }}
     >
-      <Editable textAlign="start" defaultValue={initialValue} isPreviewFocusable={false}>
-        {({ isEditing }) => (
-          <>
-            <EditablePreview
-              maxW={{
-                base: '100%',
-                md: '100%',
-                lg: '60%',
-              }}
-            />
-            {isEditing &&
-              React.cloneElement(inputChildren, {
-                as: EditableInput,
-                maxW: {
+      {isLoading ? (
+        <SkeletonText mt="4" noOfLines={1} width="200px" />
+      ) : (
+        <Editable textAlign="start" defaultValue={initialValue} isPreviewFocusable={false}>
+          {({ isEditing }) => (
+            <>
+              <EditablePreview
+                maxW={{
                   base: '100%',
                   md: '100%',
                   lg: '60%',
-                },
-              })}
-            <EditableControls isLoading={isLoading} />
-          </>
-        )}
-      </Editable>
+                }}
+              />
+              {isEditing &&
+                React.cloneElement(inputChildren, {
+                  as: EditableInput,
+                  maxW: {
+                    base: '100%',
+                    md: '100%',
+                    lg: '60%',
+                  },
+                })}
+              <EditableControls isLoading={isLoading} />
+            </>
+          )}
+        </Editable>
+      )}
     </EditRow>
   );
 });

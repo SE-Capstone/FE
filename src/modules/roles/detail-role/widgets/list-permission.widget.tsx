@@ -20,7 +20,7 @@ import { GrUserExpert } from 'react-icons/gr';
 import { RiEditFill } from 'react-icons/ri';
 
 import type { IRole } from '../../list-role/types';
-import type { IGroupPermission, IPermission } from '../apis/get-permissions.api';
+import type { IGroupPermission } from '../apis/get-permissions.api';
 
 import { Head } from '@/components/elements';
 
@@ -28,27 +28,17 @@ export interface PermissionsGroupComponentProps {
   group: IGroupPermission;
   initiallySelectedPermissions: string[];
   onPermissionChange(permissions: string[], isChecked: boolean): void;
-  isEditing: boolean;
 }
 
 function PermissionGroup({
   group,
   initiallySelectedPermissions,
   onPermissionChange,
-  isEditing,
 }: PermissionsGroupComponentProps) {
   // Initialize checked permissions based on initiallySelectedPermissions
   const [checkedPermissions, setCheckedPermissions] = useState(
     group.permissions.map((permission) => initiallySelectedPermissions.includes(permission.id))
   );
-  const [initPermissions, setInitPermissions] = useState<IPermission[]>();
-
-  useEffect(() => {
-    const filteredPermissions = group.permissions.filter((permission) =>
-      initiallySelectedPermissions.includes(permission.id)
-    );
-    setInitPermissions(filteredPermissions);
-  }, []);
 
   if (!group.permissions || group.permissions.length === 0) {
     // If no child permissions, don't render the group
@@ -83,58 +73,57 @@ function PermissionGroup({
 
   return (
     <>
-      {isEditing ? (
-        <>
-          <Stack direction="row" alignItems="center">
-            <Checkbox
-              isChecked={allChecked}
-              borderColor="gray.300"
-              isIndeterminate={isIndeterminate}
-              onChange={handleParentChange}
-            >
-              <Stack direction="row" alignItems="center">
-                <GrUserExpert color="gray" size={16} />
-                <Text>{group.name}</Text>
-              </Stack>
-            </Checkbox>
-          </Stack>
-          <Stack pl={8} mt={1} spacing={2} direction="row" alignItems="stretch">
-            <Box width="1px" bg="gray.300" />
-            <Stack spacing={1}>
-              {group.permissions.map((permission, index) => (
-                <Checkbox
-                  key={permission.id}
-                  borderColor="gray.300"
-                  paddingLeft={3}
-                  isChecked={checkedPermissions[index]}
-                  onChange={handleChildChange(index)}
-                >
-                  {permission.name}
-                </Checkbox>
-              ))}
-            </Stack>
-          </Stack>
-        </>
-      ) : (
-        <Stack direction="column" alignItems="start">
+      <Stack direction="row" alignItems="center">
+        <Checkbox
+          isChecked={allChecked}
+          borderColor="gray.300"
+          isIndeterminate={isIndeterminate}
+          onChange={handleParentChange}
+        >
           <Stack direction="row" alignItems="center">
             <GrUserExpert color="gray" size={16} />
             <Text>{group.name}</Text>
           </Stack>
-
-          <Stack pl={8} mt={1} spacing={2} direction="row" alignItems="stretch">
-            <Box width="1px" bg="gray.300" />
-            <Stack spacing={1}>
-              {initPermissions?.map((permission) => (
-                <Text key={permission.id} paddingLeft={3}>
-                  {permission.name}
-                </Text>
-              ))}
-            </Stack>
-          </Stack>
+        </Checkbox>
+      </Stack>
+      <Stack pl={8} mt={1} spacing={2} direction="row" alignItems="stretch">
+        <Box width="1px" bg="gray.300" />
+        <Stack spacing={1}>
+          {group.permissions.map((permission, index) => (
+            <Checkbox
+              key={permission.id}
+              borderColor="gray.300"
+              paddingLeft={3}
+              isChecked={checkedPermissions[index]}
+              onChange={handleChildChange(index)}
+            >
+              {permission.name}
+            </Checkbox>
+          ))}
         </Stack>
-      )}
+      </Stack>
     </>
+  );
+}
+function InitPermissionGroup({ group }: { group: IGroupPermission }) {
+  return (
+    <Stack direction="column" alignItems="start">
+      <Stack direction="row" alignItems="center">
+        <GrUserExpert color="gray" size={16} />
+        <Text>{group.name}</Text>
+      </Stack>
+
+      <Stack pl={8} mt={1} spacing={2} direction="row" alignItems="stretch">
+        <Box width="1px" bg="gray.300" />
+        <Stack spacing={1}>
+          {group.permissions.map((permission) => (
+            <Text key={permission.id} paddingLeft={3}>
+              {permission.name}
+            </Text>
+          ))}
+        </Stack>
+      </Stack>
+    </Stack>
   );
 }
 
@@ -152,6 +141,7 @@ export function ListPermissionWidget({
   // Initialize selectedPermissions with initiallySelectedPermissions
   const [selectedPermissions, setSelectedPermissions] = useState(new Set<string>());
   const [initialPermissions, setInitialPermissions] = useState<Set<string>>(new Set());
+  const [initialGroups, setInitialGroups] = useState<IGroupPermission[]>([]);
   const [permissionsLoaded, setPermissionsLoaded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -163,6 +153,21 @@ export function ListPermissionWidget({
       setPermissionsLoaded(true);
     }
   }, [role]);
+
+  useEffect(() => {
+    const filteredGroups = groupPermissions
+      .map((g) => {
+        const filteredPermissions = g.permissions.filter((p) => initialPermissions.has(p.id));
+        // Only include the group if it has at least one permission that matches
+        if (filteredPermissions.length > 0) {
+          return { ...g, permissions: filteredPermissions };
+        }
+        return null;
+      })
+      .filter((g): g is IGroupPermission => g !== null); // Ensure null values are filtered out
+
+    setInitialGroups(filteredGroups);
+  }, [initialPermissions, groupPermissions]);
 
   // Handle changes to the selected permissions
   const handlePermissionChange = (permissionIds, isChecked) => {
@@ -240,15 +245,18 @@ export function ListPermissionWidget({
                 </h2>
                 <AccordionPanel pb={4} maxH="800px" overflow="scroll">
                   <Box p={3}>
-                    {groupPermissions.map((group) => (
-                      <PermissionGroup
-                        key={group.id}
-                        group={group}
-                        initiallySelectedPermissions={Array.from(selectedPermissions)}
-                        isEditing={isEditing}
-                        onPermissionChange={handlePermissionChange}
-                      />
-                    ))}
+                    {isEditing
+                      ? groupPermissions.map((group) => (
+                          <PermissionGroup
+                            key={group.id}
+                            group={group}
+                            initiallySelectedPermissions={Array.from(selectedPermissions)}
+                            onPermissionChange={handlePermissionChange}
+                          />
+                        ))
+                      : initialGroups.map((group) => (
+                          <InitPermissionGroup key={group.id} group={group} />
+                        ))}
                   </Box>
                 </AccordionPanel>
               </AccordionItem>
