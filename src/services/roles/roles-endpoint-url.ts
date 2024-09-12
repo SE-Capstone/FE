@@ -8,6 +8,7 @@ const ENDPOINT_QUERIES = {
 const ENDPOINT_MUTATIONS = {
   createRole: 'roles',
   addRoleForUser: 'roles/add-role-for-user',
+  update: 'roles',
 } as const;
 
 export const ROLES_ENDPOINT_URL = {

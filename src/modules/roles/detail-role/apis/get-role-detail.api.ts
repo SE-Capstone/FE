@@ -26,7 +26,7 @@ export type UseGetRolesOptionsType = {
 export function useGetRole(params: UseGetRolesOptionsType) {
   const { configs, roleId } = params;
 
-  const queryKey = useMemo(() => allQueryKeysStore.user.detail(roleId).queryKey, [roleId]);
+  const queryKey = useMemo(() => allQueryKeysStore.role.detail(roleId).queryKey, [roleId]);
 
   const { data, ...queryInfo } = useQuery({
     queryKey,

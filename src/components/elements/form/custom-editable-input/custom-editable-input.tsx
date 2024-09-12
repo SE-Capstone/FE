@@ -8,9 +8,9 @@ import {
   EditablePreview,
   IconButton,
   SkeletonText,
-  forwardRef,
   useEditableControls,
 } from '@chakra-ui/react';
+import { useFormContext } from 'react-hook-form';
 import { RiEditFill } from 'react-icons/ri';
 
 import type { FieldWrapperProps } from '../field-wrapper';
@@ -18,16 +18,30 @@ import type { InputProps } from '@chakra-ui/react';
 
 import { EditRow } from '@/components/widgets';
 
-function EditableControls({ isLoading }: { isLoading: boolean }) {
+function EditableControls({
+  isLoading,
+  isDisabled,
+  onSubmit,
+}: {
+  isLoading: boolean;
+  isDisabled: boolean;
+  onSubmit: () => void;
+}) {
   const { isEditing, getSubmitButtonProps, getCancelButtonProps, getEditButtonProps } =
     useEditableControls();
 
   return isEditing ? (
     <ButtonGroup mt={2} justifyContent="start" size="sm">
-      <Button isLoading={isLoading} isDisabled={isLoading} {...getSubmitButtonProps()}>
+      <Button
+        {...getSubmitButtonProps()}
+        isLoading={isLoading}
+        isDisabled={isLoading || isDisabled}
+        onClick={onSubmit}
+      >
         Save
       </Button>
       <Button
+        {...getCancelButtonProps()}
         variant="ghost"
         border="1px"
         borderColor="transparent"
@@ -35,14 +49,14 @@ function EditableControls({ isLoading }: { isLoading: boolean }) {
         _hover={{
           borderColor: 'primary',
         }}
-        isDisabled={isLoading}
-        {...getCancelButtonProps()}
+        isDisabled={isLoading || isDisabled}
       >
         Close
       </Button>
     </ButtonGroup>
   ) : (
     <IconButton
+      {...getEditButtonProps()}
       aria-label="edit"
       bg="transparent"
       size="sm"
@@ -54,21 +68,22 @@ function EditableControls({ isLoading }: { isLoading: boolean }) {
         background: 'transparent',
       }}
       icon={<RiEditFill />}
-      {...getEditButtonProps()}
     />
   );
 }
 
 export interface CustomEditableInputProps extends InputProps, FieldWrapperProps {
   isLoading: boolean;
+  isUpdating: boolean;
   title: string;
   initialValue: string;
   inputChildren: React.ReactElement;
+  onSubmit: () => void;
 }
 
-export const CustomEditableInput = forwardRef<CustomEditableInputProps, 'input'>((props) => {
-  const { isLoading, title, initialValue, inputChildren } = props;
-
+export const CustomEditableInput = (props: CustomEditableInputProps) => {
+  const { isLoading, title, initialValue, inputChildren, isUpdating, onSubmit } = props;
+  const { handleSubmit } = useFormContext();
   return (
     <EditRow
       title={title}
@@ -100,11 +115,15 @@ export const CustomEditableInput = forwardRef<CustomEditableInputProps, 'input'>
                     lg: '60%',
                   },
                 })}
-              <EditableControls isLoading={isLoading} />
+              <EditableControls
+                isLoading={isLoading}
+                isDisabled={isUpdating}
+                onSubmit={handleSubmit(onSubmit)}
+              />
             </>
           )}
         </Editable>
       )}
     </EditRow>
   );
-});
+};

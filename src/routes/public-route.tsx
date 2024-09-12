@@ -19,7 +19,7 @@ export function PublicRoute() {
     return <Navigate to={from} replace />;
   }
 
-  if (isLoading) {
+  if (isLogged && isLoading) {
     return <GlobalLoading isLoading={isLoading} />;
   }
 
