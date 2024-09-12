@@ -58,7 +58,7 @@ export const AlertDialogConfirmStore = () => {
             isDisabled={isLoading}
             onClick={closeAlert}
           >
-            Huỷ
+            Cancel
           </Button>
           <Button
             minW="80px"

@@ -14,10 +14,12 @@ import type { UpdateRoleFormType } from '../validations/update-role.validation';
 import { CustomFormProvider, CustomInput, CustomTextArea } from '@/components/elements';
 import { CustomEditableInput } from '@/components/elements/form/custom-editable-input';
 import { EditRow } from '@/components/widgets';
+import { notify } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export function DetailRolePage() {
   const { roleId } = useParams();
+
   const {
     role,
     isError: isRoleDetailError,
@@ -32,7 +34,7 @@ export function DetailRolePage() {
   });
 
   const { formState, register, reset } = form;
-  const { errors, isDirty } = formState;
+  const { errors, dirtyFields } = formState;
 
   useEffect(() => {
     reset(role, {
@@ -40,14 +42,32 @@ export function DetailRolePage() {
     });
   }, [reset, role]);
 
-  function onSubmit(values: UpdateRoleFormType) {
+  async function onSubmit(values: UpdateRoleFormType) {
     if (isLoading || !role?.permissions) return;
 
-    updateRoleMutation({
+    await updateRoleMutation({
       body: {
         ...values,
         id: roleId || '',
         permissionsId: role.permissions.map((permission) => permission.id),
+      },
+    });
+  }
+
+  function updatePermissions(permissions: Set<string>) {
+    if (isLoading || !role) return;
+
+    if (permissions.size === 0) {
+      notify({ type: 'error', message: 'Permissions can not set to empty' });
+      return;
+    }
+
+    updateRoleMutation({
+      body: {
+        id: roleId || '',
+        name: role.name,
+        description: role.description,
+        permissionsId: Array.from(permissions),
       },
     });
   }
@@ -58,8 +78,7 @@ export function DetailRolePage() {
         <CustomEditableInput
           title="Role name"
           isLoading={isRoleDetailLoading}
-          isUpdating={isUpdating}
-          // isUpdating={isUpdating || isDirty}
+          isDisabled={isUpdating || !dirtyFields.name}
           initialValue={role?.name || ''}
           inputChildren={
             <CustomInput
@@ -74,7 +93,7 @@ export function DetailRolePage() {
         <CustomEditableInput
           title="Description"
           isLoading={isRoleDetailLoading}
-          isUpdating={isUpdating}
+          isDisabled={isUpdating || !dirtyFields.description}
           initialValue={role?.description || ''}
           inputChildren={
             <CustomTextArea
@@ -99,6 +118,8 @@ export function DetailRolePage() {
             groupPermissions={groupPermissions}
             isLoading={isLoading || isRoleDetailLoading}
             isError={!!isError || !!isRoleDetailError}
+            isDisabled={isUpdating}
+            mutation={updatePermissions}
           />
         </EditRow>
       </CustomFormProvider>

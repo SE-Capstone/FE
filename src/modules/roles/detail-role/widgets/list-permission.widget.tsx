@@ -21,6 +21,7 @@ import { RiEditFill } from 'react-icons/ri';
 
 import type { IRole } from '../../list-role/types';
 import type { IGroupPermission } from '../apis/get-permissions.api';
+import type { MutationFunction } from '@tanstack/react-query';
 
 import { Head } from '@/components/elements';
 
@@ -132,11 +133,15 @@ export function ListPermissionWidget({
   isLoading,
   groupPermissions,
   isError,
+  mutation,
+  isDisabled,
 }: {
   role?: IRole;
   groupPermissions: IGroupPermission[];
   isLoading: boolean;
   isError: boolean;
+  mutation: any;
+  isDisabled: boolean;
 }) {
   // Initialize selectedPermissions with initiallySelectedPermissions
   const [selectedPermissions, setSelectedPermissions] = useState(new Set<string>());
@@ -191,8 +196,8 @@ export function ListPermissionWidget({
     [...selectedPermissions].some((id) => !initialPermissions.has(id));
 
   const handleSubmit = () => {
-    console.log('Submitted Permission IDs:', Array.from(selectedPermissions));
     setInitialPermissions(new Set(selectedPermissions)); // Reset initial state after saving
+    mutation(selectedPermissions);
   };
 
   return (
@@ -281,7 +286,7 @@ export function ListPermissionWidget({
               <Button
                 hidden={isLoading || !isEditing}
                 w="fit-content"
-                isDisabled={!hasChanges()} // Disable if no changes
+                isDisabled={!hasChanges() || isDisabled} // Disable if no changes
                 onClick={handleSubmit}
               >
                 Save
@@ -289,6 +294,7 @@ export function ListPermissionWidget({
               <Button
                 variant="ghost"
                 hidden={isLoading || !isEditing}
+                isDisabled={isDisabled}
                 w="fit-content"
                 onClick={() => setIsEditing(!isEditing)}
               >

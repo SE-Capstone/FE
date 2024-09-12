@@ -74,7 +74,7 @@ function EditableControls({
 
 export interface CustomEditableInputProps extends InputProps, FieldWrapperProps {
   isLoading: boolean;
-  isUpdating: boolean;
+  isDisabled: boolean;
   title: string;
   initialValue: string;
   inputChildren: React.ReactElement;
@@ -82,8 +82,9 @@ export interface CustomEditableInputProps extends InputProps, FieldWrapperProps 
 }
 
 export const CustomEditableInput = (props: CustomEditableInputProps) => {
-  const { isLoading, title, initialValue, inputChildren, isUpdating, onSubmit } = props;
+  const { isLoading, title, initialValue, inputChildren, isDisabled, onSubmit } = props;
   const { handleSubmit } = useFormContext();
+
   return (
     <EditRow
       title={title}
@@ -117,7 +118,7 @@ export const CustomEditableInput = (props: CustomEditableInputProps) => {
                 })}
               <EditableControls
                 isLoading={isLoading}
-                isDisabled={isUpdating}
+                isDisabled={isDisabled}
                 onSubmit={handleSubmit(onSubmit)}
               />
             </>
