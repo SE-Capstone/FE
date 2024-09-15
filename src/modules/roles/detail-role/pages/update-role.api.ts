@@ -30,9 +30,10 @@ function mutation(req: IUpdateRoleRequest) {
 
 interface IProps {
   configs?: MutationConfig<typeof mutation>;
+  onClose?: () => void;
 }
 
-export function useUpdateRoleMutation({ configs }: IProps = {}) {
+export function useUpdateRoleMutation({ configs, onClose }: IProps = {}) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -53,6 +54,8 @@ export function useUpdateRoleMutation({ configs }: IProps = {}) {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.permission['group-permissions'].queryKey,
       });
+
+      onClose && onClose();
 
       notify({
         type: 'success',

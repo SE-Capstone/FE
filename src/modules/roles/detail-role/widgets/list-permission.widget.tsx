@@ -135,6 +135,7 @@ export function ListPermissionWidget({
   isError,
   mutation,
   isDisabled,
+  triggerClose,
 }: {
   role?: IRole;
   groupPermissions: IGroupPermission[];
@@ -142,6 +143,7 @@ export function ListPermissionWidget({
   isError: boolean;
   mutation: any;
   isDisabled: boolean;
+  triggerClose: boolean;
 }) {
   // Initialize selectedPermissions with initiallySelectedPermissions
   const [selectedPermissions, setSelectedPermissions] = useState(new Set<string>());
@@ -158,6 +160,10 @@ export function ListPermissionWidget({
       setPermissionsLoaded(true);
     }
   }, [role]);
+
+  useEffect(() => {
+    setIsEditing(false);
+  }, [triggerClose]);
 
   useEffect(() => {
     const filteredGroups = groupPermissions
@@ -296,7 +302,7 @@ export function ListPermissionWidget({
                 hidden={isLoading || !isEditing}
                 isDisabled={isDisabled}
                 w="fit-content"
-                onClick={() => setIsEditing(!isEditing)}
+                onClick={() => setIsEditing(false)}
               >
                 Close
               </Button>

@@ -1,9 +1,8 @@
 import { z } from 'zod';
 
 export const updateRoleFormSchema = z.object({
-  id: z.string(),
-  name: z.string().trim(),
-  description: z.string().trim(),
+  name: z.string().trim().min(1),
+  description: z.string().trim().min(1),
 });
 
 export type UpdateRoleFormType = z.infer<typeof updateRoleFormSchema>;

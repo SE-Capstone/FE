@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Stack } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
@@ -19,6 +19,7 @@ import { useFormWithSchema } from '@/libs/hooks';
 
 export function DetailRolePage() {
   const { roleId } = useParams();
+  const [triggerClose, setTriggerClose] = useState(false);
 
   const {
     role,
@@ -27,7 +28,13 @@ export function DetailRolePage() {
   } = useGetRole({ roleId: roleId || '' });
   const { groupPermissions, isError, isLoading } = useGetGroupPermissions();
 
-  const { mutate: updateRoleMutation, isPending: isUpdating } = useUpdateRoleMutation();
+  function onClose() {
+    setTriggerClose(!triggerClose);
+  }
+
+  const { mutate: updateRoleMutation, isPending: isUpdating } = useUpdateRoleMutation({
+    onClose,
+  });
 
   const form = useFormWithSchema({
     schema: updateRoleFormSchema,
@@ -78,8 +85,10 @@ export function DetailRolePage() {
         <CustomEditableInput
           title="Role name"
           isLoading={isRoleDetailLoading}
-          isDisabled={isUpdating || !dirtyFields.name}
+          isDisabled={isUpdating}
+          isDirty={!dirtyFields.name}
           initialValue={role?.name || ''}
+          triggerClose={triggerClose}
           inputChildren={
             <CustomInput
               isRequired
@@ -88,13 +97,22 @@ export function DetailRolePage() {
               error={errors.name}
             />
           }
-          onSubmit={() => form.handleSubmit(onSubmit)()}
+          onSubmit={() =>
+            form.handleSubmit(() =>
+              onSubmit({
+                name: form.getValues('name'),
+                description: role?.description || '',
+              })
+            )()
+          }
         />
         <CustomEditableInput
           title="Description"
           isLoading={isRoleDetailLoading}
-          isDisabled={isUpdating || !dirtyFields.description}
+          isDisabled={isUpdating}
+          isDirty={!dirtyFields.description}
           initialValue={role?.description || ''}
+          triggerClose={triggerClose}
           inputChildren={
             <CustomTextArea
               isRequired
@@ -103,7 +121,14 @@ export function DetailRolePage() {
               error={errors.description}
             />
           }
-          onSubmit={() => form.handleSubmit(onSubmit)()}
+          onSubmit={() =>
+            form.handleSubmit(() =>
+              onSubmit({
+                name: role?.name || '',
+                description: form.getValues('description'),
+              })
+            )()
+          }
         />
         <EditRow
           title="Permissions"
@@ -120,6 +145,7 @@ export function DetailRolePage() {
             isError={!!isError || !!isRoleDetailError}
             isDisabled={isUpdating}
             mutation={updatePermissions}
+            triggerClose={triggerClose}
           />
         </EditRow>
       </CustomFormProvider>

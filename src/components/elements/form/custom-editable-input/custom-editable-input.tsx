@@ -1,14 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Button,
   ButtonGroup,
   Editable,
-  EditableInput,
   EditablePreview,
   IconButton,
   SkeletonText,
-  useEditableControls,
 } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
 import { RiEditFill } from 'react-icons/ri';
@@ -21,27 +19,30 @@ import { EditRow } from '@/components/widgets';
 function EditableControls({
   isLoading,
   isDisabled,
+  isDirty,
   onSubmit,
+  onClose,
+  onEdit,
+  isEditing,
 }: {
   isLoading: boolean;
   isDisabled: boolean;
+  isDirty: boolean;
   onSubmit: () => void;
+  onClose: () => void;
+  onEdit: () => void;
+  isEditing: boolean;
 }) {
-  const { isEditing, getSubmitButtonProps, getCancelButtonProps, getEditButtonProps } =
-    useEditableControls();
-
   return isEditing ? (
-    <ButtonGroup mt={2} justifyContent="start" size="sm">
+    <ButtonGroup mt={2} justifyContent="start" size="sm" mb={2}>
       <Button
-        {...getSubmitButtonProps()}
         isLoading={isLoading}
-        isDisabled={isLoading || isDisabled}
+        isDisabled={isLoading || isDisabled || isDirty}
         onClick={onSubmit}
       >
         Save
       </Button>
       <Button
-        {...getCancelButtonProps()}
         variant="ghost"
         border="1px"
         borderColor="transparent"
@@ -50,13 +51,13 @@ function EditableControls({
           borderColor: 'primary',
         }}
         isDisabled={isLoading || isDisabled}
+        onClick={onClose}
       >
         Close
       </Button>
     </ButtonGroup>
   ) : (
     <IconButton
-      {...getEditButtonProps()}
       aria-label="edit"
       bg="transparent"
       size="sm"
@@ -67,7 +68,11 @@ function EditableControls({
         color: 'gray.500',
         background: 'transparent',
       }}
+      _focus={{
+        background: 'transparent',
+      }}
       icon={<RiEditFill />}
+      onClick={onEdit}
     />
   );
 }
@@ -75,15 +80,39 @@ function EditableControls({
 export interface CustomEditableInputProps extends InputProps, FieldWrapperProps {
   isLoading: boolean;
   isDisabled: boolean;
+  isDirty: boolean;
   title: string;
   initialValue: string;
   inputChildren: React.ReactElement;
+  triggerClose: boolean;
   onSubmit: () => void;
 }
 
 export const CustomEditableInput = (props: CustomEditableInputProps) => {
-  const { isLoading, title, initialValue, inputChildren, isDisabled, onSubmit } = props;
+  const {
+    isLoading,
+    title,
+    initialValue,
+    inputChildren,
+    isDisabled,
+    onSubmit,
+    triggerClose,
+    isDirty,
+  } = props;
   const { handleSubmit } = useFormContext();
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    setIsEditing(false);
+  }, [triggerClose]);
+
+  const handleClose = () => {
+    setIsEditing(false);
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
 
   return (
     <EditRow
@@ -98,31 +127,32 @@ export const CustomEditableInput = (props: CustomEditableInputProps) => {
         <SkeletonText mt="4" noOfLines={1} width="200px" />
       ) : (
         <Editable textAlign="start" defaultValue={initialValue} isPreviewFocusable={false}>
-          {({ isEditing }) => (
-            <>
-              <EditablePreview
-                maxW={{
-                  base: '100%',
-                  md: '100%',
-                  lg: '60%',
-                }}
-              />
-              {isEditing &&
-                React.cloneElement(inputChildren, {
-                  as: EditableInput,
-                  maxW: {
-                    base: '100%',
-                    md: '100%',
-                    lg: '60%',
-                  },
-                })}
-              <EditableControls
-                isLoading={isLoading}
-                isDisabled={isDisabled}
-                onSubmit={handleSubmit(onSubmit)}
-              />
-            </>
+          {isEditing ? (
+            React.cloneElement(inputChildren, {
+              maxW: {
+                base: '100%',
+                md: '100%',
+                lg: '60%',
+              },
+            })
+          ) : (
+            <EditablePreview
+              maxW={{
+                base: '100%',
+                md: '100%',
+                lg: '60%',
+              }}
+            />
           )}
+          <EditableControls
+            isLoading={isLoading}
+            isDisabled={isDisabled}
+            isEditing={isEditing}
+            isDirty={isDirty}
+            onSubmit={handleSubmit(onSubmit)}
+            onClose={handleClose}
+            onEdit={handleEdit}
+          />
         </Editable>
       )}
     </EditRow>
