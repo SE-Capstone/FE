@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { Stack } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import { Button, Icon, IconButton, Stack, Text } from '@chakra-ui/react';
+import { BiTrash } from 'react-icons/bi';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useGetGroupPermissions } from '../apis/get-permissions.api';
 import { useGetRole } from '../apis/get-role-detail.api';
@@ -14,10 +15,13 @@ import type { UpdateRoleFormType } from '../validations/update-role.validation';
 import { CustomFormProvider, CustomInput, CustomTextArea } from '@/components/elements';
 import { CustomEditableInput } from '@/components/elements/form/custom-editable-input';
 import { EditRow } from '@/components/widgets';
+import { defaultRoles } from '@/configs';
 import { notify } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export function DetailRolePage() {
+  const navigate = useNavigate();
+  const [isDefaultRole, setIsDefaultRole] = useState(false);
   const { roleId } = useParams();
   const [triggerClose, setTriggerClose] = useState(false);
 
@@ -44,6 +48,7 @@ export function DetailRolePage() {
   const { errors, dirtyFields } = formState;
 
   useEffect(() => {
+    setIsDefaultRole(defaultRoles.includes(role?.name || ''));
     reset(role, {
       keepDirty: false,
     });
@@ -80,75 +85,102 @@ export function DetailRolePage() {
   }
 
   return (
-    <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} justify="center" spacing={2}>
-      <CustomFormProvider form={form} style={{ height: 'fit-content' }} onSubmit={onSubmit}>
-        <CustomEditableInput
-          title="Role name"
-          isLoading={isRoleDetailLoading}
-          isDisabled={isUpdating}
-          isDirty={!dirtyFields.name}
-          initialValue={role?.name || ''}
-          triggerClose={triggerClose}
-          inputChildren={
-            <CustomInput
-              isRequired
-              placeholder="Enter role name"
-              registration={register('name')}
-              error={errors.name}
-            />
-          }
-          onSubmit={() =>
-            form.handleSubmit(() =>
-              onSubmit({
-                name: form.getValues('name'),
-                description: role?.description || '',
-              })
-            )()
-          }
-        />
-        <CustomEditableInput
-          title="Description"
-          isLoading={isRoleDetailLoading}
-          isDisabled={isUpdating}
-          isDirty={!dirtyFields.description}
-          initialValue={role?.description || ''}
-          triggerClose={triggerClose}
-          inputChildren={
-            <CustomTextArea
-              isRequired
-              placeholder="Enter description"
-              registration={register('description')}
-              error={errors.description}
-            />
-          }
-          onSubmit={() =>
-            form.handleSubmit(() =>
-              onSubmit({
-                name: role?.name || '',
-                description: form.getValues('description'),
-              })
-            )()
-          }
-        />
-        <EditRow
-          title="Permissions"
-          stackProps={{
-            maxW: 25,
-            justifyContent: 'end',
-            alignSelf: 'start',
-          }}
-        >
-          <ListPermissionWidget
-            role={role}
-            groupPermissions={groupPermissions}
-            isLoading={isLoading || isRoleDetailLoading}
-            isError={!!isError || !!isRoleDetailError}
-            isDisabled={isUpdating}
-            mutation={updatePermissions}
-            triggerClose={triggerClose}
+    <Stack spacing={3}>
+      <Stack
+        bg="white"
+        direction="row"
+        rounded={2.5}
+        p={5}
+        flex={1}
+        justify="space-between"
+        alignItems="center"
+      >
+        <Text fontSize="x-large">{role?.name}</Text>
+        <Stack direction="row">
+          <Button variant="ghost" w="fit-content" onClick={() => navigate(-1)}>
+            Back
+          </Button>
+          <IconButton
+            aria-label="DeleteRole"
+            variant="ghost"
+            size="md"
+            icon={<Icon as={BiTrash} boxSize={4} color="red.400" />}
           />
-        </EditRow>
-      </CustomFormProvider>
+        </Stack>
+      </Stack>
+      <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} justify="center" spacing={2}>
+        <CustomFormProvider form={form} style={{ height: 'fit-content' }} onSubmit={onSubmit}>
+          <CustomEditableInput
+            title="Role name"
+            isLoading={isRoleDetailLoading}
+            isDisabled={isUpdating}
+            isDirty={!dirtyFields.name}
+            initialValue={role?.name || ''}
+            isDefaultRole={isDefaultRole}
+            triggerClose={triggerClose}
+            inputChildren={
+              <CustomInput
+                isRequired
+                placeholder="Enter role name"
+                registration={register('name')}
+                error={errors.name}
+              />
+            }
+            onSubmit={() =>
+              form.handleSubmit(() =>
+                onSubmit({
+                  name: form.getValues('name'),
+                  description: role?.description || '',
+                })
+              )()
+            }
+          />
+          <CustomEditableInput
+            title="Description"
+            isLoading={isRoleDetailLoading}
+            isDisabled={isUpdating}
+            isDefaultRole={isDefaultRole}
+            isDirty={!dirtyFields.description}
+            initialValue={role?.description || ''}
+            triggerClose={triggerClose}
+            inputChildren={
+              <CustomTextArea
+                isRequired
+                placeholder="Enter description"
+                registration={register('description')}
+                error={errors.description}
+              />
+            }
+            onSubmit={() =>
+              form.handleSubmit(() =>
+                onSubmit({
+                  name: role?.name || '',
+                  description: form.getValues('description'),
+                })
+              )()
+            }
+          />
+          <EditRow
+            title="Permissions"
+            stackProps={{
+              maxW: 25,
+              justifyContent: 'end',
+              alignSelf: 'start',
+            }}
+          >
+            <ListPermissionWidget
+              role={role}
+              groupPermissions={groupPermissions}
+              isLoading={isLoading || isRoleDetailLoading}
+              isError={!!isError || !!isRoleDetailError}
+              isDefaultRole={isDefaultRole}
+              isDisabled={isUpdating}
+              mutation={updatePermissions}
+              triggerClose={triggerClose}
+            />
+          </EditRow>
+        </CustomFormProvider>
+      </Stack>
     </Stack>
   );
 }

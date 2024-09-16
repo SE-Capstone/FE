@@ -6,12 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import type { IRole } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
+import { defaultRoles } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
 
 interface ActionMenuTableRolesProps {
   role: IRole;
 }
 export function ActionMenuTableRoles({ role }: ActionMenuTableRolesProps) {
+  const isDefaultRole = defaultRoles.includes(role?.name || '');
   const navigate = useNavigate();
 
   // const { removeRoleResult, handleRemoveRole } = useRemoveRoleHook();
@@ -27,7 +29,7 @@ export function ActionMenuTableRoles({ role }: ActionMenuTableRolesProps) {
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/roles/${role.id}`),
     },
-    {
+    !isDefaultRole && {
       label: 'Delete',
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {
@@ -42,7 +44,7 @@ export function ActionMenuTableRoles({ role }: ActionMenuTableRolesProps) {
         });
       },
     },
-  ];
+  ].filter(Boolean);
 
   return (
     <ActionMenuTable actionMenuItems={menuOptions}>

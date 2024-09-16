@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { Container } from '@chakra-ui/react';
+import { Container, Text } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 
 import { useGetListRoleQuery } from '../hooks/queries';
@@ -44,6 +44,21 @@ export function ListRolesPage() {
                 >
                   {name || ''}
                 </CustomLink>
+              );
+            },
+          },
+          {
+            key: 'description',
+            title: 'Description',
+            hasSort: false,
+            tableCellProps: {
+              w: '100%',
+            },
+            Cell({ description }) {
+              return (
+                <Text noOfLines={2} whiteSpace="normal">
+                  {description || ''}
+                </Text>
               );
             },
           },

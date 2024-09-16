@@ -18,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { GrUserExpert } from 'react-icons/gr';
 import { RiEditFill } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom';
 
 import type { IRole } from '../../list-role/types';
 import type { CreateRoleFormType } from '../../list-role/validations/create-role.validation';
@@ -144,6 +145,7 @@ export function ListPermissionWidget({
   isDisabled,
   triggerClose,
   isCreate,
+  isDefaultRole,
 }: {
   form?: UseFormReturn<CreateRoleFormType>;
   role?: IRole;
@@ -154,14 +156,16 @@ export function ListPermissionWidget({
   isDisabled: boolean;
   triggerClose?: boolean;
   isCreate?: boolean;
+  isDefaultRole?: boolean;
 }) {
+  const navigate = useNavigate();
+
   // Initialize selectedPermissions with initiallySelectedPermissions
   const [selectedPermissions, setSelectedPermissions] = useState(new Set<string>());
   const [initialPermissions, setInitialPermissions] = useState<Set<string>>(new Set());
   const [initialGroups, setInitialGroups] = useState<IGroupPermission[]>([]);
   const [permissionsLoaded, setPermissionsLoaded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [permissionsInputValue, setPermissionsInputValue] = useState<string>('');
 
   useEffect(() => {
     if (role) {
@@ -298,7 +302,7 @@ export function ListPermissionWidget({
                   background: 'transparent',
                 }}
                 icon={<RiEditFill />}
-                hidden={isEditing || isCreate}
+                hidden={isEditing || isCreate || isDefaultRole}
                 onClick={() => setIsEditing(!isEditing)}
               />
             </Accordion>
@@ -312,6 +316,15 @@ export function ListPermissionWidget({
                 onClick={handleSubmit}
               >
                 Save
+              </Button>
+              <Button
+                variant="ghost"
+                hidden={!isCreate}
+                isDisabled={isDisabled}
+                w="fit-content"
+                onClick={() => navigate(-1)}
+              >
+                Back
               </Button>
               <Button
                 variant="ghost"

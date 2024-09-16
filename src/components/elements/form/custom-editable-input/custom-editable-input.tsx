@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import {
-  Button,
-  ButtonGroup,
-  Editable,
-  EditablePreview,
-  IconButton,
-  SkeletonText,
-  Text,
-} from '@chakra-ui/react';
+import { Button, ButtonGroup, Editable, IconButton, SkeletonText, Text } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
 import { RiEditFill } from 'react-icons/ri';
 
@@ -25,6 +17,7 @@ function EditableControls({
   onClose,
   onEdit,
   isEditing,
+  isDefaultRole,
 }: {
   isLoading: boolean;
   isDisabled: boolean;
@@ -33,6 +26,7 @@ function EditableControls({
   onClose: () => void;
   onEdit: () => void;
   isEditing: boolean;
+  isDefaultRole: boolean;
 }) {
   return isEditing ? (
     <ButtonGroup mt={2} justifyContent="start" size="sm" mb={2}>
@@ -59,6 +53,7 @@ function EditableControls({
     </ButtonGroup>
   ) : (
     <IconButton
+      hidden={isDefaultRole}
       aria-label="edit"
       bg="transparent"
       size="sm"
@@ -86,6 +81,7 @@ export interface CustomEditableInputProps extends InputProps, FieldWrapperProps 
   initialValue: string;
   inputChildren: React.ReactElement;
   triggerClose: boolean;
+  isDefaultRole: boolean;
   onSubmit: () => void;
 }
 
@@ -99,6 +95,7 @@ export const CustomEditableInput = (props: CustomEditableInputProps) => {
     onSubmit,
     triggerClose,
     isDirty,
+    isDefaultRole,
   } = props;
   const { handleSubmit } = useFormContext();
   const [isEditing, setIsEditing] = useState(false);
@@ -153,6 +150,7 @@ export const CustomEditableInput = (props: CustomEditableInputProps) => {
             isDisabled={isDisabled}
             isEditing={isEditing}
             isDirty={isDirty}
+            isDefaultRole={isDefaultRole}
             onSubmit={handleSubmit(onSubmit)}
             onClose={handleClose}
             onEdit={handleEdit}
