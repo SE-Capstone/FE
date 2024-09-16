@@ -7,6 +7,7 @@ import {
   EditablePreview,
   IconButton,
   SkeletonText,
+  Text,
 } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
 import { RiEditFill } from 'react-icons/ri';
@@ -136,13 +137,16 @@ export const CustomEditableInput = (props: CustomEditableInputProps) => {
               },
             })
           ) : (
-            <EditablePreview
+            <Text
+              as="span"
               maxW={{
                 base: '100%',
                 md: '100%',
                 lg: '60%',
               }}
-            />
+            >
+              {initialValue}
+            </Text>
           )}
           <EditableControls
             isLoading={isLoading}

@@ -51,7 +51,7 @@ export const EditProfilePage: React.FC = () => {
 
   const { formState, register, reset, control } = form;
   const { errors, isSubmitting, isDirty } = formState;
-  console.log(isLoading || !isDirty);
+
   function onSubmit(values: ProfileUpdateFormType) {
     if (isLoading) return;
 

@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Stack } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
-import { useUpdateRoleMutation } from './update-role.api';
 import { useGetGroupPermissions } from '../apis/get-permissions.api';
 import { useGetRole } from '../apis/get-role-detail.api';
+import { useUpdateRoleMutation } from '../apis/update-role.api';
 import { updateRoleFormSchema } from '../validations/update-role.validation';
 import { ListPermissionWidget } from '../widgets/list-permission.widget';
 
@@ -65,7 +65,7 @@ export function DetailRolePage() {
     if (isLoading || !role) return;
 
     if (permissions.size === 0) {
-      notify({ type: 'error', message: 'Permissions can not set to empty' });
+      notify({ type: 'error', message: 'At least one permission must be selected' });
       return;
     }
 

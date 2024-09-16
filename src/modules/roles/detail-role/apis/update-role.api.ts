@@ -51,9 +51,9 @@ export function useUpdateRoleMutation({ configs, onClose }: IProps = {}) {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.role.detail._def,
       });
-      queryClient.invalidateQueries({
-        queryKey: allQueryKeysStore.permission['group-permissions'].queryKey,
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: allQueryKeysStore.permission['group-permissions'].queryKey,
+      // });
 
       onClose && onClose();
 

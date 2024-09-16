@@ -3,7 +3,7 @@ import { Controller } from 'react-hook-form';
 
 import { useCreateUserHook } from '../hooks/mutations';
 
-import type { IRole } from '../apis/get-roles.api';
+import type { IRole } from '@/modules/roles/list-role/types';
 
 import {
   CustomChakraReactSelect,

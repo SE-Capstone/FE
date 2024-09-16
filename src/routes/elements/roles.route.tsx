@@ -7,6 +7,10 @@ const { DetailRolePage } = lazyImport(
   () => import('@/modules/roles/detail-role/pages'),
   'DetailRolePage'
 );
+const { CreateRolePage } = lazyImport(
+  () => import('@/modules/roles/list-role/pages/create-role.page'),
+  'CreateRolePage'
+);
 const { ProtectedRoute } = lazyImport(() => import('../protected-route'), 'ProtectedRoute');
 
 export function rolesRoutes(): RouteObject {
@@ -25,6 +29,10 @@ export function rolesRoutes(): RouteObject {
       {
         path: ':roleId',
         element: <DetailRolePage />,
+      },
+      {
+        path: 'create',
+        element: <CreateRolePage />,
       },
     ],
   };

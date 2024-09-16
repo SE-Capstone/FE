@@ -6,7 +6,7 @@ const ENDPOINT_QUERIES = {
 } as const;
 
 const ENDPOINT_MUTATIONS = {
-  createRole: 'roles',
+  create: 'roles',
   addRoleForUser: 'roles/add-role-for-user',
   update: 'roles',
 } as const;

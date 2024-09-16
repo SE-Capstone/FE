@@ -4,12 +4,12 @@ import { Box, Button, HStack, Spacer, Stack } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 
 import { AddNewUserWidget } from './add-new-user.widget';
-import { useGetRoles } from '../apis/get-roles.api';
 import { useUsersQueryFilterStateContext } from '../contexts';
 
-import type { IRole } from '../apis/get-roles.api';
+import type { IRole } from '@/modules/roles/list-role/types';
 
 import { CustomChakraReactSelect, SearchInput } from '@/components/elements';
+import { useGetRoles } from '@/modules/roles/list-role/apis/get-roles.api';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ActionTableUsersWidget() {

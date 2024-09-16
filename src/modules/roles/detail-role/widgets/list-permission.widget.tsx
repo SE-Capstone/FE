@@ -20,18 +20,21 @@ import { GrUserExpert } from 'react-icons/gr';
 import { RiEditFill } from 'react-icons/ri';
 
 import type { IRole } from '../../list-role/types';
+import type { CreateRoleFormType } from '../../list-role/validations/create-role.validation';
 import type { IGroupPermission } from '../apis/get-permissions.api';
-import type { MutationFunction } from '@tanstack/react-query';
+import type { UseFormReturn } from 'react-hook-form';
 
 import { Head } from '@/components/elements';
 
 export interface PermissionsGroupComponentProps {
+  isDisabled: boolean;
   group: IGroupPermission;
   initiallySelectedPermissions: string[];
   onPermissionChange(permissions: string[], isChecked: boolean): void;
 }
 
 function PermissionGroup({
+  isDisabled,
   group,
   initiallySelectedPermissions,
   onPermissionChange,
@@ -79,6 +82,7 @@ function PermissionGroup({
           isChecked={allChecked}
           borderColor="gray.300"
           isIndeterminate={isIndeterminate}
+          isDisabled={isDisabled}
           onChange={handleParentChange}
         >
           <Stack direction="row" alignItems="center">
@@ -95,6 +99,7 @@ function PermissionGroup({
               key={permission.id}
               borderColor="gray.300"
               paddingLeft={3}
+              isDisabled={isDisabled}
               isChecked={checkedPermissions[index]}
               onChange={handleChildChange(index)}
             >
@@ -106,6 +111,7 @@ function PermissionGroup({
     </>
   );
 }
+
 function InitPermissionGroup({ group }: { group: IGroupPermission }) {
   return (
     <Stack direction="column" alignItems="start">
@@ -130,20 +136,24 @@ function InitPermissionGroup({ group }: { group: IGroupPermission }) {
 
 export function ListPermissionWidget({
   role,
+  form,
   isLoading,
   groupPermissions,
   isError,
   mutation,
   isDisabled,
   triggerClose,
+  isCreate,
 }: {
+  form?: UseFormReturn<CreateRoleFormType>;
   role?: IRole;
   groupPermissions: IGroupPermission[];
   isLoading: boolean;
   isError: boolean;
-  mutation: any;
+  mutation?: any;
   isDisabled: boolean;
-  triggerClose: boolean;
+  triggerClose?: boolean;
+  isCreate?: boolean;
 }) {
   // Initialize selectedPermissions with initiallySelectedPermissions
   const [selectedPermissions, setSelectedPermissions] = useState(new Set<string>());
@@ -151,14 +161,15 @@ export function ListPermissionWidget({
   const [initialGroups, setInitialGroups] = useState<IGroupPermission[]>([]);
   const [permissionsLoaded, setPermissionsLoaded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [permissionsInputValue, setPermissionsInputValue] = useState<string>('');
 
   useEffect(() => {
     if (role) {
       const permissions = new Set(role.permissions.map((permission) => permission.id));
       setSelectedPermissions(permissions);
       setInitialPermissions(permissions); // Set the initial permissions
-      setPermissionsLoaded(true);
     }
+    setPermissionsLoaded(true);
   }, [role]);
 
   useEffect(() => {
@@ -192,7 +203,6 @@ export function ListPermissionWidget({
           updatedPermissions.delete(id);
         }
       });
-
       return updatedPermissions;
     });
   };
@@ -202,8 +212,12 @@ export function ListPermissionWidget({
     [...selectedPermissions].some((id) => !initialPermissions.has(id));
 
   const handleSubmit = () => {
-    setInitialPermissions(new Set(selectedPermissions)); // Reset initial state after saving
-    mutation(selectedPermissions);
+    if (isCreate && form) {
+      form.setValue('permissionsId', Array.from(selectedPermissions));
+    } else {
+      setInitialPermissions(new Set(selectedPermissions)); // Reset initial state after saving
+      mutation(selectedPermissions);
+    }
   };
 
   return (
@@ -256,11 +270,12 @@ export function ListPermissionWidget({
                 </h2>
                 <AccordionPanel pb={4} maxH="800px" overflow="scroll">
                   <Box p={3}>
-                    {isEditing
+                    {isEditing || isCreate
                       ? groupPermissions.map((group) => (
                           <PermissionGroup
                             key={group.id}
                             group={group}
+                            isDisabled={isDisabled}
                             initiallySelectedPermissions={Array.from(selectedPermissions)}
                             onPermissionChange={handlePermissionChange}
                           />
@@ -283,15 +298,16 @@ export function ListPermissionWidget({
                   background: 'transparent',
                 }}
                 icon={<RiEditFill />}
-                hidden={isEditing}
+                hidden={isEditing || isCreate}
                 onClick={() => setIsEditing(!isEditing)}
               />
             </Accordion>
 
             <Stack direction="row" mt={4}>
               <Button
-                hidden={isLoading || !isEditing}
+                hidden={isLoading || (!isEditing && !isCreate)}
                 w="fit-content"
+                type="submit"
                 isDisabled={!hasChanges() || isDisabled} // Disable if no changes
                 onClick={handleSubmit}
               >
@@ -299,7 +315,7 @@ export function ListPermissionWidget({
               </Button>
               <Button
                 variant="ghost"
-                hidden={isLoading || !isEditing}
+                hidden={isLoading || !isEditing || isCreate}
                 isDisabled={isDisabled}
                 w="fit-content"
                 onClick={() => setIsEditing(false)}

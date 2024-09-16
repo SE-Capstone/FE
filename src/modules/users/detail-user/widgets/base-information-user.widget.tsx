@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react';
 import { Box, Button, Image, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
 
-import { useGetRoles, type IRole } from '../../list-user/apis/get-roles.api';
 import { useUpdateUserMutation } from '../apis/update-user.api';
 import { updateUserFormSchema } from '../validations/update-user.validation';
 
 import type { IUser } from '../../list-user/types';
 import type { UpdateUserFormType } from '../validations/update-user.validation';
 import type { IBank } from '@/modules/profile/apis/get-banks.api';
+import type { IRole } from '@/modules/roles/list-role/types';
 
 import { CustomChakraReactSelect, CustomFormProvider, CustomInput } from '@/components/elements';
 import { PreviewImage } from '@/components/elements/preview-image';
@@ -24,6 +24,7 @@ import {
 } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 import { useGetBanks } from '@/modules/profile/apis/get-banks.api';
+import { useGetRoles } from '@/modules/roles/list-role/apis/get-roles.api';
 
 export function BaseInformationUserWidget({ user }: { user?: IUser }) {
   const userId = user?.id;
