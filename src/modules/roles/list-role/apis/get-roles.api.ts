@@ -1,15 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 
+import type { IRole } from '../types';
 import type { IResponseApi } from '@/configs/axios';
 
 import { makeRequest, type QueryConfig, type TErrorResponse } from '@/libs/react-query';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
-
-export interface IRole {
-  id: string;
-  name: string;
-}
 
 function query() {
   return makeRequest<never, IResponseApi<IRole[]>>({

@@ -1,40 +1,42 @@
 import { useCallback } from 'react';
 
 import { useCreateRoleMutation } from '../../apis/create-role.api';
-import { roleFormSchema } from '../../validations/roles.validations';
+import { createRoleFormSchema } from '../../validations/create-role.validation';
 
-import type { RoleFormValues } from '../../validations/roles.validations';
+import type { CreateRoleFormType } from '../../validations/create-role.validation';
 
+import { notify } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export function useCreateRoleHook() {
-  const formCreateRole = useFormWithSchema({
-    schema: roleFormSchema,
+  const form = useFormWithSchema({
+    schema: createRoleFormSchema,
   });
 
-  const { reset } = formCreateRole;
+  const { reset } = form;
 
-  const {
-    mutate: loginMutation,
-    isPending: isLoading,
-    ...restData
-  } = useCreateRoleMutation({ reset });
+  const { mutate, isPending: isLoading, ...restData } = useCreateRoleMutation({ reset });
 
   const handleCreateRole = useCallback(
-    async (values: RoleFormValues) => {
+    async (values: CreateRoleFormType) => {
       if (isLoading) return;
 
+      if (!values.permissionsId) {
+        notify({ type: 'error', message: 'At least one permission must be selected' });
+        return;
+      }
+
       try {
-        await loginMutation({
+        await mutate({
           body: values,
         });
       } catch (error) {}
     },
-    [loginMutation, isLoading]
+    [mutate, isLoading]
   );
 
   return {
-    formCreateRole,
+    form,
     handleCreateRole,
     isLoading,
     ...restData,

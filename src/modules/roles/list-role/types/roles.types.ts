@@ -8,5 +8,6 @@ type IPermission = {
 export type IRole = {
   id: string;
   name: string;
+  description: string;
   permissions: IPermission[];
 };

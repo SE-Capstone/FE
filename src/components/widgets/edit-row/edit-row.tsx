@@ -2,14 +2,22 @@ import type { PropsWithChildren } from 'react';
 
 import { Box, HStack, Text } from '@chakra-ui/react';
 
+import type { StackProps } from '@chakra-ui/react';
+
 interface EditRowProps {
   title: string;
   isRequired?: boolean;
+  stackProps?: StackProps;
 }
 
-export function EditRow({ title, isRequired = false, children }: PropsWithChildren<EditRowProps>) {
+export function EditRow({
+  title,
+  stackProps,
+  isRequired = false,
+  children,
+}: PropsWithChildren<EditRowProps>) {
   return (
-    <HStack spacing={4} align="flex-start">
+    <HStack spacing={4} align="center">
       <HStack
         minH={10}
         spacing={0.5}
@@ -18,7 +26,8 @@ export function EditRow({ title, isRequired = false, children }: PropsWithChildr
         w={40}
         maxW={50}
         lineHeight="normal"
-        align="flex-start"
+        align="center"
+        {...stackProps}
       >
         {isRequired ? (
           <Text as="span" color="red.300">

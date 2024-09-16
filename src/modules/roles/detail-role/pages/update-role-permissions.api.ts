@@ -1,42 +1,43 @@
-import { useEditableControls } from '@chakra-ui/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 
+import type { GenderEnum } from '@/configs';
 import type { IResponseApi } from '@/configs/axios';
 import type { MutationConfig } from '@/libs/react-query';
 
 import { DEFAULT_MESSAGE } from '@/configs';
 import { getErrorMessage, notify } from '@/libs/helpers';
 import { makeRequest } from '@/libs/react-query';
-import { APP_PATHS } from '@/routes/paths/app.paths';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
 
-export interface ICreateRoleRequest {
+export interface IUpdateUserRequest {
   body: {
-    name: string;
-    description: string;
-    permissionsId: string[];
+    id: string;
+    address: string;
+    fullName: string;
+    gender: GenderEnum;
+    dob: Date | string;
+    phone: string;
+    roleId?: string;
   };
 }
 
-function mutation(req: ICreateRoleRequest) {
+function mutation(req: IUpdateUserRequest) {
   const { body } = req;
   return makeRequest<typeof body, IResponseApi<void>>({
-    method: 'POST',
-    url: ALL_ENDPOINT_URL_STORE.roles.create,
+    method: 'PUT',
+    url: ALL_ENDPOINT_URL_STORE.user.updateUser,
     data: body,
+    isFormData: true,
   });
 }
 
 interface IProps {
   configs?: MutationConfig<typeof mutation>;
-  reset?: () => void;
 }
 
-export function useCreateRoleMutation({ configs, reset }: IProps = {}) {
+export function useUpdateUserMutation({ configs }: IProps = {}) {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   return useMutation({
     mutationFn: mutation,
@@ -48,14 +49,15 @@ export function useCreateRoleMutation({ configs, reset }: IProps = {}) {
       }
 
       queryClient.invalidateQueries({
-        queryKey: allQueryKeysStore.role.roles.queryKey,
+        queryKey: allQueryKeysStore.user.users.queryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.user.detail._def,
       });
 
-      reset && reset();
-      navigate(APP_PATHS.listRoles);
       notify({
         type: 'success',
-        message: DEFAULT_MESSAGE.CREATE_SUCCESS,
+        message: DEFAULT_MESSAGE.UPDATE_SUCCESS,
       });
     },
 

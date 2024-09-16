@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 import { useGetListRoleQuery } from '../hooks/queries';
 import { ActionMenuTableRoles } from '../widgets';
+import { ActionTableRolesWidget } from '../widgets/action-table-roles.widget';
 
 import type { IRole } from '../types';
 import type { ColumnsProps } from '@/components/elements';
@@ -64,6 +65,7 @@ export function ListRolesPage() {
     <>
       <Head title="Roles" />
       <Container maxW="container.2xl" centerContent>
+        <ActionTableRolesWidget />
         <TableComponent
           data={listRole}
           groupColumns={columns}
