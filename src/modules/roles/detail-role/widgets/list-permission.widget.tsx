@@ -23,9 +23,11 @@ import { useNavigate } from 'react-router-dom';
 import type { IRole } from '../../list-role/types';
 import type { CreateRoleFormType } from '../../list-role/validations/create-role.validation';
 import type { IGroupPermission } from '../apis/get-permissions.api';
+import type { GroupPermissionEnum, PermissionEnum } from '@/configs';
 import type { UseFormReturn } from 'react-hook-form';
 
 import { Head } from '@/components/elements';
+import { getGroupPermission, getPermission } from '@/configs';
 
 export interface PermissionsGroupComponentProps {
   isDisabled: boolean;
@@ -88,11 +90,11 @@ function PermissionGroup({
         >
           <Stack direction="row" alignItems="center">
             <GrUserExpert color="gray" size={16} />
-            <Text>{group.name}</Text>
+            <Text>{getGroupPermission(group.name as GroupPermissionEnum)}</Text>
           </Stack>
         </Checkbox>
       </Stack>
-      <Stack pl={8} mt={1} spacing={2} direction="row" alignItems="stretch">
+      <Stack pl={8} spacing={2} direction="row" alignItems="stretch">
         <Box width="1px" bg="gray.300" />
         <Stack spacing={1}>
           {group.permissions.map((permission, index) => (
@@ -104,7 +106,7 @@ function PermissionGroup({
               isChecked={checkedPermissions[index]}
               onChange={handleChildChange(index)}
             >
-              {permission.name}
+              <Text key={permission.id}>{getPermission(permission.name as PermissionEnum)}</Text>
             </Checkbox>
           ))}
         </Stack>
@@ -118,15 +120,15 @@ function InitPermissionGroup({ group }: { group: IGroupPermission }) {
     <Stack direction="column" alignItems="start">
       <Stack direction="row" alignItems="center">
         <GrUserExpert color="gray" size={16} />
-        <Text>{group.name}</Text>
+        <Text>{getGroupPermission(group.name as GroupPermissionEnum)}</Text>
       </Stack>
 
-      <Stack pl={8} mt={1} spacing={2} direction="row" alignItems="stretch">
+      <Stack pl={8} spacing={2} direction="row" alignItems="stretch">
         <Box width="1px" bg="gray.300" />
         <Stack spacing={1}>
           {group.permissions.map((permission) => (
             <Text key={permission.id} paddingLeft={3}>
-              {permission.name}
+              {getPermission(permission.name as PermissionEnum)}
             </Text>
           ))}
         </Stack>

@@ -7,7 +7,7 @@ export interface IBaseResponse<TData = unknown> {
 export interface IBaseEntity {
   id: string;
   createdAt: Date | string;
-  updatedAt: Date | string;
+  updatedAt?: Date | string;
 }
 
 export interface IBasePagination {

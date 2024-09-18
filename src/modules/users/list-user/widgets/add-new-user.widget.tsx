@@ -65,7 +65,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
               registration={register('userName')}
               error={errors.userName}
             />
-          </SimpleGrid>{' '}
+          </SimpleGrid>
           <CustomInput
             label="Password"
             type="password"
@@ -89,7 +89,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
               registration={register('dob')}
               error={errors.dob}
             />
-          </SimpleGrid>{' '}
+          </SimpleGrid>
           <Controller
             name="phone"
             control={control}

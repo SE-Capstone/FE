@@ -7,5 +7,6 @@ export const userQueryKeys = createQueryKeys('user', {
   [USERS_ENDPOINT_URL.updateProfile]: null,
   [USERS_ENDPOINT_URL.createUser]: null,
   [USERS_ENDPOINT_URL.listUser]: null,
+  [USERS_ENDPOINT_URL.getByPermission]: null,
   detail: (id: string) => ({ queryKey: [id] }),
 });

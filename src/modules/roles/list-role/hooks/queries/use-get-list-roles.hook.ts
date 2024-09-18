@@ -40,7 +40,7 @@ export function useGetListRoleQuery(props: UseGetListRoleQueryProps = {}) {
   const currentParams = useMemo(() => merge({}, params), [params]);
 
   const queryKey = useMemo(
-    () => [...allQueryKeysStore.user.users.queryKey, currentParams],
+    () => [...allQueryKeysStore.role.roles.queryKey, currentParams],
     [currentParams]
   );
 

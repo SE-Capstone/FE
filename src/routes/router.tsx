@@ -3,6 +3,7 @@ import type { PropsWithChildren } from 'react';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 
 import { authRoutes, dashboardRoutes, profileRoutes, publicRoutes } from './elements';
+import { projectsRoutes } from './elements/projects.route';
 import { rolesRoutes } from './elements/roles.route';
 import { usersRoutes } from './elements/users.route';
 import { APP_PATHS } from './paths/app.paths';
@@ -36,6 +37,7 @@ const allRoutes = createBrowserRouter([
       profileRoutes(),
       usersRoutes(),
       rolesRoutes(),
+      projectsRoutes(),
     ],
   },
   {

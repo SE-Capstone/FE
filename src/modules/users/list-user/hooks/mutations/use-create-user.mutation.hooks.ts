@@ -15,18 +15,14 @@ export function useCreateUserHook() {
 
   const { reset } = formCreateUser;
 
-  const {
-    mutate: loginMutation,
-    isPending: isLoading,
-    ...restData
-  } = useCreateUserMutation({ reset });
+  const { mutate, isPending: isLoading, ...restData } = useCreateUserMutation({ reset });
 
   const handleCreateUser = useCallback(
     async (values: UserFormValues) => {
       if (isLoading) return;
 
       try {
-        await loginMutation({
+        await mutate({
           body: {
             ...values,
             phone: cleanPhoneNumber(values.phone),
@@ -38,7 +34,7 @@ export function useCreateUserHook() {
         });
       } catch (error) {}
     },
-    [loginMutation, isLoading]
+    [mutate, isLoading]
   );
 
   return {

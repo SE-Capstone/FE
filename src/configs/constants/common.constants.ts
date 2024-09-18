@@ -1,4 +1,12 @@
-import { GenderEnum, RolesEnum, UserStatusEnum } from './common.enums';
+import {
+  GenderEnum,
+  RolesEnum,
+  UserStatusEnum,
+  PermissionEnum,
+  GroupPermissionEnum,
+} from './common.enums';
+
+import { ProjectStatusEnum } from '@/modules/projects/list-project/types';
 
 export const YESTERDAY = new Date(new Date().valueOf() - 1000 * 60 * 60 * 24);
 
@@ -41,6 +49,32 @@ export const GENDER_OPTIONS = [
   {
     label: 'Others',
     value: GenderEnum.other,
+  },
+] as const;
+
+export const PROJECT_STATUS_OPTIONS = [
+  {
+    label: 'Pending',
+    value: ProjectStatusEnum.Pending,
+  },
+  {
+    label: 'Active',
+    value: ProjectStatusEnum.Active,
+  },
+  {
+    label: 'Inactive',
+    value: ProjectStatusEnum.Inactive,
+  },
+] as const;
+
+export const PROJECT_VISIBILITY_OPTIONS = [
+  {
+    label: 'Visible',
+    value: 'true',
+  },
+  {
+    label: 'Invisible',
+    value: 'false',
   },
 ] as const;
 
@@ -89,8 +123,50 @@ export const GENDER_VALUES: Record<GenderEnum, string> = {
   [GenderEnum.other]: 'Others',
 };
 
+export const PERMISSIONS_VALUES: Record<PermissionEnum, string> = {
+  [PermissionEnum.ADD_USER]: 'Create user',
+  [PermissionEnum.ADD_PROJECT]: 'Create project',
+  [PermissionEnum.IS_PROJECT_LEAD]: 'Assign as project lead',
+  [PermissionEnum.GET_LIST_PROJECT]: 'Get list project',
+  [PermissionEnum.GET_DETAIL_PROJECT]: 'Get project detail',
+  [PermissionEnum.DELETE_PROJECT]: 'Delete project',
+  [PermissionEnum.UPDATE_PROJECT]: 'Update project',
+  [PermissionEnum.ADD_ROLE]: 'Create role',
+  [PermissionEnum.GET_ROLE]: 'Get role',
+  [PermissionEnum.ADD_ROLE_FOR_USER]: 'Add role for user',
+  [PermissionEnum.READ_LIST_ROLE]: 'Read list role',
+  [PermissionEnum.CHANGE_PASSWORD]: 'Change user password',
+  [PermissionEnum.GET_ROLE_DETAIL]: 'Get role detail',
+};
+
+export const GROUP_PERMISSIONS_VALUES: Record<GroupPermissionEnum, string> = {
+  [GroupPermissionEnum.USER]: 'User',
+  [GroupPermissionEnum.ROLE]: 'Role',
+  [GroupPermissionEnum.PROJECT]: 'Project',
+  [GroupPermissionEnum.JOB]: 'Job',
+  [GroupPermissionEnum.TASK]: 'Task',
+};
+
+export const PROJECT_STATUS_VALUES: Record<ProjectStatusEnum, string> = {
+  [ProjectStatusEnum.Pending]: 'Pending',
+  [ProjectStatusEnum.Active]: 'Active',
+  [ProjectStatusEnum.Inactive]: 'Inactive',
+};
+
 export function getGender(gender?: GenderEnum) {
   return gender ? GENDER_VALUES[gender] : '';
+}
+
+export function getPermission(permission?: PermissionEnum) {
+  return permission ? PERMISSIONS_VALUES[permission] : '';
+}
+
+export function getGroupPermission(permission?: GroupPermissionEnum) {
+  return permission ? GROUP_PERMISSIONS_VALUES[permission] : '';
+}
+
+export function getProjectStatus(status?: ProjectStatusEnum) {
+  return status ? PROJECT_STATUS_VALUES[status] : '';
 }
 
 export const DEFAULT_MESSAGE = {

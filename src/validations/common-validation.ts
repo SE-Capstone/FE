@@ -83,6 +83,22 @@ export const getBirthdayField = () =>
     .refine((date) => isDateBeforeToday(date), 'Birthday must be before today')
     .refine((date) => isOlderThan18Years(date), 'Birthday must be older than 18 years');
 
+export const getDateField = () =>
+  z.preprocess(
+    (arg) => {
+      if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
+
+      return undefined;
+    },
+    z.date({
+      errorMap: (issue) => {
+        if (issue.code === 'invalid_date') return { message: 'Required' };
+
+        return { message: issue.message ?? '' };
+      },
+    })
+  );
+
 export const numericStringField = (schema: ZodTypeAny) =>
   z.preprocess((a) => {
     if (typeof a === 'string') {

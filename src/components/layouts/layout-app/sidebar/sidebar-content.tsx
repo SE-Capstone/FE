@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { Box, CloseButton, Flex, HStack, Icon, Image, Stack, Text } from '@chakra-ui/react';
+import { BsWindowDock } from 'react-icons/bs';
 import {
   MdLogout,
   MdOutlineCategory,
@@ -73,6 +74,11 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarContentProps) => {
           name: 'Roles',
           icon: MdOutlineSettings,
           path: '/roles',
+        },
+        {
+          name: 'Projects',
+          icon: BsWindowDock,
+          path: '/projects',
         },
         {
           name: 'News',
