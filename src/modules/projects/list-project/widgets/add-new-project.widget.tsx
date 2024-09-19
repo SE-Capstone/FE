@@ -86,7 +86,6 @@ export function AddNewProjectWidget(props: AddNewProjectWidgetProps) {
           <HStack align="stretch">
             <CustomChakraReactSelect
               isSearchable
-              isRequired
               placeholder="Choose team lead"
               label="Team lead"
               size="lg"

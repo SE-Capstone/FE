@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { Icon } from '@chakra-ui/react';
 import { MdOutlineToggleOff, MdOutlineToggleOn, MdVisibility } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -14,12 +16,16 @@ interface ActionMenuTableProjectsProps {
 }
 export function ActionMenuTableProjects({ project }: ActionMenuTableProjectsProps) {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
+  const { openAlert, closeAlert } = useAlertDialogStore(loading);
   const { mutate, isPending: isLoading } = useToggleVisibleProjectMutation({
-    // closeAlert,
+    closeAlert,
   });
 
-  const { openAlert, closeAlert } = useAlertDialogStore(isLoading);
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading]);
 
   if (!project || !project.id) return null;
 
@@ -39,7 +45,6 @@ export function ActionMenuTableProjects({ project }: ActionMenuTableProjectsProp
             project.isVisible ? 'Invisible' : 'Visible'
           }"?`,
           onHandleConfirm() {
-            // TODO
             if (!project.id) return;
             mutate(project.id);
           },

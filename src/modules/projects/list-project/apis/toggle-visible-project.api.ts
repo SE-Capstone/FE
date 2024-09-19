@@ -12,7 +12,7 @@ import { allQueryKeysStore } from '@/services/query-keys-store';
 
 function mutation(projectId: string) {
   return makeRequest<never, IResponseApi<IProject>>({
-    method: 'POST',
+    method: 'PUT',
     url: ALL_ENDPOINT_URL_STORE.projects.toggleVisible(projectId),
   });
 }
