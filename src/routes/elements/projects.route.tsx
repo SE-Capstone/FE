@@ -7,6 +7,14 @@ const { ListProjectsPage } = lazyImport(
   () => import('@/modules/projects/list-project'),
   'ListProjectsPage'
 );
+const { DetailProjectPage } = lazyImport(
+  () => import('@/modules/projects/detail-project/pages'),
+  'DetailProjectPage'
+);
+const { UpdateProjectPage } = lazyImport(
+  () => import('@/modules/projects/detail-project/pages'),
+  'UpdateProjectPage'
+);
 const { ProtectedRoute } = lazyImport(() => import('../protected-route'), 'ProtectedRoute');
 
 export function projectsRoutes(): RouteObject {
@@ -25,6 +33,14 @@ export function projectsRoutes(): RouteObject {
             <ListProjectsPage />
           </ProjectsQueryProvider>
         ),
+      },
+      {
+        path: ':projectId',
+        element: <DetailProjectPage />,
+      },
+      {
+        path: ':projectId/edit',
+        element: <UpdateProjectPage />,
       },
     ],
   };

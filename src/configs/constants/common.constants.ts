@@ -54,12 +54,12 @@ export const GENDER_OPTIONS = [
 
 export const PROJECT_STATUS_OPTIONS = [
   {
-    label: 'Pending',
-    value: ProjectStatusEnum.Pending,
-  },
-  {
     label: 'Active',
     value: ProjectStatusEnum.Active,
+  },
+  {
+    label: 'Pending',
+    value: ProjectStatusEnum.Pending,
   },
   {
     label: 'Inactive',

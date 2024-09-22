@@ -21,6 +21,7 @@ interface IGetListProjectRequest {
 }
 
 export const defaultFilterProjects: QueryListProjectInput = {
+  search: undefined,
   status: undefined,
   isVisible: undefined,
 };

@@ -382,6 +382,10 @@ export function isDateBeforeToday(date: Date) {
   return new Date(date.toDateString()) < new Date(new Date().toDateString());
 }
 
+export function isDateAfterToday(date: Date) {
+  return new Date(date.toDateString()) >= new Date(new Date().toDateString());
+}
+
 export function isOlderThan18Years(date: Date | undefined): boolean {
   if (!date) return false;
 

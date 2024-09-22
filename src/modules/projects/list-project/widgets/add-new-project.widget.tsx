@@ -1,4 +1,4 @@
-import { Button, HStack, SimpleGrid, Stack } from '@chakra-ui/react';
+import { Button, SimpleGrid, Stack } from '@chakra-ui/react';
 
 import { useCreateProjectHook } from '../hooks/mutations';
 
@@ -47,20 +47,18 @@ export function AddNewProjectWidget(props: AddNewProjectWidgetProps) {
         onSubmit={handleCreateProject}
       >
         <Stack spacing={5}>
-          <SimpleGrid columns={2} spacing={3}>
-            <CustomInput
-              label="Name"
-              isRequired
-              registration={register('name')}
-              error={errors.name}
-            />
-            <CustomInput
-              label="Code"
-              isRequired
-              registration={register('code')}
-              error={errors.code}
-            />
-          </SimpleGrid>
+          <CustomInput
+            label="Name"
+            isRequired
+            registration={register('name')}
+            error={errors.name}
+          />
+          <CustomInput
+            label="Code"
+            isRequired
+            registration={register('code')}
+            error={errors.code}
+          />
           <CustomTextArea
             label="Description"
             isRequired
@@ -83,20 +81,18 @@ export function AddNewProjectWidget(props: AddNewProjectWidgetProps) {
               error={errors.endDate}
             />
           </SimpleGrid>
-          <HStack align="stretch">
-            <CustomChakraReactSelect
-              isSearchable
-              placeholder="Choose team lead"
-              label="Team lead"
-              size="lg"
-              options={teamLeads.map((user) => ({
-                label: `${user.fullName} (${user.userName})`,
-                value: user.id,
-              }))}
-              control={control}
-              name="leadId"
-            />
-          </HStack>
+          <CustomChakraReactSelect
+            isSearchable
+            placeholder="Choose team lead"
+            label="Team lead"
+            size="lg"
+            options={teamLeads.map((user) => ({
+              label: `${user.fullName} (${user.userName})`,
+              value: user.id,
+            }))}
+            control={control}
+            name="leadId"
+          />
         </Stack>
       </CustomFormProvider>
     </ModalBase>

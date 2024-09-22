@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Box, Button, HStack, Spacer, Stack } from '@chakra-ui/react';
+import { Box, Button, Grid, GridItem, HStack, Spacer } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 
 import { AddNewProjectWidget } from './add-new-project.widget';
@@ -8,13 +8,13 @@ import { useProjectsQueryFilterStateContext } from '../contexts';
 
 import type { IUser } from '@/modules/users/list-user/types';
 
-import { CustomChakraReactSelect } from '@/components/elements';
+import { CustomChakraReactSelect, SearchInput } from '@/components/elements';
 import { PermissionEnum, PROJECT_STATUS_OPTIONS, PROJECT_VISIBILITY_OPTIONS } from '@/configs';
 import { useGetUsersByPermission } from '@/modules/users/list-user/apis/get-user-by-permission.api';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ActionTableProjectsWidget() {
-  const { setProjectsQueryFilterState } = useProjectsQueryFilterStateContext();
+  const { projectsQueryState, setProjectsQueryFilterState } = useProjectsQueryFilterStateContext();
   const { pathname } = useLocation();
 
   const isShowFilterProject = pathname.includes(APP_PATHS.listProject);
@@ -25,22 +25,37 @@ export function ActionTableProjectsWidget() {
   });
 
   useEffect(() => {
-    setTeamLeads(users);
-  }, [users]);
+    if (JSON.stringify(users) !== JSON.stringify(teamLeads)) {
+      setTeamLeads(users);
+    }
+  }, [users, teamLeads]);
 
   return (
     <Box p={5} mb={6} rounded={2.5} bg="white" w="full" shadow="0 1px 4px 0 #0002">
       <HStack justify="space-between">
-        <Stack
-          flexBasis={{
-            base: '100%',
-            md: '90%',
+        <Grid
+          w={{
+            base: '80%',
             lg: '70%',
-            xl: '50%',
+            xl: '60%',
           }}
-          direction="row"
+          gap={2}
         >
-          <Box flexBasis="60%">
+          <GridItem colSpan={2}>
+            <SearchInput
+              placeholder="Enter name/code..."
+              initValue={projectsQueryState.filters.search || ''}
+              onHandleSearch={(keyword) => {
+                setProjectsQueryFilterState({ search: keyword });
+              }}
+            />
+          </GridItem>
+          <GridItem
+            colSpan={{
+              base: 2,
+              md: 1,
+            }}
+          >
             <CustomChakraReactSelect
               isSearchable={false}
               placeholder="Choose status"
@@ -51,8 +66,13 @@ export function ActionTableProjectsWidget() {
                 });
               }}
             />
-          </Box>
-          <Box flexBasis="40%">
+          </GridItem>
+          <GridItem
+            colSpan={{
+              base: 2,
+              md: 1,
+            }}
+          >
             <CustomChakraReactSelect
               isSearchable={false}
               placeholder="Choose visible status"
@@ -63,8 +83,8 @@ export function ActionTableProjectsWidget() {
                 });
               }}
             />
-          </Box>
-        </Stack>
+          </GridItem>
+        </Grid>
         {isShowFilterProject && (
           <>
             <Spacer />

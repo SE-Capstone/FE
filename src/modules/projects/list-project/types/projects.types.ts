@@ -7,6 +7,7 @@ export enum ProjectStatusEnum {
 }
 
 export type QueryListProjectInput = {
+  search?: string;
   status?: ProjectStatusEnum;
   isVisible?: boolean;
 };
@@ -20,4 +21,5 @@ export type IProject = IBaseEntity & {
   status: ProjectStatusEnum;
   isVisible: boolean;
   leadId?: string;
+  leadName?: string;
 };

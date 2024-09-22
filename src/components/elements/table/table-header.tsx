@@ -239,8 +239,4 @@ const TableHeader = <T extends object>({
   );
 };
 
-TableHeader.defaultProps = {
-  additionalFeature: false,
-};
-
 export default TableHeader;

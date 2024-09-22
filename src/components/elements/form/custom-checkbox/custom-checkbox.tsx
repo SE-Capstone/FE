@@ -17,7 +17,7 @@ export const CustomCheckbox = forwardRef<CustomCheckboxProps, 'input'>(function 
   const { registration, error, label, ...rest } = props;
 
   return (
-    <Checkbox {...rest} {...registration} isInvalid={!!error}>
+    <Checkbox {...rest} {...registration} isInvalid={!!error} borderColor="gray.300" zIndex={0}>
       {label}
     </Checkbox>
   );

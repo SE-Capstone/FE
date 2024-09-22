@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import type { ZodTypeAny } from 'zod';
 
-import { isDateBeforeToday, isOlderThan18Years } from '@/libs/helpers';
+import { isDateAfterToday, isDateBeforeToday, isOlderThan18Years } from '@/libs/helpers';
 
 // export const regexEmail =
 //   /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -84,20 +84,22 @@ export const getBirthdayField = () =>
     .refine((date) => isOlderThan18Years(date), 'Birthday must be older than 18 years');
 
 export const getDateField = () =>
-  z.preprocess(
-    (arg) => {
-      if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
+  z
+    .preprocess(
+      (arg) => {
+        if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
 
-      return undefined;
-    },
-    z.date({
-      errorMap: (issue) => {
-        if (issue.code === 'invalid_date') return { message: 'Required' };
-
-        return { message: issue.message ?? '' };
+        return undefined;
       },
-    })
-  );
+      z.date({
+        errorMap: (issue) => {
+          if (issue.code === 'invalid_date') return { message: 'Required' };
+
+          return { message: issue.message ?? '' };
+        },
+      })
+    )
+    .refine((date) => isDateAfterToday(date), 'Date must not be in the past');
 
 export const numericStringField = (schema: ZodTypeAny) =>
   z.preprocess((a) => {

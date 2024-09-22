@@ -1,4 +1,4 @@
-import { Menu, MenuButton, MenuItem, MenuList, Stack, StackDivider } from '@chakra-ui/react';
+import { Menu, MenuButton, MenuItem, MenuList, StackDivider } from '@chakra-ui/react';
 
 import type { MenuButtonProps, MenuItemProps, MenuListProps, MenuProps } from '@chakra-ui/react';
 
@@ -40,7 +40,6 @@ export function ActionMenuTable({
               {childrenRender}
             </MenuButton>
             <MenuList
-              as={Stack}
               sx={{
                 boxShadow: '0px 4px 10px rgba(142, 150, 175, 0.3)',
               }}
