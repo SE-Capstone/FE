@@ -1,3 +1,8 @@
+export enum CustomHttpStatusCode {
+  ROLE_CHANGED = 888,
+  TOKEN_EXPIRED = 999,
+}
+
 export enum GenderEnum {
   male = 1,
   female = 2,

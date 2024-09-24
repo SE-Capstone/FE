@@ -1,10 +1,13 @@
 import type React from 'react';
 
-import { Box, Drawer, DrawerContent, Flex, Stack, useDisclosure } from '@chakra-ui/react';
+import { Box, Flex, Stack, useDisclosure } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 import { MobileNav } from './mobile-nav';
 import { SidebarContent } from './sidebar-content';
 
+import { IMAGE_URLS } from '@/assets/images';
+import { APP_PATHS } from '@/routes/paths/app.paths';
 import { genericMemo } from '@/types';
 
 export default genericMemo(function ({ children }: { children: React.ReactNode }) {
@@ -12,26 +15,14 @@ export default genericMemo(function ({ children }: { children: React.ReactNode }
 
   return (
     <Flex flexDir="column" h="100vh" bg="white">
-      <SidebarContent display={{ base: 'none', lg: 'block' }} onClose={onClose} />
-      <Drawer
-        isOpen={isOpen}
-        placement="left"
-        size={{ base: 'full', md: 'md' }}
-        onClose={onClose}
-        onOverlayClick={onClose}
-      >
-        {/* <DrawerOverlay /> */}
-
-        <DrawerContent>
-          <SidebarContent h="full" overflowY="hidden" onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
-
-      <Stack spacing={0} flexGrow={1} ml={{ base: 0, lg: 84 }} h="full">
-        <MobileNav onOpen={onOpen} />
-        <Box bg="#f6f6f6" p={{ base: 4 }} overflowY="auto" flexGrow={1}>
-          {children}
-        </Box>
+      <Stack spacing={0} flexDir="row" h="full">
+        <SidebarContent isOpen={isOpen} display={{ base: 'none', lg: 'block' }} onClose={onClose} />
+        <Stack flex={1} gap={0} flexDir="column" h="full">
+          <MobileNav onOpen={onOpen} />
+          <Box bg="#f6f6f6" flex={1} p={{ base: 4 }} h="full" overflowY="auto">
+            {children}
+          </Box>
+        </Stack>
       </Stack>
     </Flex>
   );

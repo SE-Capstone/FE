@@ -15,16 +15,11 @@ const { UpdateProjectPage } = lazyImport(
   () => import('@/modules/projects/detail-project/pages'),
   'UpdateProjectPage'
 );
-const { ProtectedRoute } = lazyImport(() => import('../protected-route'), 'ProtectedRoute');
 
 export function projectsRoutes(): RouteObject {
   return {
     path: '/projects',
-    element: (
-      <ProtectedRoute>
-        <Outlet />
-      </ProtectedRoute>
-    ),
+    element: <Outlet />,
     children: [
       {
         index: true,

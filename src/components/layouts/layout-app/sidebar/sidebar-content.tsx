@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
-import { Box, CloseButton, Flex, HStack, Icon, Image, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, CloseButton, Flex, HStack, Icon, Image } from '@chakra-ui/react';
 import { BsWindowDock } from 'react-icons/bs';
 import {
   MdLogout,
@@ -10,15 +10,13 @@ import {
   MdOutlineSettings,
   MdOutlineNewspaper,
 } from 'react-icons/md';
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
-
-import { NavItem } from './nav-item';
 
 import type { NavItemProps } from './nav-item';
 import type { BoxProps } from '@chakra-ui/react';
 
 import { IMAGE_URLS } from '@/assets/images';
-import { CustomAccordion } from '@/components/elements';
 import { notify } from '@/libs/helpers';
 import { useLogoutMutation } from '@/modules/auth/apis/logout.api';
 import { useAuthentication } from '@/modules/profile/hooks';
@@ -31,10 +29,12 @@ type LinkItemProps = Pick<NavItemProps, 'path' | 'icon'> & {
 
 interface SidebarContentProps extends BoxProps {
   onClose: () => void;
+  isOpen: boolean;
 }
 
-export const SidebarContent = ({ onClose, ...rest }: SidebarContentProps) => {
+export const SidebarContent = ({ onClose, isOpen, ...rest }: SidebarContentProps) => {
   const { isLogged, isAdmin } = useAuthentication();
+  const [collapsed, setCollapsed] = useState(false);
   const { handleLogout: handleLogoutMutation, isPending: logoutMutationResult } =
     useLogoutMutation();
 
@@ -90,94 +90,109 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarContentProps) => {
   );
 
   return (
-    <Box bg="white" w={{ base: 'full', lg: 84 }} pos="fixed" h="full" {...rest}>
-      <Flex alignItems="center" mx="8" justify="center" mt={6}>
-        <HStack alignItems="center" justify="center" pos="relative" mb={4}>
-          <Box role="presentation" as={Link} cursor="pointer" to={APP_PATHS.HOME}>
-            <Image
-              objectFit="cover"
-              boxSize="88px"
-              src={IMAGE_URLS.logo}
-              alt="Logo"
-              mb={1}
-              loading="lazy"
-              _hover={{}}
-            />
-          </Box>
-        </HStack>
-        <CloseButton
-          display={{ base: 'flex', lg: 'none' }}
-          position="absolute"
-          right={3}
-          top={3}
-          onClick={onClose}
-        />
-      </Flex>
-      <Flex
-        flexDir="column"
-        h="full"
-        flex={1}
-        direction="column"
-        pos="relative"
-        maxH="calc(100vh - 150px)"
-        overflowY="auto"
+    <Sidebar
+      toggled={isOpen}
+      collapsed={collapsed}
+      style={{ height: '100%' }}
+      customBreakPoint="1024px"
+      collapsedWidth="70px"
+      onBackdropClick={onClose}
+    >
+      <Menu
+        menuItemStyles={{
+          button: {
+            // the active class will be added automatically by react router
+            // so we can use it to style the active menu item
+            [`&.active`]: {
+              backgroundColor: '#13395e',
+              color: '#b6c8d9',
+            },
+          },
+        }}
       >
-        <Stack spacing={0.5}>
-          {LINK_ITEMS.map((link) => {
-            if (link.children) {
-              return (
-                <CustomAccordion
-                  key={link.name + link.path}
-                  accordionItems={[
-                    {
-                      accordionButtonProps: { pl: 8 },
-                      title: ({ isExpanded }) => (
-                        <HStack role="group" spacing={4}>
-                          <Icon
-                            boxSize={5}
-                            color={isExpanded ? 'primary' : 'neutral.300'}
-                            as={link.icon}
-                            flexShrink={0}
-                          />
-                          <Text
-                            fontSize="14px"
-                            lineHeight="19px"
-                            color={isExpanded ? 'primary' : 'neutral.300'}
-                            fontWeight="semibold"
-                          >
-                            {link.name}
-                          </Text>
-                        </HStack>
-                      ),
-                      panel: link.children?.map((child) => (
-                        <NavItem key={child.path} icon={child.icon} path={child.path}>
-                          {child.name}
-                        </NavItem>
-                      )),
-                    },
-                  ]}
-                />
-              );
-            }
-
+        <Flex alignItems="center" justify="center" mt={6}>
+          <HStack alignItems="center" justify="center" pos="relative" mb={4}>
+            <Box role="presentation" as={Link} cursor="pointer" to={APP_PATHS.HOME}>
+              <Image
+                objectFit="cover"
+                boxSize={collapsed ? '50px' : '88px'}
+                transition="all 0.3s ease"
+                src={IMAGE_URLS.logo}
+                alt="Logo"
+                mb={1}
+                loading="lazy"
+                _hover={{}}
+              />
+            </Box>
+          </HStack>
+          <CloseButton
+            display={{ base: 'flex', lg: 'none' }}
+            position="absolute"
+            right={3}
+            top={3}
+            onClick={onClose}
+          />
+        </Flex>
+        {LINK_ITEMS.map((link) => {
+          if (link.children) {
             return (
-              <NavItem key={link.name} icon={link.icon} path={link.path} onClick={onClose}>
-                {link.name}
-              </NavItem>
+              <SubMenu
+                key={link.name + link.path}
+                label={link.name}
+                icon={
+                  <Icon
+                    mr="4"
+                    boxSize={5}
+                    _groupHover={{
+                      color: 'white',
+                    }}
+                    as={MdOutlineHome}
+                  />
+                }
+              >
+                {link.children?.map((child) => (
+                  <MenuItem
+                    key={child.path}
+                    icon={
+                      <Icon
+                        mr="4"
+                        boxSize={5}
+                        _groupHover={{
+                          color: 'white',
+                        }}
+                        as={child.icon}
+                      />
+                    }
+                    component={<Link to={child.path ?? '#'} />}
+                  >
+                    {child.name}
+                  </MenuItem>
+                ))}
+              </SubMenu>
             );
-          })}
-        </Stack>
-        <Box
-        // bottom={{ base: 0, md: '23%' }}
-        // pos={{ base: 'static', md: 'absolute' }}
-        // right={0}
-        // left={0}
-        >
-          <NavItem icon={MdLogout} onClick={logoutMutationResult ? undefined : handleLogout}>
-            Đăng xuất
-          </NavItem>
-        </Box>
-      </Flex>
-    </Box>
+          }
+
+          return (
+            <MenuItem
+              key={link.name}
+              icon={
+                <Icon
+                  mr="4"
+                  boxSize={5}
+                  _groupHover={{
+                    color: 'white',
+                  }}
+                  as={link.icon}
+                />
+              }
+              component={<Link to={link.path ?? '#'} />}
+            >
+              {link.name}
+            </MenuItem>
+          );
+        })}
+      </Menu>
+      <Button hidden={isOpen} onClick={() => setCollapsed(!collapsed)} />
+    </Sidebar>
   );
 };

@@ -40,11 +40,11 @@ const allRoutes = createBrowserRouter([
       projectsRoutes(),
     ],
   },
-  {
-    path: '/',
-    element: <Outlet />,
-    children: [publicRoutes()],
-  },
+  // {
+  //   path: '/',
+  //   element: <Outlet />,
+  //   children: [publicRoutes()],
+  // },
   authRoutes(),
   { path: '/unauthorize', element: <Error403Page /> },
   { path: '*', element: <Error404Page /> },
