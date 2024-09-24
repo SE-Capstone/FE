@@ -11,16 +11,11 @@ const { CreateRolePage } = lazyImport(
   () => import('@/modules/roles/list-role/pages/create-role.page'),
   'CreateRolePage'
 );
-const { ProtectedRoute } = lazyImport(() => import('../protected-route'), 'ProtectedRoute');
 
 export function rolesRoutes(): RouteObject {
   return {
     path: '/roles',
-    element: (
-      <ProtectedRoute>
-        <Outlet />
-      </ProtectedRoute>
-    ),
+    element: <Outlet />,
     children: [
       {
         index: true,

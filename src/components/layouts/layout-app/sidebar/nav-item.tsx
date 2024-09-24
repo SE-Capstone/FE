@@ -9,9 +9,10 @@ export interface NavItemProps extends FlexProps {
   icon: As;
   children: ReactNode;
   path?: string;
+  isTransitionOn?: boolean;
 }
 
-export const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => (
+export const NavItem = ({ icon, children, path, isTransitionOn = true, ...rest }: NavItemProps) => (
   <NavLink
     end={false}
     to={path ?? '#'}
@@ -32,7 +33,7 @@ export const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => (
           cursor="pointer"
           fontWeight={600}
           bg={_isActive ? 'primary' : ''}
-          transition="all 0.3s"
+          transition={isTransitionOn ? 'all 0.3s' : 'none'}
           color={_isActive ? 'white' : 'neutral.300'}
           _hover={{
             bg: !_isActive ? 'primary' : '',
@@ -50,7 +51,7 @@ export const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => (
               as={icon}
             />
           )}
-          <Box as="span" fontSize="14px" lineHeight="19px">
+          <Box as="span" fontSize="14px" lineHeight="19px" height="full">
             {children}
           </Box>
         </Flex>

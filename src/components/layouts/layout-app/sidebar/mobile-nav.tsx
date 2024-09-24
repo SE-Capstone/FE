@@ -11,7 +11,7 @@ interface MobileProps extends FlexProps {
 export const MobileNav = ({ onOpen, ...rest }: MobileProps) => (
   <Flex
     bg="white"
-    px={{ base: 4, md: 0 }}
+    px={{ base: 4, lg: 0 }}
     height="20"
     alignItems="center"
     justifyContent={{ base: 'space-between', md: 'flex-end' }}
