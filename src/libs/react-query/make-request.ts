@@ -14,7 +14,8 @@ import type { IResponseErrorApi } from '@/configs/axios';
 import type { IBaseResponse, UnionAndString } from '@/types';
 import type { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 
-import { API_URL, TIMEOUT } from '@/configs';
+import { API_URL, CustomHttpStatusCode, TIMEOUT } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 logger.info('API_URL: ', API_URL);
 
@@ -49,11 +50,19 @@ axiosClient.interceptors.response.use(
   (error: any) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    console.log('originalRequest._retry');
+    console.log(originalRequest._retry);
+    console.log(error);
+    if (
+      (error.response?.status === 401 && !originalRequest._retry) ||
+      error.response?.status === CustomHttpStatusCode.TOKEN_EXPIRED ||
+      error.response?.status === CustomHttpStatusCode.ROLE_CHANGED
+    ) {
+      const { handleLogin } = useAuthentication();
       originalRequest._retry = true;
 
-      const refresh_token = getRefreshToken();
-      if (!refresh_token) {
+      const refreshToken = getRefreshToken();
+      if (!refreshToken) {
         return Promise.reject(error);
       }
 
@@ -61,7 +70,7 @@ axiosClient.interceptors.response.use(
         isRefreshing = true;
 
         return axiosClient
-          .post('/refresh-token', { refresh_token })
+          .post('/auth/refresh-token', { refreshToken })
           .then((response: AxiosResponse<ITokenStorage>) => {
             isRefreshing = false;
             const retryOriginalRequest = (config: AxiosRequestConfig) => {
@@ -72,8 +81,13 @@ axiosClient.interceptors.response.use(
                   Authorization: `Bearer ${response.data.accessToken}`,
                 },
               };
+              handleLogin(response.data.user);
 
-              setStoredAuth(response.data);
+              setStoredAuth<ITokenStorage>({
+                accessToken: response.data.accessToken,
+                refreshToken: response.data.refreshToken,
+                user: response.data.user,
+              });
 
               return axiosClient(configWithToken);
             };
