@@ -8,7 +8,7 @@ export function ProtectedRoute({ children }: { children: JSX.Element }) {
 
   const location = useLocation();
 
-  if (isLoading && isLogged) {
+  if (isLoading) {
     return <GlobalLoading isLoading={isLoading} />;
   }
 
