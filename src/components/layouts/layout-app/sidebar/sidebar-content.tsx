@@ -9,9 +9,11 @@ import {
   MdOutlinePeopleAlt,
   MdOutlineSettings,
   MdOutlineNewspaper,
+  MdArrowBackIosNew,
+  MdArrowForwardIos,
 } from 'react-icons/md';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { NavItem, type NavItemProps } from './nav-item';
 
@@ -34,6 +36,7 @@ interface SidebarContentProps extends BoxProps {
 }
 
 export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
+  const location = useLocation();
   const { isLogged, isAdmin } = useAuthentication();
   const [collapsed, setCollapsed] = useState(false);
   const { handleLogout: handleLogoutMutation, isPending: logoutMutationResult } =
@@ -126,6 +129,9 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
         </Flex>
         <Stack>
           {LINK_ITEMS.map((link) => {
+            const isActiveParent =
+              link.children && link.children.some((child) => child.path === location.pathname);
+
             if (link.children) {
               return (
                 <SubMenu
@@ -135,7 +141,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
                     <Text
                       fontSize="14px"
                       lineHeight="19px"
-                      color="neutral.300"
+                      color={isActiveParent ? 'primary' : 'neutral.300'}
                       fontWeight="semibold"
                     >
                       {link.name}
@@ -145,7 +151,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
                     <Icon
                       mr="4"
                       boxSize={5}
-                      color="neutral.300"
+                      color={isActiveParent ? 'primary' : 'neutral.300'}
                       _groupHover={{
                         color: 'white',
                       }}
@@ -160,8 +166,9 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
                       },
                     },
                   }}
+                  defaultOpen={isActiveParent}
                 >
-                  <Stack mb={2} />
+                  {link.children?.length > 1 && <Stack mb={2} />}
                   <Stack gap={collapsed ? 0 : 2}>
                     {link.children?.map((child) => (
                       <MenuItem
@@ -239,7 +246,13 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
         borderRadius="none"
         hidden={isOpen}
         onClick={() => setCollapsed(!collapsed)}
-      />
+      >
+        {collapsed ? (
+          <Icon boxSize={5} as={MdArrowForwardIos} />
+        ) : (
+          <Icon boxSize={5} as={MdArrowBackIosNew} />
+        )}
+      </Button>
     </Sidebar>
   );
 };

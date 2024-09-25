@@ -44,11 +44,17 @@ export function AuthProvider({ children }) {
       setAuthState({
         currentUser: storedAuth.user,
         isLogged: true,
-        isLoading: false,
+        isLoading: false, // Set loading to false after checking
         isAdmin: storedAuth.user.roleName === RolesEnum.Admin,
         fullName: storedAuth.user.fullName,
         roleName: storedAuth.user.roleName,
       });
+    } else {
+      // No stored auth, user is not logged in
+      setAuthState((prev) => ({
+        ...prev,
+        isLoading: false, // Set loading to false
+      }));
     }
   }, []);
 
