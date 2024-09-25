@@ -75,7 +75,7 @@ axiosClient.interceptors.response.use(
 
         try {
           const response = await axiosClient.post('/auth/refresh-token', {
-            refreshToken: 'invalid',
+            refreshToken,
           });
           const { accessToken, user } = response.data.data;
 
