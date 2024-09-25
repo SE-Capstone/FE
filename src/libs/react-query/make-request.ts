@@ -15,7 +15,7 @@ import type { IBaseResponse, UnionAndString } from '@/types';
 import type { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 
 import { API_URL, CustomHttpStatusCode, TIMEOUT } from '@/configs';
-import { useAuthentication } from '@/modules/profile/hooks';
+// import { useAuthentication } from '@/modules/profile/hooks';
 
 logger.info('API_URL: ', API_URL);
 
@@ -42,23 +42,27 @@ export const axiosClient = axios.create({
   },
 });
 
+interface FailedRequest {
+  resolve: (token: string) => void;
+  reject: (error: AxiosError) => void;
+}
+
 let isRefreshing = false;
-let failedQueue: any[] = [];
+let failedQueue: Array<FailedRequest> = [];
 
 axiosClient.interceptors.response.use(
   (response: AxiosResponse) => response,
-  (error: any) => {
+  async (error: any) => {
     const originalRequest = error.config;
 
-    console.log('originalRequest._retry');
-    console.log(originalRequest._retry);
-    console.log(error);
     if (
-      (error.response?.status === 401 && !originalRequest._retry) ||
+      (error.response?.status === 401 && !originalRequest?._retry) ||
       error.response?.status === CustomHttpStatusCode.TOKEN_EXPIRED ||
       error.response?.status === CustomHttpStatusCode.ROLE_CHANGED
     ) {
-      const { handleLogin } = useAuthentication();
+      if (originalRequest._retry) {
+        return Promise.reject(error); // Already retried, reject
+      }
       originalRequest._retry = true;
 
       const refreshToken = getRefreshToken();
@@ -69,39 +73,45 @@ axiosClient.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true;
 
-        return axiosClient
-          .post('/auth/refresh-token', { refreshToken })
-          .then((response: AxiosResponse<ITokenStorage>) => {
-            isRefreshing = false;
-            const retryOriginalRequest = (config: AxiosRequestConfig) => {
-              const configWithToken: AxiosRequestConfig = {
-                ...config,
-                headers: {
-                  ...config.headers,
-                  Authorization: `Bearer ${response.data.accessToken}`,
-                },
-              };
-              handleLogin(response.data.user);
+        try {
+          const response = await axiosClient.post('/auth/refresh-token', {
+            refreshToken: 'invalid',
+          });
+          const { accessToken, user } = response.data.data;
 
-              setStoredAuth<ITokenStorage>({
-                accessToken: response.data.accessToken,
-                refreshToken: response.data.refreshToken,
-                user: response.data.user,
-              });
+          // Store the new tokens
+          setStoredAuth<ITokenStorage>({
+            accessToken,
+            refreshToken: response.data.data.refreshToken,
+            user,
+          });
 
-              return axiosClient(configWithToken);
-            };
+          // const { handleLogin } = useAuthentication();
+          // handleLogin(user);
 
-            failedQueue.forEach((callback) => callback(retryOriginalRequest));
-            failedQueue = [];
-            return retryOriginalRequest(originalRequest);
-          })
-          .catch((err) => Promise.reject(err));
+          failedQueue.forEach((promise) => promise.resolve(accessToken));
+          failedQueue = [];
+
+          // Retry the original request with the new access token
+          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+          return await axiosClient(originalRequest);
+        } catch (err) {
+          failedQueue.forEach((promise) => promise.reject(err as AxiosError));
+          failedQueue = [];
+          return await Promise.reject(err); // Reject if refresh fails
+        } finally {
+          isRefreshing = false; // Reset refreshing state
+        }
       }
 
-      return new Promise((resolve) => {
-        failedQueue.push((config: AxiosRequestConfig) => {
-          resolve(axiosClient(config));
+      // If already refreshing, return a promise that resolves when the refresh completes
+      return new Promise((resolve, reject) => {
+        failedQueue.push({
+          resolve: (accessToken: string) => {
+            originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+            resolve(axiosClient(originalRequest)); // Retry the request
+          },
+          reject: (err: AxiosError) => reject(err),
         });
       });
     }
