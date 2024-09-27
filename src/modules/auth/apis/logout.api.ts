@@ -5,7 +5,7 @@ import type { IAuthLogoutResponse } from '../types/auth.types';
 import type { IResponseApi } from '@/configs/axios';
 import type { MutationConfig } from '@/libs/react-query';
 
-import { DEFAULT_MESSAGE } from '@/configs';
+import { CustomHttpStatusCode, DEFAULT_MESSAGE } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
 import { notify } from '@/libs/helpers';
 import { makeRequest } from '@/libs/react-query';
@@ -35,9 +35,13 @@ export function useLogoutMutation({ configs }: IAuthLogoutMutationProps = {}) {
     onMutate: () => {
       queryClient.clear();
     },
-    onError: async () => {
+    onError: async (error) => {
       resetAuthContext();
-      notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
+      error.statusCode === CustomHttpStatusCode.TOKEN_EXPIRED ||
+      !error.statusCode ||
+      error.message === 'Invalid refresh token'
+        ? notify({ type: 'success', message: 'Logout successfully!' })
+        : notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
       navigate(APP_PATHS.login);
     },
     onSuccess: async () => {

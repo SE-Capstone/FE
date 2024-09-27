@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import axios, { HttpStatusCode } from 'axios';
 
 import {
@@ -14,7 +16,8 @@ import type { IResponseErrorApi } from '@/configs/axios';
 import type { IBaseResponse, UnionAndString } from '@/types';
 import type { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 
-import { API_URL, TIMEOUT } from '@/configs';
+import { API_URL, CustomHttpStatusCode, TIMEOUT } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 logger.info('API_URL: ', API_URL);
 
@@ -41,60 +44,164 @@ export const axiosClient = axios.create({
   },
 });
 
+interface FailedRequest {
+  resolve: (token: string) => void;
+  reject: (error: AxiosError) => void;
+}
+
 let isRefreshing = false;
-let failedQueue: any[] = [];
+let failedQueue: Array<FailedRequest> = [];
 
-axiosClient.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error: any) => {
-    const originalRequest = error.config;
+const RequestInterceptor = () => {
+  const { handleLogin } = useAuthentication();
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+  useEffect(() => {
+    const responseInterceptor = axiosClient.interceptors.response.use(
+      (response: AxiosResponse) => response,
+      async (error: any) => {
+        const originalRequest = error.config;
 
-      const refresh_token = getRefreshToken();
-      if (!refresh_token) {
+        if (
+          (error.response?.status === 401 && !originalRequest._retry) ||
+          error.response?.status === CustomHttpStatusCode.TOKEN_EXPIRED ||
+          error.response?.status === CustomHttpStatusCode.ROLE_CHANGED
+        ) {
+          if (originalRequest._retry) {
+            return Promise.reject(error); // Already retried, reject
+          }
+          originalRequest._retry = true;
+
+          const refreshToken = getRefreshToken();
+          if (!refreshToken) {
+            return Promise.reject(error);
+          }
+
+          if (!isRefreshing) {
+            isRefreshing = true;
+
+            try {
+              const response = await axiosClient.post('/auth/refresh-token', {
+                refreshToken,
+              });
+              const { accessToken, user } = response.data.data;
+
+              // Store the new tokens
+              setStoredAuth<ITokenStorage>({
+                accessToken,
+                refreshToken: response.data.data.refreshToken,
+                user,
+              });
+
+              handleLogin(user);
+              failedQueue.forEach((promise) => promise.resolve(accessToken));
+              failedQueue = [];
+
+              // Retry the original request with the new access token
+              originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+              return await axiosClient(originalRequest);
+            } catch (err) {
+              failedQueue.forEach((promise) => promise.reject(err as AxiosError));
+              failedQueue = [];
+              return await Promise.reject(err); // Reject if refresh fails
+            } finally {
+              isRefreshing = false; // Reset refreshing state
+            }
+          }
+
+          // If already refreshing, return a promise that resolves when the refresh completes
+          return new Promise((resolve, reject) => {
+            failedQueue.push({
+              resolve: (accessToken: string) => {
+                originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                resolve(axiosClient(originalRequest)); // Retry the request
+              },
+              reject: (err: AxiosError) => reject(err),
+            });
+          });
+        }
+
         return Promise.reject(error);
       }
+    );
 
-      if (!isRefreshing) {
-        isRefreshing = true;
+    return () => {
+      axiosClient.interceptors.response.eject(responseInterceptor);
+    };
+  }, [handleLogin]);
 
-        return axiosClient
-          .post('/refresh-token', { refresh_token })
-          .then((response: AxiosResponse<ITokenStorage>) => {
-            isRefreshing = false;
-            const retryOriginalRequest = (config: AxiosRequestConfig) => {
-              const configWithToken: AxiosRequestConfig = {
-                ...config,
-                headers: {
-                  ...config.headers,
-                  Authorization: `Bearer ${response.data.accessToken}`,
-                },
-              };
+  return null;
+};
 
-              setStoredAuth(response.data);
+export default RequestInterceptor;
+// axiosClient.interceptors.response.use(
+//   (response: AxiosResponse) => response,
+//   async (error: any) => {
+//     const originalRequest = error.config;
 
-              return axiosClient(configWithToken);
-            };
+//     if (
+//       (error.response?.status === 401 && !originalRequest?._retry) ||
+//       error.response?.status === CustomHttpStatusCode.TOKEN_EXPIRED ||
+//       error.response?.status === CustomHttpStatusCode.ROLE_CHANGED
+//     ) {
+//       if (originalRequest._retry) {
+//         return Promise.reject(error); // Already retried, reject
+//       }
+//       originalRequest._retry = true;
 
-            failedQueue.forEach((callback) => callback(retryOriginalRequest));
-            failedQueue = [];
-            return retryOriginalRequest(originalRequest);
-          })
-          .catch((err) => Promise.reject(err));
-      }
+//       const refreshToken = getRefreshToken();
+//       if (!refreshToken) {
+//         return Promise.reject(error);
+//       }
 
-      return new Promise((resolve) => {
-        failedQueue.push((config: AxiosRequestConfig) => {
-          resolve(axiosClient(config));
-        });
-      });
-    }
+//       if (!isRefreshing) {
+//         isRefreshing = true;
 
-    return Promise.reject(error);
-  }
-);
+//         try {
+//           const response = await axiosClient.post('/auth/refresh-token', {
+//             refreshToken,
+//           });
+//           const { accessToken, user } = response.data.data;
+
+//           // Store the new tokens
+//           setStoredAuth<ITokenStorage>({
+//             accessToken,
+//             refreshToken: response.data.data.refreshToken,
+//             user,
+//           });
+
+//           // const { handleLogin } = useAuthentication();
+//           // handleLogin(user);
+
+//           failedQueue.forEach((promise) => promise.resolve(accessToken));
+//           failedQueue = [];
+
+//           // Retry the original request with the new access token
+//           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+//           return await axiosClient(originalRequest);
+//         } catch (err) {
+//           failedQueue.forEach((promise) => promise.reject(err as AxiosError));
+//           failedQueue = [];
+//           return await Promise.reject(err); // Reject if refresh fails
+//         } finally {
+//           isRefreshing = false; // Reset refreshing state
+//         }
+//       }
+
+//       // If already refreshing, return a promise that resolves when the refresh completes
+//       return new Promise((resolve, reject) => {
+//         failedQueue.push({
+//           resolve: (accessToken: string) => {
+//             originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+//             resolve(axiosClient(originalRequest)); // Retry the request
+//           },
+//           reject: (err: AxiosError) => reject(err),
+//         });
+//       });
+//     }
+
+//     return Promise.reject(error);
+//   }
+// );
 
 interface IMakeRequestOptions<TDataReq> extends Omit<AxiosRequestConfig<TDataReq>, 'method'> {
   method: UnionAndString<Uppercase<Method>>;
