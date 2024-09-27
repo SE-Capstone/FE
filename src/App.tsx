@@ -14,6 +14,7 @@ import { GOOGLE_CLIENT_ID } from './configs';
 import { AlertDialogProvider } from './contexts';
 import { AuthProvider } from './contexts/auth/auth-context';
 import { queryClientOptions } from './libs/react-query';
+import RequestInterceptor from './libs/react-query/make-request';
 import { AppRouter } from './routes/router';
 
 import theme from '@/themes';
@@ -32,6 +33,7 @@ export default function App() {
               <Suspense fallback={<GlobalLoading isLoading />}>
                 <AlertDialogProvider>
                   <AuthProvider>
+                    <RequestInterceptor />
                     <AppRouter />
                   </AuthProvider>
                 </AlertDialogProvider>
