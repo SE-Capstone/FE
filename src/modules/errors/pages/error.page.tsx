@@ -1,9 +1,12 @@
 import { Button, Heading, Stack, Text, VStack } from '@chakra-ui/react';
+import { MdLogout } from 'react-icons/md';
 import { Link, useRouteError } from 'react-router-dom';
 
 import type { To } from 'react-router-dom';
 
-import { isDevelopment } from '@/configs';
+import { DEFAULT_MESSAGE, isDevelopment } from '@/configs';
+import { notify } from '@/libs/helpers';
+import { useLogoutMutation } from '@/modules/auth/apis/logout.api';
 
 export function ErrorPage() {
   const error = useRouteError() as {
@@ -11,6 +14,20 @@ export function ErrorPage() {
     statusText: string;
     data: unknown;
   };
+
+  const { handleLogout: handleLogoutMutation, isPending: logoutMutationResult } =
+    useLogoutMutation();
+
+  async function handleLogout() {
+    try {
+      handleLogoutMutation();
+    } catch (error) {
+      notify({
+        type: 'error',
+        message: DEFAULT_MESSAGE.SOMETHING_WRONG,
+      });
+    }
+  }
 
   return (
     <VStack id="error-page" w="full" h="100vh" justify="center">
@@ -22,13 +39,15 @@ export function ErrorPage() {
         </Text>
       ) : null}
 
-      <Stack w="200px">
+      <Stack w="200px" gap={2}>
         <Button as={Link} to={-1 as To}>
           Back to home page
         </Button>
       </Stack>
 
-      {isDevelopment ? <Button onClick={() => window.location.reload()}>Reload</Button> : null}
+      <Button leftIcon={<MdLogout />} onClick={logoutMutationResult ? undefined : handleLogout}>
+        Logout
+      </Button>
     </VStack>
   );
 }

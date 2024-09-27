@@ -82,6 +82,7 @@ export function ListRolesPage() {
       <Container maxW="container.2xl" centerContent>
         <ActionTableRolesWidget />
         <TableComponent
+          withoutPagination
           data={listRole}
           groupColumns={columns}
           isLoading={isLoading}

@@ -18,6 +18,7 @@ import type { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axio
 
 import { API_URL, CustomHttpStatusCode, TIMEOUT } from '@/configs';
 import { useAuthentication } from '@/modules/profile/hooks';
+import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 
 logger.info('API_URL: ', API_URL);
 
@@ -60,6 +61,10 @@ const RequestInterceptor = () => {
       (response: AxiosResponse) => response,
       async (error: any) => {
         const originalRequest = error.config;
+
+        if (originalRequest.url.includes(ALL_ENDPOINT_URL_STORE.auth.logout)) {
+          return Promise.reject(error);
+        }
 
         if (
           (error.response?.status === 401 && !originalRequest._retry) ||

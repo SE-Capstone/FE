@@ -58,6 +58,7 @@ export interface TableComponentProps<ObjectType> {
 
   isLoading: boolean;
   withoutHeader?: boolean;
+  withoutPagination?: boolean;
   isError: boolean;
   TableProps?: TableProps;
   hasNoPaginate?: boolean;
@@ -90,6 +91,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
   isError,
   isLoading,
   withoutHeader = false,
+  withoutPagination = false,
 
   renderFilterTable,
   onFilterChange = undefined,
@@ -358,12 +360,14 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
               </HStack>
             )}
 
-            <Pagination
-              totalCount={Number(totalCount)}
-              currentPage={page}
-              perPage={rowsCount}
-              onPageChange={handleChangePage}
-            />
+            {!withoutPagination && (
+              <Pagination
+                totalCount={Number(totalCount)}
+                currentPage={page}
+                perPage={rowsCount}
+                onPageChange={handleChangePage}
+              />
+            )}
           </HStack>
         )}
       </Box>

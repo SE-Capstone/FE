@@ -1,6 +1,17 @@
 import { useMemo, useState } from 'react';
 
-import { Box, Button, CloseButton, Flex, HStack, Icon, Image, Stack, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  CloseButton,
+  Flex,
+  HStack,
+  Icon,
+  Image,
+  Stack,
+  Text,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import { BsWindowDock } from 'react-icons/bs';
 import {
   MdLogout,
@@ -20,6 +31,7 @@ import { NavItem, type NavItemProps } from './nav-item';
 import type { BoxProps } from '@chakra-ui/react';
 
 import { IMAGE_URLS } from '@/assets/images';
+import { DEFAULT_MESSAGE } from '@/configs';
 import { notify } from '@/libs/helpers';
 import { useLogoutMutation } from '@/modules/auth/apis/logout.api';
 import { useAuthentication } from '@/modules/profile/hooks';
@@ -50,7 +62,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
     } catch (error) {
       notify({
         type: 'error',
-        message: 'Có lỗi xảy ra, vui lòng thử lại sau',
+        message: DEFAULT_MESSAGE.SOMETHING_WRONG,
       });
     }
   }
@@ -97,8 +109,8 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
   return (
     <Sidebar
       toggled={isOpen}
-      collapsed={collapsed}
-      style={{ height: '100%', paddingBottom: collapsed ? '0px' : '40px' }}
+      collapsed={useBreakpointValue({ base: false, lg: collapsed })}
+      style={{ height: '100%', paddingBottom: useBreakpointValue({ base: '0px', lg: '40px' }) }}
       customBreakPoint="1024px"
       collapsedWidth="70px"
       backgroundColor="white"
@@ -244,7 +256,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
         width={collapsed ? `70px` : '249px'}
         transition="all 0.3s ease"
         borderRadius="none"
-        hidden={isOpen}
+        hidden={useBreakpointValue({ base: true, lg: false })}
         onClick={() => setCollapsed(!collapsed)}
       >
         {collapsed ? (
