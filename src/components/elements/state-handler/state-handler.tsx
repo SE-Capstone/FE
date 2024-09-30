@@ -59,7 +59,7 @@ export function StateHandler(props: StateHandlerProps) {
         <AlertTitle mt={4} mb={1} fontSize="lg">
           Oops!
         </AlertTitle>
-        <AlertDescription maxWidth="sm">Có lỗi xảy ra</AlertDescription>
+        <AlertDescription maxWidth="sm">Something went wrong!</AlertDescription>
         {retryHandler ? (
           <Button display="none" size="md" my={2} onClick={() => retryHandler()}>
             Retry
@@ -73,7 +73,7 @@ export function StateHandler(props: StateHandlerProps) {
     return (
       <Center bg="white" w="full" h="full" rounded={2.5}>
         <Text as="span" fontSize="sm">
-          Không có dữ liệu
+          No data
         </Text>
       </Center>
     );

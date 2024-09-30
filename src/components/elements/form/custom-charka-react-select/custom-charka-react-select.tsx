@@ -190,7 +190,7 @@ export const CustomChakraReactSelect = <
       chakraStyles: stylesComponents,
       focusBorderColor: 'primary',
       autoFocus: false,
-      placeholder: 'Chọn...',
+      placeholder: 'Select...',
       isClearable: true,
     }),
     [customComponents, isMulti, stylesComponents]
@@ -262,7 +262,7 @@ export const CustomChakraReactSelect = <
       <Select
         isMulti={isMulti}
         name={name as string}
-        noOptionsMessage={() => 'Không có dữ liệu'}
+        noOptionsMessage={() => 'No data'}
         {...basePropsSelect}
         {...selectProps}
       />

@@ -98,7 +98,7 @@ export const EditProfilePage: React.FC = () => {
 
   return (
     <>
-      <Head title="Chỉnh sửa trang cá nhân" />
+      <Head title="Update profile" />
       <CustomFormProvider form={form} style={{ height: 'fit-content' }} onSubmit={onSubmit}>
         <Stack
           direction={{ base: 'column-reverse', xl: 'row' }}

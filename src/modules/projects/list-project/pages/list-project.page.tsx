@@ -13,9 +13,10 @@ export function ListProjectsPage() {
   const { projectsQueryState, resetProjectsQueryState } = useProjectsQueryFilterStateContext();
   const { pathname } = useLocation();
 
-  const { listProject, meta, isError, isLoading, handlePaginate } = useGetListProjectQuery({
-    params: projectsQueryState.filters,
-  });
+  const { listProject, meta, isError, isLoading, handlePaginate, isRefetching } =
+    useGetListProjectQuery({
+      params: projectsQueryState.filters,
+    });
 
   return (
     <>
@@ -30,7 +31,7 @@ export function ListProjectsPage() {
         >
           <CardComponent
             data={listProject}
-            isLoading={isLoading}
+            isLoading={isLoading || isRefetching}
             isError={!!isError}
             currentPage={meta.pageIndex}
             perPage={meta.pageSize}

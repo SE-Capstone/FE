@@ -34,7 +34,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
     <ModalBase
       size="xl"
       isDone={!!data}
-      title="Thêm mới người dùng"
+      title="Create user"
       triggerButton={() => children}
       renderFooter={() => (
         <Button form="form-create-user" w={20} type="submit" isDisabled={isLoading}>

@@ -318,7 +318,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
             </Table>
             {sortedData && !sortedData.length && (
               <Flex my={4} justify="center">
-                <Text>Không có dữ liệu</Text>
+                <Text>No data</Text>
               </Flex>
             )}
           </TableContainer>

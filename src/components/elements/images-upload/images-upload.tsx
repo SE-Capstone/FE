@@ -292,7 +292,7 @@ export function ImagesUpload(props: ImagesUploadProps) {
             <Stack align="center" justify="center">
               <Icon as={BiImageAdd} boxSize={4} />
               <Text fontSize="xxs" lineHeight={4} textAlign="center">
-                Thêm hình ảnh {isMultiple ? `${filePreview.length}/${MAX_FILES}` : ''}
+                Add image {isMultiple ? `${filePreview.length}/${MAX_FILES}` : ''}
               </Text>
             </Stack>
           )}

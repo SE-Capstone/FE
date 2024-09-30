@@ -8,6 +8,7 @@ const ENDPOINT_QUERIES = {
 const ENDPOINT_MUTATIONS = {
   update: (projectId: StringNumeric) => `projects/${projectId}`,
   create: 'projects',
+  upsertMembers: 'projects/members',
   toggleVisible: (projectId: StringNumeric) => `projects/${projectId}/visible/toggle`,
 } as const;
 

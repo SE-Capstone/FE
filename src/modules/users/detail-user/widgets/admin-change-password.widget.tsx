@@ -46,7 +46,7 @@ export function AdminChangePasswordWidget({ user }: { user?: IUser }) {
       <Stack
         direction={{ base: 'column-reverse', xl: 'row' }}
         spacing="24px"
-        w={{ base: 'full', xl: '69%' }}
+        w={{ base: 'full' }}
         alignItems="flex-start"
         mt="24px"
       >

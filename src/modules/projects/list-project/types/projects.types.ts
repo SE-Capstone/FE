@@ -1,3 +1,4 @@
+import type { RolesEnum } from '@/configs';
 import type { IBaseEntity } from '@/types';
 
 export enum ProjectStatusEnum {
@@ -5,6 +6,13 @@ export enum ProjectStatusEnum {
   Active = 2,
   Inactive = 3,
 }
+
+export type ProjectMember = {
+  id: string;
+  fullName: string;
+  userName: string;
+  roleName: RolesEnum;
+};
 
 export type QueryListProjectInput = {
   search?: string;
@@ -22,4 +30,5 @@ export type IProject = IBaseEntity & {
   isVisible: boolean;
   leadId?: string;
   leadName?: string;
+  members: ProjectMember[];
 };

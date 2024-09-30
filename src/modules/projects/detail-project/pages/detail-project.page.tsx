@@ -1,4 +1,4 @@
-import { Container } from '@chakra-ui/react';
+import { Button, Container } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import { useGetDetailProject } from '../apis/detail-project.api';
@@ -16,9 +16,16 @@ export function DetailProjectPage() {
       <Head title={project?.name} />
       <Container maxW="container.2xl" centerContent>
         <StateHandler showLoader={isLoading} showError={!!isError}>
-          <LayoutBack>
-            <BaseInformationProjectWidget project={project} />
+          <LayoutBack
+            display="flex"
+            flexDir="row"
+            justify="space-between"
+            alignItems="center"
+            mb={5}
+          >
+            <Button>Edit</Button>
           </LayoutBack>
+          <BaseInformationProjectWidget project={project} />
         </StateHandler>
       </Container>
     </>

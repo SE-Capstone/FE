@@ -101,6 +101,7 @@ export function DetailRolePage() {
             Back
           </Button>
           <IconButton
+            hidden={isDefaultRole}
             aria-label="DeleteRole"
             variant="ghost"
             size="md"

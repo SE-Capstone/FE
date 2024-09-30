@@ -52,7 +52,7 @@ export const ChangePasswordWidget: React.FC = () => {
           </Heading>
           <Stack spacing={5}>
             <CustomInput
-              label="Mật khẩu hiện tại"
+              label="Current password"
               type="password"
               registration={register('oldPassword')}
               error={errors?.oldPassword}

@@ -1,5 +1,6 @@
 import { Stack, Text } from '@chakra-ui/react';
 
+import { ProjectMembersWidget } from './project-members.widget';
 import { BadgeStatus } from '../components';
 
 import type { IProject, ProjectStatusEnum } from '../../list-project/types';
@@ -46,7 +47,7 @@ export function BaseInformationProjectWidget({ project }: { project?: IProject }
     <>
       <Head title={`Project - ${project?.name}`} />
       <Stack direction={{ base: 'column', xl: 'row' }} alignItems="stretch" spacing="24px" w="100%">
-        <Stack w="full" spacing="24px" flex={3}>
+        <Stack w="full" spacing="24px" flex={2.8}>
           <Stack padding="24px" borderRadius="8px" direction="column" spacing="24px" bg="white">
             <Text
               sx={{
@@ -72,18 +73,7 @@ export function BaseInformationProjectWidget({ project }: { project?: IProject }
           </Stack>
         </Stack>
 
-        <Stack
-          bg="white"
-          p={5}
-          flex={1}
-          flexBasis="10%"
-          rounded={2.5}
-          justify="center"
-          align="center"
-          spacing={3}
-        >
-          <Text />
-        </Stack>
+        <ProjectMembersWidget project={project} />
       </Stack>
     </>
   );

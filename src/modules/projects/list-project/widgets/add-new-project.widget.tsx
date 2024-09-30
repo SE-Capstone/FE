@@ -32,7 +32,7 @@ export function AddNewProjectWidget(props: AddNewProjectWidgetProps) {
     <ModalBase
       size="xl"
       isDone={!!data}
-      title="Thêm mới người dùng"
+      title="Create project"
       triggerButton={() => children}
       renderFooter={() => (
         <Button form="form-create-project" w={20} type="submit" isDisabled={isLoading}>

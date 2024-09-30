@@ -172,7 +172,7 @@ function CardComponent<ObjectType extends { id?: string | null } = {}>({
 
             {sortedData && !sortedData.length && (
               <Flex my={4} justify="center">
-                <Text>Không có dữ liệu</Text>
+                <Text>No data</Text>
               </Flex>
             )}
           </Container>

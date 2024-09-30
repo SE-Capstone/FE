@@ -230,7 +230,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
               </MenuItem>
             );
           })}
-          <MenuItem
+          {/* <MenuItem
             rootStyles={{
               [`& > .ps-menu-button`]: {
                 padding: '0.5rem !important',
@@ -247,7 +247,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
             >
               Logout
             </NavItem>
-          </MenuItem>
+          </MenuItem> */}
         </Stack>
       </Menu>
       <Button

@@ -497,7 +497,7 @@ export function validateFiles(
   if (!isValidFileImages && type === 'image') {
     return {
       isValid: false,
-      message: 'Ảnh không hợp lệ. Bao gồm: .png, .jpg, .jpeg, .heic, .heif',
+      message: 'Invalid image. Allowed types: .png, .jpg, .jpeg, .heic, .heif',
     };
   }
   const isValidFileSize = [...files].every((file) => file.size <= maxSize);
@@ -505,7 +505,7 @@ export function validateFiles(
   if (!isValidFileSize) {
     return {
       isValid: false,
-      message: `Ảnh không quá ${Math.floor(maxSize / 1024)} Kb`,
+      message: `Image can not exceed ${Math.floor(maxSize / 1024)} Kb`,
     };
   }
 

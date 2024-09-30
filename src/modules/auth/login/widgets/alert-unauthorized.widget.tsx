@@ -20,10 +20,10 @@ export function AlertUnauthorizedWidget(props: AlertUnauthorizedWidgetProps) {
         403
       </Heading>
       <Text fontSize="18px" mt={3} mb={2}>
-        Bạn không có quyền truy cập vào trang này
+        You are not allowed to access this page
       </Text>
       <Text color="gray.500" mb={6}>
-        Liên hệ với quản trị viên để được hỗ trợ
+        Contact your administrator if you believe you should have access to this page.
       </Text>
 
       <Center>
