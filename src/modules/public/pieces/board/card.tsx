@@ -212,7 +212,6 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
             />
           )}
         >
-          hihi
           <LazyDropdownItems userId={userId} />
         </DropdownMenu>
       </Box>
