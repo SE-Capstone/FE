@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react';
 import { BsWindowDock } from 'react-icons/bs';
 import {
-  MdLogout,
   MdOutlineCategory,
   MdOutlineHome,
   MdOutlinePeopleAlt,
@@ -31,9 +30,6 @@ import { NavItem, type NavItemProps } from './nav-item';
 import type { BoxProps } from '@chakra-ui/react';
 
 import { IMAGE_URLS } from '@/assets/images';
-import { DEFAULT_MESSAGE } from '@/configs';
-import { notify } from '@/libs/helpers';
-import { useLogoutMutation } from '@/modules/auth/apis/logout.api';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
@@ -49,23 +45,8 @@ interface SidebarContentProps extends BoxProps {
 
 export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
   const location = useLocation();
-  const { isLogged, isAdmin } = useAuthentication();
+  const { isAdmin } = useAuthentication();
   const [collapsed, setCollapsed] = useState(false);
-  const { handleLogout: handleLogoutMutation, isPending: logoutMutationResult } =
-    useLogoutMutation();
-
-  async function handleLogout() {
-    if (!isLogged) return;
-
-    try {
-      handleLogoutMutation();
-    } catch (error) {
-      notify({
-        type: 'error',
-        message: DEFAULT_MESSAGE.SOMETHING_WRONG,
-      });
-    }
-  }
 
   const LINK_ITEMS: Array<LinkItemProps> = useMemo(
     () =>
