@@ -5,6 +5,6 @@ import KanbanExample from '@/modules/public/pages/kanban-ex.pages';
 export function publicRoutes(): RouteObject {
   return {
     path: '/',
-    children: [{ path: 'support', element: <KanbanExample /> }],
+    children: [{ path: 'kanban', element: <KanbanExample /> }],
   };
 }

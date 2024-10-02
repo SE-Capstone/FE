@@ -14,15 +14,15 @@ const hostname = isClient ? PUBLIC_URL : '';
 
 export const Head = ({ title = '', description = '', ...props }: HeadProps) => (
   <Helmet
-    title={title ? `${title} - Bách Gia Phát` : undefined}
-    defaultTitle="Bách Gia Phát"
+    title={title ? `${title} - Head & Shoulder` : undefined}
+    defaultTitle="Head & Shoulder"
     {...props}
   >
     <meta name="description" content={description} />
-    <meta name="author" content="Designed and Developed by Shine Team Dev" />
+    <meta name="author" content="Designed and Developed by Head & Shoulder team" />
     <meta property="og:url" content={hostname} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content="Designed and Developed by Shine Team Dev" />
+    <meta property="og:description" content="Designed and Developed by Head & Shoulder team" />
     <meta name="twitter:card" content={ogImage} />
     <meta name="twitter:image" content={ogImage} />
     <meta property="og:image" content={ogImage} />
