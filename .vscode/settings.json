@@ -2,11 +2,11 @@
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "modifications",
+  "files.autoSave": "afterDelay",
+  "files.autoSaveWorkspaceFilesOnly": true
+  // "files.autoSaveDelay": 1000000,
   // "editor.codeActionsOnSave": {
   //   "source.fixAll.eslint": "explicit"
   // },
-  "cSpell.words": ["Chakra"],
-  "yaml.schemas": {
-    "file:///Users/khunwin/.vscode/extensions/atlassian.atlascode-3.0.2/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml"
-  }
 }
