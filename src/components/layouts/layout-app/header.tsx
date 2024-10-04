@@ -30,7 +30,7 @@ export function HeaderApp() {
 
   const TITLE_ROUTES = {
     [APP_PATHS.HOME]: 'Home',
-    [APP_PATHS.listUsers]: 'Users',
+    [APP_PATHS.listUser]: 'Users',
   } as const;
 
   const title = TITLE_ROUTES[pathname];

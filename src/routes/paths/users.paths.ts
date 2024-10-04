@@ -1,3 +1,3 @@
 export const usersPaths = {
-  listUsers: `/users`,
+  listUser: `/users`,
 } as const;

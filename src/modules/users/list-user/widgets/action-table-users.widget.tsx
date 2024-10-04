@@ -16,7 +16,7 @@ export function ActionTableUsersWidget() {
   const { usersQueryState, setUsersQueryFilterState } = useUsersQueryFilterStateContext();
   const { pathname } = useLocation();
 
-  const isShowFilterUser = pathname.includes(APP_PATHS.listUsers);
+  const isShowFilterUser = pathname.includes(APP_PATHS.listUser);
   const [roles, setRoles] = useState<IRole[]>([]);
 
   const { roles: listRole } = useGetRoles({});
