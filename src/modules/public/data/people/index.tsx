@@ -97,7 +97,7 @@ const roles: string[] = [
 
 let sharedLookupIndex = 0;
 
-export function getPersonFromPosition({ position }: { position: number }): Person {
+function getPersonFromPosition({ position }: { position: number }): Person {
   // use the next name
   const name = names[position % names.length];
   // use the next role
@@ -110,25 +110,15 @@ export function getPersonFromPosition({ position }: { position: number }): Perso
   };
 }
 
-export function getPeopleFromPosition({
-  amount,
-  startIndex,
-}: {
-  amount: number;
-  startIndex: number;
-}): Person[] {
-  return Array.from({ length: amount }, () => getPersonFromPosition({ position: startIndex++ }));
-}
-
 /**
  * Note: this does not use randomness so that it is stable for VR tests
  */
-export function getPerson(): Person {
+function getPerson(): Person {
   sharedLookupIndex++;
   return getPersonFromPosition({ position: sharedLookupIndex });
 }
 
-export function getPeople({ amount }: { amount: number }): Person[] {
+function getPeople({ amount }: { amount: number }): Person[] {
   return Array.from({ length: amount }, () => getPerson());
 }
 

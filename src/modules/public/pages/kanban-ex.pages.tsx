@@ -54,6 +54,10 @@ type BoardState = {
 export default function KanbanExample() {
   const [data, setData] = useState<BoardState>(() => {
     const base = getBasicData();
+    const savedData = localStorage.getItem('kanbanDataEx');
+    if (savedData) {
+      return JSON.parse(savedData) as BoardState;
+    }
     return {
       ...base,
       lastOperation: null,
@@ -63,6 +67,7 @@ export default function KanbanExample() {
   const stableData = useRef(data);
   useEffect(() => {
     stableData.current = data;
+    localStorage.setItem('kanbanDataEx', JSON.stringify(data));
   }, [data]);
 
   const [registry] = useState(createRegistry);
@@ -174,7 +179,7 @@ export default function KanbanExample() {
           finishIndex,
         };
 
-        return {
+        const a = {
           ...data,
           orderedColumnIds: reorder({
             list: data.orderedColumnIds,
@@ -186,6 +191,8 @@ export default function KanbanExample() {
             trigger,
           },
         };
+        console.log('result', a);
+        return a;
       });
     },
     []
@@ -228,7 +235,7 @@ export default function KanbanExample() {
           finishIndex,
         };
 
-        return {
+        const a = {
           ...data,
           columnMap: updatedMap,
           lastOperation: {
@@ -236,6 +243,9 @@ export default function KanbanExample() {
             outcome,
           },
         };
+
+        console.log('result', a);
+        return a;
       });
     },
     []
@@ -288,7 +298,7 @@ export default function KanbanExample() {
           itemIndexInFinishColumn: newIndexInDestination,
         };
 
-        return {
+        const a = {
           ...data,
           columnMap: updatedMap,
           lastOperation: {
@@ -296,6 +306,10 @@ export default function KanbanExample() {
             trigger,
           },
         };
+
+        console.log('result', a);
+
+        return a;
       });
     },
     []
