@@ -298,7 +298,7 @@ export default function KanbanExample() {
           itemIndexInFinishColumn: newIndexInDestination,
         };
 
-        return {
+        const a = {
           ...data,
           columnMap: updatedMap,
           lastOperation: {
@@ -306,6 +306,10 @@ export default function KanbanExample() {
             trigger,
           },
         };
+
+        console.log('result', a);
+
+        return a;
       });
     },
     []

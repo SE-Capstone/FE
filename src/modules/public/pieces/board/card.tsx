@@ -132,17 +132,17 @@ function LazyDropdownItems({ userId }: { userId: string }) {
         <DropdownItem isDisabled={isMoveUpDisabled} onClick={moveToTop}>
           Move to top
         </DropdownItem>
-        {/* <DropdownItem isDisabled={isMoveUpDisabled} onClick={moveUp}>
+        <DropdownItem isDisabled={isMoveUpDisabled} onClick={moveUp}>
           Move up
         </DropdownItem>
         <DropdownItem isDisabled={isMoveDownDisabled} onClick={moveDown}>
           Move down
-        </DropdownItem> */}
+        </DropdownItem>
         <DropdownItem isDisabled={isMoveDownDisabled} onClick={moveToBottom}>
           Move to bottom
         </DropdownItem>
       </DropdownItemGroup>
-      {/* {moveColumnOptions.length ? (
+      {moveColumnOptions.length ? (
         <DropdownItemGroup title="Move to">
           {moveColumnOptions.map((column) => (
             <MoveToOtherColumnItem
@@ -152,7 +152,7 @@ function LazyDropdownItems({ userId }: { userId: string }) {
             />
           ))}
         </DropdownItemGroup>
-      ) : null} */}
+      ) : null}
     </>
   );
 }
