@@ -10,7 +10,8 @@ import type { IProject } from '../../list-project/types';
 import type { IOptionUserSelect } from '../components/users-async-select';
 
 export function ProjectMembersWidget({ project }: { project?: IProject }) {
-  const hasMembers = (project?.members?.length || 0) === 0 || !project?.leadId;
+  const hasMembers = (project?.members?.length || 0) === 0 || !!project?.leadId;
+
   const [initialMembers, setInitialMembers] = useState<Set<string>>(new Set());
   const [defaultUsersOption, setDefaultUsersOption] = useState<IOptionUserSelect[]>([]);
 
@@ -62,14 +63,13 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           <Icon boxSize={5} color="neutral.300" mr={3} as={PiUsersThreeFill} />
           Members
         </Text>
-        {!hasMembers && (
+        {hasMembers && (
           <UpsertMembersWidget
             defaultUserValue={Array.from(initialMembers)}
             defaultUsersOption={defaultUsersOption}
             projectId={project?.id || ''}
           >
             <IconButton
-              hidden={hasMembers}
               aria-label="edit"
               bg="transparent"
               size="sm"
@@ -88,12 +88,17 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           </UpsertMembersWidget>
         )}
       </Stack>
-      {!hasMembers ? (
-        project?.members.map((member, index) => (
-          <Text key={index} wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
-            {member.roleName} - {member.fullName}
+      {hasMembers ? (
+        <>
+          <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
+            {project?.leadName} (Leader)
           </Text>
-        ))
+          {project?.members.map((member, index) => (
+            <Text key={index} wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
+              {member.roleName} - {member.fullName}
+            </Text>
+          ))}
+        </>
       ) : (
         <UpsertMembersWidget
           defaultUserValue={Array.from(initialMembers)}

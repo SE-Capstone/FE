@@ -2,23 +2,21 @@ import { Button, SimpleGrid, Stack } from '@chakra-ui/react';
 
 import { useCreateIssueHook } from '../hooks/mutations';
 
-import type { IUser } from '@/modules/users/list-user/types';
-
 import {
   CustomChakraReactSelect,
   CustomFormProvider,
   CustomInput,
-  CustomTextArea,
   ModalBase,
 } from '@/components/elements';
+import { useProjectContext } from '@/contexts/project/project-context';
 
 export interface AddNewIssueWidgetProps {
   children: React.ReactElement;
-  teamLeads: IUser[];
 }
 
 export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
-  const { children, teamLeads } = props;
+  const { children } = props;
+  const { members } = useProjectContext();
 
   const { data, formCreateIssue, handleCreateIssue, isLoading, reset } = useCreateIssueHook();
 
@@ -53,18 +51,6 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
             registration={register('subject')}
             error={errors.subject}
           />
-          <CustomInput
-            label="Code"
-            isRequired
-            registration={register('code')}
-            error={errors.code}
-          />
-          <CustomTextArea
-            label="Description"
-            isRequired
-            registration={register('description')}
-            error={errors.description}
-          />
           <SimpleGrid columns={2} spacing={3}>
             <CustomInput
               label="Start date"
@@ -86,12 +72,12 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
             placeholder="Choose assignee"
             label="Assignee"
             size="lg"
-            options={teamLeads.map((user) => ({
-              label: `${user.fullName} (${user.userName})`,
+            options={members.map((user) => ({
+              label: `${user.fullName}`,
               value: user.id,
             }))}
             control={control}
-            name="leadId"
+            name="assigneeId"
           />
         </Stack>
       </CustomFormProvider>

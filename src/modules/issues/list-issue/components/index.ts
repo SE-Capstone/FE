@@ -1,1 +1,3 @@
-export * from './badge-role';
+export * from './badge-issue';
+
+export * from './priority-issue';

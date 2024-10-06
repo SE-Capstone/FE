@@ -4,8 +4,11 @@ import { useParams } from 'react-router-dom';
 import { useGetDetailProject } from '../apis/detail-project.api';
 import { BaseInformationProjectWidget } from '../widgets';
 
-import { Head, StateHandler } from '@/components/elements';
+import { CustomTabs, Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
+import { ListIssuesPage } from '@/modules/issues/list-issue';
+import { IssuesQueryProvider } from '@/modules/issues/list-issue/contexts';
+import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailProjectPage() {
   const { projectId } = useParams();
@@ -19,13 +22,36 @@ export function DetailProjectPage() {
           <LayoutBack
             display="flex"
             flexDir="row"
+            bgColor="transparent"
             justify="space-between"
             alignItems="center"
-            mb={5}
+            py="14px"
+            px={0}
+            pb={0}
+            title={project?.name}
           >
             <Button>Edit</Button>
           </LayoutBack>
-          <BaseInformationProjectWidget project={project} />
+          <CustomTabs
+            tabListProps={{
+              bg: 'transparent',
+            }}
+            tabsData={[
+              {
+                title: 'Overview',
+                link: `${APP_PATHS.listProject}/${projectId}`,
+                childrenPanel: <BaseInformationProjectWidget project={project} />,
+              },
+              {
+                title: 'Issues',
+                childrenPanel: (
+                  <IssuesQueryProvider>
+                    <ListIssuesPage />
+                  </IssuesQueryProvider>
+                ),
+              },
+            ]}
+          />
         </StateHandler>
       </Container>
     </>

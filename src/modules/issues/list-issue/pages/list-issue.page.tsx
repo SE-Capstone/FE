@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 import { BadgeIssue } from '../components/badge-issue';
 import { PriorityIssue } from '../components/priority-issue';
-import { IssuesQueryProvider, useIssuesQueryFilterStateContext } from '../contexts';
+import { useIssuesQueryFilterStateContext } from '../contexts';
 import { useGetListIssueQuery } from '../hooks/queries';
 import { ActionMenuTableIssues, ActionTableIssuesWidget } from '../widgets';
 
@@ -35,8 +35,8 @@ export function ListIssuesPage() {
             hasSort: false,
             title: '#',
             tableCellProps: { w: 4, pr: 2 },
-            Cell({ issueStt }) {
-              return <BadgeIssue content={issueStt} />;
+            Cell({ id }) {
+              return <BadgeIssue content={id} />;
             },
           },
           {
@@ -138,30 +138,26 @@ export function ListIssuesPage() {
     <>
       <Head title="Issues" />
       <Container maxW="container.2xl" centerContent>
-        <ActionTableIssuesWidget />
-
-        <IssuesQueryProvider>
-          <StateHandler
-            showLoader={isLoading || isRefetching}
-            showError={!!isError}
-            retryHandler={resetIssuesQueryState}
-          >
-            <Container maxW="container.2xl" centerContent>
-              <ActionTableIssuesWidget />
-              <TableComponent
-                currentPage={meta.pageIndex}
-                perPage={meta.pageSize}
-                data={listIssue}
-                groupColumns={columns}
-                totalCount={meta.totalCount}
-                isLoading={isLoading}
-                isError={!!isError}
-                additionalFeature={(issue) => <ActionMenuTableIssues issue={issue} />}
-                onPageChange={handlePaginate}
-              />
-            </Container>
-          </StateHandler>
-        </IssuesQueryProvider>
+        <StateHandler
+          showLoader={isLoading || isRefetching}
+          showError={!!isError}
+          retryHandler={resetIssuesQueryState}
+        >
+          <Container maxW="container.2xl" centerContent>
+            <ActionTableIssuesWidget />
+            <TableComponent
+              currentPage={meta.pageIndex}
+              perPage={meta.pageSize}
+              data={listIssue}
+              groupColumns={columns}
+              totalCount={meta.totalCount}
+              isLoading={isLoading}
+              isError={!!isError}
+              additionalFeature={(issue) => <ActionMenuTableIssues issue={issue} />}
+              onPageChange={handlePaginate}
+            />
+          </Container>
+        </StateHandler>
       </Container>
     </>
   );

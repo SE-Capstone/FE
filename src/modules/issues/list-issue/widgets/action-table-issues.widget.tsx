@@ -1,34 +1,17 @@
-import { useEffect, useState } from 'react';
-
 import { Box, Button, Grid, GridItem, HStack, Spacer } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 
 import { AddNewIssueWidget } from './add-new-issue.widget';
 import { useIssuesQueryFilterStateContext } from '../contexts';
 
-import type { IUser } from '@/modules/users/list-user/types';
-
 import { CustomChakraReactSelect, SearchInput } from '@/components/elements';
-import { PermissionEnum, PROJECT_STATUS_OPTIONS, PROJECT_VISIBILITY_OPTIONS } from '@/configs';
-import { useGetUsersByPermission } from '@/modules/users/list-user/apis/get-user-by-permission.api';
-import { APP_PATHS } from '@/routes/paths/app.paths';
+import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
 
 export function ActionTableIssuesWidget() {
   const { issuesQueryState, setIssuesQueryFilterState } = useIssuesQueryFilterStateContext();
   const { pathname } = useLocation();
 
-  const isShowFilterIssue = pathname.includes(APP_PATHS.listIssue);
-  const [teamLeads, setTeamLeads] = useState<IUser[]>([]);
-
-  const { users } = useGetUsersByPermission({
-    permissionName: PermissionEnum.IS_PROJECT_LEAD,
-  });
-
-  useEffect(() => {
-    if (JSON.stringify(users) !== JSON.stringify(teamLeads)) {
-      setTeamLeads(users);
-    }
-  }, [users, teamLeads]);
+  const isShowFilterIssue = pathname.includes('issues');
 
   return (
     <Box p={5} mb={6} rounded={2.5} bg="white" w="full" shadow="0 1px 4px 0 #0002">
@@ -44,9 +27,9 @@ export function ActionTableIssuesWidget() {
           <GridItem colSpan={2}>
             <SearchInput
               placeholder="Enter name/code..."
-              initValue={issuesQueryState.filters.search || ''}
+              initValue={issuesQueryState.filters.subject || ''}
               onHandleSearch={(keyword) => {
-                setIssuesQueryFilterState({ search: keyword });
+                setIssuesQueryFilterState({ subject: keyword });
               }}
             />
           </GridItem>
@@ -58,11 +41,11 @@ export function ActionTableIssuesWidget() {
           >
             <CustomChakraReactSelect
               isSearchable={false}
-              placeholder="Choose status"
-              options={PROJECT_STATUS_OPTIONS}
+              placeholder="Choose priority"
+              options={ISSUE_PRIORITY_OPTIONS}
               onChange={(opt) => {
                 setIssuesQueryFilterState({
-                  status: opt?.value ? opt.value : undefined,
+                  priority: opt?.value ? opt.value : undefined,
                 });
               }}
             />
@@ -75,11 +58,11 @@ export function ActionTableIssuesWidget() {
           >
             <CustomChakraReactSelect
               isSearchable={false}
-              placeholder="Choose visible status"
-              options={PROJECT_VISIBILITY_OPTIONS}
+              placeholder="Choose label"
+              options={ISSUE_PRIORITY_OPTIONS}
               onChange={(opt) => {
                 setIssuesQueryFilterState({
-                  isVisible: opt?.value ? opt.value === 'true' : undefined,
+                  priority: opt?.value ? opt.value : undefined,
                 });
               }}
             />
@@ -88,7 +71,7 @@ export function ActionTableIssuesWidget() {
         {isShowFilterIssue && (
           <>
             <Spacer />
-            <AddNewIssueWidget teamLeads={teamLeads}>
+            <AddNewIssueWidget>
               <Button leftIcon={<>+</>}>Create</Button>
             </AddNewIssueWidget>
           </>

@@ -13,6 +13,7 @@ import { GlobalLoading } from './components/elements';
 import { GOOGLE_CLIENT_ID } from './configs';
 import { AlertDialogProvider } from './contexts';
 import { AuthProvider } from './contexts/auth/auth-context';
+import { ProjectProvider } from './contexts/project/project-context';
 import { queryClientOptions } from './libs/react-query';
 import RequestInterceptor from './libs/react-query/make-request';
 import { AppRouter } from './routes/router';
@@ -34,7 +35,9 @@ export default function App() {
                 <AlertDialogProvider>
                   <AuthProvider>
                     <RequestInterceptor />
-                    <AppRouter />
+                    <ProjectProvider>
+                      <AppRouter />
+                    </ProjectProvider>
                   </AuthProvider>
                 </AlertDialogProvider>
                 <Box

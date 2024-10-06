@@ -1,5 +1,7 @@
 import { Outlet, type RouteObject } from 'react-router-dom';
 
+import { issuesRoutes } from './issues.route';
+
 import { lazyImport } from '@/libs/utils';
 import { ProjectsQueryProvider } from '@/modules/projects/list-project/contexts';
 
@@ -32,6 +34,11 @@ export function projectsRoutes(): RouteObject {
       {
         path: ':projectId',
         element: <DetailProjectPage />,
+      },
+      {
+        path: ':projectId/issues',
+        element: <Outlet />,
+        children: [issuesRoutes()],
       },
       {
         path: ':projectId/edit',

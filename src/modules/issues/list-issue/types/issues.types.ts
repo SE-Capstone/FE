@@ -22,7 +22,7 @@ export type QueryListIssueInput = {
 };
 
 export type IIssue = IBaseEntity & {
-  issueStt: number;
+  id: number;
   projectId: string;
   labelId: string;
   subject: string;

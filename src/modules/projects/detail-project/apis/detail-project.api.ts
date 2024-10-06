@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 
-import type { IProject } from '../../list-project/types';
+import type { IProject, ProjectMember } from '../../list-project/types';
 import type { IResponseApi } from '@/configs/axios';
 
+import { useProjectContext } from '@/contexts/project/project-context';
 import { makeRequest, type QueryConfig, type TErrorResponse } from '@/libs/react-query';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
@@ -25,6 +26,7 @@ export type UseGetDetailProjectOptionsType = {
 
 export function useGetDetailProject(params: UseGetDetailProjectOptionsType) {
   const { configs, projectId } = params;
+  const { setProjectContext } = useProjectContext();
   const enabled = useMemo(() => !!projectId, [projectId]);
   const queryKey = useMemo(() => allQueryKeysStore.project.detail(projectId).queryKey, [projectId]);
 
@@ -35,6 +37,34 @@ export function useGetDetailProject(params: UseGetDetailProjectOptionsType) {
     queryFn: () => query(projectId),
     ...configs,
   });
+
+  useEffect(() => {
+    const members: ProjectMember[] = [];
+    const project = data?.data;
+    project?.members?.map((member) =>
+      members.push({
+        id: member.id,
+        fullName: member.fullName,
+        userName: member.userName,
+        roleName: member.roleName,
+        avatar: '',
+      })
+    );
+    if (project?.leadId) {
+      members.push({
+        id: project.id,
+        fullName: project.leadName || '',
+        userName: 'username',
+        roleName: 'Project lead',
+        avatar: '',
+      });
+    }
+
+    setProjectContext({
+      members,
+      projectId: data?.data?.id || '',
+    });
+  }, [data?.data, setProjectContext]);
 
   return { project: data?.data, ...queryInfo };
 }

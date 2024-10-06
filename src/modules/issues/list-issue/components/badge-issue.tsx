@@ -1,9 +1,9 @@
 import { Badge } from '@chakra-ui/react';
 
-import type { ThemingProps, BadgeProps } from '@chakra-ui/react';
+import type { BadgeProps } from '@chakra-ui/react';
 
 interface BadgeIssueProps extends BadgeProps {
-  content: string | number;
+  content: any;
 }
 
 export function BadgeIssue(props: BadgeIssueProps) {

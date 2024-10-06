@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { Button, HStack, Stack } from '@chakra-ui/react';
+import { isEqual } from 'lodash-es';
 
 import { UsersAsyncSelect } from '../components/users-async-select';
 import { useUpsertMembersHook } from '../hooks/mutations';
@@ -25,9 +26,13 @@ export function UpsertMembersWidget(props: UpsertMembersWidgetProps) {
 
   const usersChecked = useRef<string[]>([]);
   useEffect(() => {
-    usersChecked.current = defaultUserValue;
-    setSelectedOptions(defaultUsersOption);
-  }, [defaultUserValue, defaultUsersOption]);
+    if (!isEqual(usersChecked.current, defaultUserValue)) {
+      usersChecked.current = defaultUserValue;
+    }
+    if (!isEqual(selectedOptions, defaultUsersOption)) {
+      setSelectedOptions(defaultUsersOption);
+    }
+  }, [defaultUserValue, defaultUsersOption, selectedOptions]);
 
   // const resetForm = () => {
   //   setSelectedOptions(defaultUsersOption);
