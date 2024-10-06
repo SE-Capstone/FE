@@ -1,4 +1,5 @@
 import { authPaths } from './auth.paths';
+import { issuesPaths } from './issues.paths';
 import { profilePaths } from './profile.paths';
 import { projectsPaths } from './projects.path';
 import { rolesPaths } from './roles.path';
@@ -11,5 +12,6 @@ export const APP_PATHS = {
   ...profilePaths,
   ...usersPaths,
   ...rolesPaths,
+  ...issuesPaths,
   ...projectsPaths,
 } as const;

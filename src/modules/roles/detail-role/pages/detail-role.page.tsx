@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { Button, Icon, IconButton, Stack, Text } from '@chakra-ui/react';
+import { Icon, IconButton, Stack } from '@chakra-ui/react';
 import { BiTrash } from 'react-icons/bi';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { useGetGroupPermissions } from '../apis/get-permissions.api';
 import { useGetRole } from '../apis/get-role-detail.api';
@@ -14,13 +14,13 @@ import type { UpdateRoleFormType } from '../validations/update-role.validation';
 
 import { CustomFormProvider, CustomInput, CustomTextArea } from '@/components/elements';
 import { CustomEditableInput } from '@/components/elements/form/custom-editable-input';
+import { LayoutBack } from '@/components/layouts';
 import { EditRow } from '@/components/widgets';
 import { defaultRoles } from '@/configs';
 import { notify } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export function DetailRolePage() {
-  const navigate = useNavigate();
   const [isDefaultRole, setIsDefaultRole] = useState(false);
   const { roleId } = useParams();
   const [triggerClose, setTriggerClose] = useState(false);
@@ -86,29 +86,22 @@ export function DetailRolePage() {
 
   return (
     <Stack spacing={3}>
-      <Stack
-        bg="white"
-        direction="row"
-        rounded={2.5}
-        p={5}
-        flex={1}
+      <LayoutBack
+        display="flex"
+        flexDir="row"
         justify="space-between"
         alignItems="center"
+        py="14px"
+        title={role?.name}
       >
-        <Text fontSize="x-large">{role?.name}</Text>
-        <Stack direction="row">
-          <Button variant="ghost" w="fit-content" onClick={() => navigate(-1)}>
-            Back
-          </Button>
-          <IconButton
-            hidden={isDefaultRole}
-            aria-label="DeleteRole"
-            variant="ghost"
-            size="md"
-            icon={<Icon as={BiTrash} boxSize={4} color="red.400" />}
-          />
-        </Stack>
-      </Stack>
+        <IconButton
+          hidden={isDefaultRole}
+          aria-label="DeleteRole"
+          variant="ghost"
+          size="md"
+          icon={<Icon as={BiTrash} boxSize={4} color="red.400" />}
+        />
+      </LayoutBack>
       <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} justify="center" spacing={2}>
         <CustomFormProvider form={form} style={{ height: 'fit-content' }} onSubmit={onSubmit}>
           <CustomEditableInput

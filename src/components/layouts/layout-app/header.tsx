@@ -30,7 +30,7 @@ export function HeaderApp() {
 
   const TITLE_ROUTES = {
     [APP_PATHS.HOME]: 'Home',
-    [APP_PATHS.listUsers]: 'Users',
+    [APP_PATHS.listUser]: 'Users',
   } as const;
 
   const title = TITLE_ROUTES[pathname];
@@ -73,12 +73,12 @@ export function HeaderApp() {
       <HStack spacing={{ base: 4, md: 8 }}>
         <Menu isLazy>
           <MenuButton>
-            <SkeletonCircle size="11" rounded="full" isLoaded={!isLoading}>
+            <SkeletonCircle size="10" rounded="full" isLoaded={!isLoading}>
               <Tooltip label="Go to profile">
                 <Avatar
                   name={fullName}
                   src={currentUser?.avatar}
-                  boxSize="12"
+                  boxSize="10"
                   objectFit="cover"
                   showBorder
                   borderColor="gray.200"

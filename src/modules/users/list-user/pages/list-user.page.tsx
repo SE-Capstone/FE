@@ -18,7 +18,7 @@ import { GENDER_VALUES } from '@/configs';
 import { getNumericalOrder } from '@/libs/helpers';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
-export function ListUsersPage() {
+export function ListUserPage() {
   const { usersQueryState } = useUsersQueryFilterStateContext();
   const { pathname } = useLocation();
 
@@ -75,7 +75,7 @@ export function ListUsersPage() {
             Cell({ fullName, id }) {
               return (
                 <CustomLink
-                  to={pathname.includes(APP_PATHS.listUsers) ? String(id) : '#'}
+                  to={pathname.includes(APP_PATHS.listUser) ? String(id) : '#'}
                   noOfLines={1}
                 >
                   {fullName || ''}
@@ -98,7 +98,7 @@ export function ListUsersPage() {
             Cell({ email, id }) {
               return (
                 <CustomLink
-                  to={pathname.includes(APP_PATHS.listUsers) ? String(id) : '#'}
+                  to={pathname.includes(APP_PATHS.listUser) ? String(id) : '#'}
                   noOfLines={1}
                 >
                   {email}

@@ -90,7 +90,7 @@ export function CustomTabs({
 }: CustomTabsProps) {
   return (
     <Tabs isLazy w="full" h="full" {...tabsProps}>
-      <TabList bg="white" roundedTop={2} {...tabListProps}>
+      <TabList bg="white" borderColor="gray.200" roundedTop={2} {...tabListProps}>
         {tabsData.map((tab, index) => (
           <CustomTab
             key={index}
@@ -102,12 +102,12 @@ export function CustomTabs({
           </CustomTab>
         ))}
       </TabList>
-      <TabPanels bg="white" roundedBottom={2} {...tabPanelsProps}>
+      <TabPanels roundedBottom={2} {...tabPanelsProps}>
         {useWithRouter ? (
           <Outlet context={valueOutlet} />
         ) : (
           tabsData.map((tab, index) => (
-            <TabPanel key={index} {...tab.tabPanelProps}>
+            <TabPanel key={index} px={0} {...tab.tabPanelProps}>
               {tab.childrenPanel}
             </TabPanel>
           ))

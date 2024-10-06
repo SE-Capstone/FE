@@ -6,6 +6,7 @@ import {
   GroupPermissionEnum,
 } from './common.enums';
 
+import { IssuePriorityEnum } from '@/modules/issues/list-issue/types';
 import { ProjectStatusEnum } from '@/modules/projects/list-project/types';
 
 export const YESTERDAY = new Date(new Date().valueOf() - 1000 * 60 * 60 * 24);
@@ -93,6 +94,29 @@ export const ROLES_LABEL: Record<Exclude<RolesEnum, RolesEnum.Employee>, string>
   [RolesEnum.HR]: `${RolesEnum.HR}`,
 };
 
+export const ISSUE_PRIORITY_OPTIONS = [
+  {
+    label: 'Lowest',
+    value: IssuePriorityEnum.Lowest,
+  },
+  {
+    label: 'Low',
+    value: IssuePriorityEnum.Low,
+  },
+  {
+    label: 'Medium',
+    value: IssuePriorityEnum.Medium,
+  },
+  {
+    label: 'High',
+    value: IssuePriorityEnum.High,
+  },
+  {
+    label: 'Highest',
+    value: IssuePriorityEnum.Highest,
+  },
+];
+
 export const USER_STATUS_OPTIONS = [
   {
     label: 'Active',
@@ -121,6 +145,14 @@ export const GENDER_VALUES: Record<GenderEnum, string> = {
   [GenderEnum.male]: 'Male',
   [GenderEnum.female]: 'Female',
   [GenderEnum.other]: 'Others',
+};
+
+export const ISSUE_PRIORITY_VALUES: Record<IssuePriorityEnum, string> = {
+  [IssuePriorityEnum.Lowest]: 'Lowest',
+  [IssuePriorityEnum.Low]: 'Low',
+  [IssuePriorityEnum.Medium]: 'Medium',
+  [IssuePriorityEnum.High]: 'High',
+  [IssuePriorityEnum.Highest]: 'Highest',
 };
 
 export const PERMISSIONS_VALUES: Record<PermissionEnum, string> = {

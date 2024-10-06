@@ -64,7 +64,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
             {
               name: 'List User',
               icon: MdOutlineCategory,
-              path: APP_PATHS.listUsers,
+              path: APP_PATHS.listUser,
             },
           ],
         },

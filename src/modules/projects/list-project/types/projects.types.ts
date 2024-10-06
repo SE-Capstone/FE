@@ -1,4 +1,3 @@
-import type { RolesEnum } from '@/configs';
 import type { IBaseEntity } from '@/types';
 
 export enum ProjectStatusEnum {
@@ -11,7 +10,8 @@ export type ProjectMember = {
   id: string;
   fullName: string;
   userName: string;
-  roleName: RolesEnum;
+  roleName: string;
+  avatar?: string;
 };
 
 export type QueryListProjectInput = {

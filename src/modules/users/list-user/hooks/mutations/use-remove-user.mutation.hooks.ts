@@ -7,7 +7,7 @@
 //     if (removeUserResult.loading) return;
 //     removeUser({
 //       variables: { id: userId },
-//       refetchQueries: [GetListUsersDocument],
+//       refetchQueries: [GetlistUserDocument],
 //       onCompleted() {
 //         onSuccessRemoveUser?.();
 //         notify({
