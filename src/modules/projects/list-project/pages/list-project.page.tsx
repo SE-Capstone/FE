@@ -7,9 +7,12 @@ import { ActionMenuTableProjects, ActionTableProjectsWidget } from '../widgets';
 
 import { CustomLink, Head, StateHandler } from '@/components/elements';
 import CardComponent from '@/components/elements/card/card';
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListProjectsPage() {
+  const { permissions } = useAuthentication();
   const { projectsQueryState, resetProjectsQueryState } = useProjectsQueryFilterStateContext();
   const { pathname } = useLocation();
 
@@ -44,7 +47,12 @@ export function ListProjectsPage() {
                   <Flex>
                     <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
                       <CustomLink
-                        to={pathname.includes(APP_PATHS.listProject) ? String(project.id) : '#'}
+                        to={
+                          pathname.includes(APP_PATHS.listProject) &&
+                          permissions[PermissionEnum.GET_DETAIL_PROJECT]
+                            ? String(project.id)
+                            : '#'
+                        }
                       >
                         {project.name || ''}
                       </CustomLink>

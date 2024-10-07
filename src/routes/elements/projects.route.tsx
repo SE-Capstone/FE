@@ -1,7 +1,9 @@
 import { Outlet, type RouteObject } from 'react-router-dom';
 
 import { issuesRoutes } from './issues.route';
+import { PermissionCheck } from '../permisstion-check';
 
+import { PermissionEnum } from '@/configs';
 import { lazyImport } from '@/libs/utils';
 import { ProjectsQueryProvider } from '@/modules/projects/list-project/contexts';
 
@@ -26,14 +28,20 @@ export function projectsRoutes(): RouteObject {
       {
         index: true,
         element: (
-          <ProjectsQueryProvider>
-            <ListProjectsPage />
-          </ProjectsQueryProvider>
+          <PermissionCheck permissions={[PermissionEnum.GET_ALL_PROJECT]}>
+            <ProjectsQueryProvider>
+              <ListProjectsPage />
+            </ProjectsQueryProvider>
+          </PermissionCheck>
         ),
       },
       {
         path: ':projectId',
-        element: <DetailProjectPage />,
+        element: (
+          <PermissionCheck permissions={[PermissionEnum.GET_DETAIL_PROJECT]}>
+            <DetailProjectPage />
+          </PermissionCheck>
+        ),
       },
       {
         path: ':projectId/issues',
@@ -42,7 +50,11 @@ export function projectsRoutes(): RouteObject {
       },
       {
         path: ':projectId/edit',
-        element: <UpdateProjectPage />,
+        element: (
+          <PermissionCheck permissions={[PermissionEnum.UPDATE_PROJECT]}>
+            <UpdateProjectPage />
+          </PermissionCheck>
+        ),
       },
     ],
   };

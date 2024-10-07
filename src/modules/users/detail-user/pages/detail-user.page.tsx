@@ -7,9 +7,12 @@ import { AdminChangePasswordWidget } from '../widgets/admin-change-password.widg
 
 import { Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function DetailUserPage() {
   const { userId } = useParams();
+  const { permissions } = useAuthentication();
   const { user, isLoading, isError } = useGetDetailUser({ userId: userId || '' });
 
   return (
@@ -20,7 +23,7 @@ export function DetailUserPage() {
           <LayoutBack>
             <BaseInformationUserWidget user={user} />
           </LayoutBack>
-          <AdminChangePasswordWidget user={user} />
+          {permissions[PermissionEnum.CHANGE_PASSWORD] && <AdminChangePasswordWidget user={user} />}
         </StateHandler>
       </Container>
     </>

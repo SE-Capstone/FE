@@ -133,14 +133,6 @@ export const USER_STATUS_LABEL: Record<UserStatusEnum, string> = {
   [UserStatusEnum.Inactive]: `Inactive`,
 };
 
-export const defaultRoles = [
-  RolesEnum.Admin,
-  RolesEnum.HR,
-  RolesEnum.Accountant,
-  RolesEnum.Employee,
-  RolesEnum.TeamLead,
-];
-
 export const GENDER_VALUES: Record<GenderEnum, string> = {
   [GenderEnum.male]: 'Male',
   [GenderEnum.female]: 'Female',
@@ -157,6 +149,7 @@ export const ISSUE_PRIORITY_VALUES: Record<IssuePriorityEnum, string> = {
 
 export const PERMISSIONS_VALUES: Record<PermissionEnum, string> = {
   [PermissionEnum.ADD_USER]: 'Create user',
+  [PermissionEnum.GET_LIST_USER]: 'Get list user',
   [PermissionEnum.ADD_PROJECT]: 'Create project',
   [PermissionEnum.IS_PROJECT_LEAD]: 'Assign as project lead',
   [PermissionEnum.GET_LIST_PROJECT]: 'Get list project',

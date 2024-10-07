@@ -6,14 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import type { IRole } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
-import { defaultRoles } from '@/configs';
+import { PermissionEnum } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTableRolesProps {
   role: IRole;
 }
 export function ActionMenuTableRoles({ role }: ActionMenuTableRolesProps) {
-  const isDefaultRole = defaultRoles.includes(role?.name || '');
+  const { permissions } = useAuthentication();
   const navigate = useNavigate();
 
   // const { removeRoleResult, handleRemoveRole } = useRemoveRoleHook();
@@ -24,12 +25,13 @@ export function ActionMenuTableRoles({ role }: ActionMenuTableRolesProps) {
   if (!role || !role.id) return null;
 
   const menuOptions = [
-    {
+    permissions[PermissionEnum.GET_ROLE] && {
       label: 'View detail',
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/roles/${role.id}`),
     },
-    !isDefaultRole && {
+    // Todo: fix
+    permissions[PermissionEnum.ADD_ROLE] && {
       label: 'Delete',
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {

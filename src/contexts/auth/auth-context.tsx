@@ -1,5 +1,7 @@
 import { createContext, useEffect, useMemo, useState } from 'react';
 
+import { keyBy, mapValues } from 'lodash-es';
+
 import type { ITokenStorage } from '@/libs/helpers';
 import type { ICurrentUserResponse } from '@/modules/auth/types';
 
@@ -13,6 +15,7 @@ export interface IAuthState {
   isAdmin: boolean;
   fullName?: string;
   roleName?: string;
+  permissions: Record<string, boolean>;
 }
 
 const initialState: IAuthState = {
@@ -20,6 +23,7 @@ const initialState: IAuthState = {
   isLogged: false,
   isLoading: true,
   isAdmin: false,
+  permissions: {},
 };
 
 export interface IAuthContext {
@@ -29,6 +33,7 @@ export interface IAuthContext {
   isAdmin: boolean;
   fullName?: string;
   roleName?: string;
+  permissions: Record<string, boolean>;
   handleLogin: (user: ICurrentUserResponse) => void;
   resetAuthContext: () => void;
 }
@@ -48,6 +53,7 @@ export function AuthProvider({ children }) {
         isAdmin: storedAuth.user.roleName === RolesEnum.Admin,
         fullName: storedAuth.user.fullName,
         roleName: storedAuth.user.roleName,
+        permissions: mapValues(keyBy(storedAuth.user.permissions, 'name'), () => true),
       });
     } else {
       // No stored auth, user is not logged in
@@ -66,6 +72,7 @@ export function AuthProvider({ children }) {
       isAdmin: user.roleName === RolesEnum.Admin,
       fullName: user.fullName,
       roleName: user.roleName,
+      permissions: mapValues(keyBy(user.permissions, 'name'), () => true),
     });
   };
 
@@ -78,6 +85,7 @@ export function AuthProvider({ children }) {
       isAdmin: false,
       fullName: '',
       roleName: undefined,
+      permissions: {},
     });
   };
 

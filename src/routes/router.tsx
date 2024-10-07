@@ -26,9 +26,7 @@ const allRoutes = createBrowserRouter([
     errorElement: <ErrorPage />,
     element: (
       <ProtectedRoute>
-        {/* <AuthorizationRoute roles={ROLES_ACCESS}> */}
         <LayoutApp />
-        {/* </AuthorizationRoute> */}
       </ProtectedRoute>
     ),
     children: [

@@ -21,7 +21,7 @@ export function ActionMenuTableIssues({ issue }: ActionMenuTableIssuesProps) {
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/issues/${issue.id}`),
     },
-  ];
+  ].filter(Boolean);
 
   return (
     <ActionMenuTable actionMenuItems={menuOptions}>

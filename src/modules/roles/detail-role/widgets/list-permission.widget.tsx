@@ -147,7 +147,7 @@ export function ListPermissionWidget({
   isDisabled,
   triggerClose,
   isCreate,
-  isDefaultRole,
+  isEditable,
 }: {
   form?: UseFormReturn<CreateRoleFormType>;
   role?: IRole;
@@ -158,7 +158,7 @@ export function ListPermissionWidget({
   isDisabled: boolean;
   triggerClose?: boolean;
   isCreate?: boolean;
-  isDefaultRole?: boolean;
+  isEditable?: boolean;
 }) {
   const navigate = useNavigate();
 
@@ -304,7 +304,7 @@ export function ListPermissionWidget({
                   background: 'transparent',
                 }}
                 icon={<RiEditFill />}
-                hidden={isEditing || isCreate || isDefaultRole}
+                hidden={isEditing || isCreate || isEditable}
                 onClick={() => setIsEditing(!isEditing)}
               />
             </Accordion>

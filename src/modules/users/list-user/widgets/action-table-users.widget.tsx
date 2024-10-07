@@ -9,11 +9,14 @@ import { useUsersQueryFilterStateContext } from '../contexts';
 import type { IRole } from '@/modules/roles/list-role/types';
 
 import { CustomChakraReactSelect, SearchInput } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetRoles } from '@/modules/roles/list-role/apis/get-roles.api';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ActionTableUsersWidget() {
   const { usersQueryState, setUsersQueryFilterState } = useUsersQueryFilterStateContext();
+  const { permissions } = useAuthentication();
   const { pathname } = useLocation();
 
   const isShowFilterUser = pathname.includes(APP_PATHS.listUser);
@@ -57,9 +60,11 @@ export function ActionTableUsersWidget() {
               />
             </Box>
             <Spacer />
-            <AddNewUserWidget roles={listRole}>
-              <Button leftIcon={<>+</>}>Create</Button>
-            </AddNewUserWidget>
+            {permissions[PermissionEnum.ADD_USER] && (
+              <AddNewUserWidget roles={listRole}>
+                <Button leftIcon={<>+</>}>Create</Button>
+              </AddNewUserWidget>
+            )}
           </>
         )}
       </HStack>

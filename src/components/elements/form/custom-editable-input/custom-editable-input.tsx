@@ -17,7 +17,7 @@ function EditableControls({
   onClose,
   onEdit,
   isEditing,
-  isDefaultRole,
+  isEditable,
 }: {
   isLoading: boolean;
   isDisabled: boolean;
@@ -26,7 +26,7 @@ function EditableControls({
   onClose: () => void;
   onEdit: () => void;
   isEditing: boolean;
-  isDefaultRole: boolean;
+  isEditable: boolean;
 }) {
   return isEditing ? (
     <ButtonGroup mt={2} justifyContent="start" size="sm" mb={2}>
@@ -53,7 +53,7 @@ function EditableControls({
     </ButtonGroup>
   ) : (
     <IconButton
-      hidden={isDefaultRole}
+      hidden={isEditable}
       aria-label="edit"
       bg="transparent"
       size="sm"
@@ -81,7 +81,7 @@ export interface CustomEditableInputProps extends InputProps, FieldWrapperProps 
   initialValue: string;
   inputChildren: React.ReactElement;
   triggerClose: boolean;
-  isDefaultRole: boolean;
+  isEditable: boolean;
   onSubmit: () => void;
 }
 
@@ -95,7 +95,7 @@ export const CustomEditableInput = (props: CustomEditableInputProps) => {
     onSubmit,
     triggerClose,
     isDirty,
-    isDefaultRole,
+    isEditable,
   } = props;
   const { handleSubmit } = useFormContext();
   const [isEditing, setIsEditing] = useState(false);
@@ -150,7 +150,7 @@ export const CustomEditableInput = (props: CustomEditableInputProps) => {
             isDisabled={isDisabled}
             isEditing={isEditing}
             isDirty={isDirty}
-            isDefaultRole={isDefaultRole}
+            isEditable={isEditable}
             onSubmit={handleSubmit(onSubmit)}
             onClose={handleClose}
             onEdit={handleEdit}

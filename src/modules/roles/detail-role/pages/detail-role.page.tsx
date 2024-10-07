@@ -16,12 +16,13 @@ import { CustomFormProvider, CustomInput, CustomTextArea } from '@/components/el
 import { CustomEditableInput } from '@/components/elements/form/custom-editable-input';
 import { LayoutBack } from '@/components/layouts';
 import { EditRow } from '@/components/widgets';
-import { defaultRoles } from '@/configs';
+import { PermissionEnum } from '@/configs';
 import { notify } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function DetailRolePage() {
-  const [isDefaultRole, setIsDefaultRole] = useState(false);
+  const { permissions } = useAuthentication();
   const { roleId } = useParams();
   const [triggerClose, setTriggerClose] = useState(false);
 
@@ -48,7 +49,6 @@ export function DetailRolePage() {
   const { errors, dirtyFields } = formState;
 
   useEffect(() => {
-    setIsDefaultRole(defaultRoles.includes(role?.name || ''));
     reset(role, {
       keepDirty: false,
     });
@@ -95,7 +95,8 @@ export function DetailRolePage() {
         title={role?.name}
       >
         <IconButton
-          hidden={isDefaultRole}
+          // Todo: fix
+          hidden={!permissions[PermissionEnum.ADD_ROLE]}
           aria-label="DeleteRole"
           variant="ghost"
           size="md"
@@ -110,7 +111,8 @@ export function DetailRolePage() {
             isDisabled={isUpdating}
             isDirty={!dirtyFields.name}
             initialValue={role?.name || ''}
-            isDefaultRole={isDefaultRole}
+            // Todo: fix
+            isEditable={!permissions[PermissionEnum.ADD_ROLE]}
             triggerClose={triggerClose}
             inputChildren={
               <CustomInput
@@ -133,7 +135,8 @@ export function DetailRolePage() {
             title="Description"
             isLoading={isRoleDetailLoading}
             isDisabled={isUpdating}
-            isDefaultRole={isDefaultRole}
+            // Todo: fix
+            isEditable={!permissions[PermissionEnum.ADD_ROLE]}
             isDirty={!dirtyFields.description}
             initialValue={role?.description || ''}
             triggerClose={triggerClose}
@@ -167,7 +170,8 @@ export function DetailRolePage() {
               groupPermissions={groupPermissions}
               isLoading={isLoading || isRoleDetailLoading}
               isError={!!isError || !!isRoleDetailError}
-              isDefaultRole={isDefaultRole}
+              // Todo: fix
+              isEditable={!permissions[PermissionEnum.ADD_ROLE]}
               isDisabled={isUpdating}
               mutation={updatePermissions}
               triggerClose={triggerClose}

@@ -10,10 +10,12 @@ import type { IUser } from '@/modules/users/list-user/types';
 
 import { CustomChakraReactSelect, SearchInput } from '@/components/elements';
 import { PermissionEnum, PROJECT_STATUS_OPTIONS, PROJECT_VISIBILITY_OPTIONS } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetUsersByPermission } from '@/modules/users/list-user/apis/get-user-by-permission.api';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ActionTableProjectsWidget() {
+  const { permissions } = useAuthentication();
   const { projectsQueryState, setProjectsQueryFilterState } = useProjectsQueryFilterStateContext();
   const { pathname } = useLocation();
 
@@ -85,7 +87,7 @@ export function ActionTableProjectsWidget() {
             />
           </GridItem>
         </Grid>
-        {isShowFilterProject && (
+        {isShowFilterProject && permissions[PermissionEnum.ADD_PROJECT] && (
           <>
             <Spacer />
             <AddNewProjectWidget teamLeads={teamLeads}>

@@ -12,6 +12,7 @@ import {
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
+import { BiLayer } from 'react-icons/bi';
 import { BsWindowDock } from 'react-icons/bs';
 import {
   MdOutlineCategory,
@@ -30,6 +31,7 @@ import { NavItem, type NavItemProps } from './nav-item';
 import type { BoxProps } from '@chakra-ui/react';
 
 import { IMAGE_URLS } from '@/assets/images';
+import { PermissionEnum } from '@/configs';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
@@ -45,7 +47,7 @@ interface SidebarContentProps extends BoxProps {
 
 export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
   const location = useLocation();
-  const { isAdmin } = useAuthentication();
+  const { permissions } = useAuthentication();
   const [collapsed, setCollapsed] = useState(false);
 
   const LINK_ITEMS: Array<LinkItemProps> = useMemo(
@@ -56,24 +58,32 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
           icon: MdOutlineHome,
           path: APP_PATHS.HOME,
         },
-        isAdmin && {
+        (permissions[PermissionEnum.GET_LIST_USER] ||
+          // Todo: fix
+          permissions[PermissionEnum.GET_LIST_USER]) && {
           name: 'Users',
           icon: MdOutlinePeopleAlt,
           path: undefined,
           children: [
-            {
+            permissions[PermissionEnum.GET_LIST_USER] && {
               name: 'List User',
               icon: MdOutlineCategory,
               path: APP_PATHS.listUser,
             },
-          ],
+            // Todo: fix
+            permissions[PermissionEnum.GET_LIST_USER] && {
+              name: 'Positions',
+              icon: BiLayer,
+              path: APP_PATHS.listUser,
+            },
+          ].filter(Boolean),
         },
-        isAdmin && {
+        permissions[PermissionEnum.READ_LIST_ROLE] && {
           name: 'Roles',
           icon: MdOutlineSettings,
           path: '/roles',
         },
-        {
+        permissions[PermissionEnum.GET_LIST_PROJECT] && {
           name: 'Projects',
           icon: BsWindowDock,
           path: '/projects',
@@ -84,7 +94,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
           path: '/news',
         },
       ].filter(Boolean),
-    [isAdmin]
+    [permissions]
   );
 
   return (

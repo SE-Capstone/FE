@@ -6,12 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import type { IUser } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTableUsersProps {
   user: IUser;
 }
 export function ActionMenuTableUsers({ user }: ActionMenuTableUsersProps) {
+  const { permissions } = useAuthentication();
   const navigate = useNavigate();
 
   // const { removeUserResult, handleRemoveUser } = useRemoveUserHook();
@@ -22,12 +25,14 @@ export function ActionMenuTableUsers({ user }: ActionMenuTableUsersProps) {
   if (!user || !user.id) return null;
 
   const menuOptions = [
-    {
+    // Todo: fix
+    permissions[PermissionEnum.GET_LIST_USER] && {
       label: 'View detail',
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/users/${user.id}`),
     },
-    {
+    // Todo: fix
+    permissions[PermissionEnum.GET_LIST_USER] && {
       label: 'Delete',
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {
@@ -42,7 +47,7 @@ export function ActionMenuTableUsers({ user }: ActionMenuTableUsersProps) {
         });
       },
     },
-  ];
+  ].filter(Boolean);
 
   return (
     <ActionMenuTable actionMenuItems={menuOptions}>

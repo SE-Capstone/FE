@@ -1,4 +1,5 @@
 import type { GenderEnum, UserStatusEnum } from '@/configs';
+import type { IPermission } from '@/modules/roles/detail-role/apis/get-permissions.api';
 import type { IBaseEntity } from '@/types';
 
 export interface ICurrentUserResponse extends IBaseEntity {
@@ -17,4 +18,5 @@ export interface ICurrentUserResponse extends IBaseEntity {
   bankAccountName?: string;
   status?: UserStatusEnum;
   deletedAt?: Date;
+  permissions: IPermission[];
 }

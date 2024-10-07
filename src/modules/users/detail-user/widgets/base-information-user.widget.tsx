@@ -14,7 +14,7 @@ import type { IRole } from '@/modules/roles/list-role/types';
 import { CustomChakraReactSelect, CustomFormProvider, CustomInput } from '@/components/elements';
 import { PreviewImage } from '@/components/elements/preview-image';
 import { EditRow } from '@/components/widgets';
-import { GENDER_OPTIONS, USER_STATUS_OPTIONS } from '@/configs';
+import { GENDER_OPTIONS, PermissionEnum, USER_STATUS_OPTIONS } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
 import {
   cleanPhoneNumber,
@@ -24,10 +24,12 @@ import {
 } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 import { useGetBanks } from '@/modules/profile/apis/get-banks.api';
+import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetRoles } from '@/modules/roles/list-role/apis/get-roles.api';
 
 export function BaseInformationUserWidget({ user }: { user?: IUser }) {
   const userId = user?.id;
+  const { permissions } = useAuthentication();
 
   const { mutate: updateUserMutation, isPending: isLoading } = useUpdateUserMutation();
 
@@ -102,7 +104,13 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
 
   return (
     <Box bg="white" rounded={2} w="full">
-      <CustomFormProvider form={form} style={{ height: 'fit-content' }} onSubmit={onSubmit}>
+      <CustomFormProvider
+        form={form}
+        // Todo: fix
+        isDisabled={!permissions[PermissionEnum.ADD_USER]}
+        style={{ height: 'fit-content' }}
+        onSubmit={onSubmit}
+      >
         <Stack
           direction={{ base: 'column-reverse' }}
           spacing="24px"

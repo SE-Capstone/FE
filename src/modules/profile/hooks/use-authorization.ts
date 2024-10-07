@@ -2,20 +2,20 @@ import { useCallback } from 'react';
 
 import { useAuthentication } from './use-authentication';
 
-import type { RolesEnum } from '@/configs';
+import type { PermissionEnum } from '@/configs';
 
 export function useAuthorization() {
-  const { roleName, isAdmin, isLogged } = useAuthentication();
+  const { permissions: permissionsStore, isLogged, isAdmin } = useAuthentication();
 
   const checkAccess = useCallback(
-    function ({ accessRoles }: { accessRoles: RolesEnum[] }) {
+    function ({ permissions }: { permissions: PermissionEnum[] }) {
       if (!isLogged) return false;
 
       if (isAdmin) return true;
 
-      return accessRoles.includes(roleName as RolesEnum);
+      return permissions.some((p) => permissionsStore[p]);
     },
-    [roleName, isAdmin, isLogged]
+    [isAdmin, isLogged, permissionsStore]
   );
 
   return {

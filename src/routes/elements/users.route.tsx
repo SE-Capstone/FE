@@ -1,7 +1,10 @@
 import { Outlet } from 'react-router-dom';
 
+import { PermissionCheck } from '../permisstion-check';
+
 import type { RouteObject } from 'react-router-dom';
 
+import { PermissionEnum } from '@/configs';
 import { lazyImport } from '@/libs/utils';
 import { UsersQueryProvider } from '@/modules/users/list-user/contexts';
 
@@ -19,14 +22,21 @@ export function usersRoutes(): RouteObject {
       {
         index: true,
         element: (
-          <UsersQueryProvider>
-            <ListUserPage />
-          </UsersQueryProvider>
+          <PermissionCheck permissions={[PermissionEnum.GET_LIST_USER]}>
+            <UsersQueryProvider>
+              <ListUserPage />
+            </UsersQueryProvider>
+          </PermissionCheck>
         ),
       },
       {
         path: ':userId',
-        element: <DetailUserPage />,
+        element: (
+          // Todo: fix
+          <PermissionCheck permissions={[PermissionEnum.GET_LIST_USER]}>
+            <DetailUserPage />
+          </PermissionCheck>
+        ),
       },
     ],
   };

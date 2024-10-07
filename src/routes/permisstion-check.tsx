@@ -1,18 +1,20 @@
-import type { RolesEnum } from '@/configs';
+import { Navigate } from 'react-router-dom';
+
+import type { PermissionEnum } from '@/configs';
 
 import { useAuthorization } from '@/modules/profile/hooks';
 
 interface PermissionCheckProps {
-  roles: RolesEnum[];
+  permissions: PermissionEnum[];
   children: JSX.Element;
   forbiddenFallback?: React.ReactNode;
 }
 
 export function PermissionCheck(props: PermissionCheckProps) {
-  const { roles, children, forbiddenFallback } = props;
+  const { permissions, children, forbiddenFallback } = props;
   const { checkAccess } = useAuthorization();
 
-  const canAccess = checkAccess({ accessRoles: roles });
+  const canAccess = checkAccess({ permissions });
 
-  return canAccess ? children : forbiddenFallback;
+  return canAccess ? children : forbiddenFallback || <Navigate to="/unauthorize" replace />;
 }

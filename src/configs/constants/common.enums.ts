@@ -29,6 +29,7 @@ export enum OrderInput {
 
 export enum PermissionEnum {
   ADD_USER = 'ADD_USER',
+  GET_LIST_USER = 'GET_LIST_USER',
   ADD_PROJECT = 'ADD_PROJECT',
   IS_PROJECT_LEAD = 'IS_PROJECT_LEAD',
   GET_LIST_PROJECT = 'GET_LIST_PROJECT',

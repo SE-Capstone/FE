@@ -311,7 +311,14 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                         {tdContent}
                       </DraggableRow>
                     ) : (
-                      <Tr key={object.id}>{tdContent}</Tr>
+                      <Tr
+                        key={object.id}
+                        _hover={{
+                          bgColor: 'gray.50',
+                        }}
+                      >
+                        {tdContent}
+                      </Tr>
                     );
                   })}
               </Tbody>
