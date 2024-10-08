@@ -11,7 +11,7 @@ import { PermissionEnum } from '@/configs';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
-export function ListProjectsPage() {
+export function ListProjectPage() {
   const { permissions } = useAuthentication();
   const { projectsQueryState, resetProjectsQueryState } = useProjectsQueryFilterStateContext();
   const { pathname } = useLocation();

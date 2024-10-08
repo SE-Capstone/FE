@@ -23,6 +23,7 @@ import {
   MdArrowBackIosNew,
   MdArrowForwardIos,
 } from 'react-icons/md';
+import { PiBriefcase, PiUserSquareLight } from 'react-icons/pi';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -87,6 +88,24 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
           name: 'Projects',
           icon: BsWindowDock,
           path: '/projects',
+        },
+        // Todo: update permission
+        {
+          name: 'HR',
+          icon: MdOutlinePeopleAlt,
+          path: undefined,
+          children: [
+            {
+              name: 'Jobs',
+              icon: PiBriefcase,
+              path: APP_PATHS.listJob,
+            },
+            {
+              name: 'Applicants',
+              icon: PiUserSquareLight,
+              path: APP_PATHS.listApplicant,
+            },
+          ].filter(Boolean),
         },
         {
           name: 'News',

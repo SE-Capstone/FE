@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { CloseButton, Icon } from '@chakra-ui/react';
+import { Box, CloseButton, Icon } from '@chakra-ui/react';
 import { MdSearch } from 'react-icons/md';
 
 import type { CustomInputProps } from '@/components/elements';
@@ -64,7 +64,7 @@ export function SearchInput({
       onChange={handleChange}
       {...rest}
       rightIcon={
-        <>
+        <Box h="fit-content">
           {debounceSearchValue?.length ? (
             <CloseButton size="sm" {...clearButtonProps} onClick={handleClearSearchValue} />
           ) : (
@@ -76,7 +76,7 @@ export function SearchInput({
               onClick={() => searchRef.current?.focus()}
             />
           )}
-        </>
+        </Box>
       }
     />
   );

@@ -16,7 +16,7 @@ import { CustomLink, Head, StateHandler, TableComponent } from '@/components/ele
 import { formatDate } from '@/libs/helpers';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
-export function ListIssuesPage() {
+export function ListIssuePage() {
   const { issuesQueryState, resetIssuesQueryState } = useIssuesQueryFilterStateContext();
   const { pathname } = useLocation();
 

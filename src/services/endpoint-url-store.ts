@@ -1,5 +1,7 @@
+import { APPLICANTS_ENDPOINT_URL } from './applicants';
 import { AUTH_ENDPOINT_URL } from './auth';
 import { ISSUES_ENDPOINT_URL } from './issue/issue-endpoint-url';
+import { JOBS_ENDPOINT_URL } from './job';
 import { PERMISSIONS_ENDPOINT_URL } from './permissions/permissions-endpoint-url';
 import { PROJECTS_ENDPOINT_URL } from './project';
 import { ROLES_ENDPOINT_URL } from './roles';
@@ -11,5 +13,7 @@ export const ALL_ENDPOINT_URL_STORE = {
   roles: ROLES_ENDPOINT_URL,
   projects: PROJECTS_ENDPOINT_URL,
   issues: ISSUES_ENDPOINT_URL,
+  jobs: JOBS_ENDPOINT_URL,
+  applicants: APPLICANTS_ENDPOINT_URL,
   permissions: PERMISSIONS_ENDPOINT_URL,
 } as const;

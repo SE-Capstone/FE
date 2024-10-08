@@ -7,9 +7,9 @@ import { PermissionEnum } from '@/configs';
 import { lazyImport } from '@/libs/utils';
 import { ProjectsQueryProvider } from '@/modules/projects/list-project/contexts';
 
-const { ListProjectsPage } = lazyImport(
+const { ListProjectPage } = lazyImport(
   () => import('@/modules/projects/list-project'),
-  'ListProjectsPage'
+  'ListProjectPage'
 );
 const { DetailProjectPage } = lazyImport(
   () => import('@/modules/projects/detail-project/pages'),
@@ -30,7 +30,7 @@ export function projectsRoutes(): RouteObject {
         element: (
           <PermissionCheck permissions={[PermissionEnum.GET_ALL_PROJECT]}>
             <ProjectsQueryProvider>
-              <ListProjectsPage />
+              <ListProjectPage />
             </ProjectsQueryProvider>
           </PermissionCheck>
         ),

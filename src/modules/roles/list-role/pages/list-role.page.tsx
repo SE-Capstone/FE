@@ -13,7 +13,7 @@ import type { ColumnsProps } from '@/components/elements';
 import { CustomLink, Head, TableComponent } from '@/components/elements';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
-export function ListRolesPage() {
+export function ListRolePage() {
   const { pathname } = useLocation();
 
   const { listRole, isError, isLoading } = useGetListRoleQuery({});

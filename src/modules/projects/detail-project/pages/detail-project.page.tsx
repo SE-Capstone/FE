@@ -6,7 +6,7 @@ import { BaseInformationProjectWidget } from '../widgets';
 
 import { CustomTabs, Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
-import { ListIssuesPage } from '@/modules/issues/list-issue';
+import { ListIssuePage } from '@/modules/issues/list-issue';
 import { IssuesQueryProvider } from '@/modules/issues/list-issue/contexts';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
@@ -46,7 +46,7 @@ export function DetailProjectPage() {
                 title: 'Issues',
                 childrenPanel: (
                   <IssuesQueryProvider>
-                    <ListIssuesPage />
+                    <ListIssuePage />
                   </IssuesQueryProvider>
                 ),
               },
