@@ -1,4 +1,5 @@
 import type { IBaseEntity } from '@/types';
+import type { ThemingProps } from '@chakra-ui/react';
 
 export enum IssueStatusEnum {
   Pending = 1,
@@ -25,14 +26,17 @@ export type IIssue = IBaseEntity & {
   id: number;
   projectId: string;
   labelId: string;
+  labelName: string;
   subject: string;
   description?: string;
   startDate: string;
   dueDate: string;
-  statusId: string;
+  statusName: string;
+  statusColor: ThemingProps['colorScheme'];
   priority: IssuePriorityEnum;
   lastUpdatedBy?: string;
   percentage: number;
   assigneeId: string;
+  assigneeName: string;
   estimatedTime?: number;
 };

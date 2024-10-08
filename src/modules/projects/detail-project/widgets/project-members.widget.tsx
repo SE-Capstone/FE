@@ -10,7 +10,7 @@ import type { IProject } from '../../list-project/types';
 import type { IOptionUserSelect } from '../components/users-async-select';
 
 export function ProjectMembersWidget({ project }: { project?: IProject }) {
-  const hasMembers = (project?.members?.length || 0) === 0 || !!project?.leadId;
+  const hasMembers = (project?.members?.length || 0) > 0 || !!project?.leadId;
 
   const [initialMembers, setInitialMembers] = useState<Set<string>>(new Set());
   const [defaultUsersOption, setDefaultUsersOption] = useState<IOptionUserSelect[]>([]);

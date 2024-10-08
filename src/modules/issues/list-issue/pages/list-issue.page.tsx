@@ -35,24 +35,24 @@ export function ListIssuesPage() {
             hasSort: false,
             title: '#',
             tableCellProps: { w: 4, pr: 2 },
-            Cell({ id }) {
-              return <BadgeIssue content={id} />;
+            Cell({ id, statusColor }) {
+              return <BadgeIssue content={id} colorScheme={statusColor} />;
             },
           },
           {
             key: 'label',
             title: 'Label',
             hasSort: false,
-            Cell({ labelId }) {
-              return <>{labelId}</>;
+            Cell({ labelName }) {
+              return <>{labelName}</>;
             },
           },
           {
             key: 'status',
             title: 'Status',
             hasSort: false,
-            Cell({ statusId }) {
-              return <>{statusId}</>;
+            Cell({ statusName }) {
+              return <>{statusName}</>;
             },
           },
           {
@@ -82,8 +82,8 @@ export function ListIssuesPage() {
             key: 'assigneeId',
             title: 'Assignee',
             hasSort: false,
-            Cell({ assigneeId }) {
-              return <>{assigneeId || ''}</>;
+            Cell({ assigneeName }) {
+              return <>{assigneeName || ''}</>;
             },
           },
           {

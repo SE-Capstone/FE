@@ -31,7 +31,7 @@ function mutation(req: ICreateIssueRequest) {
   const { body } = req;
   return makeRequest<typeof body, IResponseApi<IIssue>>({
     method: 'POST',
-    url: ALL_ENDPOINT_URL_STORE.projects.create,
+    url: ALL_ENDPOINT_URL_STORE.issues.create,
     data: body,
   });
 }
@@ -53,7 +53,7 @@ export function useCreateIssueMutation({ configs, reset }: Props = {}) {
       }
 
       queryClient.invalidateQueries({
-        queryKey: allQueryKeysStore.project.projects.queryKey,
+        queryKey: allQueryKeysStore.issue.issues.queryKey,
       });
       notify({
         type: 'success',
