@@ -1,7 +1,7 @@
-import { applicantsPaths } from './applicants';
+import { applicantsPaths } from './applicants.path';
 import { authPaths } from './auth.paths';
 import { issuesPaths } from './issues.paths';
-import { jobsPaths } from './jobs';
+import { jobsPaths } from './jobs.path';
 import { profilePaths } from './profile.paths';
 import { projectsPaths } from './projects.path';
 import { rolesPaths } from './roles.path';

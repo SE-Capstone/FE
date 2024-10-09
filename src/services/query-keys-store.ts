@@ -5,6 +5,7 @@ import { authQueryKeys } from './auth';
 import { issueQueryKeys } from './issue';
 import { jobQueryKeys } from './job';
 import { permissionsQueryKeys } from './permissions';
+import { positionQueryKeys } from './position';
 import { projectQueryKeys } from './project';
 import { roleQueryKeys } from './roles';
 import { userQueryKeys } from './user';
@@ -17,5 +18,6 @@ export const allQueryKeysStore = mergeQueryKeys(
   projectQueryKeys,
   permissionsQueryKeys,
   jobQueryKeys,
-  applicantQueryKeys
+  applicantQueryKeys,
+  positionQueryKeys
 );

@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react';
+
 import { Button, HStack, SimpleGrid, Stack } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
 
 import { useCreateUserHook } from '../hooks/mutations';
 
+import type { IPosition } from '@/modules/positions/types';
 import type { IRole } from '@/modules/roles/list-role/types';
 
 import {
@@ -13,6 +16,7 @@ import {
 } from '@/components/elements';
 import { GENDER_OPTIONS } from '@/configs';
 import { phoneNumberAutoFormat } from '@/libs/helpers';
+import { useGetListPositionQuery } from '@/modules/positions/hooks/queries';
 
 export interface AddNewUserWidgetProps {
   children: React.ReactElement;
@@ -23,6 +27,15 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
   const { children, roles } = props;
 
   const { data, formCreateUser, handleCreateUser, isLoading, reset } = useCreateUserHook();
+
+  const [positions, setPositions] = useState<IPosition[]>([]);
+  const { listPosition, isLoading: isLoadingPosition } = useGetListPositionQuery();
+
+  useEffect(() => {
+    if (JSON.stringify(positions) !== JSON.stringify(listPosition)) {
+      setPositions(listPosition);
+    }
+  }, [listPosition, positions]);
 
   const {
     register,

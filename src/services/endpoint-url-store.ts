@@ -3,6 +3,7 @@ import { AUTH_ENDPOINT_URL } from './auth';
 import { ISSUES_ENDPOINT_URL } from './issue/issue-endpoint-url';
 import { JOBS_ENDPOINT_URL } from './job';
 import { PERMISSIONS_ENDPOINT_URL } from './permissions/permissions-endpoint-url';
+import { POSITIONS_ENDPOINT_URL } from './position';
 import { PROJECTS_ENDPOINT_URL } from './project';
 import { ROLES_ENDPOINT_URL } from './roles';
 import { USERS_ENDPOINT_URL } from './user';
@@ -16,4 +17,5 @@ export const ALL_ENDPOINT_URL_STORE = {
   jobs: JOBS_ENDPOINT_URL,
   applicants: APPLICANTS_ENDPOINT_URL,
   permissions: PERMISSIONS_ENDPOINT_URL,
+  positions: POSITIONS_ENDPOINT_URL,
 } as const;
