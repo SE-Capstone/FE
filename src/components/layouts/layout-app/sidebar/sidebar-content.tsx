@@ -117,130 +117,140 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
   );
 
   return (
-    <Sidebar
-      toggled={isOpen}
-      collapsed={useBreakpointValue({ base: false, lg: collapsed })}
-      style={{ height: '100%', paddingBottom: useBreakpointValue({ base: '0px', lg: '40px' }) }}
-      customBreakPoint="1024px"
-      collapsedWidth="70px"
-      backgroundColor="white"
-      onBackdropClick={onClose}
-    >
-      <Menu>
-        <Flex alignItems="center" justify="center" mt={6}>
-          <HStack alignItems="center" justify="center" pos="relative" mb={4}>
-            <Box role="presentation" as={Link} cursor="pointer" to={APP_PATHS.HOME}>
-              <Image
-                objectFit="cover"
-                boxSize={collapsed ? '50px' : '88px'}
-                transition="all 0.3s ease"
-                src={IMAGE_URLS.logo}
-                alt="Logo"
-                mb={1}
-                loading="lazy"
-              />
-            </Box>
-          </HStack>
-          <CloseButton
-            display={{ base: 'flex', lg: 'none' }}
-            position="absolute"
-            right={3}
-            top={3}
-            onClick={onClose}
-          />
-        </Flex>
-        <Stack>
-          {LINK_ITEMS.map((link) => {
-            const isActiveParent =
-              link.children && link.children.some((child) => child.path === location.pathname);
+    <Stack>
+      <Sidebar
+        toggled={isOpen}
+        collapsed={useBreakpointValue({ base: false, lg: collapsed })}
+        style={{
+          height: '100%',
+          paddingBottom: useBreakpointValue({ base: '0px', lg: '50px', xl: '50px' }),
+        }}
+        customBreakPoint="1024px"
+        collapsedWidth="70px"
+        backgroundColor="white"
+        onBackdropClick={onClose}
+      >
+        <Menu>
+          <Flex alignItems="center" justify="center" mt={6}>
+            <HStack alignItems="center" justify="center" pos="relative" mb={4}>
+              <Box role="presentation" as={Link} cursor="pointer" to={APP_PATHS.HOME}>
+                <Image
+                  objectFit="cover"
+                  boxSize={collapsed ? '50px' : '88px'}
+                  transition="all 0.3s ease"
+                  src={IMAGE_URLS.logo}
+                  alt="Logo"
+                  mb={1}
+                  loading="lazy"
+                />
+              </Box>
+            </HStack>
+            <CloseButton
+              display={{ base: 'flex', lg: 'none' }}
+              position="absolute"
+              right={3}
+              top={3}
+              onClick={onClose}
+            />
+          </Flex>
+          <Stack>
+            {LINK_ITEMS.map((link) => {
+              const isActiveParent =
+                link.children && link.children.some((child) => child.path === location.pathname);
 
-            if (link.children) {
+              if (link.children) {
+                return (
+                  <SubMenu
+                    key={link.name + link.path}
+                    className="ps-menu-group"
+                    label={
+                      <Text
+                        fontSize="14px"
+                        lineHeight="19px"
+                        color={isActiveParent ? 'primary' : 'neutral.300'}
+                        fontWeight="semibold"
+                      >
+                        {link.name}
+                      </Text>
+                    }
+                    icon={
+                      <Icon
+                        mr="4"
+                        boxSize={5}
+                        color={isActiveParent ? 'primary' : 'neutral.300'}
+                        _groupHover={{
+                          color: 'white',
+                        }}
+                        ml={3}
+                        as={link.icon}
+                      />
+                    }
+                    rootStyles={{
+                      [`& > div`]: {
+                        '&:hover': {
+                          transition: 'ease 0.3s',
+                        },
+                      },
+                    }}
+                    defaultOpen={isActiveParent}
+                  >
+                    {link.children?.length > 1 && <Stack mb={2} />}
+                    <Stack gap={collapsed ? 0 : 2}>
+                      {link.children?.map((child) => (
+                        <MenuItem
+                          key={child.path}
+                          rootStyles={{
+                            [`& > .ps-menu-button`]: {
+                              margin: collapsed ? '6px' : '',
+                              height: '100% !important',
+                              padding: collapsed ? '0 !important' : '0 20px !important',
+                              '&:hover': {
+                                backgroundColor: 'white !important',
+                              },
+                            },
+                          }}
+                        >
+                          <NavItem
+                            key={child.path}
+                            isTransitionOn={false}
+                            m={0}
+                            icon={child.icon}
+                            path={child.path}
+                          >
+                            {child.name}
+                          </NavItem>
+                        </MenuItem>
+                      ))}
+                    </Stack>
+                  </SubMenu>
+                );
+              }
+
               return (
-                <SubMenu
-                  key={link.name + link.path}
-                  className="ps-menu-group"
-                  label={
-                    <Text
-                      fontSize="14px"
-                      lineHeight="19px"
-                      color={isActiveParent ? 'primary' : 'neutral.300'}
-                      fontWeight="semibold"
-                    >
-                      {link.name}
-                    </Text>
-                  }
-                  icon={
-                    <Icon
-                      mr="4"
-                      boxSize={5}
-                      color={isActiveParent ? 'primary' : 'neutral.300'}
-                      _groupHover={{
-                        color: 'white',
-                      }}
-                      ml={3}
-                      as={link.icon}
-                    />
-                  }
+                <MenuItem
+                  key={link.name}
                   rootStyles={{
-                    [`& > div`]: {
+                    [`& > .ps-menu-button`]: {
+                      padding: '0.5rem !important',
                       '&:hover': {
-                        transition: 'ease 0.3s',
+                        backgroundColor: 'white !important',
                       },
                     },
                   }}
-                  defaultOpen={isActiveParent}
                 >
-                  {link.children?.length > 1 && <Stack mb={2} />}
-                  <Stack gap={collapsed ? 0 : 2}>
-                    {link.children?.map((child) => (
-                      <MenuItem
-                        key={child.path}
-                        rootStyles={{
-                          [`& > .ps-menu-button`]: {
-                            margin: collapsed ? '6px' : '',
-                            height: '100% !important',
-                            padding: collapsed ? '0 !important' : '0 20px !important',
-                            '&:hover': {
-                              backgroundColor: 'white !important',
-                            },
-                          },
-                        }}
-                      >
-                        <NavItem
-                          key={child.path}
-                          isTransitionOn={false}
-                          m={0}
-                          icon={child.icon}
-                          path={child.path}
-                        >
-                          {child.name}
-                        </NavItem>
-                      </MenuItem>
-                    ))}
-                  </Stack>
-                </SubMenu>
+                  <NavItem
+                    key={link.name}
+                    m={0}
+                    icon={link.icon}
+                    path={link.path}
+                    onClick={onClose}
+                  >
+                    {link.name}
+                  </NavItem>
+                </MenuItem>
               );
-            }
-
-            return (
-              <MenuItem
-                key={link.name}
-                rootStyles={{
-                  [`& > .ps-menu-button`]: {
-                    padding: '0.5rem !important',
-                    '&:hover': {
-                      backgroundColor: 'white !important',
-                    },
-                  },
-                }}
-              >
-                <NavItem key={link.name} m={0} icon={link.icon} path={link.path} onClick={onClose}>
-                  {link.name}
-                </NavItem>
-              </MenuItem>
-            );
-          })}
-          {/* <MenuItem
+            })}
+            {/* <MenuItem
             rootStyles={{
               [`& > .ps-menu-button`]: {
                 padding: '0.5rem !important',
@@ -258,15 +268,16 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
               Logout
             </NavItem>
           </MenuItem> */}
-        </Stack>
-      </Menu>
+          </Stack>
+        </Menu>
+      </Sidebar>
       <Button
-        position="fixed"
+        position="absolute"
         bottom={0}
         width={collapsed ? `70px` : '249px'}
         transition="all 0.3s ease"
         borderRadius="none"
-        hidden={useBreakpointValue({ base: true, lg: false })}
+        hidden={useBreakpointValue({ base: true, lg: false, xl: false })}
         onClick={() => setCollapsed(!collapsed)}
       >
         {collapsed ? (
@@ -275,6 +286,6 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
           <Icon boxSize={5} as={MdArrowBackIosNew} />
         )}
       </Button>
-    </Sidebar>
+    </Stack>
   );
 };

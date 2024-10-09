@@ -80,7 +80,7 @@ export function ListJobPage() {
       <Head title="Job" />
       <Container maxW="container.2xl" centerContent>
         <StateHandler
-          showLoader={isLoading || isRefetching}
+          showLoader={isLoading}
           showError={!!isError}
           retryHandler={resetJobsQueryState}
         >
@@ -90,7 +90,7 @@ export function ListJobPage() {
               withoutPagination
               data={listJob}
               groupColumns={columns}
-              isLoading={isLoading}
+              isLoading={isLoading || isRefetching}
               isError={!!isError}
               additionalFeature={(job) => <ActionMenuTableJobs job={job} />}
             />

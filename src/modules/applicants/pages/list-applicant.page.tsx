@@ -106,7 +106,7 @@ export function ListApplicantPage() {
       <Head title="Applicants" />
       <Container maxW="container.2xl" centerContent>
         <StateHandler
-          showLoader={isLoading || isRefetching}
+          showLoader={isLoading}
           showError={!!isError}
           retryHandler={resetApplicantsQueryState}
         >
@@ -118,7 +118,7 @@ export function ListApplicantPage() {
               data={listApplicant}
               groupColumns={columns}
               totalCount={meta.totalCount}
-              isLoading={isLoading}
+              isLoading={isLoading || isRefetching}
               isError={!!isError}
               additionalFeature={(applicant) => <ActionMenuTableApplicants applicant={applicant} />}
               onPageChange={handlePaginate}

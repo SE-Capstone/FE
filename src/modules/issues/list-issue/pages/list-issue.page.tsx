@@ -139,7 +139,7 @@ export function ListIssuePage() {
       <Head title="Issues" />
       <Container maxW="container.2xl" centerContent>
         <StateHandler
-          showLoader={isLoading || isRefetching}
+          showLoader={isLoading}
           showError={!!isError}
           retryHandler={resetIssuesQueryState}
         >
@@ -151,7 +151,7 @@ export function ListIssuePage() {
               data={listIssue}
               groupColumns={columns}
               totalCount={meta.totalCount}
-              isLoading={isLoading}
+              isLoading={isLoading || isRefetching}
               isError={!!isError}
               additionalFeature={(issue) => <ActionMenuTableIssues issue={issue} />}
               onPageChange={handlePaginate}

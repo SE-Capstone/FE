@@ -13,8 +13,8 @@ export default genericMemo(function ({ children }: { children: React.ReactNode }
   return (
     <Flex flexDir="column" h="100vh" bg="white">
       <Stack spacing={0} flexDir="row" h="full">
-        <SidebarContent isOpen={isOpen} onClose={onClose} />
-        <Stack flex={1} gap={0} flexDir="column" h="full">
+        <SidebarContent isOpen={isOpen} position="fixed" onClose={onClose} />
+        <Stack overflow="scroll" flex={1} gap={0} flexDir="column" h="full">
           <MobileNav onOpen={onOpen} />
           <Box bg="#f6f6f6" flex={1} p={{ base: 4 }} h="full" overflowY="auto">
             {children}
