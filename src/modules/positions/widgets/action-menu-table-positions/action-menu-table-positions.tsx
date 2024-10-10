@@ -7,15 +7,15 @@ import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
 import { useAlertDialogStore } from '@/contexts';
 
 interface ActionMenuTablePositionsProps {
-  job: IPosition;
+  position: IPosition;
 }
-export function ActionMenuTablePositions({ job }: ActionMenuTablePositionsProps) {
+export function ActionMenuTablePositions({ position }: ActionMenuTablePositionsProps) {
   // const { removePositionResult, handleRemovePosition } = useRemovePositionHook();
 
   const { openAlert } = useAlertDialogStore(false);
   // const { openAlert, closeAlert } = useAlertDialogStore(removePositionResult.loading);
 
-  if (!job || !job.id) return null;
+  if (!position || !position.id) return null;
 
   const menuOptions = [
     {
@@ -24,11 +24,11 @@ export function ActionMenuTablePositions({ job }: ActionMenuTablePositionsProps)
       onClick: () => {
         openAlert({
           title: 'Delete',
-          description: `Are you sure to delete job "${job.title}"?`,
+          description: `Are you sure to delete position "${position.name}"?`,
           onHandleConfirm() {
             // TODO
-            // if (!job.id) return;
-            // handleRemovePosition(job.id, closeAlert);
+            // if (!position.id) return;
+            // handleRemovePosition(position.id, closeAlert);
           },
         });
       },

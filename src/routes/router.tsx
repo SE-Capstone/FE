@@ -5,6 +5,7 @@ import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-rou
 import { authRoutes, dashboardRoutes, profileRoutes, publicRoutes } from './elements';
 import { applicantsRoutes } from './elements/applicants.route';
 import { jobsRoutes } from './elements/jobs.route';
+import { positionsRoutes } from './elements/positions.route';
 import { projectsRoutes } from './elements/projects.route';
 import { rolesRoutes } from './elements/roles.route';
 import { usersRoutes } from './elements/users.route';
@@ -40,6 +41,7 @@ const allRoutes = createBrowserRouter([
       projectsRoutes(),
       jobsRoutes(),
       applicantsRoutes(),
+      positionsRoutes(),
     ],
   },
   {

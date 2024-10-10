@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Box, Button, Image, SimpleGrid, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, HStack, Image, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
 
 import { useUpdateUserMutation } from '../apis/update-user.api';
@@ -8,6 +8,7 @@ import { updateUserFormSchema } from '../validations/update-user.validation';
 
 import type { IUser } from '../../list-user/types';
 import type { UpdateUserFormType } from '../validations/update-user.validation';
+import type { IPosition } from '@/modules/positions/types';
 import type { IBank } from '@/modules/profile/apis/get-banks.api';
 import type { IRole } from '@/modules/roles/list-role/types';
 
@@ -23,6 +24,7 @@ import {
   phoneNumberAutoFormat,
 } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
+import { useGetListPositionQuery } from '@/modules/positions/hooks/queries';
 import { useGetBanks } from '@/modules/profile/apis/get-banks.api';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetRoles } from '@/modules/roles/list-role/apis/get-roles.api';
@@ -46,8 +48,9 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
   }, [banks, listBank]);
 
   const [roles, setRoles] = useState<IRole[]>([]);
-
+  const [positions, setPositions] = useState<IPosition[]>([]);
   const { roles: listRole } = useGetRoles({});
+  const { listPosition, isLoading: isLoadingPosition } = useGetListPositionQuery();
 
   useEffect(() => {
     if (JSON.stringify(roles) !== JSON.stringify(listRole)) {
@@ -55,13 +58,19 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
     }
   }, [listRole, roles]);
 
+  useEffect(() => {
+    if (JSON.stringify(positions) !== JSON.stringify(listPosition)) {
+      setPositions(listPosition);
+    }
+  }, [listPosition, positions]);
+
   const { formState, register, reset, control } = form;
   const { errors, isDirty } = formState;
 
   const { openAlert, closeAlert } = useAlertDialogStore(isLoading);
 
   function onSubmit(values: UpdateUserFormType) {
-    if (isLoading) return;
+    if (isLoading || isLoadingPosition) return;
 
     openAlert({
       title: 'Update',
@@ -177,22 +186,36 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                 <CustomInput label="Bank account name" value={user?.bankAccountName} disabled />
               </SimpleGrid>
             </Stack>
+            <HStack align="stretch">
+              <CustomChakraReactSelect
+                isRequired
+                isSearchable
+                label="Role"
+                options={roles.map((role) => ({
+                  label: role.name,
+                  value: role.id,
+                }))}
+                control={control}
+                name="roleId"
+              />
+              <CustomChakraReactSelect
+                isSearchable
+                isRequired
+                placeholder="Choose position"
+                label="Position"
+                options={positions.map((position) => ({
+                  label: position.name,
+                  value: position.id,
+                }))}
+                control={control}
+                name="positionId"
+              />
+            </HStack>
             <CustomInput
               label="Address"
               isRequired
               registration={register('address')}
               error={errors?.address}
-            />
-            <CustomChakraReactSelect
-              isRequired
-              isSearchable
-              label="Choose role"
-              options={roles.map((role) => ({
-                label: role.name,
-                value: role.id,
-              }))}
-              control={control}
-              name="roleId"
             />
             <Stack align="center">
               <Button

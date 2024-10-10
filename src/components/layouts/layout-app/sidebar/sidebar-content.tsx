@@ -15,6 +15,7 @@ import {
 import { BiLayer } from 'react-icons/bi';
 import { BsWindowDock } from 'react-icons/bs';
 import {
+  MdOutlineLayers,
   MdOutlineCategory,
   MdOutlineHome,
   MdOutlinePeopleAlt,
@@ -95,6 +96,11 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
           icon: MdOutlinePeopleAlt,
           path: undefined,
           children: [
+            {
+              name: 'Positions',
+              icon: MdOutlineLayers,
+              path: APP_PATHS.listPosition,
+            },
             {
               name: 'Jobs',
               icon: PiBriefcase,

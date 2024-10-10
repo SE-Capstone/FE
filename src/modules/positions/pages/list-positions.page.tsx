@@ -34,11 +34,11 @@ export function ListPositionPage() {
             },
           },
           {
-            key: 'title',
-            title: 'Title',
+            key: 'name',
+            title: 'Name',
             hasSort: false,
-            Cell({ title }) {
-              return <>{title}</>;
+            Cell({ name }) {
+              return <>{name}</>;
             },
           },
           {

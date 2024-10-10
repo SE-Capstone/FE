@@ -50,7 +50,12 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
       title="Create user"
       triggerButton={() => children}
       renderFooter={() => (
-        <Button form="form-create-user" w={20} type="submit" isDisabled={isLoading}>
+        <Button
+          form="form-create-user"
+          w={20}
+          type="submit"
+          isDisabled={isLoading || isLoadingPosition}
+        >
           Save
         </Button>
       )}
@@ -129,7 +134,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
           />
           <HStack align="stretch">
             <CustomChakraReactSelect
-              isSearchable={false}
+              isSearchable
               isRequired
               placeholder="Choose role"
               label="Role"
@@ -140,6 +145,19 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
               }))}
               control={control}
               name="roleId"
+            />
+            <CustomChakraReactSelect
+              isSearchable
+              isRequired
+              placeholder="Choose position"
+              label="Position"
+              size="lg"
+              options={positions.map((position) => ({
+                label: position.name,
+                value: position.id,
+              }))}
+              control={control}
+              name="positionId"
             />
           </HStack>
         </Stack>

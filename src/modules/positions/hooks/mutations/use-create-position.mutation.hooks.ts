@@ -1,16 +1,15 @@
 import { useCallback } from 'react';
 
 import { useCreatePositionMutation } from '../../apis/create-position.api';
-import { jobFormSchema } from '../../validations/postions.validations';
+import { positionFormSchema } from '../../validations/postions.validations';
 
 import type { PositionFormValues } from '../../validations/postions.validations';
 
-import { formatDate } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export function useCreatePositionHook() {
   const formCreatePosition = useFormWithSchema({
-    schema: jobFormSchema,
+    schema: positionFormSchema,
   });
 
   const { reset } = formCreatePosition;

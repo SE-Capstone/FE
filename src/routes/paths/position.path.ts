@@ -1,3 +1,3 @@
-export const jobsPaths = {
+export const positionsPaths = {
   listPosition: `/positions`,
 } as const;

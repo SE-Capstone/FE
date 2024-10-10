@@ -22,6 +22,7 @@ export const userFormSchema = z.object({
   status: z.nativeEnum(UserStatusEnum, { message: 'Invalid status' }).optional(),
   address: z.string().trim().min(1).max(255),
   roleId: z.string().trim().min(1),
+  positionId: z.string().trim().min(1),
 });
 
 export type UserFormValues = z.infer<typeof userFormSchema>;

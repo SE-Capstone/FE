@@ -13,6 +13,7 @@ export const updateUserFormSchema = z.object({
   avatar: z.instanceof(File).optional().or(z.string().optional()),
   status: z.nativeEnum(UserStatusEnum, { message: 'Invalid status' }).optional(),
   roleId: z.string().trim().min(1),
+  positionId: z.string().trim().min(1),
 });
 
 export type UpdateUserFormType = z.infer<typeof updateUserFormSchema>;
