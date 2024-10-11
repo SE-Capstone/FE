@@ -100,6 +100,16 @@ export const getDateField = () =>
   );
 // .refine((date) => isDateAfterToday(date), 'Date must not be in the past');
 
+export const getOptionalDateField = () =>
+  z.preprocess((arg) => {
+    if (arg === '') {
+      return undefined;
+    }
+    if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
+
+    return undefined;
+  }, z.date().optional());
+
 export const numericStringField = (schema: ZodTypeAny) =>
   z.preprocess((a) => {
     if (typeof a === 'string') {

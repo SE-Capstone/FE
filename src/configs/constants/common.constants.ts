@@ -19,6 +19,12 @@ export const FILE_TYPES_IMAGES = ['jpeg', 'png', 'jpg', 'heic', 'heif'];
 
 export const REGEX_FILE_TYPE_IMAGES = /([a-zA-Z0-9\s_\\.\-\(\):])+(.jpeg|.png|.jpg|.heic|.heif)$/i;
 
+export const REGEX_FILE_TYPE_VIDEOS = /\.(mp4|mov|avi|wmv)$/i;
+
+export const REGEX_FILE_TYPE_PDFS = /\.pdf$/i;
+
+export const REGEX_FILE_TYPE_WORD = /\.(doc|docx)$/i;
+
 export const REGEX_PASSWORD =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 

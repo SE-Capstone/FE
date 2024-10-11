@@ -56,7 +56,7 @@ export const RichTextEditor = (props: RichTextEditorProps) => {
       if (!file) return;
 
       // max size 500 kb
-      const { isValid, message } = validateFiles([file], 'image', 500 * 1024);
+      const { isValid, message } = validateFiles([file], ['image'], 500 * 1024);
 
       if (!isValid) {
         notify({

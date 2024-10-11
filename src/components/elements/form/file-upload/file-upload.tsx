@@ -29,6 +29,8 @@ type FileUploadProps<TFormValues extends FieldValues> = Omit<
 > & {
   initUrl?: string;
 
+  displayFileName?: boolean;
+  types?: Array<'image' | 'video' | 'pdf' | 'word'>;
   acceptedFileTypes?: string;
   control?: Control<TFormValues>;
   name: FieldPathByValue<TFormValues, any>;
@@ -44,8 +46,11 @@ export const FileUpload = <TFormValues extends FieldValues>({
   initUrl = '',
   control,
   isRequired = false,
+  types = ['image'],
   error,
+  displayFileName = false,
   controlProps,
+  acceptedFileTypes = 'image/*',
   labelProps,
   stackProps,
   trigger,
@@ -64,6 +69,7 @@ export const FileUpload = <TFormValues extends FieldValues>({
   const isError = !!error;
 
   const [filePreview, setFilePreview] = useState(initUrl);
+  const [fileName, setFileName] = useState<string | null>(null);
 
   const { setError, clearErrors } = useFormContext<TFormValues>();
 
@@ -92,6 +98,7 @@ export const FileUpload = <TFormValues extends FieldValues>({
     e.stopPropagation();
     e.preventDefault();
     setFilePreview('');
+    setFileName(null);
     clearErrors(name);
     field.onChange(null as any);
   }
@@ -106,20 +113,21 @@ export const FileUpload = <TFormValues extends FieldValues>({
         <Stack pos="relative" spacing={4} {...stackProps} onClick={(e) => e.preventDefault()}>
           {childrenClone}
           <HStack spacing={2} onClick={(e) => e.preventDefault()}>
+            {triggerBtn}
             {filePreview && (
               <Tooltip label="Xoá" placement="top" hasArrow onClick={(e) => e.preventDefault()}>
                 <IconButton
                   aria-label="DeleteImage"
                   variant="ghost"
-                  size="sm"
+                  size="md"
                   shadow="md"
                   icon={<Icon as={BiTrash} boxSize={4} color="red.400" />}
                   onClick={handleDeletePreview}
                 />
               </Tooltip>
             )}
-            {triggerBtn}
           </HStack>
+          {displayFileName && fileName && <Text>{fileName}</Text>}
           {isError && <Text color="red.500">{error?.message}</Text>}
         </Stack>
       </FormLabel>
@@ -127,7 +135,7 @@ export const FileUpload = <TFormValues extends FieldValues>({
         <Input
           ref={inputRef}
           type="file"
-          accept="image/*"
+          accept={acceptedFileTypes}
           hidden
           {...inputFileProps}
           {...field}
@@ -135,7 +143,7 @@ export const FileUpload = <TFormValues extends FieldValues>({
             const file = e.target?.files?.[0];
             if (!file) return;
 
-            const { isValid, message } = validateFiles([file]);
+            const { isValid, message } = validateFiles([file], types);
 
             if (!isValid) {
               setError(name, { message }, { shouldFocus: true });
@@ -143,6 +151,7 @@ export const FileUpload = <TFormValues extends FieldValues>({
               return;
             }
 
+            setFileName(file.name);
             setFilePreview(URL.createObjectURL(file));
             if (error) clearErrors(name);
             field.onChange(file as any);

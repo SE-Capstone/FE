@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Button, Icon, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
 import { MdOutlineFileUpload } from 'react-icons/md';
@@ -48,6 +50,13 @@ export function AddNewApplicantWidget(props: AddNewApplicantWidgetProps) {
             registration={register('name')}
             error={errors.name}
           />
+          <CustomInput
+            label="Email"
+            type="email"
+            isRequired
+            registration={register('email')}
+            error={errors.email}
+          />
           <Controller
             name="phoneNumber"
             control={control}
@@ -78,6 +87,9 @@ export function AddNewApplicantWidget(props: AddNewApplicantWidgetProps) {
             control={control}
             name="cvFile"
             error={errors?.cvFile}
+            types={['pdf', 'word']}
+            displayFileName
+            acceptedFileTypes="application/pdf,application/msword"
             trigger={() => (
               <Button
                 color="secondary"
@@ -94,7 +106,7 @@ export function AddNewApplicantWidget(props: AddNewApplicantWidgetProps) {
             controlProps={{
               bg: 'white',
               rounded: '8px',
-              w: { base: 'full', xl: '30%' },
+              w: { base: 'full' },
             }}
             labelProps={{
               w: 'full',

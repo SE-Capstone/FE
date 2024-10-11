@@ -4,7 +4,14 @@ import duration from 'dayjs/plugin/duration';
 
 import type { IErrorValidation } from '@/types';
 
-import { MAX_SIZE_IMAGE, REGEX_FILE_TYPE_IMAGES, STORAGE_URL } from '@/configs';
+import {
+  MAX_SIZE_IMAGE,
+  REGEX_FILE_TYPE_IMAGES,
+  REGEX_FILE_TYPE_PDFS,
+  REGEX_FILE_TYPE_VIDEOS,
+  REGEX_FILE_TYPE_WORD,
+  STORAGE_URL,
+} from '@/configs';
 
 dayjs.extend(duration);
 /**
@@ -489,23 +496,50 @@ export function formatNumberPrice(
 
 export function validateFiles(
   files: File[],
-  type: 'image' | 'video' = 'image',
+  types: Array<'image' | 'video' | 'pdf' | 'word'> = ['image'],
   maxSize = MAX_SIZE_IMAGE // unit bytes
 ) {
-  const isValidFileImages = [...files].some((file) => file.name.match(REGEX_FILE_TYPE_IMAGES));
+  const fileTypeValidators = {
+    image: {
+      regex: REGEX_FILE_TYPE_IMAGES,
+      message: '.png, .jpg, .jpeg, .heic, .heif',
+    },
+    video: {
+      regex: REGEX_FILE_TYPE_VIDEOS,
+      message: '.mp4, .mov, .avi, .wmv',
+    },
+    pdf: {
+      regex: REGEX_FILE_TYPE_PDFS,
+      message: '.pdf',
+    },
+    word: {
+      regex: REGEX_FILE_TYPE_WORD,
+      message: '.doc, .docx',
+    },
+  };
 
-  if (!isValidFileImages && type === 'image') {
+  const isValidFileType = files.some((file) =>
+    types.some((type) => fileTypeValidators[type]?.regex.test(file.name))
+  );
+
+  if (!isValidFileType) {
+    const allowedTypesMessage = types
+      .map((type) => fileTypeValidators[type]?.message)
+      .filter(Boolean)
+      .join(',\n');
+
     return {
       isValid: false,
-      message: 'Invalid image. Allowed types: .png, .jpg, .jpeg, .heic, .heif',
+      message: `Invalid file type. Allowed file types: ${allowedTypesMessage}`,
     };
   }
+
   const isValidFileSize = [...files].every((file) => file.size <= maxSize);
 
   if (!isValidFileSize) {
     return {
       isValid: false,
-      message: `Image can not exceed ${Math.floor(maxSize / 1024)} Kb`,
+      message: `File size can not exceed ${Math.floor(maxSize / 1024)} Kb`,
     };
   }
 

@@ -26,6 +26,7 @@ function mutation(req: ICreateApplicantRequest) {
     method: 'POST',
     url: ALL_ENDPOINT_URL_STORE.applicants.create,
     data: body,
+    isFormData: true,
   });
 }
 
