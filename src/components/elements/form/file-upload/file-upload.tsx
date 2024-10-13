@@ -17,7 +17,7 @@ import { useController, useFormContext } from 'react-hook-form';
 import { BiTrash } from 'react-icons/bi';
 
 import type { CustomInputProps } from '../custom-input';
-import type { StackProps } from '@chakra-ui/react';
+import type { FormLabelProps, StackProps } from '@chakra-ui/react';
 import type { FieldValues } from 'react-hook-form';
 import type { Control, FieldPathByValue } from 'react-hook-form/dist/types';
 
@@ -34,11 +34,13 @@ type FileUploadProps<TFormValues extends FieldValues> = Omit<
   acceptedFileTypes?: string;
   control?: Control<TFormValues>;
   name: FieldPathByValue<TFormValues, any>;
+  label?: string;
   trigger: (url: string) => React.ReactElement;
 
   children?: (url: string) => React.ReactNode;
 
   stackProps?: StackProps;
+  labelProps?: FormLabelProps;
 };
 
 export const FileUpload = <TFormValues extends FieldValues>({
@@ -52,6 +54,7 @@ export const FileUpload = <TFormValues extends FieldValues>({
   controlProps,
   acceptedFileTypes = 'image/*',
   labelProps,
+  label,
   stackProps,
   trigger,
   children,
@@ -109,7 +112,15 @@ export const FileUpload = <TFormValues extends FieldValues>({
       isRequired={isRequired}
       {...controlProps}
     >
-      <FormLabel {...labelProps}>
+      <FormLabel
+        color="black"
+        opacity={0.75}
+        fontSize={{ base: 'xs', md: 'sm' }}
+        lineHeight="18px"
+        fontWeight={500}
+        {...labelProps}
+      >
+        {label && <Text mb={2}>{label}</Text>}
         <Stack pos="relative" spacing={4} {...stackProps} onClick={(e) => e.preventDefault()}>
           {childrenClone}
           <HStack spacing={2} onClick={(e) => e.preventDefault()}>
