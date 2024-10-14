@@ -215,6 +215,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
                               },
                             },
                           }}
+                          component={<Box />}
                         >
                           <NavItem
                             key={child.path}
@@ -235,6 +236,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
               return (
                 <MenuItem
                   key={link.name}
+                  component={<Box />}
                   rootStyles={{
                     [`& > .ps-menu-button`]: {
                       padding: '0.5rem !important',

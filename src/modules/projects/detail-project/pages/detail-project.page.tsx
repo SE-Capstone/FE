@@ -8,6 +8,7 @@ import { CustomTabs, Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
 import { ListIssuePage } from '@/modules/issues/list-issue';
 import { IssuesQueryProvider } from '@/modules/issues/list-issue/contexts';
+import { ListLabelPage } from '@/modules/labels';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailProjectPage() {
@@ -41,6 +42,10 @@ export function DetailProjectPage() {
                 title: 'Overview',
                 link: `${APP_PATHS.listProject}/${projectId}`,
                 childrenPanel: <BaseInformationProjectWidget project={project} />,
+              },
+              {
+                title: 'Labels',
+                childrenPanel: <ListLabelPage />,
               },
               {
                 title: 'Issues',

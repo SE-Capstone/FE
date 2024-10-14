@@ -9,7 +9,7 @@ const initialState = {
   description:
     `Are you sure to do this action? You can't undo this action afterwards.` as React.ReactNode,
   textConfirm: 'OK',
-  type: 'error' as 'error' | 'info',
+  type: 'error' as 'error' | 'info' | 'warning',
   isOpenAlert: false,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onHandleConfirm() {},

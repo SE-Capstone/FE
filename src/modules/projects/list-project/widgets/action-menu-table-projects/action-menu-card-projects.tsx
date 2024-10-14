@@ -43,7 +43,9 @@ export function ActionMenuTableProjects({ project }: ActionMenuTableProjectsProp
       icon: <Icon as={project.isVisible ? MdOutlineToggleOff : MdOutlineToggleOn} boxSize={5} />,
       onClick: () => {
         openAlert({
-          title: 'Update',
+          title: 'Archive project?',
+          type: 'warning',
+          textConfirm: 'Archive',
           description: `Are you sure to change project to "${
             project.isVisible ? 'Invisible' : 'Visible'
           }"?`,

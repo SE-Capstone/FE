@@ -8,9 +8,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Stack,
   Text,
   useDisclosure,
-  useMediaQuery,
+  Button,
 } from '@chakra-ui/react';
 
 import type { MaybeElementRenderProps, NeverField, RequireField } from '@/types';
@@ -80,8 +81,6 @@ export function ModalBase(props: ModalBaseProps) {
 
   const { isOpen, onClose, onOpen } = disClosureProps;
 
-  const [isBiggerThan500px] = useMediaQuery('(min-width: 500px)');
-
   const trigger =
     triggerButton && typeof triggerButton === 'function'
       ? React.cloneElement(triggerButton(disClosureProps), {
@@ -113,7 +112,7 @@ export function ModalBase(props: ModalBaseProps) {
       {trigger}
       <Modal
         size="xl"
-        isCentered={isBiggerThan500px}
+        isCentered
         closeOnOverlayClick={!isLoading}
         scrollBehavior="inside"
         {...restModalProps}
@@ -136,7 +135,23 @@ export function ModalBase(props: ModalBaseProps) {
           </ModalHeader>
           {!isLoading && <ModalCloseButton isDisabled={isLoading} onClick={onClose} />}
           <ModalBody>{childrenRender}</ModalBody>
-          {renderFooter && <ModalFooter justifyContent="center">{footerRender}</ModalFooter>}
+          {renderFooter && (
+            <ModalFooter justifyContent="right">
+              <Stack flexDir="row">
+                <Button
+                  variant="ghost"
+                  border="1px"
+                  borderColor="transparent"
+                  color="textColor"
+                  isDisabled={isLoading}
+                  onClick={onClose}
+                >
+                  Cancel
+                </Button>
+                {footerRender}
+              </Stack>
+            </ModalFooter>
+          )}
         </ModalContent>
       </Modal>
     </>

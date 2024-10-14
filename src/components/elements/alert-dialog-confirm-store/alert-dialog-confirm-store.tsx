@@ -62,9 +62,9 @@ export const AlertDialogConfirmStore = () => {
           </Button>
           <Button
             minW="80px"
-            bg={type === 'error' ? 'red.600' : 'primary'}
+            bg={type === 'error' ? 'red.600' : type === 'warning' ? 'yellow.400' : 'primary'}
             _hover={{
-              bg: type === 'error' ? 'red.600' : 'primary',
+              bg: type === 'error' ? 'red.600' : type === 'warning' ? 'yellow.400' : 'primary',
               opacity: 0.8,
             }}
             ml={3}

@@ -208,4 +208,5 @@ export const DEFAULT_MESSAGE = {
   SOMETHING_WRONG: 'Something went wrong, please try again',
   UPDATE_SUCCESS: 'Update successfully',
   CREATE_SUCCESS: 'Create successfully',
+  DELETE_SUCCESS: 'Delete successfully',
 };
