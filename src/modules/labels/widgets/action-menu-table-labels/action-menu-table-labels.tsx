@@ -41,6 +41,7 @@ export function ActionMenuTableLabels({ label, listLabel }: ActionMenuTableLabel
         }
 
         disclosureModalRemoveLabel.onOpen();
+        return undefined;
       },
     },
   ].filter(Boolean);

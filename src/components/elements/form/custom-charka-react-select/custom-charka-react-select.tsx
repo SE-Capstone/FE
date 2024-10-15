@@ -25,7 +25,7 @@ import type { FieldValues } from 'react-hook-form';
 import { FieldWrapper } from '@/components/elements';
 
 export interface CustomOptionSelectBase extends OptionBase {
-  label: string;
+  label: string | JSX.Element;
   value: number | string;
   isDisabled?: boolean;
   onClickOption?: () => void;
@@ -223,7 +223,9 @@ export const CustomChakraReactSelect = <
 
             if (isMulti && Array.isArray(multipleOption)) {
               field.onChange(multipleOption.map((opt) => opt.value) as any);
-              onChangeLabel?.(multipleOption.map((opt) => opt.label));
+              onChangeLabel?.(
+                multipleOption.map((opt) => (typeof opt?.label === 'string' ? opt.label : ''))
+              );
               return;
             }
 
@@ -231,7 +233,7 @@ export const CustomChakraReactSelect = <
 
             field.onChange(singleOption?.value ?? (undefined as any));
 
-            onChangeLabel?.([singleOption?.label || '']);
+            onChangeLabel?.([typeof singleOption?.label === 'string' ? singleOption.label : '']);
           },
         };
         return (

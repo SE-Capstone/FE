@@ -134,6 +134,27 @@ export const USER_STATUS_OPTIONS = [
   },
 ];
 
+export const COLOR_OPTIONS = [
+  'whiteAlpha',
+  'blackAlpha',
+  'gray',
+  'red',
+  'orange',
+  'yellow',
+  'green',
+  'teal',
+  'blue',
+  'cyan',
+  'purple',
+  'pink',
+  'linkedin',
+  'facebook',
+  'messenger',
+  'whatsapp',
+  'twitter',
+  'telegram',
+];
+
 export const USER_STATUS_LABEL: Record<UserStatusEnum, string> = {
   [UserStatusEnum.Active]: `Active`,
   [UserStatusEnum.Inactive]: `Inactive`,

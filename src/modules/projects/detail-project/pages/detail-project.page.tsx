@@ -9,6 +9,7 @@ import { LayoutBack } from '@/components/layouts';
 import { ListIssuePage } from '@/modules/issues/list-issue';
 import { IssuesQueryProvider } from '@/modules/issues/list-issue/contexts';
 import { ListLabelPage } from '@/modules/labels';
+import { ListStatusPage } from '@/modules/statuses';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailProjectPage() {
@@ -46,6 +47,10 @@ export function DetailProjectPage() {
               {
                 title: 'Labels',
                 childrenPanel: <ListLabelPage />,
+              },
+              {
+                title: 'Status',
+                childrenPanel: <ListStatusPage />,
               },
               {
                 title: 'Issues',

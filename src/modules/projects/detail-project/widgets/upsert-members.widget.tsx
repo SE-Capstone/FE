@@ -77,13 +77,11 @@ export function UpsertMembersWidget(props: UpsertMembersWidgetProps) {
               }
 
               handleSubmit();
+              return undefined;
             }}
           >
             Save
           </Button>
-          {/* <Button w={20} variant="ghost" isDisabled={isLoading} onClick={resetForm}>
-            Reset
-          </Button> */}
         </Stack>
       )}
       onCloseComplete={reset}

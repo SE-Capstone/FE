@@ -7,6 +7,7 @@ import { PERMISSIONS_ENDPOINT_URL } from './permissions/permissions-endpoint-url
 import { POSITIONS_ENDPOINT_URL } from './position';
 import { PROJECTS_ENDPOINT_URL } from './project';
 import { ROLES_ENDPOINT_URL } from './roles';
+import { STATUSES_ENDPOINT_URL } from './status';
 import { USERS_ENDPOINT_URL } from './user';
 
 export const ALL_ENDPOINT_URL_STORE = {
@@ -20,4 +21,5 @@ export const ALL_ENDPOINT_URL_STORE = {
   permissions: PERMISSIONS_ENDPOINT_URL,
   positions: POSITIONS_ENDPOINT_URL,
   labels: LABELS_ENDPOINT_URL,
+  statuses: STATUSES_ENDPOINT_URL,
 } as const;

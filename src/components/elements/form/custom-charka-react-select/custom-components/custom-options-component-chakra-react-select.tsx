@@ -15,7 +15,7 @@ export function CustomOptionComponentChakraReactSelect<
   return (
     <chakraComponents.Option {...props} innerProps={newInnerProps}>
       <HStack w="full" role="group">
-        <Avatar src={data.image} boxSize={10} name={data.label} />
+        <Avatar src={data.image} boxSize={10} name={data.label as string} />
 
         <Text color="inherit">{data.label}</Text>
       </HStack>

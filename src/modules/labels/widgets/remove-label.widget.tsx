@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import { Button, Stack, Text } from '@chakra-ui/react';
 
 import { useRemoveLabelMutation } from '../apis/delete-label.api';
@@ -11,17 +9,17 @@ import type { RemoveLabelFormValues } from '../validations/remove-label.validati
 import { CustomChakraReactSelect, CustomFormProvider, ModalBase } from '@/components/elements';
 import { useFormWithSchema } from '@/libs/hooks';
 
-export interface UpsertLabelWidgetProps {
+export interface RemoveLabelWidgetProps {
   listLabel: ILabel[];
   label: ILabel;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function RemoveLabelWidget(props: UpsertLabelWidgetProps) {
+export function RemoveLabelWidget(props: RemoveLabelWidgetProps) {
   const { label, listLabel, isOpen, onClose } = props;
 
-  const formUpsertLabel = useFormWithSchema({
+  const formRemoveLabel = useFormWithSchema({
     schema: removeLabelFormSchema,
   });
 
@@ -29,7 +27,7 @@ export function RemoveLabelWidget(props: UpsertLabelWidgetProps) {
     control,
     formState: { isDirty },
     reset,
-  } = formUpsertLabel;
+  } = formRemoveLabel;
 
   const { mutate, isPending: isLoading } = useRemoveLabelMutation({ closeAlert: onClose });
 
@@ -69,7 +67,7 @@ export function RemoveLabelWidget(props: UpsertLabelWidgetProps) {
       onClose={onClose}
       onCloseComplete={reset}
     >
-      <CustomFormProvider id="form-upsert-label" form={formUpsertLabel} onSubmit={onSubmit}>
+      <CustomFormProvider id="form-upsert-label" form={formRemoveLabel} onSubmit={onSubmit}>
         <Stack spacing={5}>
           <Text>
             Your project has {label.issueCount} {`"${label.title}"`} issues. Before you can delete
