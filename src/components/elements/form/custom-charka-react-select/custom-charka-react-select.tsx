@@ -7,7 +7,6 @@ import { Controller } from 'react-hook-form';
 
 import type { MayBeController } from '../types';
 import type { FieldWrapperProps } from '@/components/elements';
-import type { As } from '@chakra-ui/react';
 import type {
   Props as ChakraSelectProps,
   ChakraStylesConfig,
@@ -29,7 +28,7 @@ export interface CustomOptionSelectBase extends OptionBase {
   value: number | string;
   isDisabled?: boolean;
   onClickOption?: () => void;
-  IconOption?: As;
+  IconOption?: any;
 }
 
 export type CustomChakraReactSelectProps<

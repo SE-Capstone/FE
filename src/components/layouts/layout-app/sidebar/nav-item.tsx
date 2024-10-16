@@ -3,10 +3,10 @@ import type { ReactNode } from 'react';
 import { Box, Flex, Icon } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 
-import type { As, FlexProps } from '@chakra-ui/react';
+import type { FlexProps } from '@chakra-ui/react';
 
 export interface NavItemProps extends FlexProps {
-  icon?: As;
+  icon?: any;
   children: ReactNode;
   path?: string;
   isTransitionOn?: boolean;

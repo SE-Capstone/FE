@@ -97,6 +97,8 @@ export default function RichTextExample() {
 
   const onChangeContent = (value: any) => {
     setContent(value);
+    // eslint-disable-next-line no-console
+    console.log(content);
   };
 
   return (
@@ -105,7 +107,7 @@ export default function RichTextExample() {
         dark={false}
         label="Editor"
         output="html"
-        content={content}
+        content={DEFAULT}
         extensions={extensions}
         onChangeContent={onChangeContent}
       />
