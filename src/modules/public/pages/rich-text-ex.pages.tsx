@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { Container } from '@chakra-ui/react';
 import RichTextEditor, {
   BaseKit,
   Blockquote,
@@ -30,6 +31,7 @@ import RichTextEditor, {
   TextDirection,
   Mention,
 } from 'reactjs-tiptap-editor';
+
 import 'reactjs-tiptap-editor/style.css';
 
 const extensions = [
@@ -95,17 +97,18 @@ export default function RichTextExample() {
 
   const onChangeContent = (value: any) => {
     setContent(value);
-    console.log(value);
   };
 
   return (
-    <RichTextEditor
-      dark={false}
-      label="Editor"
-      output="html"
-      content={content}
-      extensions={extensions}
-      onChangeContent={onChangeContent}
-    />
+    <Container mt={5}>
+      <RichTextEditor
+        dark={false}
+        label="Editor"
+        output="html"
+        content={content}
+        extensions={extensions}
+        onChangeContent={onChangeContent}
+      />
+    </Container>
   );
 }
