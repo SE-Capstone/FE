@@ -1,11 +1,10 @@
-import { Button, Icon, SimpleGrid, Stack } from '@chakra-ui/react';
+import { Button, Icon, Stack } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
 import { MdOutlineFileUpload } from 'react-icons/md';
 
 import { useCreateApplicantHook } from '../hooks/mutations';
 
 import { CustomFormProvider, CustomInput, FileUpload, ModalBase } from '@/components/elements';
-import { EditRow } from '@/components/widgets';
 import { phoneNumberAutoFormat } from '@/libs/helpers';
 
 export interface AddNewApplicantWidgetProps {

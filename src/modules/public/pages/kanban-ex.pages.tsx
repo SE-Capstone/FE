@@ -191,7 +191,7 @@ export default function KanbanExample() {
             trigger,
           },
         };
-        console.log('result', a);
+
         return a;
       });
     },
@@ -244,7 +244,6 @@ export default function KanbanExample() {
           },
         };
 
-        console.log('result', a);
         return a;
       });
     },
@@ -306,8 +305,6 @@ export default function KanbanExample() {
             trigger,
           },
         };
-
-        console.log('result', a);
 
         return a;
       });

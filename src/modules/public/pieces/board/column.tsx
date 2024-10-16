@@ -176,11 +176,8 @@ function ActionMenuItems() {
       finishIndex: startIndex - 1,
     });
   }, [reorderColumn, startIndex]);
-  console.log(columnId);
-  console.log(startIndex);
+
   const moveRight = useCallback(() => {
-    console.log(startIndex);
-    console.log(startIndex + 1);
     reorderColumn({
       startIndex,
       finishIndex: startIndex + 1,

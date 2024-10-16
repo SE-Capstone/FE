@@ -1,7 +1,7 @@
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 
 export function DetailIssuePage() {
-  const { issueId } = useParams();
+  // const { issueId } = useParams();
 
-  return <></>;
+  return <>Some text</>;
 }

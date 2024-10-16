@@ -5,7 +5,6 @@ import { jobFormSchema } from '../../validations/jobs.validations';
 
 import type { JobFormValues } from '../../validations/jobs.validations';
 
-import { formatDate } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export function useCreateJobHook() {
