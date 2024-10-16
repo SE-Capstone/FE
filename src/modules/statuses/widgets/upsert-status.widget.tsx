@@ -44,6 +44,7 @@ export function UpsertStatusWidget(props: UpsertStatusWidgetProps) {
       resetForm(
         {
           name: status.name || '',
+          color: status.color || '',
           description: status.description || '',
         },
         {

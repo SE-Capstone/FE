@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ElementType, ReactNode } from 'react';
 
 import { Box, Flex, Icon } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 import type { FlexProps } from '@chakra-ui/react';
 
 export interface NavItemProps extends FlexProps {
-  icon?: any;
+  icon?: ElementType;
   children: ReactNode;
   path?: string;
   isTransitionOn?: boolean;

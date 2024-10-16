@@ -8,6 +8,7 @@ export type IStatus = {
   id: string;
   name: string;
   description: string;
+  position: number;
   color: ThemingProps['colorScheme'];
   projectId: string;
   issueCount: number;

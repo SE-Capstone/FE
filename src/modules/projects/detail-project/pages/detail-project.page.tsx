@@ -8,12 +8,14 @@ import { CustomTabs, Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
 import { ListIssuePage } from '@/modules/issues/list-issue';
 import { IssuesQueryProvider } from '@/modules/issues/list-issue/contexts';
+import KanbanWidget from '@/modules/issues/list-issue/widgets/kanban/kanban.widget';
 import { ListLabelPage } from '@/modules/labels';
 import { ListStatusPage } from '@/modules/statuses';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailProjectPage() {
   const { projectId } = useParams();
+
   const { project, isLoading, isError } = useGetDetailProject({ projectId: projectId || '' });
 
   return (
@@ -51,6 +53,10 @@ export function DetailProjectPage() {
               {
                 title: 'Status',
                 childrenPanel: <ListStatusPage />,
+              },
+              {
+                title: 'Kanban',
+                childrenPanel: <KanbanWidget />,
               },
               {
                 title: 'Issues',

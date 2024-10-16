@@ -49,8 +49,13 @@ export function useGetListStatusQuery(props: UseGetListStatusQueryProps = {}) {
     ...configs,
   });
 
+  const refetch = () => {
+    query.refetch();
+  };
+
   return {
     ...query,
+    refetch,
     listStatus: query.data?.data || [],
   };
 }

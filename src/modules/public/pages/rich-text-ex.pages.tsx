@@ -49,21 +49,12 @@ const extensions = [
   History,
   HorizontalRule,
   Image,
-  // ImageUpload.configure({
-  //   upload: (files: File) =>
-  //     new Promise((resolve) => {
-  //       setTimeout(() => {
-  //         resolve(URL.createObjectURL(files));
-  //       }, 500);
-  //     }),
-  // }),
   ImageUpload.configure({
     upload: (files: File) =>
       new Promise((resolve, reject) => {
         const reader = new FileReader();
 
         reader.onloadend = () => {
-          // `result` contains the base64-encoded string
           const base64String = reader.result;
           resolve(base64String as any);
         };
@@ -72,7 +63,7 @@ const extensions = [
           reject(error);
         };
 
-        reader.readAsDataURL(files); // Convert the file to a base64 string
+        reader.readAsDataURL(files);
       }),
   }),
   Italic,
@@ -97,8 +88,6 @@ export default function RichTextExample() {
 
   const onChangeContent = (value: any) => {
     setContent(value);
-    // eslint-disable-next-line no-console
-    console.log(content);
   };
 
   return (
@@ -107,7 +96,7 @@ export default function RichTextExample() {
         dark={false}
         label="Editor"
         output="html"
-        content={DEFAULT}
+        content={content}
         extensions={extensions}
         onChangeContent={onChangeContent}
       />

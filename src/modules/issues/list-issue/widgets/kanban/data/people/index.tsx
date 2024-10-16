@@ -1,8 +1,8 @@
-/**
- * These imports are written out explicitly because they
- * need to be statically analyzable to be uploaded to CodeSandbox correctly.
- */
-import Alexander from './images/processed/Alexander';
+import { useParams } from 'react-router-dom';
+
+import Vania from './images/processed/Vania';
+
+import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 
 export type Person = {
   userId: string;
@@ -12,7 +12,7 @@ export type Person = {
 };
 
 const avatarMap: Record<string, string> = {
-  Alexander,
+  Vania,
 };
 
 const names: string[] = Object.keys(avatarMap);
@@ -92,29 +92,32 @@ export function getData({
   };
 }
 
-export function getBasicData() {
-  const columnMap: ColumnMap = {
-    confluence: {
-      title: 'Confluence',
-      columnId: 'confluence',
-      items: getPeople({ amount: 10 }),
+export function useGetBasicData() {
+  const { projectId } = useParams();
+  const { listStatus, ...rest } = useGetListStatusQuery({
+    params: {
+      projectId: projectId || '',
     },
-    jira: {
-      title: 'Jira',
-      columnId: 'jira',
-      items: getPeople({ amount: 10 }),
-    },
-    trello: {
-      title: 'Trello',
-      columnId: 'trello',
-      items: getPeople({ amount: 10 }),
-    },
-  };
+  });
 
-  const orderedColumnIds = ['confluence', 'jira', 'trello'];
+  const columnMap: ColumnMap = listStatus
+    .sort((a, b) => a.position - b.position)
+    .reduce((acc, item) => {
+      acc[item.id] = {
+        title: item.name,
+        columnId: item.id,
+        items: getPeople({ amount: 10 }), // Assuming this function returns an array of items
+      };
+      return acc;
+    }, {});
+
+  const orderedColumnIds = listStatus
+    .sort((a, b) => a.position - b.position)
+    .map((item) => item.id);
 
   return {
     columnMap,
     orderedColumnIds,
+    ...rest,
   };
 }

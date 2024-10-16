@@ -8,15 +8,19 @@ import { triggerPostMoveFlash } from '@atlaskit/pragmatic-drag-and-drop-flourish
 import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
 import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index';
 import * as liveRegion from '@atlaskit/pragmatic-drag-and-drop-live-region';
+import { useParams } from 'react-router-dom';
 import invariant from 'tiny-invariant';
 
-import { type ColumnMap, type ColumnType, getBasicData, type Person } from './data/people';
+import Connector from '../signalR-connection';
+import { type ColumnMap, type ColumnType, type Person, useGetBasicData } from './data/people';
 import Board from './pieces/board/board';
 import { BoardContext, type BoardContextValue } from './pieces/board/board-context';
 import { Column } from './pieces/board/column';
 import { createRegistry } from './pieces/board/registry';
 
 import type { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/types';
+
+import { getAccessToken } from '@/libs/helpers';
 
 type Outcome =
   | {
@@ -51,23 +55,49 @@ type BoardState = {
   lastOperation: Operation | null;
 };
 
-export default function KanbanExample() {
-  const [data, setData] = useState<BoardState>(() => {
-    const base = getBasicData();
-    const savedData = localStorage.getItem('kanbanDataEx');
-    if (savedData) {
-      return JSON.parse(savedData) as BoardState;
-    }
-    return {
-      ...base,
-      lastOperation: null,
+export default function KanbanWidget() {
+  const { projectId } = useParams();
+  const accessToken = getAccessToken();
+  const { columnMap, orderedColumnIds, isLoading, refetch } = useGetBasicData();
+
+  const { sendMessage, events } = Connector(accessToken || '', projectId || '');
+  useEffect(() => {
+    const handleMessageReceived = () => {
+      console.log('Refetching data due to message received');
+      refetch(); // Call refetch when a message is received
     };
-  });
+    events(handleMessageReceived);
+  }, [events, refetch]);
+
+  // console.log(newMessage);
+  // console.log(message);
+  const [data, setData] = useState<BoardState>(() =>
+    // const savedData = localStorage.getItem('kanbanDataEx');
+    // if (savedData) {
+    //   return JSON.parse(savedData) as BoardState;
+    // }
+    ({
+      columnMap,
+      orderedColumnIds,
+      lastOperation: null,
+    })
+  );
+
+  useEffect(() => {
+    if (!isLoading && columnMap && orderedColumnIds) {
+      setData({
+        columnMap,
+        orderedColumnIds,
+        lastOperation: null,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   const stableData = useRef(data);
   useEffect(() => {
     stableData.current = data;
-    localStorage.setItem('kanbanDataEx', JSON.stringify(data));
+    // localStorage.setItem('kanbanDataEx', JSON.stringify(data));
   }, [data]);
 
   const [registry] = useState(createRegistry);
@@ -191,7 +221,12 @@ export default function KanbanExample() {
             trigger,
           },
         };
-        console.log('result', a);
+        console.log('result', outcome);
+        sendMessage({
+          projectId: projectId || '',
+          statusId: outcome.columnId,
+          position: outcome.finishIndex + 1,
+        });
         return a;
       });
     },

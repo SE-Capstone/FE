@@ -135,7 +135,6 @@ export const USER_STATUS_OPTIONS = [
 ];
 
 export const COLOR_OPTIONS = [
-  'whiteAlpha',
   'blackAlpha',
   'gray',
   'red',
@@ -147,12 +146,6 @@ export const COLOR_OPTIONS = [
   'cyan',
   'purple',
   'pink',
-  'linkedin',
-  'facebook',
-  'messenger',
-  'whatsapp',
-  'twitter',
-  'telegram',
 ];
 
 export const USER_STATUS_LABEL: Record<UserStatusEnum, string> = {

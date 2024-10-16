@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ElementType } from 'react';
 import { useMemo } from 'react';
 
 import { Box, Icon, Tooltip } from '@chakra-ui/react';
@@ -28,7 +29,7 @@ export interface CustomOptionSelectBase extends OptionBase {
   value: number | string;
   isDisabled?: boolean;
   onClickOption?: () => void;
-  IconOption?: any;
+  IconOption?: ElementType;
 }
 
 export type CustomChakraReactSelectProps<
