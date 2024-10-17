@@ -3,9 +3,9 @@ import * as signalR from '@microsoft/signalr';
 
 const URL = 'https://headnshoulder.hanhtester.xyz/statusHub';
 class Connector {
-  private connection: signalR.HubConnection;
+  public connection: signalR.HubConnection;
 
-  public events: (onMessageReceived: (response: any) => void) => void;
+  public events: (onMessageReceived: (userId: string) => void) => void;
 
   // eslint-disable-next-line no-use-before-define
   static instance: Connector;
@@ -17,6 +17,7 @@ class Connector {
       })
       .withAutomaticReconnect()
       .build();
+
     this.connection
       .start()
       .then(() => {
@@ -29,6 +30,7 @@ class Connector {
           .catch((err) => console.error(err.toString()));
       })
       .catch((err) => document.write(err));
+
     this.events = (onMessageReceived) => {
       this.connection.on('StatusOrderResponse', (response) => {
         console.log('Event received');

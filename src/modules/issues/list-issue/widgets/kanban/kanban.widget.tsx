@@ -58,33 +58,33 @@ type BoardState = {
 export default function KanbanWidget() {
   const { projectId } = useParams();
   const accessToken = getAccessToken();
-  const { columnMap, orderedColumnIds, isLoading, refetch } = useGetBasicData();
+  const { columnMap, orderedColumnIds, isLoading, refetch, isRefetching } = useGetBasicData();
 
-  const { sendMessage, events } = Connector(accessToken || '', projectId || '');
+  const [lastActionId, setLastActionId] = useState<string | null>(null);
+
+  const { sendMessage, events, connection } = Connector(accessToken || '', projectId || '');
   useEffect(() => {
-    const handleMessageReceived = () => {
-      console.log('Refetching data due to message received');
-      refetch(); // Call refetch when a message is received
+    events(() => {
+      const storedActionId = localStorage.getItem('lastActionId');
+      if (storedActionId !== lastActionId) {
+        refetch();
+      }
+    });
+
+    return () => {
+      // Unsubscribe from the event when the component unmounts
+      connection.off('StatusOrderResponse');
     };
-    events(handleMessageReceived);
-  }, [events, refetch]);
+  });
 
-  // console.log(newMessage);
-  // console.log(message);
-  const [data, setData] = useState<BoardState>(() =>
-    // const savedData = localStorage.getItem('kanbanDataEx');
-    // if (savedData) {
-    //   return JSON.parse(savedData) as BoardState;
-    // }
-    ({
-      columnMap,
-      orderedColumnIds,
-      lastOperation: null,
-    })
-  );
+  const [data, setData] = useState<BoardState>(() => ({
+    columnMap,
+    orderedColumnIds,
+    lastOperation: null,
+  }));
 
   useEffect(() => {
-    if (!isLoading && columnMap && orderedColumnIds) {
+    if ((!isLoading || !isRefetching) && columnMap && orderedColumnIds) {
       setData({
         columnMap,
         orderedColumnIds,
@@ -92,12 +92,21 @@ export default function KanbanWidget() {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  }, [isLoading, isRefetching]);
+
+  useEffect(() => {
+    // Cleanup the stored action ID after a short period (optional)
+    const timer = setTimeout(() => {
+      localStorage.removeItem('lastActionId');
+      setLastActionId(null);
+    }, 5000); // Clear the ID after 5 seconds (adjust as needed)
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const stableData = useRef(data);
   useEffect(() => {
     stableData.current = data;
-    // localStorage.setItem('kanbanDataEx', JSON.stringify(data));
   }, [data]);
 
   const [registry] = useState(createRegistry);
@@ -202,6 +211,10 @@ export default function KanbanWidget() {
       trigger?: Trigger;
     }) => {
       setData((data) => {
+        const actionId = Date.now().toString(); // Generate a unique ID (could use a library for unique IDs)
+        setLastActionId(actionId);
+        localStorage.setItem('lastActionId', actionId);
+
         const outcome: Outcome = {
           type: 'column-reorder',
           columnId: data.orderedColumnIds[startIndex],
@@ -221,12 +234,14 @@ export default function KanbanWidget() {
             trigger,
           },
         };
-        console.log('result', outcome);
-        sendMessage({
-          projectId: projectId || '',
-          statusId: outcome.columnId,
-          position: outcome.finishIndex + 1,
-        });
+
+        if (startIndex !== finishIndex) {
+          sendMessage({
+            projectId: projectId || '',
+            statusId: outcome.columnId,
+            position: outcome.finishIndex,
+          });
+        }
         return a;
       });
     },

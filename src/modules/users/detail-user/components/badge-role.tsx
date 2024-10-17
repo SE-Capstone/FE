@@ -23,7 +23,7 @@ export function BadgeRole(props: BadgeRoleProps) {
   const { role, ...badgeProps } = props;
 
   return (
-    <Badge variant="outline" {...badgeProps} colorScheme={BADGE_ROLE_COLOR_MAP[role] || 'telegram'}>
+    <Badge variant="outline" {...badgeProps} colorScheme={BADGE_ROLE_COLOR_MAP[role] || 'blue'}>
       {ROLES_LABEL[role] || role}
     </Badge>
   );

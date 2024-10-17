@@ -109,14 +109,6 @@ function LazyDropdownItems({ userId }: { userId: string }) {
     reorderCard({ columnId, startIndex, finishIndex: 0 });
   }, [columnId, reorderCard, startIndex]);
 
-  const moveUp = useCallback(() => {
-    reorderCard({ columnId, startIndex, finishIndex: startIndex - 1 });
-  }, [columnId, reorderCard, startIndex]);
-
-  const moveDown = useCallback(() => {
-    reorderCard({ columnId, startIndex, finishIndex: startIndex + 1 });
-  }, [columnId, reorderCard, startIndex]);
-
   const moveToBottom = useCallback(() => {
     reorderCard({ columnId, startIndex, finishIndex: numCards - 1 });
   }, [columnId, reorderCard, startIndex, numCards]);
@@ -124,36 +116,15 @@ function LazyDropdownItems({ userId }: { userId: string }) {
   const isMoveUpDisabled = startIndex === 0;
   const isMoveDownDisabled = startIndex === numCards - 1;
 
-  const moveColumnOptions = getColumns().filter((column) => column.columnId !== columnId);
-
   return (
-    <>
-      <DropdownItemGroup title="Reorder">
-        <DropdownItem isDisabled={isMoveUpDisabled} onClick={moveToTop}>
-          Move to top
-        </DropdownItem>
-        {/* <DropdownItem isDisabled={isMoveUpDisabled} onClick={moveUp}>
-          Move up
-        </DropdownItem>
-        <DropdownItem isDisabled={isMoveDownDisabled} onClick={moveDown}>
-          Move down
-        </DropdownItem> */}
-        <DropdownItem isDisabled={isMoveDownDisabled} onClick={moveToBottom}>
-          Move to bottom
-        </DropdownItem>
-      </DropdownItemGroup>
-      {/* {moveColumnOptions.length ? (
-        <DropdownItemGroup title="Move to">
-          {moveColumnOptions.map((column) => (
-            <MoveToOtherColumnItem
-              key={column.columnId}
-              targetColumn={column}
-              startIndex={startIndex}
-            />
-          ))}
-        </DropdownItemGroup>
-      ) : null} */}
-    </>
+    <DropdownItemGroup title="Reorder">
+      <DropdownItem isDisabled={isMoveUpDisabled} onClick={moveToTop}>
+        Move to top
+      </DropdownItem>
+      <DropdownItem isDisabled={isMoveDownDisabled} onClick={moveToBottom}>
+        Move to bottom
+      </DropdownItem>
+    </DropdownItemGroup>
   );
 }
 

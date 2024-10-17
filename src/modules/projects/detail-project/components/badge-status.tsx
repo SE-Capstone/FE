@@ -9,7 +9,7 @@ import { PROJECT_STATUS_VALUES } from '@/configs';
 const BADGE_STATUS_COLOR_MAP: Record<ProjectStatusEnum, ThemingProps['colorScheme']> = {
   [ProjectStatusEnum.Active]: 'green',
   [ProjectStatusEnum.Inactive]: 'red',
-  [ProjectStatusEnum.Pending]: 'telegram',
+  [ProjectStatusEnum.Pending]: 'blue',
 };
 
 interface BadgeRoleProps extends BadgeProps {
