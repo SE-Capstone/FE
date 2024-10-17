@@ -37,19 +37,14 @@ import { ColumnContext, type ColumnContextProps, useColumnContext } from './colu
 import { type ColumnType } from '../../data/people';
 
 const columnStyles = xcss({
-  width: '250px',
-  backgroundColor: 'elevation.surface.sunken',
+  backgroundColor: 'elevation.surface.raised',
   borderRadius: 'border.radius.300',
   transition: `background ${mediumDurationMs}ms ${easeInOut}`,
   position: 'relative',
-  /**
-   * TODO: figure out hover color.
-   * There is no `elevation.surface.sunken.hovered` token,
-   * so leaving this for now.
-   */
 });
 
 const stackStyles = xcss({
+  width: '270px',
   // allow the container to be shrunk by a parent height
   // https://www.joshwcomeau.com/css/interactive-guide-to-flexbox/#the-minimum-size-gotcha-11
   minHeight: '0',
