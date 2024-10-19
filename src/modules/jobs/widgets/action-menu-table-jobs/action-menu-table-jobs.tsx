@@ -1,43 +1,51 @@
-import { Icon } from '@chakra-ui/react';
+import { Icon, useDisclosure } from '@chakra-ui/react';
 import { BiTrash } from 'react-icons/bi';
+import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
+
+import { useRemoveJobHook } from '../../hooks/mutations/use-remove-job.hooks';
+import { UpsertJobWidget } from '../upsert-job.widget';
 
 import type { IJob } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
-import { useAlertDialogStore } from '@/contexts';
 
 interface ActionMenuTableJobsProps {
   job: IJob;
 }
 export function ActionMenuTableJobs({ job }: ActionMenuTableJobsProps) {
-  // const { removeJobResult, handleRemoveJob } = useRemoveJobHook();
-
-  const { openAlert } = useAlertDialogStore(false);
-  // const { openAlert, closeAlert } = useAlertDialogStore(removeJobResult.loading);
+  const disclosureModal = useDisclosure();
+  const { handleRemoveJob } = useRemoveJobHook();
 
   if (!job || !job.id) return null;
 
   const menuOptions = [
     {
+      label: 'Update',
+      icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
+      onClick: () => {
+        if (!job.id) return;
+
+        disclosureModal.onOpen();
+      },
+    },
+    {
       label: 'Delete',
       icon: <Icon as={BiTrash} boxSize={5} />,
-      onClick: () => {
-        openAlert({
-          title: 'Delete',
-          description: `Are you sure to delete job "${job.title}"?`,
-          onHandleConfirm() {
-            // TODO
-            // if (!job.id) return;
-            // handleRemoveJob(job.id, closeAlert);
-          },
-        });
-      },
+      onClick: () => handleRemoveJob(job),
     },
   ].filter(Boolean);
 
   return (
-    <ActionMenuTable actionMenuItems={menuOptions}>
-      {({ isOpen }) => <AdditionalFeature isOpen={isOpen} />}
-    </ActionMenuTable>
+    <>
+      <UpsertJobWidget
+        job={job}
+        isUpdate
+        isOpen={disclosureModal.isOpen}
+        onClose={disclosureModal.onClose}
+      />
+      <ActionMenuTable actionMenuItems={menuOptions}>
+        {({ isOpen }) => <AdditionalFeature isOpen={isOpen} />}
+      </ActionMenuTable>
+    </>
   );
 }

@@ -6,7 +6,8 @@ const ENDPOINT_QUERIES = {
 } as const;
 
 const ENDPOINT_MUTATIONS = {
-  update: (jobId: StringNumeric) => `jobs/${jobId}`,
+  update: `jobs`,
+  delete: (jobId: StringNumeric) => `jobs/${jobId}`,
   create: 'jobs',
 } as const;
 

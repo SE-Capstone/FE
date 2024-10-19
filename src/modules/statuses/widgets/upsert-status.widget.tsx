@@ -81,7 +81,7 @@ export function UpsertStatusWidget(props: UpsertStatusWidgetProps) {
       >
         <Stack spacing={5}>
           <CustomInput
-            label="Title"
+            label="Name"
             isRequired
             registration={register('name')}
             error={errors.name}

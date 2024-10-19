@@ -10,18 +10,19 @@ import { makeRequest } from '@/libs/react-query';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
 
-interface ICreateJobRequest {
+interface IUpsertJobRequest {
   body: {
+    id?: string;
     title: string;
     description: string;
   };
 }
 
-function mutation(req: ICreateJobRequest) {
+function mutation(req: IUpsertJobRequest, isUpdate = false) {
   const { body } = req;
   return makeRequest<typeof body, IResponseApi<IJob>>({
-    method: 'POST',
-    url: ALL_ENDPOINT_URL_STORE.jobs.create,
+    method: isUpdate ? 'PUT' : 'POST',
+    url: isUpdate ? ALL_ENDPOINT_URL_STORE.jobs.update : ALL_ENDPOINT_URL_STORE.jobs.create,
     data: body,
   });
 }
@@ -29,27 +30,26 @@ function mutation(req: ICreateJobRequest) {
 interface Props {
   configs?: MutationConfig<typeof mutation>;
   reset?: () => void;
+  onClose: () => void;
+  id?: string;
+  isUpdate?: boolean;
 }
 
-export function useCreateJobMutation({ configs, reset }: Props = {}) {
+export function useUpsertJobMutation({ configs, reset, isUpdate, onClose }: Props) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: mutation,
+    mutationFn: (req) => mutation(req, isUpdate),
 
-    onSuccess: (data) => {
-      if (data.statusCode !== 201) {
-        notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
-        return;
-      }
-
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.job.jobs.queryKey,
       });
       notify({
         type: 'success',
-        message: DEFAULT_MESSAGE.CREATE_SUCCESS,
+        message: isUpdate ? DEFAULT_MESSAGE.UPDATE_SUCCESS : DEFAULT_MESSAGE.CREATE_SUCCESS,
       });
       reset && reset();
+      onClose();
     },
 
     onError(error) {

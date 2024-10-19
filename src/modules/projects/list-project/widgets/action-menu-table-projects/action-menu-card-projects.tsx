@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import { Icon } from '@chakra-ui/react';
-import { MdOutlineToggleOff, MdOutlineToggleOn, MdVisibility } from 'react-icons/md';
+import { HiArchiveBox, HiArchiveBoxXMark } from 'react-icons/hi2';
+import { MdVisibility } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 import { useToggleVisibleProjectMutation } from '../../apis/toggle-visible-project.api';
@@ -39,16 +40,16 @@ export function ActionMenuTableProjects({ project }: ActionMenuTableProjectsProp
       onClick: () => navigate(`/projects/${project.id}`),
     },
     permissions[PermissionEnum.TOGGLE_VISIBLE_PROJECT] && {
-      label: project.isVisible ? 'Toggle invisible' : 'Toggle visible',
-      icon: <Icon as={project.isVisible ? MdOutlineToggleOff : MdOutlineToggleOn} boxSize={5} />,
+      label: project.isVisible ? 'Archive' : 'Unarchive',
+      icon: <Icon as={project.isVisible ? HiArchiveBox : HiArchiveBoxXMark} boxSize={5} />,
       onClick: () => {
         openAlert({
-          title: 'Archive project?',
+          title: project.isVisible ? 'Unarchive project?' : 'Archive project?',
           type: 'warning',
           textConfirm: 'Archive',
-          description: `Are you sure to change project to "${
-            project.isVisible ? 'Invisible' : 'Visible'
-          }"?`,
+          description: project.isVisible
+            ? 'This project will be invisible to all members'
+            : 'This project will be visible to all members',
           onHandleConfirm() {
             if (!project.id) return;
             mutate(project.id);

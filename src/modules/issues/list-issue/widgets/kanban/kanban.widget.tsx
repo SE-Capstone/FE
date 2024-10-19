@@ -8,6 +8,7 @@ import { triggerPostMoveFlash } from '@atlaskit/pragmatic-drag-and-drop-flourish
 import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
 import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index';
 import * as liveRegion from '@atlaskit/pragmatic-drag-and-drop-live-region';
+import { Box, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import invariant from 'tiny-invariant';
 
@@ -15,6 +16,7 @@ import Connector from '../signalR-connection';
 import { type ColumnMap, type ColumnType, type Person, useGetBasicData } from './data/people';
 import Board from './pieces/board/board';
 import { BoardContext, type BoardContextValue } from './pieces/board/board-context';
+import BoardSkeleton from './pieces/board/board-skeleton';
 import { Column } from './pieces/board/column';
 import { createRegistry } from './pieces/board/registry';
 
@@ -66,6 +68,7 @@ export default function KanbanWidget() {
     accessToken || '',
     projectId || ''
   );
+
   useEffect(() => {
     orderStatusEvents(() => {
       const storedActionId = localStorage.getItem('lastActionId');
@@ -248,6 +251,7 @@ export default function KanbanWidget() {
         return a;
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -518,14 +522,22 @@ export default function KanbanWidget() {
     [getColumns, reorderColumn, reorderCard, registry, moveCard, instanceId]
   );
 
+  if (isLoading || isRefetching) return <BoardSkeleton />;
+
   return (
     <AppProvider>
       <BoardContext.Provider value={contextValue}>
-        <Board>
-          {data.orderedColumnIds.map((columnId) => (
-            <Column key={columnId} column={data.columnMap[columnId]} />
-          ))}
-        </Board>
+        {data.orderedColumnIds.length > 0 ? (
+          <Board>
+            {data.orderedColumnIds.map((columnId) => (
+              <Column key={columnId} column={data.columnMap[columnId]} />
+            ))}
+          </Board>
+        ) : (
+          <Box w="full" bg="white" p={5} rounded={2} textAlign="center">
+            <Text fontSize="20px">No data</Text>
+          </Box>
+        )}
       </BoardContext.Provider>
     </AppProvider>
   );

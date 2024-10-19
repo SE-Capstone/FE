@@ -29,7 +29,7 @@ import invariant from 'tiny-invariant';
 
 import { useBoardContext } from './board-context';
 import { useColumnContext } from './column-context';
-import { type ColumnType, type Person } from '../../data/people';
+import { type Person } from '../../data/people';
 
 type State =
   | { type: 'idle' }
@@ -77,29 +77,8 @@ type CardPrimitiveProps = {
   actionMenuTriggerRef?: Ref<HTMLButtonElement>;
 };
 
-function MoveToOtherColumnItem({
-  targetColumn,
-  startIndex,
-}: {
-  targetColumn: ColumnType;
-  startIndex: number;
-}) {
-  const { moveCard } = useBoardContext();
-  const { columnId } = useColumnContext();
-
-  const onClick = useCallback(() => {
-    moveCard({
-      startColumnId: columnId,
-      finishColumnId: targetColumn.columnId,
-      itemIndexInStartColumn: startIndex,
-    });
-  }, [columnId, moveCard, startIndex, targetColumn.columnId]);
-
-  return <DropdownItem onClick={onClick}>{targetColumn.title}</DropdownItem>;
-}
-
 function LazyDropdownItems({ userId }: { userId: string }) {
-  const { getColumns, reorderCard } = useBoardContext();
+  const { reorderCard } = useBoardContext();
   const { columnId, getCardIndex, getNumCards } = useColumnContext();
 
   const numCards = getNumCards();

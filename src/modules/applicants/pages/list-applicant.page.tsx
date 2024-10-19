@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { Container, Text } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { useApplicantsQueryFilterStateContext } from '../contexts';
 import { useGetListApplicantQuery } from '../hooks/queries';
@@ -67,6 +67,14 @@ export function ListApplicantPage() {
             hasSort: false,
             Cell({ phoneNumber }) {
               return <Text>{phoneNumberAutoFormat(phoneNumber || '')}</Text>;
+            },
+          },
+          {
+            key: 'cvFile',
+            title: 'CV',
+            hasSort: false,
+            Cell({ cvLink }) {
+              return <>{cvLink && <Link to={cvLink}>Download</Link>}</>;
             },
           },
           {
