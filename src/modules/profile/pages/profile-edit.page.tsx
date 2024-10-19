@@ -30,6 +30,7 @@ import {
   phoneNumberAutoFormat,
 } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
+import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export const EditProfilePage: React.FC = () => {
   const { currentUser } = useAuthentication();
@@ -106,7 +107,7 @@ export const EditProfilePage: React.FC = () => {
           w="100%"
           alignItems="flex-start"
         >
-          <LayoutBack w={{ base: 'full', xl: '70%' }}>
+          <LayoutBack w={{ base: 'full', xl: '70%' }} path={APP_PATHS.profile}>
             <Stack direction="column" spacing="24px">
               <Heading variant="title" mt="12px">
                 Update personal information

@@ -1,14 +1,20 @@
-import { Container, Flex, Heading, Text } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+
+import { Box, Container, Flex, Heading, Text } from '@chakra-ui/react';
+import { MdCheck, MdClose } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 
 import { useProjectsQueryFilterStateContext } from '../contexts';
 import { useGetListProjectQuery } from '../hooks/queries';
 import { ActionMenuTableProjects, ActionTableProjectsWidget } from '../widgets';
 
+import type { IUser } from '@/modules/users/list-user/types';
+
 import { CustomLink, Head, StateHandler } from '@/components/elements';
 import CardComponent from '@/components/elements/card/card';
 import { PermissionEnum } from '@/configs';
 import { useAuthentication } from '@/modules/profile/hooks';
+import { useGetUsersByPermission } from '@/modules/users/list-user/apis/get-user-by-permission.api';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListProjectPage() {
@@ -21,11 +27,23 @@ export function ListProjectPage() {
       params: projectsQueryState.filters,
     });
 
+  const [teamLeads, setTeamLeads] = useState<IUser[]>([]);
+
+  const { users } = useGetUsersByPermission({
+    permissionName: PermissionEnum.IS_PROJECT_LEAD,
+  });
+
+  useEffect(() => {
+    if (JSON.stringify(users) !== JSON.stringify(teamLeads)) {
+      setTeamLeads(users);
+    }
+  }, [users, teamLeads]);
+
   return (
     <>
       <Head title="Projects" />
       <Container maxW="container.2xl" centerContent>
-        <ActionTableProjectsWidget />
+        <ActionTableProjectsWidget teamLeads={teamLeads} />
 
         <StateHandler
           showLoader={isLoading}
@@ -57,18 +75,28 @@ export function ListProjectPage() {
                         {project.name || ''}
                       </CustomLink>
                     </Flex>
-                    <ActionMenuTableProjects project={project} />
+                    <ActionMenuTableProjects project={project} teamLeads={teamLeads} />
                   </Flex>
                 </Heading>
                 <Text mt={1} fontSize="12px" noOfLines={3}>
                   {project.description}
                 </Text>
 
-                <Text mt={5} fontSize="12px" noOfLines={2}>
-                  Isvisible: {project.isVisible ? 'Yes' : 'No'}
-                  <br />
-                  Code: {project.code}
-                </Text>
+                <Box mt={5} fontSize="12px" noOfLines={2}>
+                  {permissions[PermissionEnum.GET_ALL_PROJECT] && (
+                    <Flex alignItems="center">
+                      <Text fontSize="13px" mr={1}>
+                        Isvisible:
+                      </Text>
+                      {project.isVisible ? (
+                        <MdCheck size="12px" color="green" />
+                      ) : (
+                        <MdClose size="12px" color="red" />
+                      )}
+                    </Flex>
+                  )}
+                  <Text fontSize="14px">Code: {project.code}</Text>
+                </Box>
               </>
             )}
           </CardComponent>

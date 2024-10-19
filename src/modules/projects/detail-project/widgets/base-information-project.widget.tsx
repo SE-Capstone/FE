@@ -6,10 +6,18 @@ import { BadgeStatus } from '../components';
 import type { IProject, ProjectStatusEnum } from '../../list-project/types';
 
 import { Head } from '@/components/elements';
+import { ChangeStatus } from '@/components/widgets/change-status';
+import { PermissionEnum } from '@/configs';
 import { formatDate } from '@/libs/helpers';
 import { InfoCard } from '@/modules/profile/components';
 
-export function BaseInformationProjectWidget({ project }: { project?: IProject }) {
+export function BaseInformationProjectWidget({
+  project,
+  permissions,
+}: {
+  project?: IProject;
+  permissions: Record<string, boolean>;
+}) {
   const infoData = [
     {
       label: 'Name',
@@ -23,13 +31,24 @@ export function BaseInformationProjectWidget({ project }: { project?: IProject }
       label: 'Description',
       text: project?.description || '',
     },
-    {
+    permissions[PermissionEnum.GET_ALL_PROJECT] && {
       label: 'Status',
       text: <BadgeStatus status={project?.status as ProjectStatusEnum} />,
     },
-    {
+    permissions[PermissionEnum.GET_ALL_PROJECT] && {
       label: 'Isvisible',
-      text: project?.isVisible ? 'Yes' : 'No',
+      text: (
+        <ChangeStatus
+          id={project?.id || ''}
+          initStatus={project?.isVisible || false}
+          title={project?.isVisible ? 'Unarchive project?' : 'Archive project?'}
+          description={
+            project?.isVisible
+              ? 'This project will be invisible to all members'
+              : 'This project will be visible to all members'
+          }
+        />
+      ),
     },
     {
       label: 'Start date',
@@ -41,7 +60,7 @@ export function BaseInformationProjectWidget({ project }: { project?: IProject }
       label: 'End date',
       text: project?.endDate ? formatDate({ date: project?.endDate, format: 'DD-MM-YYYY' }) : '',
     },
-  ];
+  ].filter(Boolean);
 
   return (
     <>

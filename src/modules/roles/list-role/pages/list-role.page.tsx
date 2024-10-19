@@ -39,7 +39,7 @@ export function ListRolePage() {
             Cell({ name, id }) {
               return (
                 <CustomLink
-                  to={pathname.includes(APP_PATHS.listRoles) ? String(id) : '#'}
+                  to={pathname.includes(APP_PATHS.listRole) ? String(id) : '#'}
                   noOfLines={1}
                 >
                   {name || ''}

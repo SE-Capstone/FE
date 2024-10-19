@@ -51,7 +51,7 @@ export function useCreateRoleMutation({ configs, reset }: IProps = {}) {
       });
 
       reset && reset();
-      navigate(APP_PATHS.listRoles);
+      navigate(APP_PATHS.listRole);
       notify({
         type: 'success',
         message: DEFAULT_MESSAGE.CREATE_SUCCESS,

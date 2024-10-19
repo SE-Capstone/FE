@@ -36,6 +36,9 @@ export function useToggleVisibleProjectMutation({ configs, closeAlert }: Props =
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.project.projects.queryKey,
       });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.project.detail._def,
+      });
       closeAlert && closeAlert();
       notify({
         type: 'success',

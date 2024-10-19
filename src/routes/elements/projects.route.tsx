@@ -15,10 +15,6 @@ const { DetailProjectPage } = lazyImport(
   () => import('@/modules/projects/detail-project/pages'),
   'DetailProjectPage'
 );
-const { UpdateProjectPage } = lazyImport(
-  () => import('@/modules/projects/detail-project/pages'),
-  'UpdateProjectPage'
-);
 
 export function projectsRoutes(): RouteObject {
   return {
@@ -47,14 +43,6 @@ export function projectsRoutes(): RouteObject {
         path: ':projectId/issues',
         element: <Outlet />,
         children: [issuesRoutes()],
-      },
-      {
-        path: ':projectId/edit',
-        element: (
-          <PermissionCheck permissions={[PermissionEnum.UPDATE_PROJECT]}>
-            <UpdateProjectPage />
-          </PermissionCheck>
-        ),
       },
     ],
   };

@@ -61,16 +61,20 @@ export const GENDER_OPTIONS = [
 
 export const PROJECT_STATUS_OPTIONS = [
   {
-    label: 'Active',
-    value: ProjectStatusEnum.Active,
+    label: 'Completed',
+    value: ProjectStatusEnum.Completed,
   },
   {
-    label: 'Pending',
-    value: ProjectStatusEnum.Pending,
+    label: 'In progress',
+    value: ProjectStatusEnum.InProgress,
   },
   {
-    label: 'Inactive',
-    value: ProjectStatusEnum.Inactive,
+    label: 'Not started',
+    value: ProjectStatusEnum.NotStarted,
+  },
+  {
+    label: 'Canceled',
+    value: ProjectStatusEnum.Canceled,
   },
 ] as const;
 
@@ -196,9 +200,10 @@ export const GROUP_PERMISSIONS_VALUES: Record<GroupPermissionEnum, string> = {
 };
 
 export const PROJECT_STATUS_VALUES: Record<ProjectStatusEnum, string> = {
-  [ProjectStatusEnum.Pending]: 'Pending',
-  [ProjectStatusEnum.Active]: 'Active',
-  [ProjectStatusEnum.Inactive]: 'Inactive',
+  [ProjectStatusEnum.NotStarted]: 'Not started',
+  [ProjectStatusEnum.InProgress]: 'In progress',
+  [ProjectStatusEnum.Completed]: 'Completed',
+  [ProjectStatusEnum.Canceled]: 'Canceled',
 };
 
 export function getGender(gender?: GenderEnum) {

@@ -20,6 +20,7 @@ import { PermissionEnum } from '@/configs';
 import { notify } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 import { useAuthentication } from '@/modules/profile/hooks';
+import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailRolePage() {
   const { permissions } = useAuthentication();
@@ -93,6 +94,7 @@ export function DetailRolePage() {
         alignItems="center"
         py="14px"
         title={role?.name}
+        path={APP_PATHS.listRole}
       >
         <IconButton
           // Todo: fix
