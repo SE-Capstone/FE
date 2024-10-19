@@ -62,9 +62,12 @@ export default function KanbanWidget() {
 
   const [lastActionId, setLastActionId] = useState<string | null>(null);
 
-  const { sendMessage, events, connection } = Connector(accessToken || '', projectId || '');
+  const { sendMessage, orderStatusEvents, connection } = Connector(
+    accessToken || '',
+    projectId || ''
+  );
   useEffect(() => {
-    events(() => {
+    orderStatusEvents(() => {
       const storedActionId = localStorage.getItem('lastActionId');
       if (storedActionId !== lastActionId) {
         refetch();

@@ -7,7 +7,7 @@ import react from '@vitejs/plugin-react-swc';
 import { defineConfig, splitVendorChunkPlugin } from 'vite';
 import checker from 'vite-plugin-checker';
 import eslint from 'vite-plugin-eslint';
-import removeConsole from 'vite-plugin-remove-console';
+// import removeConsole from 'vite-plugin-remove-console';
 
 export default defineConfig((env) => {
   const isDevelopment = env.mode === 'development';
@@ -35,7 +35,7 @@ export default defineConfig((env) => {
         cache: true,
         ignorePath: './.eslintignore',
       }),
-      removeConsole(),
+      // removeConsole(),
       splitVendorChunkPlugin(),
     ],
 

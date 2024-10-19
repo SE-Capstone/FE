@@ -5,7 +5,7 @@ const URL = 'https://headnshoulder.hanhtester.xyz/statusHub';
 class Connector {
   public connection: signalR.HubConnection;
 
-  public events: (onMessageReceived: (userId: string) => void) => void;
+  public orderStatusEvents: (onMessageReceived: (userId: string) => void) => void;
 
   // eslint-disable-next-line no-use-before-define
   static instance: Connector;
@@ -16,6 +16,7 @@ class Connector {
         accessTokenFactory: () => accessToken,
       })
       .withAutomaticReconnect()
+      .configureLogging(signalR.LogLevel.Information)
       .build();
 
     this.connection
@@ -24,20 +25,29 @@ class Connector {
         console.log('Connected to SignalR Hub');
 
         // Tham gia vào group với ID cụ thể
-        this.connection
-          .invoke('JoinGroup', projectId)
-          .then(() => console.log(`Joined group ${projectId}`))
-          .catch((err) => console.error(err.toString()));
+        this.joinGroup(projectId);
+
+        this.connection.onreconnected(() => this.joinGroup(projectId));
+        this.connection.onreconnecting((err) => console.warn('Reconnecting...', err));
       })
       .catch((err) => document.write(err));
 
-    this.events = (onMessageReceived) => {
+    this.orderStatusEvents = (onMessageReceived) => {
       this.connection.on('StatusOrderResponse', (response) => {
         console.log('Event received');
         console.log(response);
         onMessageReceived(response);
       });
     };
+  }
+
+  private joinGroup(projectId: string) {
+    try {
+      this.connection.invoke('JoinGroup', projectId);
+      console.log(`Joined group ${projectId}`);
+    } catch (err: any) {
+      console.error('Error joining group:', err.toString());
+    }
   }
 
   public sendMessage = ({
