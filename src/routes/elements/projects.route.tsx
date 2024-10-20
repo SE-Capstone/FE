@@ -24,11 +24,9 @@ export function projectsRoutes(): RouteObject {
       {
         index: true,
         element: (
-          <PermissionCheck permissions={[PermissionEnum.GET_ALL_PROJECT]}>
-            <ProjectsQueryProvider>
-              <ListProjectPage />
-            </ProjectsQueryProvider>
-          </PermissionCheck>
+          <ProjectsQueryProvider>
+            <ListProjectPage />
+          </ProjectsQueryProvider>
         ),
       },
       {
