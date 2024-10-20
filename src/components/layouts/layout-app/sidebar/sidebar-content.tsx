@@ -85,7 +85,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
           icon: MdOutlineSettings,
           path: '/roles',
         },
-        permissions[PermissionEnum.GET_LIST_PROJECT] && {
+        {
           name: 'Projects',
           icon: BsWindowDock,
           path: '/projects',
