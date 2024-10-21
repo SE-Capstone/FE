@@ -79,8 +79,8 @@ function PermissionGroup({
   };
 
   return (
-    <>
-      <Stack direction="row" alignItems="center">
+    <AccordionItem border="none">
+      <Stack direction="row" alignItems="center" w="full">
         <Checkbox
           isChecked={allChecked}
           borderColor="gray.300"
@@ -88,30 +88,35 @@ function PermissionGroup({
           isDisabled={isDisabled}
           onChange={handleParentChange}
         >
-          <Stack direction="row" alignItems="center">
-            <GrUserExpert color="gray" size={16} />
-            <Text>{getGroupPermission(group.name as GroupPermissionEnum)}</Text>
-          </Stack>
+          <AccordionButton pl={1} border="none">
+            <Stack direction="row" alignItems="center">
+              <GrUserExpert color="gray" size={16} />
+              <Text>{getGroupPermission(group.name as GroupPermissionEnum)}</Text>
+            </Stack>
+            <AccordionIcon />
+          </AccordionButton>
         </Checkbox>
       </Stack>
-      <Stack pl={8} spacing={2} direction="row" alignItems="stretch">
-        <Box width="1px" bg="gray.300" />
-        <Stack spacing={1}>
-          {group.permissions.map((permission, index) => (
-            <Checkbox
-              key={permission.id}
-              borderColor="gray.300"
-              paddingLeft={3}
-              isDisabled={isDisabled}
-              isChecked={checkedPermissions[index]}
-              onChange={handleChildChange(index)}
-            >
-              <Text key={permission.id}>{getPermission(permission.name as PermissionEnum)}</Text>
-            </Checkbox>
-          ))}
+      <AccordionPanel px={1} py={1}>
+        <Stack pl={8} spacing={2} direction="row" alignItems="stretch">
+          <Box width="1px" bg="gray.300" />
+          <Stack spacing={1}>
+            {group.permissions.map((permission, index) => (
+              <Checkbox
+                key={permission.id}
+                borderColor="gray.300"
+                paddingLeft={3}
+                isDisabled={isDisabled}
+                isChecked={checkedPermissions[index]}
+                onChange={handleChildChange(index)}
+              >
+                <Text key={permission.id}>{getPermission(permission.name as PermissionEnum)}</Text>
+              </Checkbox>
+            ))}
+          </Stack>
         </Stack>
-      </Stack>
-    </>
+      </AccordionPanel>
+    </AccordionItem>
   );
 }
 
@@ -277,14 +282,16 @@ export function ListPermissionWidget({
                 <AccordionPanel pb={4} maxH="800px" overflow="scroll">
                   <Box p={3}>
                     {isEditing || isCreate
-                      ? groupPermissions.map((group) => (
-                          <PermissionGroup
-                            key={group.id}
-                            group={group}
-                            isDisabled={isDisabled}
-                            initiallySelectedPermissions={Array.from(selectedPermissions)}
-                            onPermissionChange={handlePermissionChange}
-                          />
+                      ? groupPermissions.map((group, _index) => (
+                          <Accordion key={group.id} allowMultiple>
+                            <PermissionGroup
+                              key={group.id}
+                              group={group}
+                              isDisabled={isDisabled}
+                              initiallySelectedPermissions={Array.from(selectedPermissions)}
+                              onPermissionChange={handlePermissionChange}
+                            />
+                          </Accordion>
                         ))
                       : initialGroups.map((group) => (
                           <InitPermissionGroup key={group.id} group={group} />

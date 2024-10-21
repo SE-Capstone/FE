@@ -14,7 +14,7 @@ export function ActionTableJobsWidget() {
   const isShowFilterJob = pathname.includes('jobs');
 
   return (
-    <Box p={5} mb={6} rounded={2.5} bg="white" w="full" shadow="0 1px 4px 0 #0002">
+    <Box p={5} py={3} mb={6} rounded={2.5} bg="white" w="full" shadow="0 1px 4px 0 #0002">
       <HStack justify="space-between">
         <Grid
           w={{
@@ -37,7 +37,7 @@ export function ActionTableJobsWidget() {
         {isShowFilterJob && (
           <>
             <Spacer />
-            <Button leftIcon={<>+</>} onClick={disclosureModal.onOpen}>
+            <Button size="md" leftIcon={<>+</>} onClick={disclosureModal.onOpen}>
               Create
             </Button>
             <UpsertJobWidget isOpen={disclosureModal.isOpen} onClose={disclosureModal.onClose} />

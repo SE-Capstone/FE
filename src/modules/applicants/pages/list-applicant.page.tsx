@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { Container, Text } from '@chakra-ui/react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { useApplicantsQueryFilterStateContext } from '../contexts';
 import { useGetListApplicantQuery } from '../hooks/queries';

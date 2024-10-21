@@ -11,6 +11,7 @@ const ENDPOINT_MUTATIONS = {
   updateUser: 'users',
   updateProfile: 'user/update-profile',
   createUser: 'user',
+  toggleStatus: `users/toggle-status`,
 } as const;
 
 export const USERS_ENDPOINT_URL = {

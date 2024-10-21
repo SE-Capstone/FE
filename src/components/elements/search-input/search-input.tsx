@@ -54,6 +54,9 @@ export function SearchInput({
   return (
     <CustomInput
       ref={searchRef}
+      inputGroupProps={{
+        size: 'md',
+      }}
       autoFocus
       placeholder="Tìm kiếm..."
       _disabled={{
@@ -70,7 +73,7 @@ export function SearchInput({
           ) : (
             <Icon
               as={MdSearch}
-              boxSize={5}
+              boxSize={4.5}
               cursor="default"
               {...iconSearchProps}
               onClick={() => searchRef.current?.focus()}

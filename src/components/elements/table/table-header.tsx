@@ -171,7 +171,7 @@ const TableHeader = <T extends object>({
               isChecked={isCheckAll}
               isIndeterminate={isIndeterminate}
               py={3}
-              size="lg"
+              size="sm"
               variant="normal"
               onChange={
                 onHandleCheckbox

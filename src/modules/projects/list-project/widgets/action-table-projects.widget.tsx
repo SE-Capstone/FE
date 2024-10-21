@@ -20,7 +20,7 @@ export function ActionTableProjectsWidget({ teamLeads }: { teamLeads: IUser[] })
   const isShowFilterProject = pathname.includes(APP_PATHS.listProject);
 
   return (
-    <Box p={5} mb={6} rounded={2.5} bg="white" w="full" shadow="0 1px 4px 0 #0002">
+    <Box p={5} py={3} mb={6} rounded={2.5} bg="white" w="full" shadow="0 1px 4px 0 #0002">
       <HStack justify="space-between">
         <Grid
           w={{
@@ -64,6 +64,7 @@ export function ActionTableProjectsWidget({ teamLeads }: { teamLeads: IUser[] })
           >
             <CustomChakraReactSelect
               isSearchable={false}
+              size="md"
               placeholder="Choose visible status"
               options={PROJECT_VISIBILITY_OPTIONS}
               onChange={(opt) => {

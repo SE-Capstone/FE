@@ -60,7 +60,7 @@ export function ActionMenuTableProjects({ project, teamLeads }: ActionMenuTableP
         openAlert({
           title: project.isVisible ? 'Unarchive project?' : 'Archive project?',
           type: 'warning',
-          textConfirm: 'Archive',
+          textConfirm: project.isVisible ? 'Archive' : 'Unarchive',
           description: project.isVisible
             ? 'This project will be invisible to all members'
             : 'This project will be visible to all members',

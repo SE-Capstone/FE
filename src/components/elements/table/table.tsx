@@ -225,12 +225,12 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
           </Table>
         ) : (
           <TableContainer {...TableProps} maxW="full" shadow="md">
-            {/* <TableSearch handleOnSearch={handleOnSearch} /> */}
             <Table
               // sx={{ borderCollapse: 'collapse', tableLayout: 'fixed' }}
-              size="md"
+              size="sm"
               overflow="hidden"
               borderRadius={2}
+              variant="simple"
             >
               {!withoutHeader && (
                 <TableHeader<ObjectType>
@@ -257,7 +257,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                             <Checkbox
                               pt="2px"
                               isChecked={persistData.some((pd) => pd.id === object.id)}
-                              size="lg"
+                              size="md"
                               onChange={(e) => {
                                 setSelected([object], e.target.checked);
                               }}
@@ -294,7 +294,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                         ))}
 
                         {additionalFeature && (
-                          <Td py={2} border="none" textAlign="right" pos="relative">
+                          <Td py={1.5} border="none" textAlign="right" pos="relative">
                             {additionalFeature(object)}
                           </Td>
                         )}

@@ -1,26 +1,37 @@
+import { useEffect, useState } from 'react';
+
 import { Icon } from '@chakra-ui/react';
-import { BiTrash } from 'react-icons/bi';
 import { MdVisibility } from 'react-icons/md';
+import { SlUserFollowing, SlUserUnfollow } from 'react-icons/sl';
 import { useNavigate } from 'react-router-dom';
+
+import { useToggleUserStatusMutation } from '../../apis/toggle-user-status.api';
 
 import type { IUser } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
-import { PermissionEnum } from '@/configs';
+import { PermissionEnum, UserStatusEnum } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
 import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTableUsersProps {
   user: IUser;
 }
+
 export function ActionMenuTableUsers({ user }: ActionMenuTableUsersProps) {
   const { permissions } = useAuthentication();
   const navigate = useNavigate();
 
-  // const { removeUserResult, handleRemoveUser } = useRemoveUserHook();
+  const [loading, setLoading] = useState(false);
 
-  const { openAlert } = useAlertDialogStore(false);
-  // const { openAlert, closeAlert } = useAlertDialogStore(removeUserResult.loading);
+  const { openAlert, closeAlert } = useAlertDialogStore(loading);
+  const { mutate, isPending: isLoading } = useToggleUserStatusMutation({
+    closeAlert,
+  });
+
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading]);
 
   if (!user || !user.id) return null;
 
@@ -31,18 +42,28 @@ export function ActionMenuTableUsers({ user }: ActionMenuTableUsersProps) {
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/users/${user.id}`),
     },
-    // Todo: fix
-    permissions[PermissionEnum.GET_LIST_USER] && {
-      label: 'Delete',
-      icon: <Icon as={BiTrash} boxSize={5} />,
+    {
+      label: user.status === UserStatusEnum.Active ? 'Inactive' : 'Active',
+      icon: (
+        <Icon
+          as={user.status === UserStatusEnum.Active ? SlUserUnfollow : SlUserFollowing}
+          boxSize={5}
+        />
+      ),
       onClick: () => {
         openAlert({
-          title: 'Delete',
-          description: `Are you sure to delete user "${user.fullName}"?`,
+          title: user.status === UserStatusEnum.Active ? 'Inactive user?' : 'Active user?',
+          type: 'warning',
+          textConfirm: user.status === UserStatusEnum.Active ? 'Inactive' : 'Active',
+          description:
+            user.status === UserStatusEnum.Active
+              ? 'This user will be disable and can not access to the system'
+              : 'This user will be enable and can access to the system',
           onHandleConfirm() {
-            // TODO
-            // if (!user.id) return;
-            // handleRemoveUser(user.id, closeAlert);
+            if (!user.id) return;
+            mutate({
+              body: { userId: user.id },
+            });
           },
         });
       },
