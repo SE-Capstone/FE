@@ -74,7 +74,15 @@ export function ListApplicantPage() {
             title: 'CV',
             hasSort: false,
             Cell({ cvLink }) {
-              return <>{cvLink && <Link to={cvLink}>Download</Link>}</>;
+              return (
+                <>
+                  {cvLink && (
+                    <CustomLink target="_blank" to={cvLink}>
+                      View
+                    </CustomLink>
+                  )}
+                </>
+              );
             },
           },
           {

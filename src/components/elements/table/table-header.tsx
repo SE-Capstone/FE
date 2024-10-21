@@ -188,7 +188,7 @@ const TableHeader = <T extends object>({
           <HeaderCell<T>
             key={String(col.key)}
             isNumeric={col.isNumeric}
-            py={3}
+            py={2}
             accessor={String(col.key) as keyof T}
             // ref={refs[index]}
             handleSortBy={handleSortBy}

@@ -7,9 +7,10 @@ import type { ThemingProps, BadgeProps } from '@chakra-ui/react';
 import { PROJECT_STATUS_VALUES } from '@/configs';
 
 const BADGE_STATUS_COLOR_MAP: Record<ProjectStatusEnum, ThemingProps['colorScheme']> = {
-  [ProjectStatusEnum.Active]: 'green',
-  [ProjectStatusEnum.Inactive]: 'red',
-  [ProjectStatusEnum.Pending]: 'blue',
+  [ProjectStatusEnum.Completed]: 'green',
+  [ProjectStatusEnum.Canceled]: 'orange',
+  [ProjectStatusEnum.InProgress]: 'blue',
+  [ProjectStatusEnum.NotStarted]: 'gray',
 };
 
 interface BadgeRoleProps extends BadgeProps {

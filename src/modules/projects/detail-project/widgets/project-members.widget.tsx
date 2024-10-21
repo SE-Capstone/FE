@@ -89,7 +89,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
         )}
       </Stack>
       {hasMembers ? (
-        <>
+        <Stack>
           <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
             {project?.leadName} (Leader)
           </Text>
@@ -98,7 +98,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
               {member.roleName} - {member.fullName}
             </Text>
           ))}
-        </>
+        </Stack>
       ) : (
         <UpsertMembersWidget
           defaultUserValue={Array.from(initialMembers)}

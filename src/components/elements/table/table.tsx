@@ -270,7 +270,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                               <Td
                                 key={String(column.key)}
                                 border="none"
-                                py={2}
+                                py={1}
                                 isNumeric={
                                   // typeof object[column.key] === 'number' && column.key === 'id'
                                   false

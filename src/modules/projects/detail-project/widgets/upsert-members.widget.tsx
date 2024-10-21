@@ -52,13 +52,12 @@ export function UpsertMembersWidget(props: UpsertMembersWidgetProps) {
     <ModalBase
       size="xl"
       isDone={!!data}
-      title="Add members"
+      title={defaultUserValue.length === 0 ? 'Add members' : 'Update members'}
       triggerButton={() => children}
       renderFooter={() => (
-        <Stack w="full" gap={2} display="flex" flexDir="row" justifyContent="end">
+        <Stack gap={2} display="flex" flexDir="row" justifyContent="end">
           <Button
-            form="form-create-user"
-            w={20}
+            form="form-upsert-members"
             type="submit"
             isDisabled={isLoading}
             onClick={() => {
