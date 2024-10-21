@@ -127,17 +127,6 @@ export const ISSUE_PRIORITY_OPTIONS = [
   },
 ];
 
-export const USER_STATUS_OPTIONS = [
-  {
-    label: 'Active',
-    value: UserStatusEnum.Active,
-  },
-  {
-    label: 'Inactive',
-    value: UserStatusEnum.Inactive,
-  },
-];
-
 export const COLOR_OPTIONS = [
   'blackAlpha',
   'gray',

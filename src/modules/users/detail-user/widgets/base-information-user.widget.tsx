@@ -15,7 +15,7 @@ import type { IRole } from '@/modules/roles/list-role/types';
 import { CustomChakraReactSelect, CustomFormProvider, CustomInput } from '@/components/elements';
 import { PreviewImage } from '@/components/elements/preview-image';
 import { EditRow } from '@/components/widgets';
-import { GENDER_OPTIONS, PermissionEnum, USER_STATUS_OPTIONS } from '@/configs';
+import { GENDER_OPTIONS, PermissionEnum, UserStatusEnum } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
 import {
   cleanPhoneNumber,
@@ -24,6 +24,7 @@ import {
   phoneNumberAutoFormat,
 } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
+import { BadgeIssue } from '@/modules/issues/list-issue/components';
 import { useGetListPositionQuery } from '@/modules/positions/hooks/queries';
 import { useGetBanks } from '@/modules/profile/apis/get-banks.api';
 import { useAuthentication } from '@/modules/profile/hooks';
@@ -178,7 +179,16 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                   isRequired
                   isSearchable
                   label="Choose status"
-                  options={USER_STATUS_OPTIONS}
+                  options={[
+                    {
+                      label: <BadgeIssue content="Active" colorScheme="green" />,
+                      value: UserStatusEnum.Active,
+                    },
+                    {
+                      label: <BadgeIssue content="Inactive" colorScheme="red" />,
+                      value: UserStatusEnum.Inactive,
+                    },
+                  ]}
                   control={control}
                   name="status"
                 />

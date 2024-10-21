@@ -22,6 +22,7 @@ function mutation(req: IToggleUserStatus) {
     method: 'PUT',
     url: ALL_ENDPOINT_URL_STORE.user.toggleStatus,
     data: body,
+    isFormData: true,
   });
 }
 
