@@ -86,7 +86,7 @@ export function ListProjectPage() {
                   {permissions[PermissionEnum.GET_ALL_PROJECT] && (
                     <Flex alignItems="center">
                       <Text fontSize="13px" mr={1}>
-                        Isvisible:
+                        Visible:
                       </Text>
                       {project.isVisible ? (
                         <MdCheck size="12px" color="green" />

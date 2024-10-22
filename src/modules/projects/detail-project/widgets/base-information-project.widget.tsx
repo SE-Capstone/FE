@@ -36,7 +36,7 @@ export function BaseInformationProjectWidget({
       text: <BadgeStatus status={project?.status as ProjectStatusEnum} />,
     },
     permissions[PermissionEnum.GET_ALL_PROJECT] && {
-      label: 'Isvisible',
+      label: 'Visible',
       text: (
         <ChangeStatus
           id={project?.id || ''}

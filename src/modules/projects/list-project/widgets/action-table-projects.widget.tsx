@@ -47,6 +47,7 @@ export function ActionTableProjectsWidget({ teamLeads }: { teamLeads: IUser[] })
           >
             <CustomChakraReactSelect
               isSearchable={false}
+              size="md"
               placeholder="Choose status"
               options={PROJECT_STATUS_OPTIONS}
               onChange={(opt) => {
