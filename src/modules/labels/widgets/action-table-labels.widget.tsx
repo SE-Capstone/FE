@@ -2,7 +2,7 @@ import { Box, Button, HStack, Spacer, useDisclosure } from '@chakra-ui/react';
 
 import { UpsertLabelWidget } from './upsert-label.widget';
 
-export function ActionTableLabelsWidget() {
+export function ActionTableLabelsWidget({ isDefault }: { isDefault?: boolean }) {
   const disclosureModal = useDisclosure();
 
   return (
@@ -12,7 +12,11 @@ export function ActionTableLabelsWidget() {
         <Button leftIcon={<>+</>} onClick={disclosureModal.onOpen}>
           Create
         </Button>
-        <UpsertLabelWidget isOpen={disclosureModal.isOpen} onClose={disclosureModal.onClose} />
+        <UpsertLabelWidget
+          isOpen={disclosureModal.isOpen}
+          isDefault={isDefault}
+          onClose={disclosureModal.onClose}
+        />
       </HStack>
     </Box>
   );

@@ -14,6 +14,7 @@ interface IRemoveLabelRequest {
   body: {
     id: string;
     newLabelId?: string;
+    isDefault?: string;
   };
 }
 
@@ -21,7 +22,9 @@ function mutation(req: IRemoveLabelRequest) {
   const { body } = req;
   return makeRequest<typeof body, IResponseApi<ILabel>>({
     method: 'DELETE',
-    url: ALL_ENDPOINT_URL_STORE.labels.delete(body.id),
+    url: body.isDefault
+      ? ALL_ENDPOINT_URL_STORE.labels.deleteDefault(body.id)
+      : ALL_ENDPOINT_URL_STORE.labels.delete(body.id),
     data: body,
   });
 }
@@ -29,19 +32,26 @@ function mutation(req: IRemoveLabelRequest) {
 interface Props {
   configs?: MutationConfig<typeof mutation>;
   closeAlert: () => void;
+  isDefault?: boolean;
 }
 
 export function useRemoveLabelMutation(props: Props) {
-  const { configs, closeAlert } = props;
+  const { configs, closeAlert, isDefault } = props;
 
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: mutation,
 
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: allQueryKeysStore.label.labels.queryKey,
-      });
+      if (isDefault) {
+        queryClient.invalidateQueries({
+          queryKey: allQueryKeysStore.label['labels/default'].queryKey,
+        });
+      } else {
+        queryClient.invalidateQueries({
+          queryKey: allQueryKeysStore.label.labels.queryKey,
+        });
+      }
       notify({
         type: 'success',
         message: DEFAULT_MESSAGE.DELETE_SUCCESS,

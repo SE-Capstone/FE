@@ -18,18 +18,20 @@ import { BadgeIssue } from '@/modules/issues/list-issue/components';
 
 export interface UpsertStatusWidgetProps {
   isUpdate?: boolean;
+  isDefault?: boolean;
   status?: IStatus;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export function UpsertStatusWidget(props: UpsertStatusWidgetProps) {
-  const { isUpdate, status, isOpen, onClose } = props;
+  const { isUpdate, status, isOpen, onClose, isDefault } = props;
 
   const { formUpsertStatus, handleUpsertStatus, isLoading, reset } = useUpsertStatusHook({
     id: status?.id,
     isUpdate,
     onClose,
+    isDefault,
   });
 
   const {

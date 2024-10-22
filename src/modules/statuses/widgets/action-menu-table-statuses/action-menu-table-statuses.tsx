@@ -13,12 +13,17 @@ import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
 interface ActionMenuTableStatusesProps {
   status: IStatus;
   listStatus: IStatus[];
+  isDefault?: boolean;
 }
 
-export function ActionMenuTableStatuses({ status, listStatus }: ActionMenuTableStatusesProps) {
+export function ActionMenuTableStatuses({
+  status,
+  listStatus,
+  isDefault,
+}: ActionMenuTableStatusesProps) {
   const disclosureModal = useDisclosure();
   const disclosureModalRemoveStatus = useDisclosure();
-  const { handleRemoveStatus } = useRemoveStatusHook();
+  const { handleRemoveStatus } = useRemoveStatusHook(isDefault);
 
   if (!status || !status.id) return null;
 
@@ -36,7 +41,7 @@ export function ActionMenuTableStatuses({ status, listStatus }: ActionMenuTableS
       label: 'Delete',
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {
-        if (status.issueCount === 0) {
+        if (status.issueCount === 0 || isDefault) {
           return handleRemoveStatus(status);
         }
 
@@ -51,12 +56,14 @@ export function ActionMenuTableStatuses({ status, listStatus }: ActionMenuTableS
       <UpsertStatusWidget
         status={status}
         isUpdate
+        isDefault={isDefault}
         isOpen={disclosureModal.isOpen}
         onClose={disclosureModal.onClose}
       />
       <RemoveStatusWidget
         listStatus={listStatus}
         status={status}
+        isDefault={isDefault}
         isOpen={disclosureModalRemoveStatus.isOpen}
         onClose={disclosureModalRemoveStatus.onClose}
       />

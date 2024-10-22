@@ -13,12 +13,13 @@ import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
 interface ActionMenuTableLabelsProps {
   label: ILabel;
   listLabel: ILabel[];
+  isDefault?: boolean;
 }
 
-export function ActionMenuTableLabels({ label, listLabel }: ActionMenuTableLabelsProps) {
+export function ActionMenuTableLabels({ label, listLabel, isDefault }: ActionMenuTableLabelsProps) {
   const disclosureModal = useDisclosure();
   const disclosureModalRemoveLabel = useDisclosure();
-  const { handleRemoveLabel } = useRemoveLabelHook();
+  const { handleRemoveLabel } = useRemoveLabelHook(isDefault);
 
   if (!label || !label.id) return null;
 
@@ -36,7 +37,7 @@ export function ActionMenuTableLabels({ label, listLabel }: ActionMenuTableLabel
       label: 'Delete',
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {
-        if (label.issueCount === 0) {
+        if (label.issueCount === 0 || isDefault) {
           return handleRemoveLabel(label);
         }
 
@@ -52,11 +53,13 @@ export function ActionMenuTableLabels({ label, listLabel }: ActionMenuTableLabel
         label={label}
         isUpdate
         isOpen={disclosureModal.isOpen}
+        isDefault={isDefault}
         onClose={disclosureModal.onClose}
       />
       <RemoveLabelWidget
         listLabel={listLabel}
         label={label}
+        isDefault={isDefault}
         isOpen={disclosureModalRemoveLabel.isOpen}
         onClose={disclosureModalRemoveLabel.onClose}
       />

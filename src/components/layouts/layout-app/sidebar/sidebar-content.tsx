@@ -12,6 +12,7 @@ import {
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
+import { AiOutlineIdcard } from 'react-icons/ai';
 import { BiLayer } from 'react-icons/bi';
 import { BsWindowDock } from 'react-icons/bs';
 import {
@@ -82,7 +83,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
         },
         permissions[PermissionEnum.READ_LIST_ROLE] && {
           name: 'Roles',
-          icon: MdOutlineSettings,
+          icon: AiOutlineIdcard,
           path: '/roles',
         },
         {
@@ -112,6 +113,11 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
               path: APP_PATHS.listApplicant,
             },
           ].filter(Boolean),
+        },
+        {
+          name: 'Settings',
+          icon: MdOutlineSettings,
+          path: '/settings',
         },
         {
           name: 'News',

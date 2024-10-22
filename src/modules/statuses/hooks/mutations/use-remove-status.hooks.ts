@@ -6,11 +6,12 @@ import type { IStatus } from '../../types';
 
 import { useAlertDialogStore } from '@/contexts';
 
-export function useRemoveStatusHook() {
+export function useRemoveStatusHook(isDefault?: boolean) {
   const [loading, setLoading] = useState(false);
   const { openAlert, closeAlert } = useAlertDialogStore(loading);
   const { mutate, isPending } = useRemoveStatusMutation({
     closeAlert,
+    isDefault,
   });
 
   useEffect(() => {

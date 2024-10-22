@@ -13,15 +13,17 @@ export interface UpsertLabelWidgetProps {
   label?: ILabel;
   isOpen: boolean;
   onClose: () => void;
+  isDefault?: boolean;
 }
 
 export function UpsertLabelWidget(props: UpsertLabelWidgetProps) {
-  const { isUpdate, label, isOpen, onClose } = props;
+  const { isUpdate, label, isOpen, onClose, isDefault } = props;
 
   const { formUpsertLabel, handleUpsertLabel, isLoading, reset } = useUpsertLabelHook({
     id: label?.id,
     isUpdate,
     onClose,
+    isDefault,
   });
 
   const {

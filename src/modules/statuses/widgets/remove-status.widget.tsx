@@ -15,10 +15,11 @@ export interface RemoveStatusWidgetProps {
   status: IStatus;
   isOpen: boolean;
   onClose: () => void;
+  isDefault?: boolean;
 }
 
 export function RemoveStatusWidget(props: RemoveStatusWidgetProps) {
-  const { status, listStatus, isOpen, onClose } = props;
+  const { status, listStatus, isOpen, onClose, isDefault } = props;
 
   const formRemoveStatus = useFormWithSchema({
     schema: removeStatusFormSchema,
@@ -30,7 +31,10 @@ export function RemoveStatusWidget(props: RemoveStatusWidgetProps) {
     reset,
   } = formRemoveStatus;
 
-  const { mutate, isPending: isLoading } = useRemoveStatusMutation({ closeAlert: onClose });
+  const { mutate, isPending: isLoading } = useRemoveStatusMutation({
+    closeAlert: onClose,
+    isDefault,
+  });
 
   function onSubmit(values: RemoveStatusFormValues) {
     if (isLoading) return;

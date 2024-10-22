@@ -14,10 +14,11 @@ export interface RemoveLabelWidgetProps {
   label: ILabel;
   isOpen: boolean;
   onClose: () => void;
+  isDefault?: boolean;
 }
 
 export function RemoveLabelWidget(props: RemoveLabelWidgetProps) {
-  const { label, listLabel, isOpen, onClose } = props;
+  const { label, listLabel, isOpen, onClose, isDefault } = props;
 
   const formRemoveLabel = useFormWithSchema({
     schema: removeLabelFormSchema,
@@ -29,7 +30,10 @@ export function RemoveLabelWidget(props: RemoveLabelWidgetProps) {
     reset,
   } = formRemoveLabel;
 
-  const { mutate, isPending: isLoading } = useRemoveLabelMutation({ closeAlert: onClose });
+  const { mutate, isPending: isLoading } = useRemoveLabelMutation({
+    closeAlert: onClose,
+    isDefault,
+  });
 
   function onSubmit(values: RemoveLabelFormValues) {
     if (isLoading) return;

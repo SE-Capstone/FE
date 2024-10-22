@@ -6,11 +6,12 @@ import type { ILabel } from '../../types';
 
 import { useAlertDialogStore } from '@/contexts';
 
-export function useRemoveLabelHook() {
+export function useRemoveLabelHook(isDefault?: boolean) {
   const [loading, setLoading] = useState(false);
   const { openAlert, closeAlert } = useAlertDialogStore(loading);
   const { mutate, isPending } = useRemoveLabelMutation({
     closeAlert,
+    isDefault,
   });
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import { Box, Button, HStack, Spacer, useDisclosure } from '@chakra-ui/react';
 
 import { UpsertStatusWidget } from './upsert-status.widget';
 
-export function ActionTableStatusesWidget() {
+export function ActionTableStatusesWidget({ isDefault }: { isDefault?: boolean }) {
   const disclosureModal = useDisclosure();
 
   return (
@@ -12,7 +12,11 @@ export function ActionTableStatusesWidget() {
         <Button leftIcon={<>+</>} onClick={disclosureModal.onOpen}>
           Create
         </Button>
-        <UpsertStatusWidget isOpen={disclosureModal.isOpen} onClose={disclosureModal.onClose} />
+        <UpsertStatusWidget
+          isOpen={disclosureModal.isOpen}
+          isDefault={isDefault}
+          onClose={disclosureModal.onClose}
+        />
       </HStack>
     </Box>
   );

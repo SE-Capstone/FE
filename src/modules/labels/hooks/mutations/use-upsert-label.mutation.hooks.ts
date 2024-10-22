@@ -13,10 +13,12 @@ export function useUpsertLabelHook({
   id,
   isUpdate,
   onClose,
+  isDefault,
 }: {
   id?: string;
   isUpdate?: boolean;
   onClose: () => void;
+  isDefault?: boolean;
 }) {
   const { projectId } = useParams();
   const formUpsertLabel = useFormWithSchema({
@@ -29,7 +31,7 @@ export function useUpsertLabelHook({
     mutate,
     isPending: isLoading,
     ...restData
-  } = useUpsertLabelMutation({ onClose, reset, id, isUpdate });
+  } = useUpsertLabelMutation({ onClose, reset, id, isUpdate, isDefault });
 
   const handleUpsertLabel = useCallback(
     async (values: LabelFormValues) => {

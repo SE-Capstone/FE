@@ -19,12 +19,16 @@ interface IUpsertStatusRequest {
   };
 }
 
-function mutation(req: IUpsertStatusRequest, id?: string, isUpdate = false) {
+function mutation(req: IUpsertStatusRequest, id?: string, isUpdate = false, isDefault = false) {
   const { body } = req;
   return makeRequest<typeof body, IResponseApi<IStatus>>({
     method: isUpdate ? 'PUT' : 'POST',
     url: isUpdate
-      ? ALL_ENDPOINT_URL_STORE.statuses.update(id || '')
+      ? isDefault
+        ? ALL_ENDPOINT_URL_STORE.statuses.updateDefault(id || '')
+        : ALL_ENDPOINT_URL_STORE.statuses.update(id || '')
+      : isDefault
+      ? ALL_ENDPOINT_URL_STORE.statuses.createDefault
       : ALL_ENDPOINT_URL_STORE.statuses.create,
     data: body,
   });
@@ -36,17 +40,31 @@ interface Props {
   onClose: () => void;
   id?: string;
   isUpdate?: boolean;
+  isDefault?: boolean;
 }
 
-export function useUpsertStatusMutation({ configs, reset, id, isUpdate, onClose }: Props) {
+export function useUpsertStatusMutation({
+  configs,
+  reset,
+  id,
+  isUpdate,
+  isDefault,
+  onClose,
+}: Props) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (req) => mutation(req, id, isUpdate),
+    mutationFn: (req) => mutation(req, id, isUpdate, isDefault),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: allQueryKeysStore.status.statuses.queryKey,
-      });
+      if (isDefault) {
+        queryClient.invalidateQueries({
+          queryKey: allQueryKeysStore.status['statuses/default'].queryKey,
+        });
+      } else {
+        queryClient.invalidateQueries({
+          queryKey: allQueryKeysStore.status.statuses.queryKey,
+        });
+      }
       notify({
         type: 'success',
         message: isUpdate ? DEFAULT_MESSAGE.UPDATE_SUCCESS : DEFAULT_MESSAGE.CREATE_SUCCESS,
