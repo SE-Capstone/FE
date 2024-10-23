@@ -29,6 +29,7 @@ export function useRemoveLabelHook(isDefault?: boolean) {
         mutate({
           body: {
             id: label.id,
+            isDefault,
           },
         });
       },

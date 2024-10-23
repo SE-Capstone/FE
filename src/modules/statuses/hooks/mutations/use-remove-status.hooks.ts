@@ -29,6 +29,7 @@ export function useRemoveStatusHook(isDefault?: boolean) {
         mutate({
           body: {
             id: status.id,
+            isDefault,
           },
         });
       },

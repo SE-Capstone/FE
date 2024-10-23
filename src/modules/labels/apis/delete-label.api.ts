@@ -14,7 +14,7 @@ interface IRemoveLabelRequest {
   body: {
     id: string;
     newLabelId?: string;
-    isDefault?: string;
+    isDefault?: boolean;
   };
 }
 
