@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 
-import { Box, CloseButton, Icon } from '@chakra-ui/react';
-import { MdSearch } from 'react-icons/md';
+import { Box, Icon } from '@chakra-ui/react';
+import { MdClose, MdSearch } from 'react-icons/md';
 
 import type { CustomInputProps } from '@/components/elements';
-import type { CloseButtonProps, IconProps } from '@chakra-ui/react';
+import type { IconProps } from '@chakra-ui/react';
 
 import { CustomInput } from '@/components/elements';
 import { useDebounce } from '@/libs/hooks';
@@ -15,15 +15,12 @@ interface SearchInputProps extends CustomInputProps {
   onHandleSearch: (value: string | undefined) => void;
 
   iconSearchProps?: IconProps;
-
-  clearButtonProps?: CloseButtonProps;
 }
 
 export function SearchInput({
   onHandleSearch,
   initValue = undefined,
   iconSearchProps,
-  clearButtonProps,
   ...rest
 }: SearchInputProps) {
   const [debounceSearchValue, setSearchValue, value] = useDebounce(initValue);
@@ -58,7 +55,7 @@ export function SearchInput({
         size: 'md',
       }}
       autoFocus
-      placeholder="Tìm kiếm..."
+      placeholder="Search..."
       _disabled={{
         bg: 'white',
         cursor: 'not-allowed',
@@ -69,7 +66,13 @@ export function SearchInput({
       rightIcon={
         <Box h="fit-content">
           {debounceSearchValue?.length ? (
-            <CloseButton size="sm" {...clearButtonProps} onClick={handleClearSearchValue} />
+            <Icon
+              as={MdClose}
+              boxSize={4.5}
+              cursor="pointer"
+              {...iconSearchProps}
+              onClick={handleClearSearchValue}
+            />
           ) : (
             <Icon
               as={MdSearch}

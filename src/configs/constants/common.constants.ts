@@ -59,6 +59,17 @@ export const GENDER_OPTIONS = [
   },
 ] as const;
 
+export const USER_STATUS_OPTIONS = [
+  {
+    label: 'Active',
+    value: UserStatusEnum.Active,
+  },
+  {
+    label: 'Inctive',
+    value: UserStatusEnum.Inactive,
+  },
+] as const;
+
 export const PROJECT_STATUS_OPTIONS = [
   {
     label: 'Completed',

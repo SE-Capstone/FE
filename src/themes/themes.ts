@@ -140,10 +140,10 @@ const customTheme: ThemeOverride = {
         },
         md: {
           field: {
-            h: '34px',
+            h: '32px',
           },
           addon: {
-            h: '34px',
+            h: '32px',
             fontsize: { base: 'xs', lg: 'sm' },
           },
         },

@@ -47,7 +47,7 @@ export function ActionTableProjectsWidget({ teamLeads }: { teamLeads: IUser[] })
           >
             <CustomChakraReactSelect
               isSearchable={false}
-              size="md"
+              size="sm"
               placeholder="Choose status"
               options={PROJECT_STATUS_OPTIONS}
               onChange={(opt) => {
@@ -65,7 +65,7 @@ export function ActionTableProjectsWidget({ teamLeads }: { teamLeads: IUser[] })
           >
             <CustomChakraReactSelect
               isSearchable={false}
-              size="md"
+              size="sm"
               placeholder="Choose visible status"
               options={PROJECT_VISIBILITY_OPTIONS}
               onChange={(opt) => {
