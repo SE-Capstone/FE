@@ -44,7 +44,6 @@ export function useGetInfiniteUserQuery(props: UseGetInfiniteUserQueryProps = {}
           pageIndex,
           pageSize,
           orderBy: 'createDate',
-          orderByDesc: 'desc',
         },
         params
       ),

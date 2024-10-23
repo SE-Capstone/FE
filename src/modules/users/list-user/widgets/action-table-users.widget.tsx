@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import { Box, Button, HStack, Spacer, Stack } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
 
 import { AddNewUserWidget } from './add-new-user.widget';
 import { useUsersQueryFilterStateContext } from '../contexts';
@@ -12,14 +11,11 @@ import { CustomChakraReactSelect, SearchInput } from '@/components/elements';
 import { PermissionEnum } from '@/configs';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetRoles } from '@/modules/roles/list-role/apis/get-roles.api';
-import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ActionTableUsersWidget() {
   const { usersQueryState, setUsersQueryFilterState } = useUsersQueryFilterStateContext();
   const { permissions } = useAuthentication();
-  const { pathname } = useLocation();
 
-  const isShowFilterUser = pathname.includes(APP_PATHS.listUser);
   const [roles, setRoles] = useState<IRole[]>([]);
 
   const { roles: listRole } = useGetRoles({});
@@ -42,30 +38,28 @@ export function ActionTableUsersWidget() {
             }}
           />
         </Stack>
-        {isShowFilterUser && (
-          <>
-            <Box flexBasis="30%">
-              <CustomChakraReactSelect
-                isSearchable
-                placeholder="Filter by role"
-                options={roles.map((role) => ({
-                  label: role.name,
-                  value: role.id,
-                }))}
-                onChange={(opt) => {
-                  setUsersQueryFilterState({
-                    roleId: opt?.value ? opt.value : undefined,
-                  });
-                }}
-              />
-            </Box>
-            <Spacer />
-            {permissions[PermissionEnum.ADD_USER] && (
-              <AddNewUserWidget roles={listRole}>
-                <Button leftIcon={<>+</>}>Create</Button>
-              </AddNewUserWidget>
-            )}
-          </>
+        <Box flexBasis="30%">
+          <CustomChakraReactSelect
+            isSearchable
+            size="sm"
+            placeholder="Filter by role"
+            options={roles.map((role) => ({
+              label: role.name,
+              value: role.id,
+            }))}
+            onChange={(opt) => {
+              setUsersQueryFilterState({
+                roleId: opt?.value ? opt.value : undefined,
+              });
+            }}
+          />
+        </Box>
+        <Spacer />
+
+        {permissions[PermissionEnum.ADD_USER] && (
+          <AddNewUserWidget roles={listRole}>
+            <Button leftIcon={<>+</>}>Create</Button>
+          </AddNewUserWidget>
         )}
       </HStack>
     </Box>

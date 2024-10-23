@@ -141,7 +141,7 @@ export const CustomChakraReactSelect = <
         bg: state.isSelected ? 'primary' : 'white',
         _hover: { bg: 'primary', color: 'white' },
         transition: 'background 0.3s ease',
-        fontSize: { base: 'sm', '2xl': 'md' },
+        fontSize: { base: 'sm', '2xl': 'sm' },
       }),
 
       container: (provide) => ({
@@ -151,12 +151,12 @@ export const CustomChakraReactSelect = <
       }),
       noOptionsMessage: (provide) => ({
         ...provide,
-        fontSize: { base: 'sm', '2xl': 'md' },
+        fontSize: { base: 'sm', '2xl': 'sm' },
         p: { base: 0, '2xl': 1 },
       }),
       loadingMessage: (provide) => ({
         ...provide,
-        fontSize: { base: 'sm', '2xl': 'md' },
+        fontSize: { base: 'sm', '2xl': 'sm' },
         p: { base: 0, '2xl': 1 },
       }),
       placeholder: (provide) => ({
@@ -167,13 +167,13 @@ export const CustomChakraReactSelect = <
       }),
       multiValue: (provide) => ({
         ...provide,
-        fontSize: { base: 'sm', '2xl': 'md' },
+        fontSize: { base: 'sm', '2xl': 'sm' },
         fontWeight: 'medium',
       }),
 
       singleValue: (provide) => ({
         ...provide,
-        fontSize: { base: 'sm', '2xl': 'md' },
+        fontSize: { base: 'sm', '2xl': 'sm' },
       }),
 
       ...chakraStyles,
@@ -183,7 +183,7 @@ export const CustomChakraReactSelect = <
 
   const basePropsSelect: Partial<ChakraSelectProps<TOption, IsMulti, GroupBase<TOption>>> = useMemo(
     () => ({
-      size: { base: 'md', xl: 'lg' },
+      size: { base: 'md', xl: 'md' },
       menuPosition: 'fixed',
       closeMenuOnSelect: !isMulti,
       components: customComponents,
