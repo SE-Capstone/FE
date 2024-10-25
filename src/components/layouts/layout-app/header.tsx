@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   Avatar,
   Heading,
@@ -10,7 +12,9 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  MenuDivider,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { CgProfile } from 'react-icons/cg';
 import { MdLogout } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';
@@ -22,6 +26,10 @@ import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function HeaderApp() {
+  const { t, i18n } = useTranslation();
+  const [currentLanguage, setCurrentLanguage] = useState<string>(
+    localStorage.getItem('i18nextLng') || 'en'
+  );
   const { fullName, isLoading, currentUser, isLogged } = useAuthentication();
 
   const location = useLocation();
@@ -29,8 +37,8 @@ export function HeaderApp() {
   const { pathname } = location;
 
   const TITLE_ROUTES = {
-    [APP_PATHS.HOME]: 'Home',
-    [APP_PATHS.listUser]: 'Users',
+    [APP_PATHS.HOME]: t('common.home'),
+    [APP_PATHS.listUser]: t('common.users'),
   } as const;
 
   const title = TITLE_ROUTES[pathname];
@@ -50,6 +58,13 @@ export function HeaderApp() {
       });
     }
   }
+
+  const changeLanguage = (lang: 'en' | 'vi') => {
+    if (currentLanguage === lang) return;
+    setCurrentLanguage(lang);
+    i18n.changeLanguage(lang);
+    localStorage.setItem('i18nextLng', lang);
+  };
 
   return (
     <HStack
@@ -110,7 +125,7 @@ export function HeaderApp() {
                   }}
                   fontWeight="semibold"
                 >
-                  Profile
+                  {t('common.profile')}
                 </Text>
               </MenuItem>
               <MenuItem
@@ -134,9 +149,60 @@ export function HeaderApp() {
                   }}
                   fontWeight="semibold"
                 >
-                  Logout
+                  {t('common.logout')}
                 </Text>
               </MenuItem>
+              <MenuDivider />
+              <Text fontWeight="bold" color="neutral.300" px={1}>
+                {t('common.language')}
+              </Text>
+              <MenuItem
+                color={i18n.language === 'en' ? 'white' : 'neutral.300'}
+                bg={i18n.language === 'en' ? 'primary' : 'transparent'}
+                py={2.5}
+                className="group"
+                borderRadius={1.5}
+                _hover={{
+                  color: 'white',
+                  background: 'primary',
+                }}
+                onClick={() => changeLanguage('en')}
+              >
+                <Text
+                  fontSize="14px"
+                  _groupHover={{
+                    color: 'white',
+                  }}
+                  color={i18n.language === 'en' ? 'white' : 'neutral.300'}
+                  fontWeight="semibold"
+                >
+                  English
+                </Text>
+              </MenuItem>
+              <MenuItem
+                color={i18n.language === 'vi' ? 'white' : 'neutral.300'}
+                bg={i18n.language === 'vi' ? 'primary' : 'transparent'}
+                py={2.5}
+                borderRadius={1.5}
+                className="group"
+                _hover={{
+                  color: 'white',
+                  background: 'primary',
+                }}
+                onClick={() => changeLanguage('vi')}
+              >
+                <Text
+                  color={i18n.language === 'vi' ? 'white' : 'neutral.300'}
+                  _groupHover={{
+                    color: 'white',
+                  }}
+                  fontSize="14px"
+                  fontWeight="semibold"
+                >
+                  Tiếng Việt
+                </Text>
+              </MenuItem>
+              {/* Add more languages as needed */}
             </Stack>
           </MenuList>
         </Menu>

@@ -15,7 +15,7 @@ import { getNumericalOrder } from '@/libs/helpers';
 export function ListJobPage() {
   const { jobsQueryState, resetJobsQueryState } = useJobsQueryFilterStateContext();
 
-  const { listJob, isError, isLoading, isRefetching } = useGetListJobQuery({
+  const { listJob, meta, isError, isLoading, handlePaginate, isRefetching } = useGetListJobQuery({
     params: jobsQueryState.filters,
   });
 
@@ -87,12 +87,15 @@ export function ListJobPage() {
           <Container maxW="container.2xl" centerContent>
             <ActionTableJobsWidget />
             <TableComponent
-              withoutPagination
+              currentPage={meta.pageIndex}
+              perPage={meta.pageSize}
               data={listJob}
               groupColumns={columns}
+              totalCount={meta.totalCount}
               isLoading={isLoading || isRefetching}
               isError={!!isError}
               additionalFeature={(job) => <ActionMenuTableJobs job={job} />}
+              onPageChange={handlePaginate}
             />
           </Container>
         </StateHandler>

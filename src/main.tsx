@@ -4,6 +4,7 @@ import App from './App';
 
 import { isProduction } from '@/configs';
 import reportWebVitals from '@/libs/utils/web-vitals';
+import './configs/i18n';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<App />);
 

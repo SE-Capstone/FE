@@ -162,8 +162,7 @@ export const CustomChakraReactSelect = <
       placeholder: (provide) => ({
         ...provide,
         color: 'textColor',
-        fontWeight: 'medium',
-        fontSize: { base: 'xs', '2xl': 'sm' },
+        fontSize: { base: 'xs', '2xl': 'xs' },
       }),
       multiValue: (provide) => ({
         ...provide,

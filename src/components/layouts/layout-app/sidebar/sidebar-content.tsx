@@ -12,6 +12,7 @@ import {
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { AiOutlineIdcard } from 'react-icons/ai';
 import { BiLayer } from 'react-icons/bi';
 import { BsWindowDock } from 'react-icons/bs';
@@ -49,6 +50,7 @@ interface SidebarContentProps extends BoxProps {
 }
 
 export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
+  const { t } = useTranslation();
   const location = useLocation();
   const { permissions } = useAuthentication();
   const [collapsed, setCollapsed] = useState(false);
@@ -57,75 +59,75 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
     () =>
       [
         {
-          name: 'Home',
+          name: t('common.home'),
           icon: MdOutlineHome,
           path: APP_PATHS.HOME,
         },
         (permissions[PermissionEnum.GET_LIST_USER] ||
           // Todo: fix
           permissions[PermissionEnum.GET_LIST_USER]) && {
-          name: 'Users',
+          name: t('common.user'),
           icon: MdOutlinePeopleAlt,
           path: undefined,
           children: [
             permissions[PermissionEnum.GET_LIST_USER] && {
-              name: 'List User',
+              name: t('common.users'),
               icon: MdOutlineCategory,
               path: APP_PATHS.listUser,
             },
             // Todo: fix
             permissions[PermissionEnum.GET_LIST_USER] && {
-              name: 'Positions',
+              name: t('common.positions'),
               icon: BiLayer,
               path: APP_PATHS.listUser,
             },
           ].filter(Boolean),
         },
         permissions[PermissionEnum.READ_LIST_ROLE] && {
-          name: 'Roles',
+          name: t('common.roles'),
           icon: AiOutlineIdcard,
           path: '/roles',
         },
         {
-          name: 'Projects',
+          name: t('common.projects'),
           icon: BsWindowDock,
           path: '/projects',
         },
         // Todo: update permission
         {
-          name: 'HR',
+          name: t('common.hr'),
           icon: MdOutlinePeopleAlt,
           path: undefined,
           children: [
             {
-              name: 'Positions',
+              name: t('common.positions'),
               icon: MdOutlineLayers,
               path: APP_PATHS.listPosition,
             },
             {
-              name: 'Jobs',
+              name: t('common.jobs'),
               icon: PiBriefcase,
               path: APP_PATHS.listJob,
             },
             {
-              name: 'Applicants',
+              name: t('common.applicants'),
               icon: PiUserSquareLight,
               path: APP_PATHS.listApplicant,
             },
           ].filter(Boolean),
         },
         {
-          name: 'Settings',
+          name: t('common.settings'),
           icon: MdOutlineSettings,
           path: '/settings',
         },
         {
-          name: 'News',
+          name: t('common.news'),
           icon: MdOutlineNewspaper,
           path: '/news',
         },
       ].filter(Boolean),
-    [permissions]
+    [permissions, t]
   );
 
   return (

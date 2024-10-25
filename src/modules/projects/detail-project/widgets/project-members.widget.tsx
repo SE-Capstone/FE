@@ -21,7 +21,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
     project?.members?.map((member) =>
       tempDefaultUsers.push({
         value: member.id,
-        label: member.fullName,
+        label: `${member.fullName} (${member.userName})`,
         image: '',
       })
     );
@@ -95,7 +95,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           </Text>
           {project?.members.map((member, index) => (
             <Text key={index} wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
-              {member.roleName} - {member.fullName}
+              {member.userName} ({member.positionName})
             </Text>
           ))}
         </Stack>

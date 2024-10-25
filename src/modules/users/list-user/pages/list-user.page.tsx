@@ -132,7 +132,7 @@ export function ListUserPage() {
             title: 'Status',
             hasSort: false,
             Cell({ status }) {
-              return <BadgeStatus role={status as unknown as RolesEnum} />;
+              return <BadgeStatus status={status} />;
             },
           },
         ],

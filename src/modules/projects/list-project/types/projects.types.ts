@@ -12,6 +12,7 @@ export type ProjectMember = {
   fullName: string;
   userName: string;
   roleName: string;
+  positionName: string;
   avatar?: string;
 };
 
