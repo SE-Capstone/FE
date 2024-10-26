@@ -70,7 +70,7 @@ export function UpsertMembersWidget(props: UpsertMembersWidgetProps) {
               if (!usersChecked.current.length) {
                 return notify({
                   type: 'error',
-                  message: t('validatation.memberRequired'),
+                  message: t('validation.memberRequired'),
                 });
               }
               const selected = usersChecked.current.sort().join();

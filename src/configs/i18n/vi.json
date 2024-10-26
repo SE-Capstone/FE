@@ -1,5 +1,10 @@
 {
   "common": {
+    "login": "Đăng nhập",
+    "forgotPassword": "Quên mật khẩu",
+    "backToLogin": "Quay lại trang đăng nhập",
+    "backToHomePage": "Quay lại trang chủ",
+    "pageNotFound": "Không tìm thấy trang",
     "choose": "Chọn",
     "enter": "Nhập",
     "filterBy": "Lọc theo",
@@ -133,9 +138,70 @@
     "updatePersonalInformation": "Cập nhật thông tin cá nhân",
     "projectInformation": "Thông tin dự án"
   },
-  "validatation": {
+  "validation": {
     "memberRequired": "Vui lòng chọn ít nhất một thành viên",
-    "permissionRequired": "Vui lòng chọn ít nhất một quyền"
+    "permissionRequired": "Vui lòng chọn ít nhất một quyền",
+    "fieldRequired": "Trường này là bắt buộc",
+    "phoneMin": "Số điện thoại phải có ít nhất 8 ký tự",
+    "phoneMax": "Số điện thoại phải có ít nhất 15 ký tự",
+    "nameRequired": "Tên là bắt buộc",
+    "nameMax": "Tên không được quá 255 ký tự",
+    "emailRequired": "Email là bắt buộc",
+    "emailMax": "Email không được quá 255 ký tự",
+    "emailInvalid": "Email không hợp lệ",
+    "passwordMin": "Mật khẩu phải có ít nhất 6 ký tự",
+    "passwordMax": "Mật khẩu phải có ít nhất 255 ký tự",
+    "passwordComplexity": "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 chữ số và 1 ký tự đặc biệt",
+    "passwordSame": "Mật khẩu không khớp",
+    "titleRequired": "Tiêu đề là bắt buộc",
+    "descriptionRequired": "Mô tả là bắt buộc",
+    "profile": {
+      "fullNameRequired": "Tên là bắt buộc",
+      "fullNameMax": "Tên không được quá 255 ký tự",
+      "invalidGender": "Giới tính không hợp lệ",
+      "addressRequired": "Địa chỉ là bắt buộc",
+      "birthdayBeforeToday": "Ngày sinh phải nhỏ hơn ngày hiện tại",
+      "birthdayOlderThan18Years": "Phải đủ ít nhất 18 tuổi",
+      "addressMax": "Địa chỉ không được quá 255 ký tự",
+      "bankAccountMax": "Số tài khoản ngân hàng không hợp lệ",
+      "bankAccountInvalid": "Số tài khoản ngân hàng không hợp lệ",
+      "bankAccountNameRequired": "Tên tài khoản ngân hàng là bắt buộc",
+      "bankAccountNameMax": "Tên tài khoản ngân hàng không được quá 100 ký tự",
+      "invalidStatus": "Trạng thái không hợp lệ",
+      "roleRequired": "Vai trò là bắt buộc",
+      "positionRequired": "Vị trí là bắt buộc",
+      "usernameRequired": "Tên thay thế là bắt buộc",
+      "usernameMax": "Tên thay thế có nhiều nhất 100 ký tự"
+    },
+    "issue": {
+      "subjectRequired": "Tiêu đề là bắt buộc",
+      "subjectMax": "Tiêu đề không được quá 500 ký tự",
+      "descriptionRequired": "Mô tả là bắt buộc",
+      "percentageInteger": "Giá trị phải là số nguyên",
+      "percentageMin": "Giá trị phải ít nhất 0",
+      "percentageMax": "Giá trị phải ít nhất 100",
+      "invalidPriority": "Dữ liệu không hợp lệ",
+      "estimatedTimeMin": "Thời gian được dự đoán phải ít nhất 0",
+      "estimatedTimeMax": "Thời gian được dự đoán phải ít nhất 1000"
+    },
+    "label": {
+      "titleMax": "Tiêu đề không được quá 20 ký tự",
+      "descriptionMax": "Mô tả không được quá 500 ký tự"
+    },
+    "project": {
+      "nameRequired": "Tên dự án là bắt buộc",
+      "nameMax": "Tên dự án phải có ít nhất 255 ký tự",
+      "codeRequired": "Mã dự án là bắt buộc",
+      "codeMax": "Mã dự án phải có ít nhất 100 ký tự",
+      "invalidStatus": "Trạng thái không hợp lệ",
+      "endDateInvalid": "Ngày kết thúc phải nằm sau ngày bắt đầu"
+    },
+    "status": {
+      "nameRequired": "Tên trạng thái là bắt buộc",
+      "nameMax": "Tên trạng thái phải có ít nhất 20 ký tự",
+      "descriptionMax": "Mô tả không được quá 500 ký tự",
+      "colorRequired": "Màu nền là bắt buộc"
+    }
   },
   "project": {
     "completed": "Hoàn thành",
@@ -207,9 +273,14 @@
     "createSuccess": "Tạo thành công",
     "deleteSuccess": "Xóa thành công",
     "loginSuccess": "Đăng nhập thành công",
+    "logoutSuccess": "Đăng xuất thành công",
+    "confirmLogout": "Bạn có chắc chắn muốn đăng xuất không?",
     "resetPasswordSuccess": "Đặt lại mật khẩu thành công",
     "forgotPasswordSuccess": "Gửi yêu cầu thành công. Vui lòng kiểm tra email của bạn và làm theo hướng dẫn để đặt lại mật khẩu",
     "deleteStatusLabel": "Cập nhật tất cả các công việc hiện có từ trạng thái \"{{statusName}}\" thành",
-    "deleteStatusBody": "Dự án của bạn có {{issueCount}} công việc với trạng thái \"{{statusName}}\". Trước khi bạn có thể xóa trạng thái này, hãy đổi các công việc có trạng thái \"{{statusName}}\" thành trạng thái khác."
+    "deleteStatusBody": "Dự án của bạn có {{issueCount}} công việc với trạng thái \"{{statusName}}\". Trước khi bạn có thể xóa trạng thái này, hãy đổi các công việc có trạng thái \"{{statusName}}\" thành trạng thái khác.",
+    "errorPageMessage": "Xin lỗi, có lỗi xảy ra.",
+    "403PageMessage": "Xin lỗi, bạn không có quyền truy cập trang này.",
+    "resetPasswordFailed": "Đặt lại mật khẩu thất bại, Vui lòng thử lại!"
   }
 }

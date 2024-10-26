@@ -14,7 +14,7 @@ import { useFormWithSchema } from '@/libs/hooks';
 export const ChangePasswordWidget: React.FC = () => {
   const { t } = useTranslation();
   const form = useFormWithSchema({
-    schema: changePasswordSchema,
+    schema: changePasswordSchema(t),
   });
 
   const { formState, register, reset } = form;

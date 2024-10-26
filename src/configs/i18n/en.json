@@ -1,5 +1,10 @@
 {
   "common": {
+    "login": "Login",
+    "forgotPassword": "Forgot password",
+    "backToLogin": "Back to login",
+    "backToHomePage": "Back to home page",
+    "pageNotFound": "Page not found",
     "choose": "Choose",
     "enter": "Enter",
     "filterBy": "Filter by",
@@ -169,9 +174,69 @@
     "updatePersonalInformation": "Update personal information",
     "projectInformation": "Project information"
   },
-  "validatation": {
+  "validation": {
     "memberRequired": "Please choose at least one member",
-    "permissionRequired": "Please choose at least one permission"
+    "permissionRequired": "Please choose at least one permission",
+    "fieldRequired": "This field is required",
+    "phoneMin": "Phone number must be at least 8 characters",
+    "phoneMax": "Phone number must be at most 15 characters",
+    "nameRequired": "Name is required",
+    "nameMax": "Name must be at most 100 characters",
+    "emailRequired": "Email is required",
+    "emailMax": "Email must be at most 100 characters",
+    "emailInvalid": "Invalid email address",
+    "passwordMin": "Password must be at least 6 characters",
+    "passwordMax": "Password must be at most 255 characters",
+    "passwordComplexity": "Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character",
+    "titleRequired": "Title is required",
+    "descriptionRequired": "Description is required",
+    "profile": {
+      "fullNameRequired": "Full name is required",
+      "fullNameMax": "Full name must be at most 100 characters",
+      "invalidGender": "Invalid gender",
+      "addressRequired": "Address is required",
+      "birthdayBeforeToday": "Birthday must be before today",
+      "birthdayOlderThan18Years": "Birthday must be older than 18 years",
+      "addressMax": "Address must be at most 255 characters",
+      "bankAccountMax": "Invalid bank account number",
+      "bankAccountInvalid": "Invalid bank account number",
+      "bankAccountNameRequired": "Bank account name is required",
+      "bankAccountNameMax": "Bank account name must be at most 100 characters",
+      "invalidStatus": "Invalid status",
+      "roleRequired": "Role is required",
+      "positionRequired": "Position is required",
+      "usernameRequired": "Alias name is required",
+      "usernameMax": "Alias name must be at most 100 characters"
+    },
+    "issue": {
+      "subjectRequired": "Subject is required",
+      "subjectMax": "Subject must be at most 500 characters",
+      "descriptionRequired": "Description is required",
+      "percentageInteger": "Percentage must be an integer",
+      "percentageMin": "Percentage must be at least 0",
+      "percentageMax": "Percentage must be at most 100",
+      "invalidPriority": "Invalid priority value",
+      "estimatedTimeMin": "Estimated time must be at least 0",
+      "estimatedTimeMax": "Estimated time must be at most 1000"
+    },
+    "label": {
+      "titleMax": "Title must be at most 20 characters",
+      "descriptionMax": "Description must be at most 500 characters"
+    },
+    "project": {
+      "nameRequired": "Project name is required",
+      "nameMax": "Project name must be at most 255 characters",
+      "codeRequired": "Project code is required",
+      "codeMax": "Project code must be at most 100 characters",
+      "invalidStatus": "Invalid status",
+      "endDateInvalid": "End date must be on or after start date"
+    },
+    "status": {
+      "nameRequired": "Status name is required",
+      "nameMax": "Status name must be at most 20 characters",
+      "descriptionMax": "Description must be at most 500 characters",
+      "colorRequired": "Theme is required"
+    }
   },
   "project": {
     "completed": "Completed",
@@ -243,9 +308,14 @@
     "createSuccess": "Create successfully",
     "deleteSuccess": "Delete successfully",
     "loginSuccess": "Login successfully",
+    "logoutSuccess": "Logout successfully",
+    "confirmLogout": "Are you sure to logout?",
     "resetPasswordSuccess": "Reset password successfully",
     "forgotPasswordSuccess": "Submit request successfully. Please check your email and follow instruction to reset password",
     "deleteStatusLabel": "Change all existing \"{{statusName}}\" issues to",
-    "deleteStatusBody": "Your project has {{issueCount}} \"{{statusName}}\" issues. Before you can delete this status, change \"{{statusName}}\" issues to another type."
+    "deleteStatusBody": "Your project has {{issueCount}} \"{{statusName}}\" issues. Before you can delete this status, change \"{{statusName}}\" issues to another type.",
+    "errorPageMessage": "Sorry, an unexpected error has occurred.",
+    "403PageMessage": "Oops, You don't have permission to access this page.",
+    "resetPasswordFailed": "Reset failed, Please try again!"
   }
 }

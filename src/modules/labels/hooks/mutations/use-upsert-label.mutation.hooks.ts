@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { useUpsertLabelMutation } from '../../apis/upsert-label.api';
@@ -20,9 +21,10 @@ export function useUpsertLabelHook({
   onClose: () => void;
   isDefault?: boolean;
 }) {
+  const { t } = useTranslation();
   const { projectId } = useParams();
   const formUpsertLabel = useFormWithSchema({
-    schema: labelFormSchema,
+    schema: labelFormSchema(t),
   });
 
   const { reset } = formUpsertLabel;

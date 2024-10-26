@@ -45,7 +45,7 @@ export function DetailRolePage() {
   });
 
   const form = useFormWithSchema({
-    schema: updateRoleFormSchema,
+    schema: updateRoleFormSchema(t),
   });
 
   const { formState, register, reset } = form;
@@ -73,7 +73,7 @@ export function DetailRolePage() {
     if (isLoading || !role) return;
 
     if (permissions.size === 0) {
-      notify({ type: 'error', message: t('validatation.permissionRequired') });
+      notify({ type: 'error', message: t('validation.permissionRequired') });
       return;
     }
 

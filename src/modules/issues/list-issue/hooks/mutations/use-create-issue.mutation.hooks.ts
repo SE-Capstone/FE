@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { useCreateIssueMutation } from '../../apis/create-issue.api';
 import { issueFormSchema } from '../../validations/issues.validations';
 
@@ -9,8 +11,9 @@ import { formatDate } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export function useCreateIssueHook() {
+  const { t } = useTranslation();
   const formCreateIssue = useFormWithSchema({
-    schema: issueFormSchema,
+    schema: issueFormSchema(t),
   });
 
   const { reset } = formCreateIssue;

@@ -1,4 +1,5 @@
 import { Button, Heading, Stack, Text, VStack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { MdLogout } from 'react-icons/md';
 import { Link, useRouteError } from 'react-router-dom';
 
@@ -9,6 +10,7 @@ import { notify } from '@/libs/helpers';
 import { useLogoutMutation } from '@/modules/auth/apis/logout.api';
 
 export function ErrorPage() {
+  const { t } = useTranslation();
   const error = useRouteError() as {
     status: number;
     statusText: string;
@@ -24,7 +26,7 @@ export function ErrorPage() {
     } catch (error) {
       notify({
         type: 'error',
-        message: DEFAULT_MESSAGE.SOMETHING_WRONG,
+        message: DEFAULT_MESSAGE(t).SOMETHING_WRONG,
       });
     }
   }
@@ -41,12 +43,12 @@ export function ErrorPage() {
 
       <Stack w="200px" gap={2}>
         <Button as={Link} to={-1 as To}>
-          Back to home page
+          {t('common.backToHomePage')}
         </Button>
       </Stack>
 
       <Button leftIcon={<MdLogout />} onClick={logoutMutationResult ? undefined : handleLogout}>
-        Logout
+        {t('common.logout')}
       </Button>
     </VStack>
   );

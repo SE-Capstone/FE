@@ -39,7 +39,7 @@ export function ProfilePage() {
     },
     {
       label: t('fields.gender'),
-      text: getGender(currentUser?.gender),
+      text: getGender(t, currentUser?.gender),
     },
     {
       label: t('fields.birthday'),

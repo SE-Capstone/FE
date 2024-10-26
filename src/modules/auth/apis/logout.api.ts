@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import type { IAuthLogoutResponse } from '../types/auth.types';
@@ -25,6 +26,7 @@ interface IAuthLogoutMutationProps {
 }
 
 export function useLogoutMutation({ configs }: IAuthLogoutMutationProps = {}) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { resetAuthContext } = useAuthentication();
@@ -40,13 +42,13 @@ export function useLogoutMutation({ configs }: IAuthLogoutMutationProps = {}) {
       error.statusCode === CustomHttpStatusCode.TOKEN_EXPIRED ||
       !error.statusCode ||
       error.message === 'Invalid refresh token'
-        ? notify({ type: 'success', message: 'Logout successfully!' })
-        : notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
+        ? notify({ type: 'success', message: t('messages.logoutSuccess') })
+        : notify({ type: 'error', message: DEFAULT_MESSAGE(t).SOMETHING_WRONG });
       navigate(APP_PATHS.login);
     },
     onSuccess: async () => {
       resetAuthContext();
-      notify({ type: 'success', message: 'Logout successfully!' });
+      notify({ type: 'success', message: t('messages.logoutSuccess') });
       navigate(APP_PATHS.login);
     },
     ...configs,
@@ -56,8 +58,8 @@ export function useLogoutMutation({ configs }: IAuthLogoutMutationProps = {}) {
 
   const handleLogout = () => {
     openAlert({
-      title: 'Logout',
-      description: 'Are you sure to logout?',
+      title: t('messages.logout'),
+      description: t('messages.confirmLogout'),
       onHandleConfirm() {
         mutation.mutate();
         closeAlert();

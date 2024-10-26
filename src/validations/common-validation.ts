@@ -64,7 +64,7 @@ export const getStringRequiredField = (msg?: string) =>
     .trim()
     .min(1, `${msg ?? 'This field'} is required`);
 
-export const getBirthdayField = () =>
+export const getBirthdayField = (t: any) =>
   z
     .preprocess(
       (arg) => {
@@ -74,16 +74,16 @@ export const getBirthdayField = () =>
       },
       z.date({
         errorMap: (issue) => {
-          if (issue.code === 'invalid_date') return { message: 'Required' };
+          if (issue.code === 'invalid_date') return { message: t('validation.fieldRequired') };
 
           return { message: issue.message ?? '' };
         },
       })
     )
-    .refine((date) => isDateBeforeToday(date), 'Birthday must be before today')
-    .refine((date) => isOlderThan18Years(date), 'Birthday must be older than 18 years');
+    .refine((date) => isDateBeforeToday(date), t('validation.profile.birthdayBeforeToday'))
+    .refine((date) => isOlderThan18Years(date), t('validation.profile.birthdayOlderThan18Years'));
 
-export const getDateField = () =>
+export const getDateField = (t: any) =>
   z.preprocess(
     (arg) => {
       if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
@@ -92,7 +92,7 @@ export const getDateField = () =>
     },
     z.date({
       errorMap: (issue) => {
-        if (issue.code === 'invalid_date') return { message: 'Required' };
+        if (issue.code === 'invalid_date') return { message: t('validation.fieldRequired') };
 
         return { message: issue.message ?? '' };
       },

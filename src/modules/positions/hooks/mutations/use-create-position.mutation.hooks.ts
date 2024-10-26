@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { useCreatePositionMutation } from '../../apis/create-position.api';
 import { positionFormSchema } from '../../validations/postions.validations';
 
@@ -8,8 +10,9 @@ import type { PositionFormValues } from '../../validations/postions.validations'
 import { useFormWithSchema } from '@/libs/hooks';
 
 export function useCreatePositionHook() {
+  const { t } = useTranslation();
   const formCreatePosition = useFormWithSchema({
-    schema: positionFormSchema,
+    schema: positionFormSchema(t),
   });
 
   const { reset } = formCreatePosition;

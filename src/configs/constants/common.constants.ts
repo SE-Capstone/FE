@@ -217,8 +217,8 @@ export const PROJECT_STATUS_VALUES = (t: any): Record<ProjectStatusEnum, string>
   [ProjectStatusEnum.Canceled]: t('project.canceled'),
 });
 
-export function getGender(gender?: GenderEnum) {
-  return gender ? GENDER_VALUES[gender] : '';
+export function getGender(t: any, gender?: GenderEnum) {
+  return gender ? GENDER_VALUES(t)[gender] : '';
 }
 
 export function getPermission(t: any, permission?: PermissionEnum) {

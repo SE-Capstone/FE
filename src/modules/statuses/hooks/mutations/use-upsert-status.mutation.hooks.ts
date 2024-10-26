@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { useUpsertStatusMutation } from '../../apis/upsert-status.api';
@@ -20,9 +21,10 @@ export function useUpsertStatusHook({
   isDefault?: boolean;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const { projectId } = useParams();
   const formUpsertStatus = useFormWithSchema({
-    schema: statusFormSchema,
+    schema: statusFormSchema(t),
   });
 
   const { reset } = formUpsertStatus;

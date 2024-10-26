@@ -48,7 +48,7 @@ export const EditProfilePage: React.FC = () => {
   }, [banks, listBank]);
 
   const form = useFormWithSchema({
-    schema: profileUpdateFormSchema,
+    schema: profileUpdateFormSchema(t),
   });
   const initUrl = form.getValues('avatar') instanceof File ? '' : form.getValues('avatar');
 

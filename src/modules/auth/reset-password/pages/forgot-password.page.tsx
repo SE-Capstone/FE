@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Button, Icon as ChakraIcon, HStack, Stack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { MdLockOpen } from 'react-icons/md';
 
 import { useForgotPasswordMutation } from '../../apis/forgot-password';
@@ -16,8 +17,9 @@ import { LayoutAuth } from '@/modules/auth/layouts';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ForgotPasswordPage() {
+  const { t } = useTranslation();
   const [loading, setLoading] = React.useState(false);
-  const formForgotPassword = useFormWithSchema({ schema: forgotPasswordSchema });
+  const formForgotPassword = useFormWithSchema({ schema: forgotPasswordSchema(t) });
   const {
     register,
     formState: { errors, isValid },
@@ -37,7 +39,7 @@ export function ForgotPasswordPage() {
     } catch (error) {
       notify({
         type: 'error',
-        message: DEFAULT_MESSAGE.SOMETHING_WRONG,
+        message: DEFAULT_MESSAGE(t).SOMETHING_WRONG,
       });
     } finally {
       setLoading(false);
@@ -45,7 +47,10 @@ export function ForgotPasswordPage() {
   }
 
   return (
-    <LayoutAuth title="Forgot password" Icon={<ChakraIcon as={MdLockOpen} w={8} h={8} />}>
+    <LayoutAuth
+      title={t('common.forgotPassword')}
+      Icon={<ChakraIcon as={MdLockOpen} w={8} h={8} />}
+    >
       <CustomFormProvider
         isDisabled={loading || loadingMutation}
         form={formForgotPassword}
@@ -61,7 +66,7 @@ export function ForgotPasswordPage() {
           />
           <HStack alignItems="center" justifyContent="space-between">
             <CustomLink className="mt-1" style={{ marginLeft: 'auto' }} to={APP_PATHS.login}>
-              Back to login
+              {t('common.backToLogin')}
             </CustomLink>
           </HStack>
         </Stack>
@@ -74,7 +79,7 @@ export function ForgotPasswordPage() {
           variant="solid"
           sx={{ mt: 3, mb: 2 }}
         >
-          Submit
+          {t('common.submit')}
         </Button>
       </CustomFormProvider>
     </LayoutAuth>

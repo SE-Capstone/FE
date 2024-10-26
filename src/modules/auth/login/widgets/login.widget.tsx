@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Button, Center, Icon as ChakraIcon, HStack, Stack } from '@chakra-ui/react';
 import { GoogleLogin } from '@react-oauth/google';
+import { useTranslation } from 'react-i18next';
 import { MdLockOpen } from 'react-icons/md';
 
 import { useGoogleLoginMutation } from '../../apis/google-login.api';
@@ -18,8 +19,9 @@ import { LayoutAuth } from '@/modules/auth/layouts';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function LoginWidget() {
+  const { t } = useTranslation();
   const [loading, setLoading] = React.useState(false);
-  const formLogin = useFormWithSchema({ schema: loginValidationSchema });
+  const formLogin = useFormWithSchema({ schema: loginValidationSchema(t) });
   const {
     register,
     formState: { errors, isValid },
@@ -50,7 +52,7 @@ export function LoginWidget() {
     if (!idToken) {
       notify({
         type: 'error',
-        message: DEFAULT_MESSAGE.SOMETHING_WRONG,
+        message: DEFAULT_MESSAGE(t).SOMETHING_WRONG,
       });
       return;
     }
@@ -69,7 +71,7 @@ export function LoginWidget() {
   }
 
   return (
-    <LayoutAuth title="Login" Icon={<ChakraIcon as={MdLockOpen} w={8} h={8} />}>
+    <LayoutAuth title={t('common.login')} Icon={<ChakraIcon as={MdLockOpen} w={8} h={8} />}>
       <CustomFormProvider
         isDisabled={loading || loadingMutation || loadingGgLoginMutation}
         form={formLogin}
@@ -79,15 +81,15 @@ export function LoginWidget() {
           <CustomInput
             label="Email"
             isRequired
-            placeholder="Nhập email"
+            placeholder={`${t('common.enter')} ${t('fields.email').toLowerCase()}`}
             registration={register('email')}
             error={errors.email}
           />
           <CustomInput
-            label="Password"
+            label={t('fields.password')}
             isRequired
             type="password"
-            placeholder="Enter password"
+            placeholder={`${t('common.enter')} ${t('fields.password').toLowerCase()}`}
             registration={register('password')}
             error={errors.password}
           />
@@ -96,7 +98,7 @@ export function LoginWidget() {
               Remember me
             </Checkbox> */}
             <CustomLink style={{ marginLeft: 'auto' }} to={APP_PATHS.forgotPassword}>
-              Forgot password?
+              {t('common.forgotPassword')}?
             </CustomLink>
           </HStack>
           <Center>
@@ -107,7 +109,7 @@ export function LoginWidget() {
               onError={() => {
                 notify({
                   type: 'error',
-                  message: DEFAULT_MESSAGE.SOMETHING_WRONG,
+                  message: DEFAULT_MESSAGE(t).SOMETHING_WRONG,
                 });
               }}
             />
@@ -121,7 +123,7 @@ export function LoginWidget() {
           variant="solid"
           sx={{ mt: 3, mb: 2 }}
         >
-          Login
+          {t('common.login')}
         </Button>
       </CustomFormProvider>
     </LayoutAuth>

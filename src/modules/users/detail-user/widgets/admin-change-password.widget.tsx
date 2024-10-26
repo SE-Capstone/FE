@@ -14,7 +14,7 @@ import { useFormWithSchema } from '@/libs/hooks';
 export function AdminChangePasswordWidget({ user }: { user?: IUser }) {
   const { t } = useTranslation();
   const form = useFormWithSchema({
-    schema: adminChangePasswordSchema,
+    schema: adminChangePasswordSchema(t),
   });
 
   const { formState, register, reset } = form;

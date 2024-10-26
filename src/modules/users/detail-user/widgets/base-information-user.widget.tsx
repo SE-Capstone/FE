@@ -39,7 +39,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
   const { mutate: updateUserMutation, isPending: isLoading } = useUpdateUserMutation();
 
   const form = useFormWithSchema({
-    schema: updateUserFormSchema,
+    schema: updateUserFormSchema(t),
   });
   const [banks, setBanks] = useState<IBank[]>([]);
   const { banks: listBank } = useGetBanks();

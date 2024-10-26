@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import type { ProjectFormValues } from '@/modules/projects/list-project/validations/projects.validations';
 
 import { formatDate } from '@/libs/helpers';
@@ -19,8 +21,9 @@ export function useUpsertProjectHook({
   isUpdate?: boolean;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const formUpsertProject = useFormWithSchema({
-    schema: isUpdate ? projectUpdateFormSchema : projectFormSchema,
+    schema: isUpdate ? projectUpdateFormSchema(t) : projectFormSchema(t),
   });
 
   const { reset } = formUpsertProject;

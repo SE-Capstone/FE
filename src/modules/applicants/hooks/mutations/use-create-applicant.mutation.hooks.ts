@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { useCreateApplicantMutation } from '../../apis/create-applicant.api';
 import { applicantFormSchema } from '../../validations/applicants.validations';
 
@@ -9,8 +11,9 @@ import { formatDate } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export function useCreateApplicantHook() {
+  const { t } = useTranslation();
   const formCreateApplicant = useFormWithSchema({
-    schema: applicantFormSchema,
+    schema: applicantFormSchema(t),
   });
 
   const { reset } = formCreateApplicant;

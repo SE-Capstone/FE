@@ -1,24 +1,20 @@
 import { z } from 'zod';
 
-import { REGEX_PASSWORD } from '@/configs';
 import { regexEmail } from '@/validations';
 
-export const loginValidationSchema = z.object({
-  email: z
-    .string({
-      invalid_type_error: 'Email is required',
-      required_error: 'Email is required',
-    })
-    .regex(regexEmail, `Invalid email`),
-  password: z
-    .string()
-    .trim()
-    .min(6)
-    .max(255)
-    .regex(
-      REGEX_PASSWORD,
-      'Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character'
-    ),
-});
+export const loginValidationSchema = (t: any) =>
+  z.object({
+    email: z
+      .string({
+        invalid_type_error: t('validation.emailRequired'),
+        required_error: t('validation.emailRequired'),
+      })
+      .regex(regexEmail, t('validation.emailInvalid')),
+    password: z
+      .string()
+      .trim()
+      .min(6, { message: t('validation.passwordMin') })
+      .max(255, { message: t('validation.passwordMax') }),
+  });
 
-export type LoginValidationSchemaType = z.infer<typeof loginValidationSchema>;
+export type LoginValidationSchemaType = z.infer<ReturnType<typeof loginValidationSchema>>;

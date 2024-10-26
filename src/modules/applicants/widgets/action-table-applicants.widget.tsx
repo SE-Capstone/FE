@@ -28,7 +28,7 @@ export function ActionTableApplicantsWidget() {
         >
           <GridItem colSpan={2}>
             <SearchInput
-              placeholder="Enter name/code..."
+              placeholder={`${t('common.enter')} ${t('fields.name').toLowerCase()}`}
               initValue={applicantsQueryState.filters.search || ''}
               onHandleSearch={(keyword) => {
                 setApplicantsQueryFilterState({ search: keyword });

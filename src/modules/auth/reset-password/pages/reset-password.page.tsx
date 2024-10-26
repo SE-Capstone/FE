@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button, Icon as ChakraIcon, Stack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { MdOutlineVerifiedUser } from 'react-icons/md';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -17,11 +18,12 @@ import { LayoutAuth } from '@/modules/auth/layouts';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ResetPasswordPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams, _] = useSearchParams();
   const [code, setCode] = useState<string>('');
   const [loading, setLoading] = React.useState(false);
-  const formResetPasswordNumber = useFormWithSchema({ schema: resetPasswordSchema });
+  const formResetPasswordNumber = useFormWithSchema({ schema: resetPasswordSchema(t) });
   const {
     register,
     formState: { errors, isValid },
@@ -64,7 +66,7 @@ export function ResetPasswordPage() {
     } catch (error) {
       notify({
         type: 'error',
-        message: 'Reset failed, Please try again!',
+        message: t('messages.resetPasswordFailed'),
       });
     } finally {
       setLoading(false);
@@ -72,7 +74,10 @@ export function ResetPasswordPage() {
   }
 
   return (
-    <LayoutAuth title="Reset password" Icon={<ChakraIcon as={MdOutlineVerifiedUser} w={8} h={8} />}>
+    <LayoutAuth
+      title={`${t('common.reset')} - ${t('fields.password')}`}
+      Icon={<ChakraIcon as={MdOutlineVerifiedUser} w={8} h={8} />}
+    >
       <CustomFormProvider
         form={formResetPasswordNumber}
         isDisabled={loading || loadingMutation || loadingCheckCodeMutation}
@@ -80,21 +85,21 @@ export function ResetPasswordPage() {
       >
         <Stack spacing={3}>
           <CustomInput
-            label="New password"
+            label={t('fields.newPassword')}
             type="password"
             isRequired
             registration={register('newPassword')}
             error={errors?.newPassword}
           />
           <CustomInput
-            label="Confirm password"
+            label={t('fields.confirmPassword')}
             isRequired
             type="password"
             registration={register('confirmPassword')}
             error={errors?.confirmPassword}
           />
           <CustomLink style={{ marginLeft: 'auto' }} to={APP_PATHS.login}>
-            Back to login
+            {t('common.backToLogin')}
           </CustomLink>
           <Button
             type="submit"
@@ -103,7 +108,7 @@ export function ResetPasswordPage() {
             w="full"
             variant="solid"
           >
-            Submit
+            {t('common.submit')}
           </Button>
         </Stack>
       </CustomFormProvider>
