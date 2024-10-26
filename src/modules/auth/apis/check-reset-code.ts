@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import type { IResponseApi } from '@/configs/axios';
@@ -8,7 +9,6 @@ import { getErrorMessage, notify } from '@/libs/helpers';
 import { makeRequest } from '@/libs/react-query';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
-import { useTranslation } from 'react-i18next';
 
 interface IAuthCheckResetCodeRequest {
   body: {

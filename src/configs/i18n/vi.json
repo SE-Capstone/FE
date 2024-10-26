@@ -208,6 +208,8 @@
     "deleteSuccess": "Xóa thành công",
     "loginSuccess": "Đăng nhập thành công",
     "resetPasswordSuccess": "Đặt lại mật khẩu thành công",
-    "forgotPasswordSuccess": "Gửi yêu cầu thành công. Vui lòng kiểm tra email của bạn và làm theo hướng dẫn để đặt lại mật khẩu"
+    "forgotPasswordSuccess": "Gửi yêu cầu thành công. Vui lòng kiểm tra email của bạn và làm theo hướng dẫn để đặt lại mật khẩu",
+    "deleteStatusLabel": "Cập nhật tất cả các công việc hiện có từ trạng thái \"{{statusName}}\" thành",
+    "deleteStatusBody": "Dự án của bạn có {{issueCount}} công việc với trạng thái \"{{statusName}}\". Trước khi bạn có thể xóa trạng thái này, hãy đổi các công việc có trạng thái \"{{statusName}}\" thành trạng thái khác."
   }
 }

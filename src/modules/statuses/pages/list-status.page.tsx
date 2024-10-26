@@ -60,7 +60,7 @@ export function ListStatusPage() {
         ],
       },
     ],
-    []
+    [t]
   );
 
   return (

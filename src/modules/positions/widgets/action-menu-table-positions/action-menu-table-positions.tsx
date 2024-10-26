@@ -1,4 +1,5 @@
 import { Icon } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
 
 import type { IPosition } from '../../types';
@@ -10,6 +11,7 @@ interface ActionMenuTablePositionsProps {
   position: IPosition;
 }
 export function ActionMenuTablePositions({ position }: ActionMenuTablePositionsProps) {
+  const { t } = useTranslation();
   // const { removePositionResult, handleRemovePosition } = useRemovePositionHook();
 
   const { openAlert } = useAlertDialogStore(false);
@@ -19,12 +21,14 @@ export function ActionMenuTablePositions({ position }: ActionMenuTablePositionsP
 
   const menuOptions = [
     {
-      label: 'Delete',
+      label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {
         openAlert({
-          title: 'Delete',
-          description: `Are you sure to delete position "${position.name}"?`,
+          title: t('actions.delete'),
+          description: `${t('actions.confirmDelete')} ${t('common.position').toLowerCase()} "${
+            position.name
+          }"?`,
           onHandleConfirm() {
             // TODO
             // if (!position.id) return;

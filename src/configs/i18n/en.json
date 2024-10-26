@@ -244,6 +244,8 @@
     "deleteSuccess": "Delete successfully",
     "loginSuccess": "Login successfully",
     "resetPasswordSuccess": "Reset password successfully",
-    "forgotPasswordSuccess": "Submit request successfully. Please check your email and follow instruction to reset password"
+    "forgotPasswordSuccess": "Submit request successfully. Please check your email and follow instruction to reset password",
+    "deleteStatusLabel": "Change all existing \"{{statusName}}\" issues to",
+    "deleteStatusBody": "Your project has {{issueCount}} \"{{statusName}}\" issues. Before you can delete this status, change \"{{statusName}}\" issues to another type."
   }
 }

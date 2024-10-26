@@ -19,7 +19,7 @@ export function ActionMenuTableIssues({ issue }: ActionMenuTableIssuesProps) {
 
   const menuOptions = [
     {
-      label: 'View detail',
+      label: t('actions.viewDetail'),
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/issues/${issue.id}`),
     },

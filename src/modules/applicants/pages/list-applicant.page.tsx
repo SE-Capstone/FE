@@ -116,7 +116,7 @@ export function ListApplicantPage() {
         ],
       },
     ],
-    [meta.pageIndex, meta.pageSize, pathname]
+    [meta.pageIndex, meta.pageSize, pathname, t]
   );
 
   return (

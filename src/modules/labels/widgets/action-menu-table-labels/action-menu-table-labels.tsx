@@ -38,14 +38,13 @@ export function ActionMenuTableLabels({ label, listLabel, isDefault }: ActionMen
     {
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
-      onClick: () => {
-        if (label.issueCount === 0 || isDefault) {
-          return handleRemoveLabel(label);
-        }
+      onClick: () =>
+        // if (label.issueCount === 0 || isDefault) {
+        handleRemoveLabel(label),
+      // }
 
-        disclosureModalRemoveLabel.onOpen();
-        return undefined;
-      },
+      // disclosureModalRemoveLabel.onOpen();
+      // return undefined;
     },
   ].filter(Boolean);
 

@@ -1,4 +1,5 @@
 import { Button, Stack, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useRemoveLabelMutation } from '../apis/delete-label.api';
 import { removeLabelFormSchema } from '../validations/remove-label.validations';
@@ -18,6 +19,7 @@ export interface RemoveLabelWidgetProps {
 }
 
 export function RemoveLabelWidget(props: RemoveLabelWidgetProps) {
+  const { t } = useTranslation();
   const { label, listLabel, isOpen, onClose, isDefault } = props;
 
   const formRemoveLabel = useFormWithSchema({
@@ -63,10 +65,10 @@ export function RemoveLabelWidget(props: RemoveLabelWidgetProps) {
           }}
           isDisabled={isLoading || !isDirty}
         >
-          Delete
+          {t('actions.delete')}
         </Button>
       )}
-      title="Delete label"
+      title={`${t('actions.delete')} ${t('common.label').toLowerCase()}`}
       isOpen={isOpen}
       onClose={onClose}
       onCloseComplete={reset}
@@ -79,7 +81,7 @@ export function RemoveLabelWidget(props: RemoveLabelWidgetProps) {
           </Text>
           <CustomChakraReactSelect
             isSearchable
-            placeholder="Choose label"
+            placeholder={`${t('common.choose')} ${t('common.label').toLowerCase()}`}
             label={`Change all existing "${label.title}" issues to`}
             size="lg"
             options={listLabel

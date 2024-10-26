@@ -74,7 +74,7 @@ export function ListPositionPage() {
         ],
       },
     ],
-    []
+    [t]
   );
 
   return (
