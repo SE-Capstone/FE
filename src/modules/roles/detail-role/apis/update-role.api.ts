@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import type { IResponseApi } from '@/configs/axios';
 import type { MutationConfig } from '@/libs/react-query';
@@ -34,13 +35,14 @@ interface IProps {
 
 export function useUpdateRoleMutation({ configs, onClose }: IProps = {}) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: mutation,
 
     onSuccess: (data) => {
       if (data.statusCode !== 200) {
-        notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
+        notify({ type: 'error', message: DEFAULT_MESSAGE(t).SOMETHING_WRONG });
         return;
       }
 
@@ -58,12 +60,12 @@ export function useUpdateRoleMutation({ configs, onClose }: IProps = {}) {
 
       notify({
         type: 'success',
-        message: DEFAULT_MESSAGE.UPDATE_SUCCESS,
+        message: DEFAULT_MESSAGE(t).UPDATE_SUCCESS,
       });
     },
 
     onError(error) {
-      notify({ type: 'error', message: getErrorMessage(error) });
+      notify({ type: 'error', message: getErrorMessage(t, error) });
     },
 
     ...configs,

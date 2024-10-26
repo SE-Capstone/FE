@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import type { IResponseApi } from '@/configs/axios';
 import type { MutationConfig } from '@/libs/react-query';
@@ -28,6 +29,7 @@ interface IAuthLoginMutationProps {
 }
 
 export function useForgotPasswordMutation({ configs, reset }: IAuthLoginMutationProps = {}) {
+  const { t } = useTranslation();
   return useMutation({
     mutationFn: authForgotPasswordRequest,
 
@@ -35,12 +37,12 @@ export function useForgotPasswordMutation({ configs, reset }: IAuthLoginMutation
       reset && reset();
       notify({
         type: 'success',
-        message: `Submit request successfully. Please check your email and follow instruction to reset password`,
+        message: t('messages.forgotPasswordSuccess'),
       });
     },
 
     onError(error) {
-      notify({ type: 'error', message: getErrorMessage(error) });
+      notify({ type: 'error', message: getErrorMessage(t, error) });
     },
 
     ...configs,

@@ -64,10 +64,10 @@ export function showErrorFromApi(error: TErrorResponse) {
   return notify({ type: 'error', message: msg });
 }
 
-export function getErrorMessage(error: IResponseErrorApi) {
+export function getErrorMessage(t: any, error: IResponseErrorApi) {
   return error.message
     ? error.message
     : error?.errors
     ? Object.values(error?.errors)[0][0]
-    : error?.title || DEFAULT_MESSAGE.SOMETHING_WRONG;
+    : error?.title || DEFAULT_MESSAGE(t).SOMETHING_WRONG;
 }

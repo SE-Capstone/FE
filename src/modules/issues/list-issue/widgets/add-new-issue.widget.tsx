@@ -1,4 +1,5 @@
 import { Button, SimpleGrid, Stack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useCreateIssueHook } from '../hooks/mutations';
 
@@ -15,6 +16,7 @@ export interface AddNewIssueWidgetProps {
 }
 
 export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
+  const { t } = useTranslation();
   const { children } = props;
   const { members } = useProjectContext();
 
@@ -30,11 +32,11 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
     <ModalBase
       size="xl"
       isDone={!!data}
-      title="Create issue"
+      title={`${t('common.create')} ${t('common.issue').toLowerCase()}`}
       triggerButton={() => children}
       renderFooter={() => (
         <Button form="form-create-issue" w={20} type="submit" isDisabled={isLoading}>
-          Save
+          {t('common.save')}
         </Button>
       )}
       onCloseComplete={reset}
@@ -46,21 +48,21 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
       >
         <Stack spacing={5}>
           <CustomInput
-            label="Subject"
+            label={t('fields.subject')}
             isRequired
             registration={register('subject')}
             error={errors.subject}
           />
           <SimpleGrid columns={2} spacing={3}>
             <CustomInput
-              label="Start date"
+              label={t('fields.startDate')}
               isRequired
               type="date"
               registration={register('startDate')}
               error={errors.startDate}
             />
             <CustomInput
-              label="Due date"
+              label={t('fields.dueDate')}
               isRequired
               type="date"
               registration={register('dueDate')}
@@ -69,8 +71,8 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
           </SimpleGrid>
           <CustomChakraReactSelect
             isSearchable
-            placeholder="Choose assignee"
-            label="Assignee"
+            placeholder={`${t('common.choose')} ${t('common.assignee').toLowerCase()}`}
+            label={t('common.assignee')}
             size="lg"
             options={members.map((user) => ({
               label: `${user.fullName}`,

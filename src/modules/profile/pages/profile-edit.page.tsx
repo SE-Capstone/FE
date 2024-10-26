@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { Avatar, Button, Heading, Icon, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { MdOutlineFileUpload } from 'react-icons/md';
 
 import { useGetBanks } from '../apis/get-banks.api';
@@ -33,6 +34,7 @@ import { useFormWithSchema } from '@/libs/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export const EditProfilePage: React.FC = () => {
+  const { t } = useTranslation();
   const { currentUser } = useAuthentication();
 
   const { mutate: updateProfileMutation, isPending: isLoading } = useUpdateProfileMutation();
@@ -110,7 +112,7 @@ export const EditProfilePage: React.FC = () => {
           <LayoutBack w={{ base: 'full', xl: '70%' }} path={APP_PATHS.profile}>
             <Stack direction="column" spacing="24px">
               <Heading variant="title" mt="12px">
-                Update personal information
+                {t('header.updatePersonalInformation')}
               </Heading>
               <Stack spacing={5}>
                 <SimpleGrid
@@ -119,9 +121,9 @@ export const EditProfilePage: React.FC = () => {
                   alignItems="start"
                 >
                   <CustomInput
-                    label="Full name"
+                    label={t('fields.fullName')}
                     isRequired
-                    placeholder="Enter full name"
+                    placeholder={`${t('common.enter')} ${t('fields.fullName')}`}
                     registration={register('fullName')}
                     error={errors?.fullName}
                   />
@@ -130,7 +132,7 @@ export const EditProfilePage: React.FC = () => {
                     control={control}
                     render={({ field: { value, onChange, ...field } }) => (
                       <CustomInput
-                        label="Phone number"
+                        label={t('fields.phone')}
                         placeholder="012-345-6789"
                         isRequired
                         error={errors?.phone}
@@ -146,20 +148,20 @@ export const EditProfilePage: React.FC = () => {
                   <CustomChakraReactSelect
                     isRequired
                     isSearchable={false}
-                    label="Gender"
+                    label={t('fields.gender')}
                     options={GENDER_OPTIONS}
                     control={control}
                     name="gender"
                   />
                   <CustomInput
-                    label="Birthday"
+                    label={t('fields.birthday')}
                     isRequired
                     type="date"
                     registration={register('dob')}
                     error={errors.dob}
                   />
                   <CustomInput
-                    label="Bank account number"
+                    label={t('fields.bankAccount')}
                     isRequired
                     registration={register('bankAccount')}
                     error={errors?.bankAccount}
@@ -167,7 +169,7 @@ export const EditProfilePage: React.FC = () => {
                   <CustomChakraReactSelect
                     isRequired
                     isSearchable
-                    label="Bank account name"
+                    label={t('fields.bankAccountName')}
                     options={banks.map((bank) => ({
                       label: `${bank.code} - ${bank.name}`,
                       value: bank.short_name,
@@ -178,7 +180,7 @@ export const EditProfilePage: React.FC = () => {
                 </SimpleGrid>
               </Stack>
               <CustomInput
-                label="Address"
+                label={t('fields.address')}
                 isRequired
                 registration={register('address')}
                 error={errors?.address}
@@ -191,7 +193,7 @@ export const EditProfilePage: React.FC = () => {
                   isDisabled={isLoading || !isDirty}
                   isLoading={isLoading}
                 >
-                  Save
+                  {t('common.save')}
                 </Button>
               </Stack>
             </Stack>
@@ -210,7 +212,7 @@ export const EditProfilePage: React.FC = () => {
                 leftIcon={<Icon as={MdOutlineFileUpload} boxSize={5} />}
                 isDisabled={isSubmitting}
               >
-                Upload
+                {t('common.upload')}
               </Button>
             )}
             stackProps={{ direction: 'column', align: 'flex-start', spacing: 4 }}

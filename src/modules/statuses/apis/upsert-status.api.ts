@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import type { IStatus } from '../types';
 import type { IResponseApi } from '@/configs/axios';
@@ -52,6 +53,8 @@ export function useUpsertStatusMutation({
   onClose,
 }: Props) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
+
   return useMutation({
     mutationFn: (req) => mutation(req, id, isUpdate, isDefault),
 
@@ -67,7 +70,7 @@ export function useUpsertStatusMutation({
       }
       notify({
         type: 'success',
-        message: isUpdate ? DEFAULT_MESSAGE.UPDATE_SUCCESS : DEFAULT_MESSAGE.CREATE_SUCCESS,
+        message: isUpdate ? DEFAULT_MESSAGE(t).UPDATE_SUCCESS : DEFAULT_MESSAGE(t).CREATE_SUCCESS,
       });
       reset && reset();
       onClose();
@@ -76,7 +79,7 @@ export function useUpsertStatusMutation({
     onError(error) {
       notify({
         type: 'error',
-        message: getErrorMessage(error),
+        message: getErrorMessage(t, error),
       });
     },
 

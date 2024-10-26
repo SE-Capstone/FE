@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Icon, IconButton, Stack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
 
@@ -23,6 +24,7 @@ import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailRolePage() {
+  const { t } = useTranslation();
   const { permissions } = useAuthentication();
   const { roleId } = useParams();
   const [triggerClose, setTriggerClose] = useState(false);
@@ -71,7 +73,7 @@ export function DetailRolePage() {
     if (isLoading || !role) return;
 
     if (permissions.size === 0) {
-      notify({ type: 'error', message: 'At least one permission must be selected' });
+      notify({ type: 'error', message: t('validatation.permissionRequired') });
       return;
     }
 
@@ -108,7 +110,7 @@ export function DetailRolePage() {
       <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} justify="center" spacing={2}>
         <CustomFormProvider form={form} style={{ height: 'fit-content' }} onSubmit={onSubmit}>
           <CustomEditableInput
-            title="Role name"
+            title={t('fields.name')}
             isLoading={isRoleDetailLoading}
             isDisabled={isUpdating}
             isDirty={!dirtyFields.name}
@@ -119,7 +121,7 @@ export function DetailRolePage() {
             inputChildren={
               <CustomInput
                 isRequired
-                placeholder="Enter role name"
+                placeholder={`${t('common.enter')} ${t('fields.name')}`}
                 registration={register('name')}
                 error={errors.name}
               />
@@ -134,7 +136,7 @@ export function DetailRolePage() {
             }
           />
           <CustomEditableInput
-            title="Description"
+            title={t('fields.description')}
             isLoading={isRoleDetailLoading}
             isDisabled={isUpdating}
             // Todo: fix
@@ -145,7 +147,7 @@ export function DetailRolePage() {
             inputChildren={
               <CustomTextArea
                 isRequired
-                placeholder="Enter description"
+                placeholder={`${t('common.enter')} ${t('fields.description')}`}
                 registration={register('description')}
                 error={errors.description}
               />
@@ -160,7 +162,7 @@ export function DetailRolePage() {
             }
           />
           <EditRow
-            title="Permissions"
+            title={t('fields.permission')}
             stackProps={{
               maxW: 25,
               justifyContent: 'end',

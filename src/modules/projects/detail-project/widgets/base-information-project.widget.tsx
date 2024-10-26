@@ -1,4 +1,5 @@
 import { Stack, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { ProjectMembersWidget } from './project-members.widget';
 import { BadgeStatus } from '../components';
@@ -18,46 +19,50 @@ export function BaseInformationProjectWidget({
   project?: IProject;
   permissions: Record<string, boolean>;
 }) {
+  const { t } = useTranslation();
+
   const infoData = [
     {
-      label: 'Name',
+      label: t('fields.name'),
       text: project?.name || '',
     },
     {
-      label: 'Code',
+      label: t('fields.code'),
       text: project?.code || '',
     },
     {
-      label: 'Description',
+      label: t('fields.description'),
       text: project?.description || '',
     },
     permissions[PermissionEnum.GET_ALL_PROJECT] && {
-      label: 'Status',
+      label: t('fields.status'),
       text: <BadgeStatus status={project?.status as ProjectStatusEnum} />,
     },
     permissions[PermissionEnum.GET_ALL_PROJECT] && {
-      label: 'Visible',
+      label: t('fields.visible'),
       text: (
         <ChangeStatus
           id={project?.id || ''}
           initStatus={project?.isVisible || false}
-          title={project?.isVisible ? 'Unarchive project?' : 'Archive project?'}
-          description={
+          title={
             project?.isVisible
-              ? 'This project will be invisible to all members'
-              : 'This project will be visible to all members'
+              ? `${t('actions.archive')} ${t('common.project').toLowerCase()}?`
+              : `${t('actions.unarchive')} ${t('common.project').toLowerCase()}?`
+          }
+          description={
+            project?.isVisible ? t('actions.archiveProject') : t('actions.unarchiveProject')
           }
         />
       ),
     },
     {
-      label: 'Start date',
+      label: t('fields.startDate'),
       text: project?.startDate
         ? formatDate({ date: project?.startDate, format: 'DD-MM-YYYY' })
         : '',
     },
     {
-      label: 'End date',
+      label: t('fields.endDate'),
       text: project?.endDate ? formatDate({ date: project?.endDate, format: 'DD-MM-YYYY' }) : '',
     },
   ].filter(Boolean);
@@ -78,13 +83,13 @@ export function BaseInformationProjectWidget({
                 borderColor: 'neutral.500',
               }}
             >
-              Project information
+              {t('header.projectInformation')}
             </Text>
             <InfoCard
               data={infoData}
               labelProps={{
                 sx: {
-                  w: '100px',
+                  w: '150px',
                 },
               }}
             />

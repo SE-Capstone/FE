@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import type { ILabel } from '../types';
 import type { IResponseApi } from '@/configs/axios';
@@ -36,6 +37,7 @@ interface Props {
 }
 
 export function useRemoveLabelMutation(props: Props) {
+  const { t } = useTranslation();
   const { configs, closeAlert, isDefault } = props;
 
   const queryClient = useQueryClient();
@@ -54,7 +56,7 @@ export function useRemoveLabelMutation(props: Props) {
       }
       notify({
         type: 'success',
-        message: DEFAULT_MESSAGE.DELETE_SUCCESS,
+        message: DEFAULT_MESSAGE(t).DELETE_SUCCESS,
       });
       closeAlert();
     },
@@ -62,7 +64,7 @@ export function useRemoveLabelMutation(props: Props) {
     onError(error) {
       notify({
         type: 'error',
-        message: getErrorMessage(error),
+        message: getErrorMessage(t, error),
       });
     },
 

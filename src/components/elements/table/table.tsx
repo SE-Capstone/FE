@@ -15,6 +15,7 @@ import {
   Text,
   Tr,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { DraggableRow, type DraggableRowProps } from './draggable-row';
 import TableHeader from './table-header';
@@ -105,6 +106,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
   hasDraggable,
   handleReorderRow,
 }: TableComponentProps<ObjectType>) {
+  const { t } = useTranslation();
   const [page, setPage] = useState(currentPage);
   const [sortedData, setSortedData] = useState<ObjectType[]>([]);
   const [persistData, setPersistData] = useState<ObjectType[]>([]);
@@ -204,7 +206,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
       <Box w="full">
         {!isLoading && isError ? (
           <Flex my={4} justify="center">
-            <Text>No data</Text>
+            <Text>{t('common.noData')}</Text>
           </Flex>
         ) : isLoading ? (
           <Table bg="white">
@@ -325,7 +327,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
             </Table>
             {sortedData && !sortedData.length && (
               <Flex my={4} justify="center">
-                <Text>No data</Text>
+                <Text>{t('common.noData')}</Text>
               </Flex>
             )}
           </TableContainer>

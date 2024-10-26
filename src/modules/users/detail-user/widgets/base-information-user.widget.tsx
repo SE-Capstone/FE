@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Box, Button, HStack, Image, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { useUpdateUserMutation } from '../apis/update-user.api';
 import { updateUserFormSchema } from '../validations/update-user.validation';
@@ -31,6 +32,7 @@ import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetRoles } from '@/modules/roles/list-role/apis/get-roles.api';
 
 export function BaseInformationUserWidget({ user }: { user?: IUser }) {
+  const { t } = useTranslation();
   const userId = user?.id;
   const { permissions } = useAuthentication();
 
@@ -74,8 +76,8 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
     if (isLoading || isLoadingPosition) return;
 
     openAlert({
-      title: 'Update',
-      description: `Are you sure to update user "${user?.fullName}"?`,
+      title: t('common.edit'),
+      description: `${t('actions.updateUser')} "${user?.fullName}"?`,
       onHandleConfirm() {
         updateUserMutation({
           body: {
@@ -135,9 +137,9 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                 alignItems="start"
               >
                 <CustomInput
-                  label="Full name"
+                  label={t('fields.fullName')}
                   isRequired
-                  placeholder="Enter full name"
+                  placeholder={`${t('common.enter')} ${t('fields.fullName')}`}
                   registration={register('fullName')}
                   error={errors?.fullName}
                 />
@@ -147,7 +149,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                   control={control}
                   render={({ field: { value, onChange, ...field } }) => (
                     <CustomInput
-                      label="Phone number"
+                      label={t('fields.phone')}
                       placeholder="012-345-6789"
                       isRequired
                       error={errors?.phone}
@@ -163,13 +165,13 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                 <CustomChakraReactSelect
                   isRequired
                   isSearchable={false}
-                  label="Gender"
+                  label={t('fields.gender')}
                   options={GENDER_OPTIONS}
                   control={control}
                   name="gender"
                 />
                 <CustomInput
-                  label="Birthday"
+                  label={t('fields.birthday')}
                   isRequired
                   type="date"
                   registration={register('dob')}
@@ -178,7 +180,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                 <CustomChakraReactSelect
                   isRequired
                   isSearchable
-                  label="Choose status"
+                  label={`${t('common.choose')} ${t('fields.status').toLowerCase()}`}
                   options={[
                     {
                       label: <BadgeIssue content="Active" colorScheme="green" />,
@@ -192,15 +194,19 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                   control={control}
                   name="status"
                 />
-                <CustomInput label="Bank account number" value={user?.bankAccount} disabled />
-                <CustomInput label="Bank account name" value={user?.bankAccountName} disabled />
+                <CustomInput label={t('fields.bankAccount')} value={user?.bankAccount} disabled />
+                <CustomInput
+                  label={t('fields.bankAccountName')}
+                  value={user?.bankAccountName}
+                  disabled
+                />
               </SimpleGrid>
             </Stack>
             <HStack align="stretch">
               <CustomChakraReactSelect
                 isRequired
                 isSearchable
-                label="Role"
+                label={t('fields.role')}
                 options={roles.map((role) => ({
                   label: role.name,
                   value: role.id,
@@ -211,8 +217,8 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
               <CustomChakraReactSelect
                 isSearchable
                 isRequired
-                placeholder="Choose position"
-                label="Position"
+                placeholder={`${t('common.choose')} ${t('common.position').toLowerCase()}`}
+                label={t('common.position')}
                 options={positions.map((position) => ({
                   label: position.name,
                   value: position.id,
@@ -222,7 +228,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
               />
             </HStack>
             <CustomInput
-              label="Address"
+              label={t('fields.address')}
               isRequired
               registration={register('address')}
               error={errors?.address}
@@ -235,7 +241,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                 isDisabled={isLoading || !isDirty}
                 isLoading={isLoading}
               >
-                Save
+                {t('common.save')}
               </Button>
             </Stack>
           </Stack>
@@ -256,7 +262,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                 )}
               </PreviewImage>
             ) : (
-              <Text color="red.300">No image</Text>
+              <Text color="red.300">{t('fields.noImage')}</Text>
             )}
           </EditRow>
         </Stack>

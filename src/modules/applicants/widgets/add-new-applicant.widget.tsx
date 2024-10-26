@@ -1,5 +1,6 @@
 import { Button, Icon, Stack } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { MdOutlineFileUpload } from 'react-icons/md';
 
 import { useCreateApplicantHook } from '../hooks/mutations';
@@ -12,6 +13,7 @@ export interface AddNewApplicantWidgetProps {
 }
 
 export function AddNewApplicantWidget(props: AddNewApplicantWidgetProps) {
+  const { t } = useTranslation();
   const { children } = props;
 
   const { data, formCreateApplicant, handleCreateApplicant, isLoading, reset } =
@@ -27,11 +29,11 @@ export function AddNewApplicantWidget(props: AddNewApplicantWidgetProps) {
     <ModalBase
       size="xl"
       isDone={!!data}
-      title="Create applicant"
+      title={`${t('common.create')} ${t('common.applicant').toLowerCase()}`}
       triggerButton={() => children}
       renderFooter={() => (
         <Button form="form-create-applicant" w={20} type="submit" isDisabled={isLoading}>
-          Save
+          {t('common.save')}
         </Button>
       )}
       onCloseComplete={reset}
@@ -43,7 +45,7 @@ export function AddNewApplicantWidget(props: AddNewApplicantWidgetProps) {
       >
         <Stack spacing={5}>
           <CustomInput
-            label="Name"
+            label={t('fields.name')}
             isRequired
             registration={register('name')}
             error={errors.name}
@@ -60,7 +62,7 @@ export function AddNewApplicantWidget(props: AddNewApplicantWidgetProps) {
             control={control}
             render={({ field: { value, onChange, ...field } }) => (
               <CustomInput
-                label="Phone number"
+                label={t('fields.phone')}
                 placeholder="012-345-6789"
                 isRequired
                 error={errors?.phoneNumber}
@@ -74,7 +76,7 @@ export function AddNewApplicantWidget(props: AddNewApplicantWidgetProps) {
             )}
           />
           <CustomInput
-            label="Start date"
+            label={t('fields.startDate')}
             type="date"
             registration={register('startDate')}
             error={errors.startDate}
@@ -96,7 +98,7 @@ export function AddNewApplicantWidget(props: AddNewApplicantWidgetProps) {
                 leftIcon={<Icon as={MdOutlineFileUpload} boxSize={5} />}
                 isDisabled={isLoading}
               >
-                Upload
+                {t('common.upload')}
               </Button>
             )}
             stackProps={{ direction: 'column', align: 'flex-start', spacing: 4 }}

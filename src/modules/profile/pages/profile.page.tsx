@@ -1,4 +1,5 @@
 import { Avatar, Button, Icon, Stack, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { MdModeEditOutline } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
@@ -12,11 +13,12 @@ import { formatDate, phoneNumberAutoFormat } from '@/libs/helpers';
 import { BadgeRole } from '@/modules/users/detail-user/components';
 
 export function ProfilePage() {
+  const { t } = useTranslation();
   const { currentUser } = useAuthentication();
 
   const infoData = [
     {
-      label: 'Full name',
+      label: t('fields.fullName'),
       text: currentUser?.fullName || '',
     },
     {
@@ -24,31 +26,31 @@ export function ProfilePage() {
       text: currentUser?.email || '',
     },
     {
-      label: 'Phone number',
+      label: t('fields.phone'),
       text: phoneNumberAutoFormat(currentUser?.phone || ''),
     },
     {
-      label: 'Address',
+      label: t('fields.address'),
       text: currentUser?.address || '',
     },
     {
-      label: 'Role',
+      label: t('fields.role'),
       text: <BadgeRole role={currentUser?.roleName as unknown as RolesEnum} />,
     },
     {
-      label: 'Gender',
+      label: t('fields.gender'),
       text: getGender(currentUser?.gender),
     },
     {
-      label: 'Birthday',
+      label: t('fields.birthday'),
       text: currentUser?.dob ? formatDate({ date: currentUser?.dob, format: 'DD-MM-YYYY' }) : '',
     },
     {
-      label: 'Bank account number',
+      label: t('fields.bankAccount'),
       text: currentUser?.bankAccount || '',
     },
     {
-      label: 'Bank account name',
+      label: t('fields.bankAccountName'),
       text: currentUser?.bankAccountName || '',
     },
   ];
@@ -74,7 +76,7 @@ export function ProfilePage() {
                 borderColor: 'neutral.500',
               }}
             >
-              Personal information
+              {t('header.personalInformation')}
             </Text>
             <InfoCard data={infoData} />
             <Stack />
@@ -113,7 +115,7 @@ export function ProfilePage() {
             variant="ghost"
             leftIcon={<Icon as={MdModeEditOutline} boxSize={5} />}
           >
-            Edit
+            {t('common.edit')}
           </Button>
         </Stack>
       </Stack>

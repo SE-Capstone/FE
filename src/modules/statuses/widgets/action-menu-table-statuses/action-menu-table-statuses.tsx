@@ -1,4 +1,5 @@
 import { Icon, useDisclosure } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
 import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
 
@@ -21,6 +22,7 @@ export function ActionMenuTableStatuses({
   listStatus,
   isDefault,
 }: ActionMenuTableStatusesProps) {
+  const { t } = useTranslation();
   const disclosureModal = useDisclosure();
   const disclosureModalRemoveStatus = useDisclosure();
   const { handleRemoveStatus } = useRemoveStatusHook(isDefault);
@@ -29,7 +31,7 @@ export function ActionMenuTableStatuses({
 
   const menuOptions = [
     {
-      label: 'Update',
+      label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => {
         if (!status.id) return;
@@ -38,7 +40,7 @@ export function ActionMenuTableStatuses({
       },
     },
     {
-      label: 'Delete',
+      label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {
         if (status.issueCount === 0 || isDefault) {

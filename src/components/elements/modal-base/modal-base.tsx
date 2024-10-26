@@ -13,6 +13,7 @@ import {
   useDisclosure,
   Button,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import type { MaybeElementRenderProps, NeverField, RequireField } from '@/types';
 import type {
@@ -49,6 +50,7 @@ export type ModalBaseProps = Partial<Omit<ModalProps, 'children'>> &
   (ModalInternalState | ModalExternalState);
 
 export function ModalBase(props: ModalBaseProps) {
+  const { t } = useTranslation();
   const {
     title,
     children,
@@ -146,7 +148,7 @@ export function ModalBase(props: ModalBaseProps) {
                   isDisabled={isLoading}
                   onClick={onClose}
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
                 {footerRender}
               </Stack>

@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import type { IAuthUserLoginResponse } from '../types/auth.types';
@@ -34,6 +35,7 @@ interface IAuthGoogleLoginMutationProps {
 
 export function useGoogleLoginMutation({ configs }: IAuthGoogleLoginMutationProps = {}) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { handleLogin } = useAuthentication();
 
   return useMutation({
@@ -44,7 +46,7 @@ export function useGoogleLoginMutation({ configs }: IAuthGoogleLoginMutationProp
     },
     onSuccess: (data) => {
       if (data.statusCode !== 200) {
-        notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
+        notify({ type: 'error', message: DEFAULT_MESSAGE(t).SOMETHING_WRONG });
         return;
       }
       const result = data?.data;
@@ -58,13 +60,13 @@ export function useGoogleLoginMutation({ configs }: IAuthGoogleLoginMutationProp
 
       notify({
         type: 'success',
-        message: `Login successfully`,
+        message: t('messages.loginSuccess'),
       });
       navigate(APP_PATHS.HOME);
     },
 
     onError(error) {
-      notify({ type: 'error', message: getErrorMessage(error) });
+      notify({ type: 'error', message: getErrorMessage(t, error) });
       if (error.statusCode === 401) {
         clearStoredAuth();
       }

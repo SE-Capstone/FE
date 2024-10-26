@@ -1,4 +1,5 @@
 import { Icon } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
 import { MdVisibility } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +15,7 @@ interface ActionMenuTableRolesProps {
   role: IRole;
 }
 export function ActionMenuTableRoles({ role }: ActionMenuTableRolesProps) {
+  const { t } = useTranslation();
   const { permissions } = useAuthentication();
   const navigate = useNavigate();
 
@@ -26,17 +28,17 @@ export function ActionMenuTableRoles({ role }: ActionMenuTableRolesProps) {
 
   const menuOptions = [
     permissions[PermissionEnum.GET_ROLE] && {
-      label: 'View detail',
+      label: t('actions.viewDetail'),
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/roles/${role.id}`),
     },
     // Todo: fix
     permissions[PermissionEnum.ADD_ROLE] && {
-      label: 'Delete',
+      label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {
         openAlert({
-          title: 'Delete',
+          title: t('common.delete'),
           description: `Are you sure to delete role "${role.name}"?`,
           onHandleConfirm() {
             // TODO

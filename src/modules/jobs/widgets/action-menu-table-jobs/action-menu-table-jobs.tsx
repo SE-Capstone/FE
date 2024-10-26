@@ -1,4 +1,5 @@
 import { Icon, useDisclosure } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
 import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
 
@@ -13,6 +14,7 @@ interface ActionMenuTableJobsProps {
   job: IJob;
 }
 export function ActionMenuTableJobs({ job }: ActionMenuTableJobsProps) {
+  const { t } = useTranslation();
   const disclosureModal = useDisclosure();
   const { handleRemoveJob } = useRemoveJobHook();
 
@@ -20,7 +22,7 @@ export function ActionMenuTableJobs({ job }: ActionMenuTableJobsProps) {
 
   const menuOptions = [
     {
-      label: 'Update',
+      label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => {
         if (!job.id) return;
@@ -29,7 +31,7 @@ export function ActionMenuTableJobs({ job }: ActionMenuTableJobsProps) {
       },
     },
     {
-      label: 'Delete',
+      label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => handleRemoveJob(job),
     },

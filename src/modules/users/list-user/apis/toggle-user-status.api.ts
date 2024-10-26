@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import type { IUser } from '../types';
 import type { IResponseApi } from '@/configs/axios';
@@ -33,6 +34,8 @@ interface Props {
 
 export function useToggleUserStatusMutation({ configs, closeAlert }: Props = {}) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
+
   return useMutation({
     mutationFn: mutation,
 
@@ -46,14 +49,14 @@ export function useToggleUserStatusMutation({ configs, closeAlert }: Props = {})
       closeAlert && closeAlert();
       notify({
         type: 'success',
-        message: DEFAULT_MESSAGE.UPDATE_SUCCESS,
+        message: DEFAULT_MESSAGE(t).UPDATE_SUCCESS,
       });
     },
 
     onError(error) {
       notify({
         type: 'error',
-        message: getErrorMessage(error),
+        message: getErrorMessage(t, error),
       });
     },
 

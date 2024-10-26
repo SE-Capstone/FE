@@ -1,4 +1,5 @@
 import { Box, Button, Grid, GridItem, HStack, Spacer, useDisclosure } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { UpsertProjectWidget } from './upsert-project.widget';
@@ -12,6 +13,7 @@ import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ActionTableProjectsWidget({ teamLeads }: { teamLeads: IUser[] }) {
+  const { t } = useTranslation();
   const { permissions } = useAuthentication();
   const disclosureModal = useDisclosure();
   const { projectsQueryState, setProjectsQueryFilterState } = useProjectsQueryFilterStateContext();
@@ -80,7 +82,7 @@ export function ActionTableProjectsWidget({ teamLeads }: { teamLeads: IUser[] })
           <>
             <Spacer />
             <Button leftIcon={<>+</>} onClick={disclosureModal.onOpen}>
-              Create
+              {t('common.create')}
             </Button>
             <UpsertProjectWidget
               isOpen={disclosureModal.isOpen}

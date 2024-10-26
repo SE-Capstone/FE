@@ -54,7 +54,7 @@ export function HeaderApp() {
     } catch (error) {
       notify({
         type: 'error',
-        message: DEFAULT_MESSAGE.SOMETHING_WRONG,
+        message: DEFAULT_MESSAGE(t).SOMETHING_WRONG,
       });
     }
   }

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { Container, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useJobsQueryFilterStateContext } from '../contexts';
 import { useGetListJobQuery } from '../hooks/queries';
@@ -13,6 +14,7 @@ import { Head, StateHandler, TableComponent } from '@/components/elements';
 import { getNumericalOrder } from '@/libs/helpers';
 
 export function ListJobPage() {
+  const { t } = useTranslation();
   const { jobsQueryState, resetJobsQueryState } = useJobsQueryFilterStateContext();
 
   const { listJob, meta, isError, isLoading, handlePaginate, isRefetching } = useGetListJobQuery({
@@ -35,7 +37,7 @@ export function ListJobPage() {
           },
           {
             key: 'title',
-            title: 'Title',
+            title: t('fields.title'),
             hasSort: false,
             Cell({ title }) {
               return <>{title}</>;
@@ -43,7 +45,7 @@ export function ListJobPage() {
           },
           {
             key: 'description',
-            title: 'Description',
+            title: t('fields.description'),
             hasSort: false,
             Cell({ description }) {
               return (
@@ -55,7 +57,7 @@ export function ListJobPage() {
           },
           {
             key: 'createdBy',
-            title: 'Created by',
+            title: t('fields.createdBy'),
             hasSort: false,
             Cell({ createdBy }) {
               return <Text>{createdBy || ''}</Text>;
@@ -63,7 +65,7 @@ export function ListJobPage() {
           },
           {
             key: 'updatedBy',
-            title: 'Updated by',
+            title: t('fields.updatedBy'),
             hasSort: false,
             Cell({ updatedBy }) {
               return <Text>{updatedBy || ''}</Text>;
@@ -72,7 +74,7 @@ export function ListJobPage() {
         ],
       },
     ],
-    []
+    [t]
   );
 
   return (

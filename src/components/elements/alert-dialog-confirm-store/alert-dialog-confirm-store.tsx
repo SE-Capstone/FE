@@ -9,10 +9,12 @@ import {
   AlertDialogOverlay,
   Button,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useAlertDialogStore } from '@/contexts';
 
 export const AlertDialogConfirmStore = () => {
+  const { t } = useTranslation();
   const cancelRef = React.useRef<HTMLButtonElement>() as React.RefObject<HTMLButtonElement>;
 
   const { state, closeAlert } = useAlertDialogStore();
@@ -58,7 +60,7 @@ export const AlertDialogConfirmStore = () => {
             isDisabled={isLoading}
             onClick={closeAlert}
           >
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button
             minW="80px"

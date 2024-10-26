@@ -1,4 +1,5 @@
 import { Stack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useGetGroupPermissions } from '../../detail-role/apis/get-permissions.api';
 import { ListPermissionWidget } from '../../detail-role/widgets/list-permission.widget';
@@ -8,6 +9,7 @@ import { CustomFormProvider, CustomInput, CustomTextArea } from '@/components/el
 import { EditRow } from '@/components/widgets';
 
 export function CreateRolePage() {
+  const { t } = useTranslation();
   const { groupPermissions, isError, isLoading } = useGetGroupPermissions();
   const { form, handleCreateRole, isLoading: isCreating } = useCreateRoleHook();
 
@@ -20,7 +22,7 @@ export function CreateRolePage() {
     <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} justify="center" spacing={2}>
       <CustomFormProvider form={form} style={{ height: 'fit-content' }} onSubmit={handleCreateRole}>
         <EditRow
-          title="Role name"
+          title={t('fields.name')}
           stackProps={{
             maxW: 25,
             justifyContent: 'end',
@@ -34,13 +36,13 @@ export function CreateRolePage() {
               lg: '60%',
             }}
             isRequired
-            placeholder="Enter role name"
+            placeholder={`${t('common.enter')} ${t('fields.name')}`}
             registration={register('name')}
             error={errors.name}
           />
         </EditRow>
         <EditRow
-          title="Description"
+          title={t('fields.description')}
           stackProps={{
             maxW: 25,
             justifyContent: 'end',
@@ -55,13 +57,13 @@ export function CreateRolePage() {
               lg: '60%',
             }}
             isRequired
-            placeholder="Enter description"
+            placeholder={`${t('common.enter')} ${t('fields.description')}`}
             registration={register('description')}
             error={errors.description}
           />
         </EditRow>
         <EditRow
-          title="Permissions"
+          title={t('fields.permission')}
           stackProps={{
             maxW: 25,
             justifyContent: 'end',

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button, ButtonGroup, Editable, IconButton, SkeletonText, Text } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { RiEditFill } from 'react-icons/ri';
 
 import type { FieldWrapperProps } from '../field-wrapper';
@@ -28,6 +29,8 @@ function EditableControls({
   isEditing: boolean;
   isEditable: boolean;
 }) {
+  const { t } = useTranslation();
+
   return isEditing ? (
     <ButtonGroup mt={2} justifyContent="start" size="sm" mb={2}>
       <Button
@@ -35,7 +38,7 @@ function EditableControls({
         isDisabled={isLoading || isDisabled || isDirty}
         onClick={onSubmit}
       >
-        Save
+        {t('common.save')}
       </Button>
       <Button
         variant="ghost"
@@ -48,7 +51,7 @@ function EditableControls({
         isDisabled={isLoading || isDisabled}
         onClick={onClose}
       >
-        Close
+        {t('common.cancel')}
       </Button>
     </ButtonGroup>
   ) : (

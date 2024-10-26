@@ -1,4 +1,5 @@
 import { Icon, useDisclosure } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
 import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
 
@@ -17,6 +18,7 @@ interface ActionMenuTableLabelsProps {
 }
 
 export function ActionMenuTableLabels({ label, listLabel, isDefault }: ActionMenuTableLabelsProps) {
+  const { t } = useTranslation();
   const disclosureModal = useDisclosure();
   const disclosureModalRemoveLabel = useDisclosure();
   const { handleRemoveLabel } = useRemoveLabelHook(isDefault);
@@ -25,7 +27,7 @@ export function ActionMenuTableLabels({ label, listLabel, isDefault }: ActionMen
 
   const menuOptions = [
     {
-      label: 'Update',
+      label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => {
         if (!label.id) return;
@@ -34,7 +36,7 @@ export function ActionMenuTableLabels({ label, listLabel, isDefault }: ActionMen
       },
     },
     {
-      label: 'Delete',
+      label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {
         if (label.issueCount === 0 || isDefault) {

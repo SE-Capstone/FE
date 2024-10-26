@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { useRemoveStatusMutation } from '../../apis/delete-status.api';
 
 import type { IStatus } from '../../types';
@@ -7,6 +9,7 @@ import type { IStatus } from '../../types';
 import { useAlertDialogStore } from '@/contexts';
 
 export function useRemoveStatusHook(isDefault?: boolean) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const { openAlert, closeAlert } = useAlertDialogStore(loading);
   const { mutate, isPending } = useRemoveStatusMutation({
@@ -22,9 +25,11 @@ export function useRemoveStatusHook(isDefault?: boolean) {
     if (isPending) return;
 
     openAlert({
-      title: 'Delete status',
-      description: `Are you sure to delete status "${status.name}"?`,
-      textConfirm: 'Delete',
+      title: `${t('common.delete')} ${t('common.status').toLowerCase()}`,
+      description: `${t('actions.confirmDelete')} ${t('common.status').toLowerCase()} ${
+        status.name
+      }?`,
+      textConfirm: t('actions.delete'),
       onHandleConfirm() {
         mutate({
           body: {

@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { Box, Icon, Tooltip } from '@chakra-ui/react';
 import { Select, chakraComponents } from 'chakra-react-select';
 import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import type { MayBeController } from '../types';
 import type { FieldWrapperProps } from '@/components/elements';
@@ -50,6 +51,7 @@ export const CustomChakraReactSelect = <
 >(
   props: CustomChakraReactSelectProps<TFormValues, IsMulti, TOption>
 ) => {
+  const { t } = useTranslation();
   const {
     control,
     name,
@@ -189,10 +191,10 @@ export const CustomChakraReactSelect = <
       chakraStyles: stylesComponents,
       focusBorderColor: 'primary',
       autoFocus: false,
-      placeholder: 'Select...',
+      placeholder: `${t('common.choose')}...`,
       isClearable: true,
     }),
-    [customComponents, isMulti, stylesComponents]
+    [customComponents, isMulti, stylesComponents, t]
   );
 
   return control && name ? (
@@ -263,7 +265,7 @@ export const CustomChakraReactSelect = <
       <Select
         isMulti={isMulti}
         name={name as string}
-        noOptionsMessage={() => 'No data'}
+        noOptionsMessage={() => t('common.noData')}
         {...basePropsSelect}
         {...selectProps}
       />

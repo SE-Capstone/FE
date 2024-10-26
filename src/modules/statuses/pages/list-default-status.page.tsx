@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useGetListDefaultStatusQuery } from '../hooks/queries/use-get-list-default-statuses.hook';
 import { ActionMenuTableStatuses, ActionTableStatusesWidget } from '../widgets';
@@ -13,6 +14,7 @@ import { getNumericalOrder } from '@/libs/helpers';
 import { BadgeIssue } from '@/modules/issues/list-issue/components';
 
 export function ListDefaultStatusPage() {
+  const { t } = useTranslation();
   const { listStatus, isError, isLoading, isRefetching } = useGetListDefaultStatusQuery();
 
   const columns = useMemo<ColumnsProps<IStatus>>(
@@ -31,7 +33,7 @@ export function ListDefaultStatusPage() {
           },
           {
             key: 'name',
-            title: 'Name',
+            title: t('fields.name'),
             hasSort: false,
             Cell({ name, color }) {
               return <BadgeIssue content={name} colorScheme={color} />;
@@ -39,7 +41,7 @@ export function ListDefaultStatusPage() {
           },
           {
             key: 'description',
-            title: 'Description',
+            title: t('fields.description'),
             hasSort: false,
             Cell({ description }) {
               return (
@@ -52,7 +54,7 @@ export function ListDefaultStatusPage() {
         ],
       },
     ],
-    []
+    [t]
   );
 
   return (

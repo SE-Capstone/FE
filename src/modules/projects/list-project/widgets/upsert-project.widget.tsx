@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { Button, SimpleGrid, Stack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useUpsertProjectHook } from '../../detail-project/hooks/mutations/use-upsert-project.mutation.hooks';
 
@@ -26,6 +27,7 @@ export interface UpsertProjectWidgetProps {
 }
 
 export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
+  const { t } = useTranslation();
   const { teamLeads, isUpdate, project, isOpen, onClose } = props;
 
   const { formUpsertProject, handleUpsertProject, isLoading, reset } = useUpsertProjectHook({
@@ -78,10 +80,14 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
           type="submit"
           isDisabled={isLoading || (isUpdate && !isDirty)}
         >
-          Save
+          {t('common.save')}
         </Button>
       )}
-      title={isUpdate ? 'Update project' : 'Create project'}
+      title={
+        isUpdate
+          ? `${t('common.update')} ${t('common.project').toLowerCase()}`
+          : `${t('common.create')} ${t('common.project').toLowerCase()}`
+      }
       isOpen={isOpen}
       onClose={onClose}
       onCloseComplete={reset}
@@ -93,33 +99,33 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
       >
         <Stack spacing={5}>
           <CustomInput
-            label="Name"
+            label={t('fields.name')}
             isRequired
             registration={register('name')}
             error={errors.name}
           />
           <CustomInput
-            label="Code"
+            label={t('fields.code')}
             isRequired
             registration={register('code')}
             error={errors.code}
           />
           <CustomTextArea
-            label="Description"
+            label={t('fields.description')}
             isRequired
             registration={register('description')}
             error={errors.description}
           />
           <SimpleGrid columns={2} spacing={3}>
             <CustomInput
-              label="Start date"
+              label={t('fields.startDate')}
               isRequired
               type="date"
               registration={register('startDate')}
               error={errors.startDate}
             />
             <CustomInput
-              label="End date"
+              label={t('fields.endDate')}
               isRequired
               type="date"
               registration={register('endDate')}
@@ -128,7 +134,7 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
           </SimpleGrid>
           <CustomChakraReactSelect
             isSearchable
-            placeholder="Choose team lead"
+            placeholder={`${t('common.choose')} team lead`}
             label="Team lead"
             size="lg"
             options={teamLeads.map((user) => ({
@@ -142,8 +148,8 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
             <CustomChakraReactSelect
               isSearchable
               isRequired
-              placeholder="Choose status"
-              label="Status"
+              placeholder={`${t('common.choose')} ${t('common.status').toLowerCase()}`}
+              label={t('common.status')}
               size="lg"
               options={PROJECT_STATUS_OPTIONS}
               control={control}

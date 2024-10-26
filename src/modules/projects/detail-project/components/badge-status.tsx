@@ -1,4 +1,5 @@
 import { Badge } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { ProjectStatusEnum } from '../../list-project/types';
 
@@ -19,10 +20,11 @@ interface BadgeRoleProps extends BadgeProps {
 
 export function BadgeStatus(props: BadgeRoleProps) {
   const { status, ...badgeProps } = props;
+  const { t } = useTranslation();
 
   return (
     <Badge variant="outline" {...badgeProps} colorScheme={BADGE_STATUS_COLOR_MAP[status]}>
-      {PROJECT_STATUS_VALUES[status] || status}
+      {PROJECT_STATUS_VALUES(t)[status] || status}
     </Badge>
   );
 }

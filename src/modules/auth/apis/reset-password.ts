@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import type { IResponseApi } from '@/configs/axios';
@@ -31,6 +32,7 @@ interface IAuthLoginMutationProps {
 }
 
 export function useResetPasswordMutation({ configs }: IAuthLoginMutationProps = {}) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return useMutation({
@@ -39,13 +41,13 @@ export function useResetPasswordMutation({ configs }: IAuthLoginMutationProps = 
     onSuccess: () => {
       notify({
         type: 'success',
-        message: `Reset password successfully`,
+        message: t('messages.resetPasswordSuccess'),
       });
       navigate(APP_PATHS.login);
     },
 
     onError(error) {
-      notify({ type: 'error', message: getErrorMessage(error) });
+      notify({ type: 'error', message: getErrorMessage(t, error) });
     },
 
     ...configs,

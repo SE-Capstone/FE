@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { Button, Stack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useUpsertJobHook } from '../hooks/mutations';
 
@@ -16,6 +17,7 @@ export interface UpsertJobWidgetProps {
 }
 
 export function UpsertJobWidget(props: UpsertJobWidgetProps) {
+  const { t } = useTranslation();
   const { isUpdate, job, isOpen, onClose } = props;
 
   const { formUpsertJob, handleUpsertJob, isLoading, reset } = useUpsertJobHook({
@@ -56,10 +58,14 @@ export function UpsertJobWidget(props: UpsertJobWidgetProps) {
           type="submit"
           isDisabled={isLoading || (isUpdate && !isDirty)}
         >
-          Save
+          {t('common.save')}
         </Button>
       )}
-      title={isUpdate ? 'Update job' : 'Create job'}
+      title={
+        isUpdate
+          ? `${t('common.update')} ${t('common.job').toLowerCase()}`
+          : `${t('common.create')} ${t('common.job').toLowerCase()}`
+      }
       isOpen={isOpen}
       onClose={onClose}
       onCloseComplete={reset}
@@ -67,13 +73,13 @@ export function UpsertJobWidget(props: UpsertJobWidgetProps) {
       <CustomFormProvider id="form-upsert-job" form={formUpsertJob} onSubmit={handleUpsertJob}>
         <Stack spacing={5}>
           <CustomInput
-            label="Title"
+            label={t('fields.title')}
             isRequired
             registration={register('title')}
             error={errors.title}
           />
           <CustomTextArea
-            label="Description"
+            label={t('fields.description')}
             isRequired
             registration={register('description')}
             error={errors.description}

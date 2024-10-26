@@ -8,6 +8,7 @@ import { getErrorMessage, notify } from '@/libs/helpers';
 import { makeRequest } from '@/libs/react-query';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
+import { useTranslation } from 'react-i18next';
 
 interface IAuthCheckResetCodeRequest {
   body: {
@@ -29,6 +30,7 @@ interface IAuthLoginMutationProps {
 }
 
 export function useCheckResetCodeMutation({ configs }: IAuthLoginMutationProps = {}) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return useMutation({
@@ -37,7 +39,7 @@ export function useCheckResetCodeMutation({ configs }: IAuthLoginMutationProps =
     onSuccess: () => {},
 
     onError(error) {
-      notify({ type: 'error', message: getErrorMessage(error) });
+      notify({ type: 'error', message: getErrorMessage(t, error) });
       navigate(APP_PATHS.login);
     },
 

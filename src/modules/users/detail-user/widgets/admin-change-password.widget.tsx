@@ -1,4 +1,5 @@
 import { Button, Heading, Stack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useAdminChangePasswordMutation } from '../apis/admin-change-password.api';
 import { adminChangePasswordSchema } from '../validations/admin-change-password.validation';
@@ -11,6 +12,7 @@ import { useAlertDialogStore } from '@/contexts';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export function AdminChangePasswordWidget({ user }: { user?: IUser }) {
+  const { t } = useTranslation();
   const form = useFormWithSchema({
     schema: adminChangePasswordSchema,
   });
@@ -26,8 +28,8 @@ export function AdminChangePasswordWidget({ user }: { user?: IUser }) {
     if (isLoading) return;
 
     openAlert({
-      title: 'Update',
-      description: `Are you sure to update password for user "${user?.fullName}"?`,
+      title: t('common.edit'),
+      description: `${t('actions.updatePassword')} ${user?.fullName}`,
       onHandleConfirm() {
         changePasswordMutation({
           body: {
@@ -60,18 +62,18 @@ export function AdminChangePasswordWidget({ user }: { user?: IUser }) {
           spacing="24px"
         >
           <Heading variant="title" mt="12px">
-            Update password
+            {`${t('common.update')} ${t('fields.password').toLowerCase()}`}
           </Heading>
           <Stack spacing={5}>
             <CustomInput
-              label="New password"
+              label={t('fields.newPassword')}
               isRequired
               type="password"
               registration={register('newPassword')}
               error={errors?.newPassword}
             />
             <CustomInput
-              label="Confirm password"
+              label={t('fields.confirmPassword')}
               isRequired
               type="password"
               registration={register('confirmPassword')}
@@ -86,7 +88,7 @@ export function AdminChangePasswordWidget({ user }: { user?: IUser }) {
               isDisabled={isLoading || !isDirty}
               isLoading={isLoading}
             >
-              Save
+              {t('common.save')}
             </Button>
           </Stack>
         </Stack>

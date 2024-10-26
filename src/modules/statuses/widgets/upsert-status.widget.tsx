@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { Button, Stack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useUpsertStatusHook } from '../hooks/mutations';
 
@@ -25,6 +26,7 @@ export interface UpsertStatusWidgetProps {
 }
 
 export function UpsertStatusWidget(props: UpsertStatusWidgetProps) {
+  const { t } = useTranslation();
   const { isUpdate, status, isOpen, onClose, isDefault } = props;
 
   const { formUpsertStatus, handleUpsertStatus, isLoading, reset } = useUpsertStatusHook({
@@ -68,10 +70,14 @@ export function UpsertStatusWidget(props: UpsertStatusWidgetProps) {
           type="submit"
           isDisabled={isLoading || (isUpdate && !isDirty)}
         >
-          Save
+          {t('common.save')}
         </Button>
       )}
-      title={isUpdate ? 'Update status' : 'Create status'}
+      title={
+        isUpdate
+          ? `${t('common.update')} ${t('common.status').toLowerCase()}`
+          : `${t('common.create')} ${t('common.status').toLowerCase()}`
+      }
       isOpen={isOpen}
       onClose={onClose}
       onCloseComplete={reset}
@@ -83,7 +89,7 @@ export function UpsertStatusWidget(props: UpsertStatusWidgetProps) {
       >
         <Stack spacing={5}>
           <CustomInput
-            label="Name"
+            label={t('fields.name')}
             isRequired
             registration={register('name')}
             error={errors.name}
@@ -91,8 +97,8 @@ export function UpsertStatusWidget(props: UpsertStatusWidgetProps) {
           <CustomChakraReactSelect
             isSearchable
             isRequired
-            placeholder="Choose theme"
-            label="Theme"
+            placeholder={`${t('common.choose')} ${t('fields.theme').toLowerCase()}`}
+            label={t('fields.theme')}
             size="lg"
             options={COLOR_OPTIONS.map((color) => ({
               label: <BadgeIssue content="Status" colorScheme={color} />,
@@ -102,7 +108,7 @@ export function UpsertStatusWidget(props: UpsertStatusWidgetProps) {
             name="color"
           />
           <CustomTextArea
-            label="Description"
+            label={t('fields.description')}
             registration={register('description')}
             error={errors.description}
           />

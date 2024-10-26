@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { Container, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { useGetListRoleQuery } from '../hooks/queries';
@@ -14,6 +15,7 @@ import { CustomLink, Head, TableComponent } from '@/components/elements';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListRolePage() {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
 
   const { listRole, isError, isLoading } = useGetListRoleQuery({});
@@ -26,7 +28,7 @@ export function ListRolePage() {
           {
             key: 'id',
             hasSort: false,
-            title: 'STT',
+            title: '#',
             tableCellProps: { w: 4, pr: 2 },
             Cell(_, index) {
               return <>{index + 1}</>;
@@ -34,7 +36,7 @@ export function ListRolePage() {
           },
           {
             key: 'name',
-            title: 'Name',
+            title: t('fields.name'),
             hasSort: false,
             Cell({ name, id }) {
               return (
@@ -49,7 +51,7 @@ export function ListRolePage() {
           },
           {
             key: 'description',
-            title: 'Description',
+            title: t('fields.description'),
             hasSort: false,
             tableCellProps: {
               w: '100%',
@@ -64,7 +66,7 @@ export function ListRolePage() {
           },
           {
             key: 'permission',
-            title: 'Permissions',
+            title: t('fields.permission'),
             hasSort: false,
             Cell({ permissions }) {
               return <>{permissions.length || 0}</>;
@@ -73,7 +75,7 @@ export function ListRolePage() {
         ],
       },
     ],
-    [pathname]
+    [pathname, t]
   );
 
   return (

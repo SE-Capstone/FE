@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Button, Container, useDisclosure } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { UpsertProjectWidget } from '../../list-project/widgets';
@@ -22,6 +23,7 @@ import { useGetUsersByPermission } from '@/modules/users/list-user/apis/get-user
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailProjectPage() {
+  const { t, i18n } = useTranslation();
   const disclosureModal = useDisclosure();
   const { permissions } = useAuthentication();
   const { projectId } = useParams();
@@ -59,7 +61,7 @@ export function DetailProjectPage() {
           >
             {permissions[PermissionEnum.UPDATE_PROJECT] && (
               <>
-                <Button onClick={disclosureModal.onOpen}>Edit</Button>
+                <Button onClick={disclosureModal.onOpen}>{t('actions.edit')}</Button>
                 <UpsertProjectWidget
                   project={project}
                   teamLeads={teamLeads}
@@ -76,18 +78,18 @@ export function DetailProjectPage() {
             }}
             tabsData={[
               {
-                title: 'Overview',
+                title: t('fields.overview'),
                 link: `${APP_PATHS.listProject}/${projectId}`,
                 childrenPanel: (
                   <BaseInformationProjectWidget project={project} permissions={permissions} />
                 ),
               },
               {
-                title: 'Labels',
+                title: i18n.language === 'vi' ? t('common.label') : t('common.labels'),
                 childrenPanel: <ListLabelPage />,
               },
               {
-                title: 'Status',
+                title: i18n.language === 'vi' ? t('common.status') : t('common.statuses'),
                 childrenPanel: <ListStatusPage />,
               },
               {
@@ -95,7 +97,7 @@ export function DetailProjectPage() {
                 childrenPanel: <KanbanWidget />,
               },
               {
-                title: 'Issues',
+                title: i18n.language === 'vi' ? t('common.issue') : t('common.issues'),
                 childrenPanel: (
                   <IssuesQueryProvider>
                     <ListIssuePage />

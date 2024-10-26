@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { useGetListLabelQuery } from '../hooks/queries';
@@ -13,6 +14,7 @@ import { Head, StateHandler, TableComponent } from '@/components/elements';
 import { getNumericalOrder } from '@/libs/helpers';
 
 export function ListLabelPage() {
+  const { t } = useTranslation();
   const { projectId } = useParams();
   const { listLabel, isError, isLoading, isRefetching } = useGetListLabelQuery({
     params: {
@@ -36,7 +38,7 @@ export function ListLabelPage() {
           },
           {
             key: 'title',
-            title: 'Title',
+            title: t('fields.title'),
             hasSort: false,
             Cell({ title }) {
               return <>{title}</>;
@@ -44,7 +46,7 @@ export function ListLabelPage() {
           },
           {
             key: 'description',
-            title: 'Description',
+            title: t('fields.description'),
             hasSort: false,
             Cell({ description }) {
               return (

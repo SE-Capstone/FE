@@ -1,8 +1,10 @@
 import { Box, Button, HStack, Spacer, useDisclosure } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { UpsertLabelWidget } from './upsert-label.widget';
 
 export function ActionTableLabelsWidget({ isDefault }: { isDefault?: boolean }) {
+  const { t } = useTranslation();
   const disclosureModal = useDisclosure();
 
   return (
@@ -10,7 +12,7 @@ export function ActionTableLabelsWidget({ isDefault }: { isDefault?: boolean }) 
       <HStack justify="space-between">
         <Spacer />
         <Button leftIcon={<>+</>} onClick={disclosureModal.onOpen}>
-          Create
+          {t('common.create')}
         </Button>
         <UpsertLabelWidget
           isOpen={disclosureModal.isOpen}

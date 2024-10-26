@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { useGetListStatusQuery } from '../hooks/queries';
@@ -14,6 +15,7 @@ import { getNumericalOrder } from '@/libs/helpers';
 import { BadgeIssue } from '@/modules/issues/list-issue/components';
 
 export function ListStatusPage() {
+  const { t } = useTranslation();
   const { projectId } = useParams();
   const { listStatus, isError, isLoading, isRefetching } = useGetListStatusQuery({
     params: {
@@ -37,7 +39,7 @@ export function ListStatusPage() {
           },
           {
             key: 'name',
-            title: 'Name',
+            title: t('fields.name'),
             hasSort: false,
             Cell({ name, color }) {
               return <BadgeIssue content={name} colorScheme={color} />;
@@ -45,7 +47,7 @@ export function ListStatusPage() {
           },
           {
             key: 'description',
-            title: 'Description',
+            title: t('fields.description'),
             hasSort: false,
             Cell({ description }) {
               return (

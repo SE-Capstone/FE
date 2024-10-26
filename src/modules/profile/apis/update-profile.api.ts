@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import type { IUpdateUserResponse } from '../types';
@@ -41,6 +42,7 @@ interface IProps {
 }
 
 export function useUpdateProfileMutation({ configs }: IProps = {}) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
@@ -50,7 +52,7 @@ export function useUpdateProfileMutation({ configs }: IProps = {}) {
 
     onSuccess: (data) => {
       if (data.statusCode !== 200) {
-        notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
+        notify({ type: 'error', message: DEFAULT_MESSAGE(t).SOMETHING_WRONG });
         return;
       }
 
@@ -60,14 +62,14 @@ export function useUpdateProfileMutation({ configs }: IProps = {}) {
 
       notify({
         type: 'success',
-        message: DEFAULT_MESSAGE.UPDATE_SUCCESS,
+        message: DEFAULT_MESSAGE(t).UPDATE_SUCCESS,
       });
 
       navigate(APP_PATHS.profile);
     },
 
     onError(error) {
-      notify({ type: 'error', message: getErrorMessage(error) });
+      notify({ type: 'error', message: getErrorMessage(t, error) });
     },
 
     ...configs,

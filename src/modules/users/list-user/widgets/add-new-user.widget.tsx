@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Button, HStack, SimpleGrid, Stack } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { useCreateUserHook } from '../hooks/mutations';
 
@@ -24,6 +25,7 @@ export interface AddNewUserWidgetProps {
 }
 
 export function AddNewUserWidget(props: AddNewUserWidgetProps) {
+  const { t } = useTranslation();
   const { children, roles } = props;
 
   const { data, formCreateUser, handleCreateUser, isLoading, reset } = useCreateUserHook();
@@ -47,7 +49,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
     <ModalBase
       size="xl"
       isDone={!!data}
-      title="Create user"
+      title={`${t('common.create')} ${t('common.user').toLowerCase()}`}
       triggerButton={() => children}
       renderFooter={() => (
         <Button
@@ -56,7 +58,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
           type="submit"
           isDisabled={isLoading || isLoadingPosition}
         >
-          Save
+          {t('common.save')}
         </Button>
       )}
       onCloseComplete={reset}
@@ -72,20 +74,20 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
           />
           <SimpleGrid columns={2} spacing={3}>
             <CustomInput
-              label="Full name"
+              label={t('fields.fullName')}
               isRequired
               registration={register('fullName')}
               error={errors.fullName}
             />
             <CustomInput
-              label="Alias name"
+              label={t('fields.aliasName')}
               isRequired
               registration={register('userName')}
               error={errors.userName}
             />
           </SimpleGrid>
           <CustomInput
-            label="Password"
+            label={t('fields.password')}
             type="password"
             isRequired
             registration={register('password')}
@@ -95,13 +97,13 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
             <CustomChakraReactSelect
               isRequired
               isSearchable={false}
-              label="Gender"
+              label={t('fields.gender')}
               options={GENDER_OPTIONS}
               control={control}
               name="gender"
             />
             <CustomInput
-              label="Birthday"
+              label={t('fields.birthday')}
               isRequired
               type="date"
               registration={register('dob')}
@@ -113,7 +115,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
             control={control}
             render={({ field: { value, onChange, ...field } }) => (
               <CustomInput
-                label="Phone number"
+                label={t('fields.phone')}
                 placeholder="012-345-6789"
                 isRequired
                 error={errors?.phone}
@@ -127,7 +129,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
             )}
           />
           <CustomInput
-            label="Address"
+            label={t('fields.address')}
             isRequired
             registration={register('address')}
             error={errors.address}
@@ -136,8 +138,8 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
             <CustomChakraReactSelect
               isSearchable
               isRequired
-              placeholder="Choose role"
-              label="Role"
+              placeholder={`${t('common.choose')} ${t('fields.role').toLowerCase()}`}
+              label={t('fields.role')}
               size="lg"
               options={roles.map((role) => ({
                 label: role.name,
@@ -149,8 +151,8 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
             <CustomChakraReactSelect
               isSearchable
               isRequired
-              placeholder="Choose position"
-              label="Position"
+              placeholder={`${t('common.choose')} ${t('common.position').toLowerCase()}`}
+              label={t('common.position')}
               size="lg"
               options={positions.map((position) => ({
                 label: position.name,

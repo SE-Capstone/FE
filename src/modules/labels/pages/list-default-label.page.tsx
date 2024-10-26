@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useGetListDefaultLabelQuery } from '../hooks/queries/use-get-list-default-labels.hook';
 import { ActionMenuTableLabels, ActionTableLabelsWidget } from '../widgets';
@@ -12,6 +13,7 @@ import { Head, StateHandler, TableComponent } from '@/components/elements';
 import { getNumericalOrder } from '@/libs/helpers';
 
 export function ListDefaultLabelPage() {
+  const { t } = useTranslation();
   const { listLabel, isError, isLoading, isRefetching } = useGetListDefaultLabelQuery();
 
   const columns = useMemo<ColumnsProps<ILabel>>(
@@ -30,7 +32,7 @@ export function ListDefaultLabelPage() {
           },
           {
             key: 'title',
-            title: 'Title',
+            title: t('fields.title'),
             hasSort: false,
             Cell({ title }) {
               return <>{title}</>;
@@ -38,7 +40,7 @@ export function ListDefaultLabelPage() {
           },
           {
             key: 'description',
-            title: 'Description',
+            title: t('fields.description'),
             hasSort: false,
             Cell({ description }) {
               return (
@@ -51,7 +53,7 @@ export function ListDefaultLabelPage() {
         ],
       },
     ],
-    []
+    [t]
   );
 
   return (

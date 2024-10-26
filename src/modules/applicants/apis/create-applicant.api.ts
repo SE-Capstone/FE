@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import type { IApplicant } from '../types';
 import type { IResponseApi } from '@/configs/axios';
@@ -36,13 +37,14 @@ interface Props {
 }
 
 export function useCreateApplicantMutation({ configs, reset }: Props = {}) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: mutation,
 
     onSuccess: (data) => {
       if (data.statusCode !== 201) {
-        notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
+        notify({ type: 'error', message: DEFAULT_MESSAGE(t).SOMETHING_WRONG });
         return;
       }
 
@@ -51,7 +53,7 @@ export function useCreateApplicantMutation({ configs, reset }: Props = {}) {
       });
       notify({
         type: 'success',
-        message: DEFAULT_MESSAGE.CREATE_SUCCESS,
+        message: DEFAULT_MESSAGE(t).CREATE_SUCCESS,
       });
       reset && reset();
     },
@@ -59,7 +61,7 @@ export function useCreateApplicantMutation({ configs, reset }: Props = {}) {
     onError(error) {
       notify({
         type: 'error',
-        message: getErrorMessage(error),
+        message: getErrorMessage(t, error),
       });
     },
 

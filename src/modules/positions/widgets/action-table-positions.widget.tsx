@@ -1,4 +1,5 @@
 import { Box, Button, Grid, GridItem, HStack, Spacer } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { AddNewPositionWidget } from './add-new-position.widget';
@@ -7,6 +8,7 @@ import { usePositionsQueryFilterStateContext } from '../contexts';
 import { SearchInput } from '@/components/elements';
 
 export function ActionTablePositionsWidget() {
+  const { t } = useTranslation();
   const { positionsQueryState, setPositionsQueryFilterState } =
     usePositionsQueryFilterStateContext();
   const { pathname } = useLocation();
@@ -38,7 +40,7 @@ export function ActionTablePositionsWidget() {
           <>
             <Spacer />
             <AddNewPositionWidget>
-              <Button leftIcon={<>+</>}>Create</Button>
+              <Button leftIcon={<>+</>}>{t('common.create')}</Button>
             </AddNewPositionWidget>
           </>
         )}

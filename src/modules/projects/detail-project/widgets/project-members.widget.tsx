@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Button, Icon, IconButton, Stack, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { PiUsersThreeFill } from 'react-icons/pi';
 import { RiEditFill } from 'react-icons/ri';
 
@@ -10,6 +11,7 @@ import type { IProject } from '../../list-project/types';
 import type { IOptionUserSelect } from '../components/users-async-select';
 
 export function ProjectMembersWidget({ project }: { project?: IProject }) {
+  const { t } = useTranslation();
   const hasMembers = (project?.members?.length || 0) > 0 || !!project?.leadId;
 
   const [initialMembers, setInitialMembers] = useState<Set<string>>(new Set());
@@ -61,7 +63,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           alignItems="center"
         >
           <Icon boxSize={5} color="neutral.300" mr={3} as={PiUsersThreeFill} />
-          Members
+          {t('fields.members')}
         </Text>
         {hasMembers && (
           <UpsertMembersWidget
@@ -106,7 +108,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           projectId={project?.id || ''}
         >
           <Button width="fit-content" leftIcon={<>+</>}>
-            Add Members
+            {`${t('common.add')} ${t('fields.members').toLowerCase()}`}
           </Button>
         </UpsertMembersWidget>
       )}

@@ -1,6 +1,7 @@
 import type React from 'react';
 
 import { Button, Heading, Stack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useChangePasswordMutation } from '../apis/change-password.api';
 import { changePasswordSchema } from '../validation/change-password.validation';
@@ -11,6 +12,7 @@ import { CustomFormProvider, CustomInput } from '@/components/elements';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export const ChangePasswordWidget: React.FC = () => {
+  const { t } = useTranslation();
   const form = useFormWithSchema({
     schema: changePasswordSchema,
   });
@@ -48,24 +50,24 @@ export const ChangePasswordWidget: React.FC = () => {
           spacing="24px"
         >
           <Heading variant="title" mt="12px">
-            Update password
+            {`${t('common.update')} ${t('fields.password').toLowerCase()}`}
           </Heading>
           <Stack spacing={5}>
             <CustomInput
-              label="Current password"
+              label={t('fields.currentPassword')}
               type="password"
               registration={register('oldPassword')}
               error={errors?.oldPassword}
             />
             <CustomInput
-              label="New password"
+              label={t('fields.newPassword')}
               type="password"
               isRequired
               registration={register('newPassword')}
               error={errors?.newPassword}
             />
             <CustomInput
-              label="Confirm password"
+              label={t('fields.confirmPassword')}
               isRequired
               type="password"
               registration={register('confirmPassword')}
@@ -80,7 +82,7 @@ export const ChangePasswordWidget: React.FC = () => {
               isDisabled={isLoading || !isDirty}
               isLoading={isLoading}
             >
-              Save
+              {t('common.save')}
             </Button>
           </Stack>
         </Stack>

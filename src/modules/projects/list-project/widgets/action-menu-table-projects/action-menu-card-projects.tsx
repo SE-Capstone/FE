@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Icon, useDisclosure } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { HiArchiveBox, HiArchiveBoxXMark } from 'react-icons/hi2';
 import { MdOutlineSystemUpdateAlt, MdVisibility } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +23,7 @@ interface ActionMenuTableProjectsProps {
 }
 
 export function ActionMenuTableProjects({ project, teamLeads }: ActionMenuTableProjectsProps) {
+  const { t } = useTranslation();
   const { permissions } = useAuthentication();
   const disclosureModal = useDisclosure();
   const navigate = useNavigate();
@@ -40,12 +42,12 @@ export function ActionMenuTableProjects({ project, teamLeads }: ActionMenuTableP
 
   const menuOptions = [
     permissions[PermissionEnum.GET_DETAIL_PROJECT] && {
-      label: 'View detail',
+      label: t('actions.viewDetail'),
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/projects/${project.id}`),
     },
     {
-      label: 'Update',
+      label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => {
         if (!project.id) return;
@@ -54,16 +56,18 @@ export function ActionMenuTableProjects({ project, teamLeads }: ActionMenuTableP
       },
     },
     permissions[PermissionEnum.TOGGLE_VISIBLE_PROJECT] && {
-      label: project.isVisible ? 'Archive' : 'Unarchive',
+      label: project.isVisible ? t('actions.archive') : t('actions.unarchive'),
       icon: <Icon as={project.isVisible ? HiArchiveBox : HiArchiveBoxXMark} boxSize={5} />,
       onClick: () => {
         openAlert({
-          title: project.isVisible ? 'Unarchive project?' : 'Archive project?',
+          title: project.isVisible
+            ? `${t('actions.archive')} ${t('common.project').toLowerCase()}`
+            : `${t('actions.unarchive')} ${t('common.project').toLowerCase()}`,
           type: 'warning',
-          textConfirm: project.isVisible ? 'Archive' : 'Unarchive',
+          textConfirm: project.isVisible ? t('actions.archive') : t('actions.unarchive'),
           description: project.isVisible
-            ? 'This project will be invisible to all members'
-            : 'This project will be visible to all members',
+            ? t('actions.archiveProject')
+            : t('actions.unarchiveProject'),
           onHandleConfirm() {
             if (!project.id) return;
             mutate(project.id);

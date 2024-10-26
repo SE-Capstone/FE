@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { useRemoveJobMutation } from '../../apis/delete-job.api';
 
 import type { IJob } from '../../types';
@@ -7,6 +9,7 @@ import type { IJob } from '../../types';
 import { useAlertDialogStore } from '@/contexts';
 
 export function useRemoveJobHook() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const { openAlert, closeAlert } = useAlertDialogStore(loading);
   const { mutate, isPending } = useRemoveJobMutation({
@@ -21,9 +24,9 @@ export function useRemoveJobHook() {
     if (isPending) return;
 
     openAlert({
-      title: 'Delete job',
-      description: `Are you sure to delete job "${job.title}"?`,
-      textConfirm: 'Delete',
+      title: `${t('common.delete')} ${t('common.job').toLowerCase()}`,
+      description: `${t('actions.confirmDelete')} ${t('common.job').toLowerCase()} ${job.title}?`,
+      textConfirm: t('actions.delete'),
       onHandleConfirm() {
         mutate({
           body: {

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { Container } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { BadgeRole } from '../../detail-user/components';
@@ -19,6 +20,7 @@ import { getNumericalOrder } from '@/libs/helpers';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListUserPage() {
+  const { t } = useTranslation();
   const { usersQueryState } = useUsersQueryFilterStateContext();
   const { pathname } = useLocation();
 
@@ -34,7 +36,7 @@ export function ListUserPage() {
           {
             key: 'id',
             hasSort: false,
-            title: 'STT',
+            title: '#',
             tableCellProps: { w: 4, pr: 2 },
             Cell(_, index) {
               return (
@@ -70,7 +72,7 @@ export function ListUserPage() {
           // },
           {
             key: 'fullName',
-            title: 'Full name',
+            title: t('fields.fullName'),
             hasSort: false,
             Cell({ fullName, id }) {
               return (
@@ -85,7 +87,7 @@ export function ListUserPage() {
           },
           {
             key: 'aliasName',
-            title: 'Alias name',
+            title: t('fields.aliasName'),
             hasSort: false,
             Cell({ userName }) {
               return <>{userName || ''}</>;
@@ -93,7 +95,7 @@ export function ListUserPage() {
           },
           {
             key: 'email',
-            title: 'Email',
+            title: t('fields.email'),
             hasSort: false,
             Cell({ email, id }) {
               return (
@@ -108,20 +110,20 @@ export function ListUserPage() {
           },
           {
             key: 'gender',
-            title: 'Gender',
+            title: t('fields.gender'),
             hasSort: false,
             Cell({ gender }) {
-              return <>{gender ? GENDER_VALUES[gender] || 'N/A' : ''}</>;
+              return <>{gender ? GENDER_VALUES(t)[gender] || 'N/A' : ''}</>;
             },
           },
           {
             key: 'phone',
-            title: 'Phone',
+            title: t('fields.phone'),
             hasSort: false,
           },
           {
             key: 'role',
-            title: 'Role',
+            title: t('fields.role'),
             hasSort: false,
             Cell({ roleName }) {
               return <BadgeRole role={roleName as unknown as RolesEnum} />;
@@ -129,7 +131,7 @@ export function ListUserPage() {
           },
           {
             key: 'status',
-            title: 'Status',
+            title: t('fields.status'),
             hasSort: false,
             Cell({ status }) {
               return <BadgeStatus status={status} />;
@@ -138,7 +140,7 @@ export function ListUserPage() {
         ],
       },
     ],
-    [meta.pageIndex, meta.pageSize, pathname]
+    [meta.pageIndex, meta.pageSize, pathname, t]
   );
 
   return (

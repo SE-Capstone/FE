@@ -1,4 +1,5 @@
 import { Box, Button, Grid, GridItem, HStack, Spacer, useDisclosure } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { useJobsQueryFilterStateContext } from '../contexts';
@@ -7,6 +8,7 @@ import { UpsertJobWidget } from './upsert-job.widget';
 import { SearchInput } from '@/components/elements';
 
 export function ActionTableJobsWidget() {
+  const { t } = useTranslation();
   const disclosureModal = useDisclosure();
   const { jobsQueryState, setJobsQueryFilterState } = useJobsQueryFilterStateContext();
   const { pathname } = useLocation();
@@ -38,7 +40,7 @@ export function ActionTableJobsWidget() {
           <>
             <Spacer />
             <Button size="md" leftIcon={<>+</>} onClick={disclosureModal.onOpen}>
-              Create
+              {t('common.create')}
             </Button>
             <UpsertJobWidget isOpen={disclosureModal.isOpen} onClose={disclosureModal.onClose} />
           </>

@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import type { ReactNode } from 'react';
 
 import { Box, Checkbox, Icon, Stack, Th, Thead, Tr } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { HiArrowNarrowUp, HiArrowNarrowDown } from 'react-icons/hi';
 import { TbArrowsDownUp } from 'react-icons/tb';
 
@@ -114,6 +115,7 @@ const TableHeader = <T extends object>({
   isIndeterminate,
   hasDraggable,
 }: TableHeadProps<T>) => {
+  const { t } = useTranslation();
   const totalColumns = groupColumns.reduce(
     (acc, value) => [
       ...acc,
@@ -214,7 +216,7 @@ const TableHeader = <T extends object>({
               lineHeight: '120%',
             }}
           >
-            Actions
+            {t('fields.actions')}
           </Th>
         )}
         {hasDraggable && (

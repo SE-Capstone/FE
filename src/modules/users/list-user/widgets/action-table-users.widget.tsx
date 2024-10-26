@@ -15,6 +15,7 @@ import {
   Spacer,
   Text,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { FiFilter } from 'react-icons/fi';
 
 import { AddNewUserWidget } from './add-new-user.widget';
@@ -29,6 +30,7 @@ import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetRoles } from '@/modules/roles/list-role/apis/get-roles.api';
 
 export function ActionTableUsersWidget() {
+  const { t } = useTranslation();
   const { usersQueryState, setUsersQueryFilterState } = useUsersQueryFilterStateContext();
   const { permissions } = useAuthentication();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
@@ -68,31 +70,31 @@ export function ActionTableUsersWidget() {
     () => [
       {
         value: 'fullName',
-        label: 'Full name',
+        label: t('fields.fullName'),
         default: true,
       },
       {
         value: 'roleId',
-        label: 'Role',
+        label: t('fields.role'),
       },
       {
         value: 'phone',
-        label: 'Phone',
+        label: t('fields.phone'),
       },
       {
         value: 'email',
-        label: 'Email',
+        label: t('fields.email'),
       },
       {
         value: 'status',
-        label: 'Status',
+        label: t('fields.status'),
       },
       {
         value: 'gender',
-        label: 'Gender',
+        label: t('fields.gender'),
       },
     ],
-    []
+    [t]
   );
 
   useEffect(() => {
@@ -121,7 +123,7 @@ export function ActionTableUsersWidget() {
           {selectedFilters.includes('fullName') && (
             <GridItem colSpan={1}>
               <SearchInput
-                placeholder="Enter name..."
+                placeholder={`${t('common.enter')} ${t('fields.fullName').toLowerCase()}...`}
                 initValue={usersQueryState.filters.fullName || ''}
                 onHandleSearch={(keyword) => {
                   setUsersQueryFilterState({ fullName: keyword });
@@ -132,7 +134,7 @@ export function ActionTableUsersWidget() {
           {selectedFilters.includes('email') && (
             <GridItem>
               <SearchInput
-                placeholder="Enter email..."
+                placeholder={`${t('common.enter')} email...`}
                 initValue={usersQueryState.filters.email || ''}
                 onHandleSearch={(keyword) => {
                   setUsersQueryFilterState({ email: keyword });
@@ -143,7 +145,7 @@ export function ActionTableUsersWidget() {
           {selectedFilters.includes('phone') && (
             <GridItem>
               <SearchInput
-                placeholder="Enter phone..."
+                placeholder={`${t('common.enter')} ${t('fields.phone').toLowerCase()}...`}
                 maxLength={12}
                 type="number"
                 initValue={usersQueryState.filters.phone || ''}
@@ -160,7 +162,7 @@ export function ActionTableUsersWidget() {
               <CustomChakraReactSelect
                 isSearchable
                 size="sm"
-                placeholder="Filter by gender"
+                placeholder={`${t('common.filterBy')} ${t('fields.gender').toLowerCase()}`}
                 options={GENDER_OPTIONS}
                 onChange={(opt) => {
                   setUsersQueryFilterState({
@@ -175,7 +177,7 @@ export function ActionTableUsersWidget() {
               <CustomChakraReactSelect
                 isSearchable
                 size="sm"
-                placeholder="Filter by status"
+                placeholder={`${t('common.filterBy')} ${t('fields.status').toLowerCase()}`}
                 options={USER_STATUS_OPTIONS}
                 onChange={(opt) => {
                   setUsersQueryFilterState({
@@ -190,7 +192,7 @@ export function ActionTableUsersWidget() {
               <CustomChakraReactSelect
                 isSearchable
                 size="sm"
-                placeholder="Filter by role"
+                placeholder={`${t('common.filterBy')} ${t('fields.role').toLowerCase()}`}
                 options={roles.map((role) => ({
                   label: role.name,
                   value: role.id,
@@ -224,7 +226,7 @@ export function ActionTableUsersWidget() {
         </Menu>
         {permissions[PermissionEnum.ADD_USER] && (
           <AddNewUserWidget roles={listRole}>
-            <Button leftIcon={<>+</>}>Create</Button>
+            <Button leftIcon={<>+</>}>{t('common.create')}</Button>
           </AddNewUserWidget>
         )}
       </HStack>

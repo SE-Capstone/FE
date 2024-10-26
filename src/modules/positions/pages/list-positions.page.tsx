@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { Container, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { usePositionsQueryFilterStateContext } from '../contexts';
 import { useGetListPositionQuery } from '../hooks/queries';
@@ -13,6 +14,7 @@ import { Head, StateHandler, TableComponent } from '@/components/elements';
 import { getNumericalOrder } from '@/libs/helpers';
 
 export function ListPositionPage() {
+  const { t } = useTranslation();
   const { positionsQueryState, resetPositionsQueryState } = usePositionsQueryFilterStateContext();
 
   const { listPosition, isError, isLoading, isRefetching } = useGetListPositionQuery({
@@ -35,7 +37,7 @@ export function ListPositionPage() {
           },
           {
             key: 'name',
-            title: 'Name',
+            title: t('fields.name'),
             hasSort: false,
             Cell({ name }) {
               return <>{name}</>;
@@ -43,7 +45,7 @@ export function ListPositionPage() {
           },
           {
             key: 'description',
-            title: 'Description',
+            title: t('fields.description'),
             hasSort: false,
             Cell({ description }) {
               return (
@@ -55,7 +57,7 @@ export function ListPositionPage() {
           },
           {
             key: 'createdBy',
-            title: 'Created by',
+            title: t('fields.createdBy'),
             hasSort: false,
             Cell({ createdBy }) {
               return <Text>{createdBy || ''}</Text>;
@@ -63,7 +65,7 @@ export function ListPositionPage() {
           },
           {
             key: 'updatedBy',
-            title: 'Updated by',
+            title: t('fields.updatedBy'),
             hasSort: false,
             Cell({ updatedBy }) {
               return <Text>{updatedBy || ''}</Text>;

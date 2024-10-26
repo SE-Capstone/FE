@@ -1,4 +1,5 @@
 import { Button, Stack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { useCreatePositionHook } from '../hooks/mutations';
 
@@ -9,6 +10,7 @@ export interface AddNewPositionWidgetProps {
 }
 
 export function AddNewPositionWidget(props: AddNewPositionWidgetProps) {
+  const { t } = useTranslation();
   const { children } = props;
 
   const { data, formCreatePosition, handleCreatePosition, isLoading, reset } =
@@ -23,11 +25,11 @@ export function AddNewPositionWidget(props: AddNewPositionWidgetProps) {
     <ModalBase
       size="xl"
       isDone={!!data}
-      title="Create position"
+      title={`${t('common.create')} ${t('common.position').toLowerCase()}`}
       triggerButton={() => children}
       renderFooter={() => (
         <Button form="form-create-position" w={20} type="submit" isDisabled={isLoading}>
-          Save
+          {t('common.save')}
         </Button>
       )}
       onCloseComplete={reset}
@@ -39,13 +41,13 @@ export function AddNewPositionWidget(props: AddNewPositionWidgetProps) {
       >
         <Stack spacing={5}>
           <CustomInput
-            label="Subject"
+            label={t('fields.name')}
             isRequired
             registration={register('title')}
             error={errors.title}
           />
           <CustomTextArea
-            label="Description"
+            label={t('fields.description')}
             isRequired
             registration={register('description')}
             error={errors.description}

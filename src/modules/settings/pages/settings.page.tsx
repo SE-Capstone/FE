@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import { Container } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { CustomTabs, Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
@@ -7,6 +8,8 @@ import { ListDefaultLabelPage } from '@/modules/labels/pages/list-default-label.
 import { ListDefaultStatusPage } from '@/modules/statuses/pages/list-default-status.page';
 
 export function SettingsPage() {
+  const { t, i18n } = useTranslation();
+
   return (
     <>
       <Head title="Settings" />
@@ -21,7 +24,7 @@ export function SettingsPage() {
             py="14px"
             px={0}
             pb={0}
-            title="Settings"
+            title={t('common.settings')}
           >
             <></>
           </LayoutBack>
@@ -31,11 +34,11 @@ export function SettingsPage() {
             }}
             tabsData={[
               {
-                title: 'Labels',
+                title: i18n.language === 'vi' ? t('common.label') : t('common.labels'),
                 childrenPanel: <ListDefaultLabelPage />,
               },
               {
-                title: 'Status',
+                title: i18n.language === 'vi' ? t('common.status') : t('common.statuses'),
                 childrenPanel: <ListDefaultStatusPage />,
               },
             ]}

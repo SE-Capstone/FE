@@ -100,14 +100,6 @@ export const PROJECT_VISIBILITY_OPTIONS = [
   },
 ] as const;
 
-export const ROLES_ACCESS: RolesEnum[] = [
-  RolesEnum.Admin,
-  RolesEnum.Accountant,
-  RolesEnum.TeamLead,
-  RolesEnum.HR,
-  RolesEnum.Employee,
-];
-
 export const ROLES_LABEL: Record<Exclude<RolesEnum, RolesEnum.Employee>, string> = {
   [RolesEnum.Admin]: `${RolesEnum.Admin}`,
   [RolesEnum.Accountant]: `${RolesEnum.Accountant}`,
@@ -157,75 +149,94 @@ export const USER_STATUS_LABEL: Record<UserStatusEnum, string> = {
   [UserStatusEnum.Inactive]: `Inactive`,
 };
 
-export const GENDER_VALUES: Record<GenderEnum, string> = {
-  [GenderEnum.male]: 'Male',
-  [GenderEnum.female]: 'Female',
-  [GenderEnum.other]: 'Others',
-};
+export const GENDER_VALUES = (t: any): Record<GenderEnum, string> => ({
+  [GenderEnum.male]: t('user.male'),
+  [GenderEnum.female]: t('user.female'),
+  [GenderEnum.other]: t('user.others'),
+});
 
-export const ISSUE_PRIORITY_VALUES: Record<IssuePriorityEnum, string> = {
-  [IssuePriorityEnum.Lowest]: 'Lowest',
-  [IssuePriorityEnum.Low]: 'Low',
-  [IssuePriorityEnum.Medium]: 'Medium',
-  [IssuePriorityEnum.High]: 'High',
-  [IssuePriorityEnum.Highest]: 'Highest',
-};
+export const ISSUE_PRIORITY_VALUES = (t: any): Record<IssuePriorityEnum, string> => ({
+  [IssuePriorityEnum.Lowest]: t('issue.lowest'),
+  [IssuePriorityEnum.Low]: t('issue.low'),
+  [IssuePriorityEnum.Medium]: t('issue.medium'),
+  [IssuePriorityEnum.High]: t('issue.high'),
+  [IssuePriorityEnum.Highest]: t('issue.highest'),
+});
 
-export const PERMISSIONS_VALUES: Record<PermissionEnum, string> = {
-  [PermissionEnum.ADD_USER]: 'Create user',
-  [PermissionEnum.GET_LIST_USER]: 'Get list user',
-  [PermissionEnum.ADD_PROJECT]: 'Create project',
-  [PermissionEnum.IS_PROJECT_LEAD]: 'Assign as project lead',
-  [PermissionEnum.GET_LIST_PROJECT]: 'Get list project',
-  [PermissionEnum.GET_DETAIL_PROJECT]: 'Get project detail',
-  [PermissionEnum.DELETE_PROJECT]: 'Update project status',
-  [PermissionEnum.UPDATE_PROJECT]: 'Update project information',
-  [PermissionEnum.TOGGLE_VISIBLE_PROJECT]: 'Update project visible state',
-  [PermissionEnum.GET_ALL_PROJECT]: 'View list project',
-  [PermissionEnum.ADD_MEMBER_TO_PROJECT]: 'Add member to project',
-  [PermissionEnum.ADD_ROLE]: 'Create role',
-  [PermissionEnum.GET_ROLE]: 'Get role',
-  [PermissionEnum.ADD_ROLE_FOR_USER]: 'Add role for user',
-  [PermissionEnum.READ_LIST_ROLE]: 'Read list role',
-  [PermissionEnum.CHANGE_PASSWORD]: 'Change user password',
-  [PermissionEnum.GET_ROLE_DETAIL]: 'Get role detail',
-};
+export const PERMISSIONS_VALUES = (t: any): Record<PermissionEnum, string> => ({
+  [PermissionEnum.ADD_USER]: t('permissions.addUser'),
+  [PermissionEnum.GET_LIST_USER]: t('permissions.getListUser'),
+  [PermissionEnum.ADD_PROJECT]: t('permissions.addProject'),
+  [PermissionEnum.IS_PROJECT_LEAD]: t('permissions.isProjectLead'),
+  [PermissionEnum.GET_LIST_PROJECT]: t('permissions.getListProject'),
+  [PermissionEnum.GET_DETAIL_PROJECT]: t('permissions.getDetailProject'),
+  [PermissionEnum.DELETE_PROJECT]: t('permissions.deleteProject'),
+  [PermissionEnum.UPDATE_PROJECT]: t('permissions.updateProject'),
+  [PermissionEnum.TOGGLE_VISIBLE_PROJECT]: t('permissions.toggleVisibleProject'),
+  [PermissionEnum.GET_ALL_PROJECT]: t('permissions.getAllProject'),
+  [PermissionEnum.ADD_MEMBER_TO_PROJECT]: t('permissions.addMemberToProject'),
+  [PermissionEnum.ADD_ROLE]: t('permissions.addRole'),
+  [PermissionEnum.GET_ROLE]: t('permissions.getRole'),
+  [PermissionEnum.ADD_ROLE_FOR_USER]: t('permissions.addRoleForUser'),
+  [PermissionEnum.READ_LIST_ROLE]: t('permissions.readListRole'),
+  [PermissionEnum.CHANGE_PASSWORD]: t('permissions.changePassword'),
+  [PermissionEnum.GET_ROLE_DETAIL]: t('permissions.getRoleDetail'),
+  [PermissionEnum.UPDATE_DEFAULT_STATUS]: t('permissions.updateDefaultStatus'),
+  [PermissionEnum.ADD_DEFAULT_STATUS]: t('permissions.addDefaultStatus'),
+  [PermissionEnum.DELETE_DEFAULT_STATUS]: t('permissions.deleteDefaultStatus'),
+  [PermissionEnum.ADD_STATUS_PROJECT]: t('permissions.addStatusProject'),
+  [PermissionEnum.DELETE_STATUS_PROJECT]: t('permissions.deleteStatusProject'),
+  [PermissionEnum.UPDATE_STATUS_PROJECT]: t('permissions.updateStatusProject'),
+  [PermissionEnum.UPDATE_LABEL]: t('permissions.updateLabel'),
+  [PermissionEnum.ADD_LABEL]: t('permissions.addLabel'),
+  [PermissionEnum.DELETE_LABEL]: t('permissions.deleteLabel'),
+  [PermissionEnum.READ_LIST_LABEL]: t('permissions.readListLabel'),
+  [PermissionEnum.UPDATE_DEFAULT_LABEL]: t('permissions.updateDefaultLabel'),
+  [PermissionEnum.ADD_DEFAULT_LABEL]: t('permissions.addDefaultLabel'),
+  [PermissionEnum.DELETE_DEFAULT_LABEL]: t('permissions.deleteDefaultLabel'),
+  [PermissionEnum.DELETE_PHASE]: t('permissions.deletePhase'),
+  [PermissionEnum.UPDATE_PHASE]: t('permissions.updatePhase'),
+  [PermissionEnum.ADD_PHASE]: t('permissions.addPhase'),
+});
 
-export const GROUP_PERMISSIONS_VALUES: Record<GroupPermissionEnum, string> = {
-  [GroupPermissionEnum.USER]: 'User',
-  [GroupPermissionEnum.ROLE]: 'Role',
-  [GroupPermissionEnum.PROJECT]: 'Project',
-  [GroupPermissionEnum.JOB]: 'Job',
-  [GroupPermissionEnum.TASK]: 'Task',
-};
+export const GROUP_PERMISSIONS_VALUES = (t: any): Record<GroupPermissionEnum, string> => ({
+  [GroupPermissionEnum.USER]: t('groupPermissions.user'),
+  [GroupPermissionEnum.ROLE]: t('groupPermissions.role'),
+  [GroupPermissionEnum.PROJECT]: t('groupPermissions.project'),
+  [GroupPermissionEnum.JOB]: t('groupPermissions.job'),
+  [GroupPermissionEnum.TASK]: t('groupPermissions.task'),
+  [GroupPermissionEnum.STATUS_PROJECT]: t('groupPermissions.statusProject'),
+  [GroupPermissionEnum.PHASE]: t('groupPermissions.phase'),
+  [GroupPermissionEnum.LABEL]: t('groupPermissions.label'),
+});
 
-export const PROJECT_STATUS_VALUES: Record<ProjectStatusEnum, string> = {
-  [ProjectStatusEnum.NotStarted]: 'Not started',
-  [ProjectStatusEnum.InProgress]: 'In progress',
-  [ProjectStatusEnum.Completed]: 'Completed',
-  [ProjectStatusEnum.Canceled]: 'Canceled',
-};
+export const PROJECT_STATUS_VALUES = (t: any): Record<ProjectStatusEnum, string> => ({
+  [ProjectStatusEnum.NotStarted]: t('project.notStarted'),
+  [ProjectStatusEnum.InProgress]: t('project.inProgress'),
+  [ProjectStatusEnum.Completed]: t('project.completed'),
+  [ProjectStatusEnum.Canceled]: t('project.canceled'),
+});
 
 export function getGender(gender?: GenderEnum) {
   return gender ? GENDER_VALUES[gender] : '';
 }
 
-export function getPermission(permission?: PermissionEnum) {
-  return permission ? PERMISSIONS_VALUES[permission] : '';
+export function getPermission(t: any, permission?: PermissionEnum) {
+  return permission ? PERMISSIONS_VALUES(t)[permission] : '';
 }
 
-export function getGroupPermission(permission?: GroupPermissionEnum) {
-  return permission ? GROUP_PERMISSIONS_VALUES[permission] : '';
+export function getGroupPermission(t: any, permission?: GroupPermissionEnum) {
+  return permission ? GROUP_PERMISSIONS_VALUES(t)[permission] : '';
 }
 
 export function getProjectStatus(status?: ProjectStatusEnum) {
   return status ? PROJECT_STATUS_VALUES[status] : '';
 }
 
-export const DEFAULT_MESSAGE = {
-  SUCCESS: 'Success',
-  SOMETHING_WRONG: 'Something went wrong, please try again',
-  UPDATE_SUCCESS: 'Update successfully',
-  CREATE_SUCCESS: 'Create successfully',
-  DELETE_SUCCESS: 'Delete successfully',
-};
+export const DEFAULT_MESSAGE = (t: any) => ({
+  SUCCESS: t('messages.success'),
+  SOMETHING_WRONG: t('messages.somethingWrong'),
+  UPDATE_SUCCESS: t('messages.updateSuccess'),
+  CREATE_SUCCESS: t('messages.createSuccess'),
+  DELETE_SUCCESS: t('messages.deleteSuccess'),
+});

@@ -1,4 +1,5 @@
 import { Icon } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { MdVisibility } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +12,7 @@ interface ActionMenuTableApplicantsProps {
 }
 
 export function ActionMenuTableApplicants({ applicant }: ActionMenuTableApplicantsProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   if (!applicant || !applicant.id) return null;

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import type { IUser } from '../types';
 import type { GenderEnum } from '@/configs';
@@ -41,21 +42,17 @@ interface Props {
 
 export function useCreateUserMutation({ configs, reset }: Props = {}) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   return useMutation({
     mutationFn: mutation,
 
-    onSuccess: (data) => {
-      if (data.statusCode !== 200) {
-        notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
-        return;
-      }
-
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.user.users.queryKey,
       });
       notify({
         type: 'success',
-        message: DEFAULT_MESSAGE.CREATE_SUCCESS,
+        message: DEFAULT_MESSAGE(t).CREATE_SUCCESS,
       });
       reset && reset();
     },
@@ -63,7 +60,7 @@ export function useCreateUserMutation({ configs, reset }: Props = {}) {
     onError(error) {
       notify({
         type: 'error',
-        message: getErrorMessage(error),
+        message: getErrorMessage(t, error),
       });
     },
 

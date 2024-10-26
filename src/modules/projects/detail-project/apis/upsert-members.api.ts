@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import type { IResponseApi } from '@/configs/axios';
 import type { MutationConfig } from '@/libs/react-query';
@@ -31,6 +32,7 @@ interface IProps {
 }
 
 export function useUpsertMembersMutation({ configs, reset }: IProps = {}) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -38,7 +40,7 @@ export function useUpsertMembersMutation({ configs, reset }: IProps = {}) {
 
     onSuccess: (data) => {
       if (data.statusCode !== 204) {
-        notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
+        notify({ type: 'error', message: DEFAULT_MESSAGE(t).SOMETHING_WRONG });
         return;
       }
 
@@ -50,12 +52,12 @@ export function useUpsertMembersMutation({ configs, reset }: IProps = {}) {
 
       notify({
         type: 'success',
-        message: DEFAULT_MESSAGE.UPDATE_SUCCESS,
+        message: DEFAULT_MESSAGE(t).UPDATE_SUCCESS,
       });
     },
 
     onError(error) {
-      notify({ type: 'error', message: getErrorMessage(error) });
+      notify({ type: 'error', message: getErrorMessage(t, error) });
     },
 
     ...configs,

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { Container, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { useApplicantsQueryFilterStateContext } from '../contexts';
@@ -15,6 +16,7 @@ import { formatDate, getNumericalOrder, phoneNumberAutoFormat } from '@/libs/hel
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListApplicantPage() {
+  const { t } = useTranslation();
   const { applicantsQueryState, resetApplicantsQueryState } =
     useApplicantsQueryFilterStateContext();
   const { pathname } = useLocation();
@@ -48,7 +50,7 @@ export function ListApplicantPage() {
           },
           {
             key: 'name',
-            title: 'Name',
+            title: t('fields.name'),
             hasSort: false,
             Cell({ name, id }) {
               return (
@@ -63,7 +65,7 @@ export function ListApplicantPage() {
           },
           {
             key: 'phoneNumber',
-            title: 'Phone',
+            title: t('fields.phone'),
             hasSort: false,
             Cell({ phoneNumber }) {
               return <Text>{phoneNumberAutoFormat(phoneNumber || '')}</Text>;
@@ -87,7 +89,7 @@ export function ListApplicantPage() {
           },
           {
             key: 'updatedBy',
-            title: 'Updated by',
+            title: t('fields.updatedBy'),
             hasSort: false,
             Cell({ updatedBy }) {
               return <>{updatedBy || ''}</>;
@@ -95,7 +97,7 @@ export function ListApplicantPage() {
           },
           {
             key: 'startDate',
-            title: 'Start date',
+            title: t('fields.startDate'),
             hasSort: false,
             Cell({ startDate }) {
               return <>{startDate ? formatDate({ date: startDate, format: 'DD-MM-YYYY' }) : ''}</>;
@@ -103,7 +105,7 @@ export function ListApplicantPage() {
           },
           {
             key: 'updatedAt',
-            title: 'Updated at',
+            title: t('fields.updatedAt'),
             hasSort: false,
             Cell({ updatedAt, createdAt }) {
               return (

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import type { IResponseApi } from '@/configs/axios';
@@ -36,13 +37,14 @@ interface IProps {
 export function useCreateRoleMutation({ configs, reset }: IProps = {}) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: mutation,
 
     onSuccess: (data) => {
       if (data.statusCode !== 200) {
-        notify({ type: 'error', message: DEFAULT_MESSAGE.SOMETHING_WRONG });
+        notify({ type: 'error', message: DEFAULT_MESSAGE(t).SOMETHING_WRONG });
         return;
       }
 
@@ -54,12 +56,12 @@ export function useCreateRoleMutation({ configs, reset }: IProps = {}) {
       navigate(APP_PATHS.listRole);
       notify({
         type: 'success',
-        message: DEFAULT_MESSAGE.CREATE_SUCCESS,
+        message: DEFAULT_MESSAGE(t).CREATE_SUCCESS,
       });
     },
 
     onError(error) {
-      notify({ type: 'error', message: getErrorMessage(error) });
+      notify({ type: 'error', message: getErrorMessage(t, error) });
     },
 
     ...configs,

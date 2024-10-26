@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Icon } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { MdVisibility } from 'react-icons/md';
 import { SlUserFollowing, SlUserUnfollow } from 'react-icons/sl';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +20,7 @@ interface ActionMenuTableUsersProps {
 }
 
 export function ActionMenuTableUsers({ user }: ActionMenuTableUsersProps) {
+  const { t } = useTranslation();
   const { permissions } = useAuthentication();
   const navigate = useNavigate();
 
@@ -38,12 +40,12 @@ export function ActionMenuTableUsers({ user }: ActionMenuTableUsersProps) {
   const menuOptions = [
     // Todo: fix
     permissions[PermissionEnum.GET_LIST_USER] && {
-      label: 'View detail',
+      label: t('actions.viewDetail'),
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/users/${user.id}`),
     },
     {
-      label: user.status === UserStatusEnum.Active ? 'Inactive' : 'Active',
+      label: user.status === UserStatusEnum.Active ? t('actions.inactive') : t('actions.active'),
       icon: (
         <Icon
           as={user.status === UserStatusEnum.Active ? SlUserUnfollow : SlUserFollowing}
@@ -52,13 +54,17 @@ export function ActionMenuTableUsers({ user }: ActionMenuTableUsersProps) {
       ),
       onClick: () => {
         openAlert({
-          title: user.status === UserStatusEnum.Active ? 'Inactive user?' : 'Active user?',
+          title:
+            user.status === UserStatusEnum.Active
+              ? `${t('actions.inactive')} ${t('common.user').toLowerCase()}`
+              : `${t('actions.active')} ${t('common.user').toLowerCase()}`,
           type: 'warning',
-          textConfirm: user.status === UserStatusEnum.Active ? 'Inactive' : 'Active',
+          textConfirm:
+            user.status === UserStatusEnum.Active ? t('actions.inactive') : t('actions.active'),
           description:
             user.status === UserStatusEnum.Active
-              ? 'This user will be disable and can not access to the system'
-              : 'This user will be enable and can access to the system',
+              ? t('actions.disableUser')
+              : t('actions.enableUser'),
           onHandleConfirm() {
             if (!user.id) return;
             mutate({
