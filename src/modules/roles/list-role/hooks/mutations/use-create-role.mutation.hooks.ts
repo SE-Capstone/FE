@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { useCreateRoleMutation } from '../../apis/create-role.api';
 import { createRoleFormSchema } from '../../validations/create-role.validation';
 
@@ -9,8 +11,9 @@ import { notify } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
 export function useCreateRoleHook() {
+  const { t } = useTranslation();
   const form = useFormWithSchema({
-    schema: createRoleFormSchema,
+    schema: createRoleFormSchema(t),
   });
 
   const { reset } = form;

@@ -47,21 +47,24 @@ export function useGetDetailProject(params: UseGetDetailProjectOptionsType) {
         fullName: member.fullName,
         userName: member.userName,
         roleName: member.roleName,
-        avatar: '',
+        positionName: member.positionName,
+        avatar: member.avatar || '',
       })
     );
     if (project?.leadId) {
       members.push({
         id: project.id,
         fullName: project.leadName || '',
-        userName: 'username',
+        userName: project.leadName || '',
         roleName: 'Project lead',
+        positionName: project.leadPosition || '',
         avatar: '',
       });
     }
 
     setProjectContext({
       members,
+      project: data?.data || null,
       projectId: data?.data?.id || '',
     });
   }, [data?.data, setProjectContext]);

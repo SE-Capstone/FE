@@ -2,14 +2,14 @@ import { useCallback } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { useUpsertJobMutation } from '../../apis/upsert-job.api';
-import { jobFormSchema } from '../../validations/jobs.validations';
+import { useUpsertSkillMutation } from '../../apis/upsert-skill.api';
+import { skillFormSchema } from '../../validations/skills.validations';
 
-import type { JobFormValues } from '../../validations/jobs.validations';
+import type { SkillFormValues } from '../../validations/skills.validations';
 
 import { useFormWithSchema } from '@/libs/hooks';
 
-export function useUpsertJobHook({
+export function useUpsertSkillHook({
   id,
   isUpdate,
   onClose,
@@ -19,20 +19,20 @@ export function useUpsertJobHook({
   onClose: () => void;
 }) {
   const { t } = useTranslation();
-  const formUpsertJob = useFormWithSchema({
-    schema: jobFormSchema(t),
+  const formUpsertSkill = useFormWithSchema({
+    schema: skillFormSchema(t),
   });
 
-  const { reset } = formUpsertJob;
+  const { reset } = formUpsertSkill;
 
   const {
     mutate,
     isPending: isLoading,
     ...restData
-  } = useUpsertJobMutation({ onClose, reset, isUpdate });
+  } = useUpsertSkillMutation({ onClose, reset, isUpdate });
 
-  const handleUpsertJob = useCallback(
-    async (values: JobFormValues) => {
+  const handleUpsertSkill = useCallback(
+    async (values: SkillFormValues) => {
       if (isLoading) return;
 
       try {
@@ -49,8 +49,8 @@ export function useUpsertJobHook({
   );
 
   return {
-    formUpsertJob,
-    handleUpsertJob,
+    formUpsertSkill,
+    handleUpsertSkill,
     isLoading,
     ...restData,
   };

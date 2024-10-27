@@ -3,10 +3,10 @@ import { useMemo } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { merge } from 'lodash-es';
 
-import type { IProject } from '../../types';
-import type { QueryListProjectInput } from '../../types/projects.types';
+import type { ISkill } from '../../types';
+import type { QueryListSkillInput } from '../../types/skills.types';
 import type { IResponseApi } from '@/configs/axios';
-import type { DeepPartial, IBaseQueryParams } from '@/types';
+import type { DeepPartial } from '@/types';
 
 import { calculatePrevAndNext } from '@/libs/helpers';
 import { usePaginateReq } from '@/libs/hooks/use-paginate';
@@ -14,33 +14,25 @@ import { makeRequest, type QueryConfig } from '@/libs/react-query';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
 
-export type IParamsGetListProject = IBaseQueryParams<QueryListProjectInput>;
-
-interface IGetListProjectRequest {
-  params: IParamsGetListProject;
+interface IGetListSkillRequest {
+  params?: DeepPartial<QueryListSkillInput>;
 }
 
-export const defaultFilterProjects: QueryListProjectInput = {
-  search: undefined,
-  status: undefined,
-  isVisible: undefined,
-};
-
-export function getListProjectRequest(req: IGetListProjectRequest) {
+export function getListSkillRequest(req: IGetListSkillRequest) {
   const { params } = req;
-  return makeRequest<typeof params, IResponseApi<IProject[]>>({
+  return makeRequest<typeof params, IResponseApi<ISkill[]>>({
     method: 'GET',
-    url: ALL_ENDPOINT_URL_STORE.projects.list,
+    url: ALL_ENDPOINT_URL_STORE.skills.list,
     params,
   });
 }
 
-interface UseGetListProjectQueryProps {
-  configs?: QueryConfig<typeof getListProjectRequest>;
-  params?: DeepPartial<QueryListProjectInput>;
+interface UseGetListSkillQueryProps {
+  configs?: QueryConfig<typeof getListSkillRequest>;
+  params?: DeepPartial<QueryListSkillInput>;
 }
 
-export function useGetListProjectQuery(props: UseGetListProjectQueryProps = {}) {
+export function useGetListSkillQuery(props: UseGetListSkillQueryProps = {}) {
   const { pageIndex, pageSize, setPaginate } = usePaginateReq();
   const { configs, params } = props;
 
@@ -50,6 +42,7 @@ export function useGetListProjectQuery(props: UseGetListProjectQueryProps = {}) 
         {
           pageIndex,
           pageSize,
+          orderBy: 'createdAt',
         },
         params
       ),
@@ -57,14 +50,14 @@ export function useGetListProjectQuery(props: UseGetListProjectQueryProps = {}) 
   );
 
   const queryKey = useMemo(
-    () => [...allQueryKeysStore.project.projects.queryKey, currentParams],
+    () => [...allQueryKeysStore.skill.skills.queryKey, currentParams],
     [currentParams]
   );
 
   const query = useQuery({
     queryKey,
     queryFn: () =>
-      getListProjectRequest({
+      getListSkillRequest({
         params: currentParams,
       }),
     placeholderData: keepPreviousData,
@@ -90,7 +83,7 @@ export function useGetListProjectQuery(props: UseGetListProjectQueryProps = {}) 
 
   return {
     ...query,
-    listProject: query.data?.data || [],
+    listSkill: query.data?.data || [],
     meta,
     handlePaginate,
   };

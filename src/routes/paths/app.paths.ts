@@ -6,6 +6,7 @@ import { positionsPaths } from './position.path';
 import { profilePaths } from './profile.paths';
 import { projectsPaths } from './projects.path';
 import { rolesPaths } from './roles.path';
+import { skillsPaths } from './skills.path';
 import { usersPaths } from './users.paths';
 
 export const APP_PATHS = {
@@ -20,4 +21,5 @@ export const APP_PATHS = {
   ...jobsPaths,
   ...applicantsPaths,
   ...positionsPaths,
+  ...skillsPaths,
 } as const;

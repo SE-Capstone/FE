@@ -8,6 +8,7 @@ import { jobsRoutes } from './elements/jobs.route';
 import { positionsRoutes } from './elements/positions.route';
 import { projectsRoutes } from './elements/projects.route';
 import { rolesRoutes } from './elements/roles.route';
+import { skillsRoutes } from './elements/skills.route';
 import { usersRoutes } from './elements/users.route';
 import { APP_PATHS } from './paths/app.paths';
 
@@ -42,6 +43,7 @@ const allRoutes = createBrowserRouter([
       rolesRoutes(),
       projectsRoutes(),
       jobsRoutes(),
+      skillsRoutes(),
       applicantsRoutes(),
       positionsRoutes(),
     ],

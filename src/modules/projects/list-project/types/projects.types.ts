@@ -32,5 +32,6 @@ export type IProject = IBaseEntity & {
   isVisible: boolean;
   leadId?: string;
   leadName?: string;
+  leadPosition?: string;
   members: ProjectMember[];
 };

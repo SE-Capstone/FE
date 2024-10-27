@@ -2,20 +2,23 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import { isEqual } from 'lodash-es';
 
-import type { ProjectMember } from '@/modules/projects/list-project/types';
+import type { IProject, ProjectMember } from '@/modules/projects/list-project/types';
 
 export interface IProjectState {
   members: ProjectMember[];
+  project: IProject | null;
   projectId: string | null;
 }
 
 const initialState: IProjectState = {
   members: [],
+  project: null,
   projectId: null,
 };
 
 export interface IProjectContext {
   members: ProjectMember[];
+  project: IProject | null;
   projectId: string | null;
   setProjectContext: (state: IProjectState) => void;
   resetProjectContext: () => void;
@@ -29,6 +32,7 @@ export function ProjectProvider({ children }) {
   useEffect(() => {
     setProjectState({
       members: [],
+      project: null,
       projectId: null,
     });
   }, []);
@@ -38,6 +42,7 @@ export function ProjectProvider({ children }) {
       if (prevState.projectId !== state.projectId || !isEqual(prevState.members, state.members)) {
         return {
           members: state.members,
+          project: state.project,
           projectId: state.projectId,
         };
       }
@@ -49,6 +54,7 @@ export function ProjectProvider({ children }) {
   const resetProjectContext = () => {
     setProjectState({
       members: [],
+      project: null,
       projectId: null,
     });
   };

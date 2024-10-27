@@ -26,7 +26,8 @@ import {
   MdArrowBackIosNew,
   MdArrowForwardIos,
 } from 'react-icons/md';
-import { PiBriefcase, PiUserSquareLight } from 'react-icons/pi';
+import { PiUserSquareLight } from 'react-icons/pi';
+import { RiFolderUserLine } from 'react-icons/ri';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -104,10 +105,15 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
               icon: MdOutlineLayers,
               path: APP_PATHS.listPosition,
             },
+            // {
+            //   name: t('common.jobs'),
+            //   icon: PiBriefcase,
+            //   path: APP_PATHS.listJob,
+            // },
             {
-              name: t('common.jobs'),
-              icon: PiBriefcase,
-              path: APP_PATHS.listJob,
+              name: t('common.skills'),
+              icon: RiFolderUserLine,
+              path: APP_PATHS.listSkill,
             },
             {
               name: t('common.applicants'),

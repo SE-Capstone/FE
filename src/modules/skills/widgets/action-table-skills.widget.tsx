@@ -2,18 +2,18 @@ import { Box, Button, Grid, GridItem, HStack, Spacer, useDisclosure } from '@cha
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { useJobsQueryFilterStateContext } from '../contexts';
-import { UpsertJobWidget } from './upsert-job.widget';
+import { useSkillsQueryFilterStateContext } from '../contexts';
+import { UpsertSkillWidget } from './upsert-skill.widget';
 
 import { SearchInput } from '@/components/elements';
 
-export function ActionTableJobsWidget() {
+export function ActionTableSkillsWidget() {
   const { t } = useTranslation();
   const disclosureModal = useDisclosure();
-  const { jobsQueryState, setJobsQueryFilterState } = useJobsQueryFilterStateContext();
+  const { skillsQueryState, setSkillsQueryFilterState } = useSkillsQueryFilterStateContext();
   const { pathname } = useLocation();
 
-  const isShowFilterJob = pathname.includes('jobs');
+  const isShowFilterSkill = pathname.includes('skills');
 
   return (
     <Box p={5} py={3} mb={6} rounded={2.5} bg="white" w="full" shadow="0 1px 4px 0 #0002">
@@ -29,20 +29,20 @@ export function ActionTableJobsWidget() {
           <GridItem colSpan={2}>
             <SearchInput
               placeholder={`${t('common.enter')} ${t('fields.title').toLowerCase()}...`}
-              initValue={jobsQueryState.filters.title || ''}
+              initValue={skillsQueryState.filters.title || ''}
               onHandleSearch={(keyword) => {
-                setJobsQueryFilterState({ title: keyword });
+                setSkillsQueryFilterState({ title: keyword });
               }}
             />
           </GridItem>
         </Grid>
-        {isShowFilterJob && (
+        {isShowFilterSkill && (
           <>
             <Spacer />
             <Button size="md" leftIcon={<>+</>} onClick={disclosureModal.onOpen}>
               {t('common.create')}
             </Button>
-            <UpsertJobWidget isOpen={disclosureModal.isOpen} onClose={disclosureModal.onClose} />
+            <UpsertSkillWidget isOpen={disclosureModal.isOpen} onClose={disclosureModal.onClose} />
           </>
         )}
       </HStack>

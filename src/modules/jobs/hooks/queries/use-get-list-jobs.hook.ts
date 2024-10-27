@@ -42,7 +42,7 @@ export function useGetListJobQuery(props: UseGetListJobQueryProps = {}) {
         {
           pageIndex,
           pageSize,
-          orderBy: 'createDate',
+          orderBy: 'createdAt',
         },
         params
       ),

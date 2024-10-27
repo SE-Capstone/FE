@@ -13,6 +13,8 @@ import type { IUser } from '@/modules/users/list-user/types';
 import { CustomTabs, Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
 import { PermissionEnum } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
+import { Error403Page } from '@/modules/errors';
 import { ListIssuePage } from '@/modules/issues/list-issue';
 import { IssuesQueryProvider } from '@/modules/issues/list-issue/contexts';
 import KanbanWidget from '@/modules/issues/list-issue/widgets/kanban/kanban.widget';
@@ -26,6 +28,7 @@ export function DetailProjectPage() {
   const { t, i18n } = useTranslation();
   const disclosureModal = useDisclosure();
   const { permissions } = useAuthentication();
+  const { project: projectContext } = useProjectContext();
   const { projectId } = useParams();
 
   const { project, isLoading, isError } = useGetDetailProject({ projectId: projectId || '' });
@@ -41,6 +44,10 @@ export function DetailProjectPage() {
       setTeamLeads(users);
     }
   }, [users, teamLeads]);
+
+  if (!permissions[PermissionEnum.GET_ALL_PROJECT] && !projectContext?.isVisible) {
+    return <Error403Page />;
+  }
 
   return (
     <>

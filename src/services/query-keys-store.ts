@@ -9,6 +9,7 @@ import { permissionsQueryKeys } from './permissions';
 import { positionQueryKeys } from './position';
 import { projectQueryKeys } from './project';
 import { roleQueryKeys } from './roles';
+import { skillQueryKeys } from './skill';
 import { statusQueryKeys } from './status';
 import { userQueryKeys } from './user';
 
@@ -23,5 +24,6 @@ export const allQueryKeysStore = mergeQueryKeys(
   applicantQueryKeys,
   positionQueryKeys,
   labelQueryKeys,
-  statusQueryKeys
+  statusQueryKeys,
+  skillQueryKeys
 );
