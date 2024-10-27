@@ -76,7 +76,7 @@ export function RemoveLabelWidget(props: RemoveLabelWidgetProps) {
       <CustomFormProvider id="form-upsert-label" form={formRemoveLabel} onSubmit={onSubmit}>
         <Stack spacing={5}>
           <Text>
-            Your project has {label.issueCount} {`"${label.title}"`} issues. Before you can delete
+            {/* Your project has {label.issueCount} {`"${label.title}"`} issues. Before you can delete */}
             this issue type, change {`"${label.title}"`} issues to another type.
           </Text>
           <CustomChakraReactSelect

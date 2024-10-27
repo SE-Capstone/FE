@@ -19,6 +19,7 @@ import { ListIssuePage } from '@/modules/issues/list-issue';
 import { IssuesQueryProvider } from '@/modules/issues/list-issue/contexts';
 import KanbanWidget from '@/modules/issues/list-issue/widgets/kanban/kanban.widget';
 import { ListLabelPage } from '@/modules/labels';
+import { ListPhasePage } from '@/modules/phases';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { ListStatusPage } from '@/modules/statuses';
 import { useGetUsersByPermission } from '@/modules/users/list-user/apis/get-user-by-permission.api';
@@ -98,6 +99,10 @@ export function DetailProjectPage() {
               {
                 title: i18n.language === 'vi' ? t('common.status') : t('common.statuses'),
                 childrenPanel: <ListStatusPage />,
+              },
+              {
+                title: i18n.language === 'vi' ? t('common.phase') : t('common.phases'),
+                childrenPanel: <ListPhasePage />,
               },
               {
                 title: 'Kanban',

@@ -7,5 +7,4 @@ export type ILabel = {
   title: string;
   description: string;
   projectId: string;
-  issueCount: number;
 };

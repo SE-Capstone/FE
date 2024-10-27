@@ -6,6 +6,7 @@ import { issueQueryKeys } from './issue';
 import { jobQueryKeys } from './job';
 import { labelQueryKeys } from './label';
 import { permissionsQueryKeys } from './permissions';
+import { phaseQueryKeys } from './phase';
 import { positionQueryKeys } from './position';
 import { projectQueryKeys } from './project';
 import { roleQueryKeys } from './roles';
@@ -25,5 +26,6 @@ export const allQueryKeysStore = mergeQueryKeys(
   positionQueryKeys,
   labelQueryKeys,
   statusQueryKeys,
-  skillQueryKeys
+  skillQueryKeys,
+  phaseQueryKeys
 );

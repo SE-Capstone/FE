@@ -30,6 +30,7 @@ export interface IRequest {
 
 export interface IResponseApi<TData = unknown> {
   data: TData;
+  phases: TData;
   meta?: IMetaResponse;
   message: string;
   statusCode: number;

@@ -1,5 +1,11 @@
 {
   "common": {
+    "onTime": "Đúng hạn",
+    "late": "Trễ hạn",
+    "completePhase": "Hoàn thành giai đoạn",
+    "runningPhase": "Đang chạy",
+    "noRunningPhase": "Không có giai đoạn nào đang chạy",
+    "startPhase": "Bắt đầu chạy giai đoạn",
     "login": "Đăng nhập",
     "forgotPassword": "Quên mật khẩu",
     "backToLogin": "Quay lại trang đăng nhập",
@@ -78,6 +84,8 @@
     "label": "Nhãn",
     "statuses": "Danh sách trạng thái",
     "status": "Trạng thái",
+    "phases": "Giai đoạn",
+    "phase": "Giai đoạn",
     "issues": "Công việc",
     "issue": "Công việc"
   },
@@ -119,6 +127,10 @@
     "noImage": "Không có hình ảnh"
   },
   "actions": {
+    "startPhase": "Bắt đầu",
+    "startPhaseDesc": "Hành động này không thể hoàn tác. Bạn có muốn bắt đầu chạy giai đoạn đầu tiên không?",
+    "completePhase": "Hoàn thành",
+    "completePhaseDesc": "Hành động này không thể hoàn tác. Bạn có muốn hoàn thành giai đoạn đang chạy không?",
     "edit": "Chỉnh sửa",
     "viewDetail": "Xem chi tiết",
     "update": "Cập nhật",
@@ -157,6 +169,7 @@
     "passwordSame": "Mật khẩu không khớp",
     "titleRequired": "Tiêu đề là bắt buộc",
     "descriptionRequired": "Mô tả là bắt buộc",
+    "descriptionMax": "Mô tả không được quá 500 ký tự",
     "profile": {
       "fullNameRequired": "Tên là bắt buộc",
       "fullNameMax": "Tên không được quá 255 ký tự",

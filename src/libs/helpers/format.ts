@@ -20,6 +20,7 @@ enum FormatDateTimeEnum {
   'DD/MM/YY hh:mm a' = 'DD/MM/YY hh:mm a',
   'h:mm a' = 'h:mm a',
   'DD-MM-YYYY: HH:mm' = 'DD-MM-YYYY: HH:mm',
+  'MMMM DD, YYYY' = 'MMMM DD, YYYY',
 }
 
 type FormatDateTimeType = {
@@ -47,4 +48,23 @@ export function formatDate({
 
 export function getCurrentDate() {
   return dayjs().format(FormatDateTimeEnum['YYYY-MM-DD']);
+}
+
+type CompareDatesInput = {
+  date1: Date | string | number | Dayjs;
+  date2: Date | string | number | Dayjs;
+};
+
+/**
+ * Compare two dates to check if the first date is less than the second date
+ * at the start of each day.
+ *
+ * @param {CompareDatesInput} input - An object containing two dates to compare.
+ * @returns {boolean} - Returns true if date1 is less than date2, otherwise false.
+ */
+export function isDateLessThan({ date1, date2 }: CompareDatesInput): boolean {
+  const parsedDate1 = dayjs(date1).startOf('day');
+  const parsedDate2 = dayjs(date2).startOf('day');
+
+  return parsedDate1.isBefore(parsedDate2);
 }

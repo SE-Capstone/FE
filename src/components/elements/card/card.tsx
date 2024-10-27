@@ -14,6 +14,7 @@ import {
   Container,
   SkeletonText,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import type { UnionAndString } from '@/types';
 import type { CardProps } from '@chakra-ui/react';
@@ -65,6 +66,7 @@ function CardComponent<ObjectType extends { id?: string | null } = {}>({
   onPageChange,
   hasNoPaginate,
 }: CardComponentProps<ObjectType>) {
+  const { t } = useTranslation();
   const [page, setPage] = useState(currentPage);
   const [sortedData, setSortedData] = useState<ObjectType[]>([]);
 
@@ -100,7 +102,7 @@ function CardComponent<ObjectType extends { id?: string | null } = {}>({
       <Box w="full">
         {!isLoading && isError ? (
           <Flex my={4} justify="center">
-            <Text>No data</Text>
+            <Text>{t('common.noData')}</Text>
           </Flex>
         ) : isLoading ? (
           <Card bg="white">
@@ -172,7 +174,7 @@ function CardComponent<ObjectType extends { id?: string | null } = {}>({
 
             {sortedData && !sortedData.length && (
               <Flex my={4} justify="center">
-                <Text>No data</Text>
+                <Text>{t('common.noData')}</Text>
               </Flex>
             )}
           </Container>

@@ -1,5 +1,11 @@
 {
   "common": {
+    "onTime": "On time",
+    "late": "Late",
+    "completePhase": "Complete phase",
+    "runningPhase": "Running phase",
+    "noRunningPhase": "There is no running phase",
+    "startPhase": "Start phase",
     "login": "Login",
     "forgotPassword": "Forgot password",
     "backToLogin": "Back to login",
@@ -114,6 +120,8 @@
     "label": "Label",
     "statuses": "Statuses",
     "status": "Status",
+    "phases": "Phases",
+    "phase": "Phase",
     "issues": "Issues",
     "issue": "Issue"
   },
@@ -155,6 +163,10 @@
     "noImage": "No image"
   },
   "actions": {
+    "startPhase": "Start",
+    "startPhaseDesc": "This action can not be undone. Are you want to start running phase?.",
+    "completePhase": "Complete",
+    "completePhaseDesc": "This action can not be undone. Are you want to complete running phase?.",
     "edit": "Edit",
     "viewDetail": "View detail",
     "update": "Update",
@@ -192,6 +204,7 @@
     "passwordComplexity": "Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character",
     "titleRequired": "Title is required",
     "descriptionRequired": "Description is required",
+    "descriptionMax": "Description must be at most 500 characters",
     "profile": {
       "fullNameRequired": "Full name is required",
       "fullNameMax": "Full name must be at most 100 characters",
