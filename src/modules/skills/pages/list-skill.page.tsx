@@ -81,28 +81,24 @@ export function ListSkillPage() {
   return (
     <>
       <Head title="Skill" />
-      <Container maxW="container.2xl" centerContent>
-        <StateHandler
-          showLoader={isLoading}
-          showError={!!isError}
-          retryHandler={resetSkillsQueryState}
-        >
-          <Container maxW="container.2xl" centerContent>
-            <ActionTableSkillsWidget />
-            <TableComponent
-              currentPage={meta.pageIndex}
-              perPage={meta.pageSize}
-              data={listSkill}
-              groupColumns={columns}
-              totalCount={meta.totalCount}
-              isLoading={isLoading || isRefetching}
-              isError={!!isError}
-              additionalFeature={(skill) => <ActionMenuTableSkills skill={skill} />}
-              onPageChange={handlePaginate}
-            />
-          </Container>
-        </StateHandler>
-      </Container>
+      <StateHandler
+        showLoader={isLoading}
+        showError={!!isError}
+        retryHandler={resetSkillsQueryState}
+      >
+        <ActionTableSkillsWidget />
+        <TableComponent
+          currentPage={meta.pageIndex}
+          perPage={meta.pageSize}
+          data={listSkill}
+          groupColumns={columns}
+          totalCount={meta.totalCount}
+          isLoading={isLoading || isRefetching}
+          isError={!!isError}
+          additionalFeature={(skill) => <ActionMenuTableSkills skill={skill} />}
+          onPageChange={handlePaginate}
+        />
+      </StateHandler>
     </>
   );
 }

@@ -194,6 +194,7 @@ const TableHeader = <T extends object>({
             accessor={String(col.key) as keyof T}
             // ref={refs[index]}
             handleSortBy={handleSortBy}
+            fontSize="14px"
             hasSort={col?.hasSort}
           >
             {col.title}

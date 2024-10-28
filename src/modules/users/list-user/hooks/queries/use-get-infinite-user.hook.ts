@@ -34,7 +34,7 @@ interface UseGetInfiniteUserQueryProps {
 }
 
 export function useGetInfiniteUserQuery(props: UseGetInfiniteUserQueryProps = {}) {
-  const { pageIndex, pageSize, setPaginate } = usePaginateReq();
+  const { pageIndex, setPaginate } = usePaginateReq();
   const { configs, params } = props;
 
   const currentParams = useMemo(
@@ -42,12 +42,12 @@ export function useGetInfiniteUserQuery(props: UseGetInfiniteUserQueryProps = {}
       merge(
         {
           pageIndex,
-          pageSize,
+          pageSize: 20,
           orderBy: 'createDate',
         },
         params
       ),
-    [pageIndex, pageSize, params]
+    [pageIndex, params]
   );
 
   const queryKey = useMemo(

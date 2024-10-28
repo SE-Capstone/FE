@@ -1,5 +1,6 @@
 {
   "common": {
+    "assignSkill": "Gán kỹ năng",
     "selectedSkill": "Kỹ năng đã chọn",
     "retry": "Thử lại",
     "onTime": "Đúng hạn",

@@ -1,5 +1,6 @@
 {
   "common": {
+    "assignSkill": "Assign skill",
     "selectedSkill": "Selected skill",
     "retry": "Retry",
     "onTime": "On time",

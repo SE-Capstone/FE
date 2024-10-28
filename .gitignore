@@ -24,3 +24,6 @@ dist-ssr
 .env.development
 .eslintcache
 .firebase
+
+# Local Netlify folder
+.netlify

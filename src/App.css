@@ -9,3 +9,7 @@ img {
   height: auto;
   object-fit: cover;
 }
+
+::-webkit-scrollbar {
+  height: 6px;
+}
