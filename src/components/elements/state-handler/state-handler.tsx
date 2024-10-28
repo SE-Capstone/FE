@@ -10,6 +10,7 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 type MaybeBooleanFunction = boolean | (() => boolean);
 
@@ -22,6 +23,7 @@ interface StateHandlerProps {
 }
 
 export function StateHandler(props: StateHandlerProps) {
+  const { t } = useTranslation();
   const {
     showLoader = false,
     showError = false,
@@ -59,10 +61,10 @@ export function StateHandler(props: StateHandlerProps) {
         <AlertTitle mt={4} mb={1} fontSize="lg">
           Oops!
         </AlertTitle>
-        <AlertDescription maxWidth="sm">Something went wrong!</AlertDescription>
+        <AlertDescription maxWidth="sm">{t('messages.somethingWrong2')}!</AlertDescription>
         {retryHandler ? (
           <Button display="none" size="md" my={2} onClick={() => retryHandler()}>
-            Retry
+            {t('common.retry')}
           </Button>
         ) : null}
       </Alert>
@@ -73,7 +75,7 @@ export function StateHandler(props: StateHandlerProps) {
     return (
       <Center bg="white" w="full" h="full" rounded={2.5}>
         <Text as="span" fontSize="sm">
-          No data
+          {t('common.noData')}
         </Text>
       </Center>
     );

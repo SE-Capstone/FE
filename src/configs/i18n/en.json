@@ -1,5 +1,7 @@
 {
   "common": {
+    "selectedSkill": "Selected skill",
+    "retry": "Retry",
     "onTime": "On time",
     "late": "Late",
     "completePhase": "Complete phase",
@@ -320,6 +322,7 @@
   "messages": {
     "success": "Success",
     "somethingWrong": "Something went wrong, please try again",
+    "somethingWrong2": "Something went wrong",
     "updateSuccess": "Update successfully",
     "createSuccess": "Create successfully",
     "deleteSuccess": "Delete successfully",

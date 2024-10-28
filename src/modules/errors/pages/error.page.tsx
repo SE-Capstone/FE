@@ -8,6 +8,7 @@ import type { To } from 'react-router-dom';
 import { DEFAULT_MESSAGE, isDevelopment } from '@/configs';
 import { notify } from '@/libs/helpers';
 import { useLogoutMutation } from '@/modules/auth/apis/logout.api';
+import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ErrorPage() {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ export function ErrorPage() {
   return (
     <VStack id="error-page" w="full" h="100vh" justify="center">
       <Heading textAlign="center">Oops!</Heading>
-      <Text textAlign="center">Sorry, an unexpected error has occurred.</Text>
+      <Text textAlign="center">{t('messages.errorPageMessage')}</Text>
       {isDevelopment ? (
         <Text textAlign="center">
           <strong>{error.statusText}</strong>
@@ -42,7 +43,7 @@ export function ErrorPage() {
       ) : null}
 
       <Stack w="200px" gap={2}>
-        <Button as={Link} to={-1 as To}>
+        <Button as={Link} to={APP_PATHS.HOME}>
           {t('common.backToHomePage')}
         </Button>
       </Stack>

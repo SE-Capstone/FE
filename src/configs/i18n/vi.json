@@ -1,5 +1,7 @@
 {
   "common": {
+    "selectedSkill": "Kỹ năng đã chọn",
+    "retry": "Thử lại",
     "onTime": "Đúng hạn",
     "late": "Trễ hạn",
     "completePhase": "Hoàn thành giai đoạn",
@@ -285,6 +287,7 @@
   "messages": {
     "success": "Thành công",
     "somethingWrong": "Có lỗi xảy ra, vui lòng thử lại",
+    "somethingWrong2": "Có lỗi xảy ra",
     "updateSuccess": "Cập nhật thành công",
     "createSuccess": "Tạo thành công",
     "deleteSuccess": "Xóa thành công",

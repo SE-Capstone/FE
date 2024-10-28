@@ -58,7 +58,7 @@ export function useLogoutMutation({ configs }: IAuthLogoutMutationProps = {}) {
 
   const handleLogout = () => {
     openAlert({
-      title: t('messages.logout'),
+      title: t('common.logout'),
       description: t('messages.confirmLogout'),
       onHandleConfirm() {
         mutation.mutate();

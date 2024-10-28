@@ -47,7 +47,7 @@ export function useCompletePhaseMutation(props: Props) {
       });
       notify({
         type: 'success',
-        message: DEFAULT_MESSAGE(t).DELETE_SUCCESS,
+        message: DEFAULT_MESSAGE(t).SUCCESS,
       });
       closeAlert();
     },
