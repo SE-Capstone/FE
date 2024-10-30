@@ -46,7 +46,7 @@ export function DetailProjectPage() {
     }
   }, [users, teamLeads]);
 
-  if (!permissions[PermissionEnum.GET_ALL_PROJECT] && !projectContext?.isVisible) {
+  if (!permissions[PermissionEnum.GET_LIST_PROJECT] && !projectContext?.isVisible) {
     return <Error403Page />;
   }
 
@@ -116,7 +116,7 @@ export function DetailProjectPage() {
                   </IssuesQueryProvider>
                 ),
               },
-            ]}
+            ].filter(Boolean)}
           />
         </StateHandler>
       </Container>

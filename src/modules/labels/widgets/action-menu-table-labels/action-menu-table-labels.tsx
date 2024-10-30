@@ -10,6 +10,8 @@ import { UpsertLabelWidget } from '../upsert-label.widget';
 import type { ILabel } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTableLabelsProps {
   label: ILabel;
@@ -19,14 +21,21 @@ interface ActionMenuTableLabelsProps {
 
 export function ActionMenuTableLabels({ label, listLabel, isDefault }: ActionMenuTableLabelsProps) {
   const { t } = useTranslation();
+  const { permissions } = useAuthentication();
   const disclosureModal = useDisclosure();
   const disclosureModalRemoveLabel = useDisclosure();
   const { handleRemoveLabel } = useRemoveLabelHook(isDefault);
+  const canUpdate =
+    permissions[PermissionEnum.UPDATE_LABEL] ||
+    (isDefault && permissions[PermissionEnum.UPDATE_DEFAULT_LABEL]);
+  const canDelete =
+    permissions[PermissionEnum.DELETE_LABEL] ||
+    (isDefault && permissions[PermissionEnum.DELETE_DEFAULT_LABEL]);
 
   if (!label || !label.id) return null;
 
   const menuOptions = [
-    {
+    canUpdate && {
       label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => {
@@ -35,7 +44,7 @@ export function ActionMenuTableLabels({ label, listLabel, isDefault }: ActionMen
         disclosureModal.onOpen();
       },
     },
-    {
+    canDelete && {
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () =>

@@ -24,7 +24,9 @@ export function DetailUserPage() {
           <LayoutBack path={APP_PATHS.listUser}>
             <BaseInformationUserWidget user={user} />
           </LayoutBack>
-          {permissions[PermissionEnum.CHANGE_PASSWORD] && <AdminChangePasswordWidget user={user} />}
+          {permissions[PermissionEnum.CHANGE_PASSWORD_USER] && (
+            <AdminChangePasswordWidget user={user} />
+          )}
         </StateHandler>
       </Container>
     </>

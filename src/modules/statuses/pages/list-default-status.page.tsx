@@ -10,11 +10,14 @@ import type { IStatus } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 
 import { Head, StateHandler, TableComponent } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
 import { getNumericalOrder } from '@/libs/helpers';
 import { BadgeIssue } from '@/modules/issues/list-issue/components';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ListDefaultStatusPage() {
   const { t } = useTranslation();
+  const { permissions } = useAuthentication();
   const { listStatus, isError, isLoading, isRefetching } = useGetListDefaultStatusQuery();
 
   const columns = useMemo<ColumnsProps<IStatus>>(
@@ -68,9 +71,12 @@ export function ListDefaultStatusPage() {
           groupColumns={columns}
           isLoading={isLoading || isRefetching}
           isError={!!isError}
-          additionalFeature={(status) => (
-            <ActionMenuTableStatuses status={status} listStatus={listStatus} isDefault />
-          )}
+          additionalFeature={(status) =>
+            permissions[PermissionEnum.UPDATE_DEFAULT_STATUS] ||
+            permissions[PermissionEnum.DELETE_DEFAULT_STATUS] ? (
+              <ActionMenuTableStatuses status={status} listStatus={listStatus} isDefault />
+            ) : undefined
+          }
         />
       </StateHandler>
     </>

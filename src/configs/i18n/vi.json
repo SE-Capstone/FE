@@ -265,6 +265,7 @@
     "addRole": "Tạo vai trò",
     "getRole": "Lấy vai trò",
     "addRoleForUser": "Thêm vai trò cho người dùng",
+    "upsertRole": "Tạo mới vai trò hoặc cập nhật vai trò",
     "readListRole": "Đọc danh sách vai trò",
     "changePassword": "Đổi mật khẩu người dùng",
     "getRoleDetail": "Xem chi tiết vai trò",
@@ -277,13 +278,15 @@
     "updateLabel": "Cập nhật nhãn",
     "addLabel": "Thêm nhãn",
     "deleteLabel": "Xóa nhãn",
-    "readListLabel": "Đọc danh sách nhãn",
     "updateDefaultLabel": "Cập nhật nhãn mặc định",
     "addDefaultLabel": "Thêm nhãn mặc định",
     "deleteDefaultLabel": "Xóa nhãn mặc định",
     "deletePhase": "Xóa giai đoạn",
     "updatePhase": "Cập nhật giai đoạn",
-    "addPhase": "Thêm giai đoạn"
+    "addPhase": "Thêm giai đoạn",
+    "deleteIssue": "Xóa công việc",
+    "addIssue": "Thêm công việc",
+    "updateIssue": "Cập nhật công việc"
   },
   "messages": {
     "success": "Thành công",

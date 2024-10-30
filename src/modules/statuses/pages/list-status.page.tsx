@@ -11,12 +11,15 @@ import type { IStatus } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 
 import { Head, StateHandler, TableComponent } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
 import { getNumericalOrder } from '@/libs/helpers';
 import { BadgeIssue } from '@/modules/issues/list-issue/components';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ListStatusPage() {
   const { t } = useTranslation();
   const { projectId } = useParams();
+  const { permissions } = useAuthentication();
   const { listStatus, isError, isLoading, isRefetching } = useGetListStatusQuery({
     params: {
       projectId: projectId || '',
@@ -74,9 +77,12 @@ export function ListStatusPage() {
           groupColumns={columns}
           isLoading={isLoading || isRefetching}
           isError={!!isError}
-          additionalFeature={(status) => (
-            <ActionMenuTableStatuses status={status} listStatus={listStatus} />
-          )}
+          additionalFeature={(status) =>
+            permissions[PermissionEnum.UPDATE_STATUS] ||
+            permissions[PermissionEnum.DELETE_STATUS] ? (
+              <ActionMenuTableStatuses status={status} listStatus={listStatus} />
+            ) : undefined
+          }
         />
       </StateHandler>
     </>

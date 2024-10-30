@@ -27,7 +27,7 @@ export function ActionMenuTableRoles({ role }: ActionMenuTableRolesProps) {
   if (!role || !role.id) return null;
 
   const menuOptions = [
-    permissions[PermissionEnum.GET_ROLE] && {
+    permissions[PermissionEnum.READ_LIST_ROLE] && {
       label: t('actions.viewDetail'),
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/roles/${role.id}`),

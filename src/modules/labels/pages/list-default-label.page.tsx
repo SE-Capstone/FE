@@ -10,10 +10,13 @@ import type { ILabel } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 
 import { Head, StateHandler, TableComponent } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
 import { getNumericalOrder } from '@/libs/helpers';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ListDefaultLabelPage() {
   const { t } = useTranslation();
+  const { permissions } = useAuthentication();
   const { listLabel, isError, isLoading, isRefetching } = useGetListDefaultLabelQuery();
 
   const columns = useMemo<ColumnsProps<ILabel>>(
@@ -67,9 +70,12 @@ export function ListDefaultLabelPage() {
           groupColumns={columns}
           isLoading={isLoading || isRefetching}
           isError={!!isError}
-          additionalFeature={(label) => (
-            <ActionMenuTableLabels label={label} listLabel={listLabel} isDefault />
-          )}
+          additionalFeature={(label) =>
+            permissions[PermissionEnum.UPDATE_DEFAULT_LABEL] ||
+            permissions[PermissionEnum.DELETE_DEFAULT_LABEL] ? (
+              <ActionMenuTableLabels label={label} listLabel={listLabel} isDefault />
+            ) : undefined
+          }
         />
       </StateHandler>
     </>

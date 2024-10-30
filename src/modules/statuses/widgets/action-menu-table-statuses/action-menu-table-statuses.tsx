@@ -10,6 +10,8 @@ import { UpsertStatusWidget } from '../upsert-status.widget';
 import type { IStatus } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTableStatusesProps {
   status: IStatus;
@@ -23,14 +25,21 @@ export function ActionMenuTableStatuses({
   isDefault,
 }: ActionMenuTableStatusesProps) {
   const { t } = useTranslation();
+  const { permissions } = useAuthentication();
   const disclosureModal = useDisclosure();
   const disclosureModalRemoveStatus = useDisclosure();
   const { handleRemoveStatus } = useRemoveStatusHook(isDefault);
+  const canUpdate =
+    permissions[PermissionEnum.UPDATE_STATUS] ||
+    (isDefault && permissions[PermissionEnum.UPDATE_DEFAULT_STATUS]);
+  const canDelete =
+    permissions[PermissionEnum.DELETE_STATUS] ||
+    (isDefault && permissions[PermissionEnum.DELETE_DEFAULT_STATUS]);
 
   if (!status || !status.id) return null;
 
   const menuOptions = [
-    {
+    canUpdate && {
       label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => {
@@ -39,7 +48,7 @@ export function ActionMenuTableStatuses({
         disclosureModal.onOpen();
       },
     },
-    {
+    canDelete && {
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {

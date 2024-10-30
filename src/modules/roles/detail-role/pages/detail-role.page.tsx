@@ -99,9 +99,8 @@ export function DetailRolePage() {
         path={APP_PATHS.listRole}
       >
         <IconButton
-          // Todo: fix
-          hidden={!permissions[PermissionEnum.ADD_ROLE]}
-          aria-label="DeleteRole"
+          hidden={!permissions[PermissionEnum.UPSERT_ROLE]}
+          aria-label="UpsertRole"
           variant="ghost"
           size="md"
           icon={<Icon as={BiTrash} boxSize={4} color="red.400" />}
@@ -115,8 +114,7 @@ export function DetailRolePage() {
             isDisabled={isUpdating}
             isDirty={!dirtyFields.name}
             initialValue={role?.name || ''}
-            // Todo: fix
-            isEditable={!permissions[PermissionEnum.ADD_ROLE]}
+            isEditable={!permissions[PermissionEnum.UPSERT_ROLE]}
             triggerClose={triggerClose}
             inputChildren={
               <CustomInput
@@ -139,8 +137,7 @@ export function DetailRolePage() {
             title={t('fields.description')}
             isLoading={isRoleDetailLoading}
             isDisabled={isUpdating}
-            // Todo: fix
-            isEditable={!permissions[PermissionEnum.ADD_ROLE]}
+            isEditable={!permissions[PermissionEnum.UPSERT_ROLE]}
             isDirty={!dirtyFields.description}
             initialValue={role?.description || ''}
             triggerClose={triggerClose}
@@ -174,8 +171,7 @@ export function DetailRolePage() {
               groupPermissions={groupPermissions}
               isLoading={isLoading || isRoleDetailLoading}
               isError={!!isError || !!isRoleDetailError}
-              // Todo: fix
-              isEditable={!permissions[PermissionEnum.ADD_ROLE]}
+              isEditable={!permissions[PermissionEnum.UPSERT_ROLE]}
               isDisabled={isUpdating}
               mutation={updatePermissions}
               triggerClose={triggerClose}

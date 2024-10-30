@@ -65,12 +65,7 @@ export function ListProjectPage() {
                   <Flex>
                     <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
                       <CustomLink
-                        to={
-                          pathname.includes(APP_PATHS.listProject) &&
-                          permissions[PermissionEnum.GET_DETAIL_PROJECT]
-                            ? String(project.id)
-                            : '#'
-                        }
+                        to={pathname.includes(APP_PATHS.listProject) ? String(project.id) : '#'}
                       >
                         {project.name || ''}
                       </CustomLink>
@@ -83,7 +78,7 @@ export function ListProjectPage() {
                 </Text>
 
                 <Box mt={5} fontSize="12px" noOfLines={2}>
-                  {permissions[PermissionEnum.GET_ALL_PROJECT] && (
+                  {permissions[PermissionEnum.GET_LIST_PROJECT] && (
                     <Flex alignItems="center">
                       <Text fontSize="13px" mr={1}>
                         Visible:

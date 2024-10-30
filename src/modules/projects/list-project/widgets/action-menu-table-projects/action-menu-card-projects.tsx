@@ -41,12 +41,12 @@ export function ActionMenuTableProjects({ project, teamLeads }: ActionMenuTableP
   if (!project || !project.id) return null;
 
   const menuOptions = [
-    permissions[PermissionEnum.GET_DETAIL_PROJECT] && {
+    {
       label: t('actions.viewDetail'),
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/projects/${project.id}`),
     },
-    {
+    permissions[PermissionEnum.UPDATE_PROJECT] && {
       label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => {

@@ -31,7 +31,7 @@ export function rolesRoutes(): RouteObject {
       {
         path: ':roleId',
         element: (
-          <PermissionCheck permissions={[PermissionEnum.GET_ROLE_DETAIL]}>
+          <PermissionCheck permissions={[PermissionEnum.READ_DETAIL_ROLE]}>
             <DetailRolePage />
           </PermissionCheck>
         ),

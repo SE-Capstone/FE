@@ -49,7 +49,7 @@ export interface TableComponentProps<ObjectType> {
   data: ObjectType[];
   groupColumns: ColumnsProps<ObjectType>;
   hasCheckbox?: boolean;
-  additionalFeature?(value: ObjectType): JSX.Element;
+  additionalFeature?(value: ObjectType): JSX.Element | undefined;
 
   // paginate
   totalCount?: number;
@@ -272,7 +272,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                               <Td
                                 key={String(column.key)}
                                 border="none"
-                                py={1}
+                                py={2.5}
                                 isNumeric={
                                   // typeof object[column.key] === 'number' && column.key === 'id'
                                   false
