@@ -19,12 +19,12 @@ export function SkillsPage() {
           }}
           tabsData={[
             {
-              title: t('common.skills'),
-              childrenPanel: <ListSkillPage />,
-            },
-            {
               title: t('common.assignSkill'),
               childrenPanel: <AssignSkillPage />,
+            },
+            {
+              title: t('common.skills'),
+              childrenPanel: <ListSkillPage />,
             },
           ]}
         />

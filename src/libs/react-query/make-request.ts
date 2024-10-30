@@ -254,7 +254,20 @@ export const makeRequest = async <TDataReq = any, TDataRes = any, TDataErr = IRe
   return axiosClient({
     ...options,
     method: options.method as Method,
-    ...(accessToken && { headers: { ...headers, Authorization: `Bearer ${accessToken}` } }),
+    ...(accessToken
+      ? {
+          headers: {
+            ...headers,
+            Authorization: `Bearer ${accessToken}`,
+            'Accept-Language': localStorage.getItem('i18nextLng') || 'en',
+          },
+        }
+      : {
+          headers: {
+            ...headers,
+            'Accept-Language': localStorage.getItem('i18nextLng') || 'en',
+          },
+        }),
   })
     .then(onSuccess)
     .catch(onError);

@@ -8,7 +8,6 @@ export type QueryListApplicantInput = {
 };
 
 export type IApplicant = IBaseEntity & {
-  id: number;
   name: string;
   email: string;
   startDate?: Date;

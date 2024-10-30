@@ -5,7 +5,6 @@ export type QueryListJobInput = {
 };
 
 export type IJob = IBaseEntity & {
-  id: number;
   title: string;
   description: string;
   isDeleted: boolean;

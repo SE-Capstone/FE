@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { MdLogout } from 'react-icons/md';
 import { Link, useRouteError } from 'react-router-dom';
 
-import type { To } from 'react-router-dom';
-
 import { DEFAULT_MESSAGE, isDevelopment } from '@/configs';
 import { notify } from '@/libs/helpers';
 import { useLogoutMutation } from '@/modules/auth/apis/logout.api';

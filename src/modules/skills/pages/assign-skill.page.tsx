@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Grid, GridItem } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
@@ -12,18 +12,13 @@ import { Head, StateHandler } from '@/components/elements';
 export function AssignSkillPage() {
   const { t } = useTranslation();
 
-  const { listSkill, meta, isError, isLoading, handlePaginate, isRefetching } =
-    useGetListSkillQuery();
+  const { listSkill, isError, isLoading, isRefetching } = useGetListSkillQuery();
 
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   const handleUserSelect = (userId: string | null) => {
     setSelectedUserId(userId);
   };
-
-  useEffect(() => {
-    console.log(selectedUserId);
-  }, [selectedUserId]);
 
   return (
     <>
@@ -35,7 +30,11 @@ export function AssignSkillPage() {
           </GridItem>
 
           <GridItem colSpan={2}>
-            <TransferListWidget />
+            <TransferListWidget
+              skills={listSkill}
+              userId={selectedUserId}
+              isLoading={isLoading || isRefetching}
+            />
           </GridItem>
         </Grid>
       </StateHandler>

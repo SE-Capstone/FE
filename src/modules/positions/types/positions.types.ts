@@ -5,7 +5,6 @@ export type QueryListPositionInput = {
 };
 
 export type IPosition = IBaseEntity & {
-  id: number;
   name: string;
   description: string;
   isDeleted: boolean;

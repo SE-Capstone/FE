@@ -1,35 +1,85 @@
 /* eslint-disable max-params */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Button, Checkbox, VStack, HStack, Text, Heading, Input } from '@chakra-ui/react';
+import {
+  Button,
+  Checkbox,
+  VStack,
+  HStack,
+  Text,
+  Heading,
+  Skeleton,
+  Stack,
+  Box,
+  Icon,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
+  MdClose,
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
   MdOutlineKeyboardDoubleArrowLeft,
   MdOutlineKeyboardDoubleArrowRight,
+  MdSearch,
 } from 'react-icons/md';
 
-export default function TransferListWidget() {
+import { useGetListUserSkills } from '../apis/get-list-user-skills.api';
+import { useUpsertUserSkillsHook } from '../hooks/mutations/use-upsert-user-skills.mutation.hooks';
+
+import type { ISkill } from '../types';
+
+import { CustomInput } from '@/components/elements';
+import { notify } from '@/libs/helpers';
+
+export default function TransferListWidget({
+  skills,
+  userId,
+  isLoading,
+}: {
+  skills: ISkill[];
+  userId: string | null;
+  isLoading: boolean;
+}) {
   const { t } = useTranslation();
-  const [leftItems, setLeftItems] = useState([
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 11',
-    'Item 12',
-    'Item 13',
-  ]);
-  const [rightItems, setRightItems] = useState(['Item 4', 'Item 5', 'Item 44', 'Item 55']);
-  const [leftChecked, setLeftChecked] = useState([]);
-  const [rightChecked, setRightChecked] = useState([]);
+  const [leftItems, setLeftItems] = useState<ISkill[]>(skills);
+  const [rightItems, setRightItems] = useState<ISkill[]>([]);
+  const [leftChecked, setLeftChecked] = useState<ISkill[]>([]);
+  const [rightChecked, setRightChecked] = useState<ISkill[]>([]);
+  const [oldSkills, setOldSkills] = useState<ISkill[]>([]);
   const [leftSearchTerm, setLeftSearchTerm] = useState('');
   const [rightSearchTerm, setRightSearchTerm] = useState('');
+  const { handleUpsertUserSkills, isLoading: isSubmitting } = useUpsertUserSkillsHook({
+    userId: userId || '',
+  });
 
-  const handleToggle = (setChecked, _checked, value) => {
-    setChecked((prev) =>
-      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
-    );
+  const { listSkill, isLoading: isLoadingUserSkills } = useGetListUserSkills({
+    userId: userId || '',
+  });
+
+  // useEffect(() => {
+  //   if (userId) {
+  //     setOldSkills(listSkill);
+  //     setRightItems(listSkill);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [listSkill]);
+
+  useEffect(() => {
+    if (userId) {
+      const o = new Set(oldSkills.map((item) => item.id));
+      setLeftItems(skills.filter((item) => !o.has(item.id)));
+      setOldSkills(listSkill);
+      setRightItems(listSkill);
+    }
+    console.log('listSkill', oldSkills);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, skills, listSkill]);
+
+  const handleToggle = (setChecked, checked, item) => {
+    const updatedChecked = checked.includes(item)
+      ? checked.filter((i) => i !== item)
+      : [...checked, item];
+    setChecked(updatedChecked);
   };
 
   const moveItems = (_fromItems, setFromItems, _toItems, setToItems, checkedItems, setChecked) => {
@@ -41,127 +91,176 @@ export default function TransferListWidget() {
   const moveAllItems = (fromItems, setFromItems, _toItems, setToItems, setChecked) => {
     setToItems((prev) => [...prev, ...fromItems]);
     setFromItems([]);
-    setChecked([]); // Clear the checked items
+    setChecked([]);
   };
 
   const filteredLeftItems = leftItems.filter((item) =>
-    item.toLowerCase().includes(leftSearchTerm.toLowerCase())
+    item.title.toLowerCase().includes(leftSearchTerm.toLowerCase())
   );
   const filteredRightItems = rightItems.filter((item) =>
-    item.toLowerCase().includes(rightSearchTerm.toLowerCase())
+    item.title.toLowerCase().includes(rightSearchTerm.toLowerCase())
   );
 
-  const customList = (items, checked, setChecked, searchTerm, setSearchTerm) => (
-    <VStack
-      align="start"
-      p={3}
-      minW="320px"
-      maxW="320px"
-      minHeight="500px"
-      maxHeight="500px"
-      overflow="auto"
-      rounded={2.5}
-      bg="white"
-      shadow="md"
-    >
-      <Input
+  const handleSubmit = () => {
+    if (!userId) {
+      notify({
+        type: 'error',
+        message: 'Please select a user',
+      });
+    }
+
+    handleUpsertUserSkills({
+      oldUserSkills: oldSkills,
+      newUserSkills: rightItems,
+    });
+  };
+
+  const customList = (items, checked, setChecked, searchTerm, setSearchTerm, isLeft = true) => (
+    <>
+      <CustomInput
         placeholder={`${t('common.enter')} ${t('common.skill').toLowerCase()}...`}
         value={searchTerm}
-        my={2}
+        my={0}
         minH="32px"
+        maxH="32px"
+        bg="white"
+        h="32px"
+        rightIcon={
+          <Box h="32px">
+            {searchTerm ? (
+              <Icon
+                as={MdClose}
+                boxSize={4.5}
+                cursor="pointer"
+                onClick={() => (isLeft ? setLeftSearchTerm('') : setRightSearchTerm(''))}
+              />
+            ) : (
+              <Icon as={MdSearch} boxSize={4.5} cursor="default" />
+            )}
+          </Box>
+        }
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      {items.length === 0 ? (
-        <Text fontSize="md" textAlign="center" w="full">
-          {t('common.noData')}
-        </Text>
-      ) : (
-        items.map((item) => (
-          <Checkbox
-            key={item}
-            size="md"
-            isChecked={checked.includes(item)}
-            onChange={() => handleToggle(setChecked, checked, item)}
-          >
-            <Text>{item}</Text>
-          </Checkbox>
-        ))
-      )}
-    </VStack>
+      <VStack
+        align="start"
+        p={3}
+        minW="320px"
+        maxW="320px"
+        minHeight="500px"
+        maxHeight="500px"
+        overflow="auto"
+        rounded={2.5}
+        bg="white"
+        shadow="md"
+      >
+        {isLoading || isLoadingUserSkills ? (
+          <>
+            {[...Array(10)].map((_, index) => (
+              <Stack key={index} spacing={3} direction="row" align="center" w="full">
+                <Checkbox isDisabled />
+                <Skeleton flex={1} height="15px" w="full" />
+              </Stack>
+            ))}
+          </>
+        ) : items.length === 0 ? (
+          <Text fontSize="md" textAlign="center" w="full">
+            {t('common.noData')}
+          </Text>
+        ) : (
+          items.map((item) => (
+            <Checkbox
+              key={item.id}
+              size="md"
+              disabled={!userId}
+              isChecked={checked.includes(item)}
+              onChange={() => handleToggle(setChecked, checked, item)}
+            >
+              <Text noOfLines={2}>{item.title}</Text>
+            </Checkbox>
+          ))
+        )}
+      </VStack>
+    </>
   );
 
   return (
-    <HStack spacing={4} align="start" alignItems="center">
-      <VStack>
-        <Heading size="md">{t('common.skills')}</Heading>
-        {customList(
-          filteredLeftItems,
-          leftChecked,
-          setLeftChecked,
-          leftSearchTerm,
-          setLeftSearchTerm
-        )}
-      </VStack>
+    <>
+      <HStack spacing={4} align="start" alignItems="center">
+        <VStack>
+          <Heading size="md">{t('common.skills')}</Heading>
+          {customList(
+            filteredLeftItems,
+            leftChecked,
+            setLeftChecked,
+            leftSearchTerm,
+            setLeftSearchTerm
+          )}
+        </VStack>
 
-      <VStack>
-        <Button
-          disabled={leftItems.length === 0}
-          onClick={() =>
-            moveAllItems(leftItems, setLeftItems, rightItems, setRightItems, setLeftChecked)
-          }
-        >
-          <MdOutlineKeyboardDoubleArrowRight />
-        </Button>
-        <Button
-          disabled={leftChecked.length === 0}
-          onClick={() =>
-            moveItems(
-              leftItems,
-              setLeftItems,
-              rightItems,
-              setRightItems,
-              leftChecked,
-              setLeftChecked
-            )
-          }
-        >
-          <MdOutlineKeyboardArrowRight />
-        </Button>
-        <Button
-          disabled={rightChecked.length === 0}
-          onClick={() =>
-            moveItems(
-              rightItems,
-              setRightItems,
-              leftItems,
-              setLeftItems,
-              rightChecked,
-              setRightChecked
-            )
-          }
-        >
-          <MdOutlineKeyboardArrowLeft />
-        </Button>
-        <Button
-          disabled={rightItems.length === 0}
-          onClick={() =>
-            moveAllItems(rightItems, setRightItems, leftItems, setLeftItems, setRightChecked)
-          }
-        >
-          <MdOutlineKeyboardDoubleArrowLeft />
-        </Button>
-      </VStack>
+        <VStack>
+          <Button
+            disabled={leftItems.length === 0 || !userId || isSubmitting}
+            onClick={() =>
+              moveAllItems(leftItems, setLeftItems, rightItems, setRightItems, setLeftChecked)
+            }
+          >
+            <MdOutlineKeyboardDoubleArrowRight />
+          </Button>
+          <Button
+            disabled={leftChecked.length === 0 || !userId || isSubmitting}
+            onClick={() =>
+              moveItems(
+                leftItems,
+                setLeftItems,
+                rightItems,
+                setRightItems,
+                leftChecked,
+                setLeftChecked
+              )
+            }
+          >
+            <MdOutlineKeyboardArrowRight />
+          </Button>
+          <Button
+            disabled={rightChecked.length === 0 || !userId || isSubmitting}
+            onClick={() =>
+              moveItems(
+                rightItems,
+                setRightItems,
+                leftItems,
+                setLeftItems,
+                rightChecked,
+                setRightChecked
+              )
+            }
+          >
+            <MdOutlineKeyboardArrowLeft />
+          </Button>
+          <Button
+            disabled={rightItems.length === 0 || !userId || isSubmitting}
+            onClick={() =>
+              moveAllItems(rightItems, setRightItems, leftItems, setLeftItems, setRightChecked)
+            }
+          >
+            <MdOutlineKeyboardDoubleArrowLeft />
+          </Button>
+        </VStack>
 
-      <VStack>
-        <Heading size="md">{t('common.selectedSkill')}</Heading>
-        {customList(
-          filteredRightItems,
-          rightChecked,
-          setRightChecked,
-          rightSearchTerm,
-          setRightSearchTerm
-        )}
-      </VStack>
-    </HStack>
+        <VStack>
+          <Heading size="md">{t('common.selectedSkill')}</Heading>
+          {customList(
+            filteredRightItems,
+            rightChecked,
+            setRightChecked,
+            rightSearchTerm,
+            setRightSearchTerm,
+            false
+          )}
+        </VStack>
+      </HStack>
+      <Button disabled={!userId || isSubmitting} px={6} mt={4} onClick={handleSubmit}>
+        {t('common.submit')}
+      </Button>
+    </>
   );
 }

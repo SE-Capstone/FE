@@ -5,7 +5,6 @@ export type QueryListSkillInput = {
 };
 
 export type ISkill = IBaseEntity & {
-  id: number;
   title: string;
   description: string;
   isDeleted: boolean;

@@ -301,6 +301,7 @@
     "deleteStatusBody": "Dự án của bạn có {{issueCount}} công việc với trạng thái \"{{statusName}}\". Trước khi bạn có thể xóa trạng thái này, hãy đổi các công việc có trạng thái \"{{statusName}}\" thành trạng thái khác.",
     "errorPageMessage": "Xin lỗi, có lỗi xảy ra.",
     "403PageMessage": "Xin lỗi, bạn không có quyền truy cập trang này.",
+    "sameSkills": "Các kỹ năng đã chọn không có sự thay đổi",
     "resetPasswordFailed": "Đặt lại mật khẩu thất bại, Vui lòng thử lại!"
   }
 }

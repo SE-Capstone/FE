@@ -336,6 +336,7 @@
     "deleteStatusBody": "Your project has {{issueCount}} \"{{statusName}}\" issues. Before you can delete this status, change \"{{statusName}}\" issues to another type.",
     "errorPageMessage": "Sorry, an unexpected error has occurred.",
     "403PageMessage": "Oops, You don't have permission to access this page.",
+    "sameSkills": "Selected skills are the same as before",
     "resetPasswordFailed": "Reset failed, Please try again!"
   }
 }
