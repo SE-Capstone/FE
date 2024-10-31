@@ -2,29 +2,35 @@ import { z } from 'zod';
 
 import { IssuePriorityEnum } from '../types';
 
-import { getDateField } from '@/validations';
+import { getOptionalDateField } from '@/validations';
 
 export const issueFormSchema = (t: any) =>
   z.object({
     projectId: z.string().trim().uuid().optional(),
     labelId: z.string().trim().uuid().optional(),
-    statusId: z.string().trim().uuid().optional(),
-    subject: z
+    statusId: z
+      .string({ message: t('validation.fieldRequired') })
+      .trim()
+      .uuid({ message: t('validation.fieldRequired') }),
+    title: z
       .string()
       .trim()
       .min(1, { message: t('validation.issue.subjectRequired') })
       .max(500, { message: t('validation.issue.subjectMax') }),
     description: z.string().trim().min(1).optional(),
-    startDate: getDateField(t),
-    dueDate: getDateField(t),
+    startDate: getOptionalDateField(),
+    dueDate: getOptionalDateField(),
     parentIssueId: z.string().trim().uuid().optional(),
     percentage: z
       .number()
       .int({ message: t('validation.issue.percentageInteger') })
       .min(0, { message: t('validation.issue.percentageMin') })
       .max(100, { message: t('validation.issue.percentageMax') })
+      .default(0)
       .optional(),
-    priority: z.nativeEnum(IssuePriorityEnum, { message: t('validation.issue.invalidPriority') }),
+    priority: z
+      .nativeEnum(IssuePriorityEnum, { message: t('validation.issue.invalidPriority') })
+      .default(IssuePriorityEnum.Medium),
     assigneeId: z.string().trim().uuid().optional(),
     estimatedTime: z
       .number()

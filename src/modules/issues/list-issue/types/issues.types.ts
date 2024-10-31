@@ -1,3 +1,4 @@
+import type { IStatus } from '@/modules/statuses/types';
 import type { IBaseEntity } from '@/types';
 import type { ThemingProps } from '@chakra-ui/react';
 
@@ -24,18 +25,18 @@ export type QueryListIssueInput = {
 
 export type IIssue = IBaseEntity & {
   projectId: string;
-  labelId: string;
-  labelName: string;
-  subject: string;
+  label?: string;
+  title: string;
+  index: string;
   description?: string;
-  startDate: string;
-  dueDate: string;
-  statusName: string;
-  statusColor: ThemingProps['colorScheme'];
+  startDate?: string;
+  dueDate?: string;
+  status: IStatus;
   priority: IssuePriorityEnum;
   lastUpdatedBy?: string;
   percentage: number;
-  assigneeId: string;
-  assigneeName: string;
+  assigneeId?: string;
+  assigneeName?: string;
+  assigneeAvatar?: string;
   estimatedTime?: number;
 };

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { HStack } from '@chakra-ui/react';
 import { createFilter } from 'chakra-react-select';
+import { useTranslation } from 'react-i18next';
 
 import type { CustomChakraReactSelectProps, CustomOptionSelectBase } from '@/components/elements';
 import type { FieldValues } from 'react-hook-form';
@@ -31,6 +32,7 @@ type UsersAsyncSelectProps<
 export function UsersAsyncSelect<TFormValues extends FieldValues, IsMulti extends boolean>(
   props: UsersAsyncSelectProps<TFormValues, IsMulti>
 ) {
+  const { t } = useTranslation();
   const { defaultUserValue, ignoreUserIds, ...propsSelect } = props;
 
   const [inputValue, setInputValue] = useDebounce('');
@@ -106,7 +108,7 @@ export function UsersAsyncSelect<TFormValues extends FieldValues, IsMulti extend
   return (
     <HStack w="full">
       <CustomChakraReactSelect<TFormValues, IsMulti, IOptionUserSelect>
-        placeholder="Choose members..."
+        placeholder={`${t('common.choose')} ${t('fields.members').toLowerCase()}...`}
         filterOption={createFilter({ ignoreAccents: false })}
         isLoading={isLoading || isFetching || isRefetching}
         isOptionDisabled={(option) => option.isDisabled || isLoading}

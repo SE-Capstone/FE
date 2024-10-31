@@ -1,4 +1,4 @@
-import { Button, SimpleGrid, Stack } from '@chakra-ui/react';
+import { Button, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { useCreateIssueHook } from '../hooks/mutations';
@@ -10,6 +10,7 @@ import {
   ModalBase,
 } from '@/components/elements';
 import { useProjectContext } from '@/contexts/project/project-context';
+import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 
 export interface AddNewIssueWidgetProps {
   children: React.ReactElement;
@@ -18,9 +19,15 @@ export interface AddNewIssueWidgetProps {
 export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
   const { t } = useTranslation();
   const { children } = props;
-  const { members } = useProjectContext();
+  const { members, projectId } = useProjectContext();
 
   const { data, formCreateIssue, handleCreateIssue, isLoading, reset } = useCreateIssueHook();
+
+  const { listStatus, isLoading: isLoading2 } = useGetListStatusQuery({
+    params: {
+      projectId: projectId || '',
+    },
+  });
 
   const {
     register,
@@ -35,7 +42,7 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
       title={`${t('common.create')} ${t('common.issue').toLowerCase()}`}
       triggerButton={() => children}
       renderFooter={() => (
-        <Button form="form-create-issue" w={20} type="submit" isDisabled={isLoading}>
+        <Button form="form-create-issue" w={20} type="submit" isDisabled={isLoading || isLoading2}>
           {t('common.save')}
         </Button>
       )}
@@ -48,34 +55,45 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
       >
         <Stack spacing={5}>
           <CustomInput
-            label={t('fields.subject')}
+            label={t('fields.title')}
             isRequired
-            registration={register('subject')}
-            error={errors.subject}
+            registration={register('title')}
+            error={errors.title}
           />
-          <SimpleGrid columns={2} spacing={3}>
+          {/* <SimpleGrid columns={2} spacing={3}>
             <CustomInput
               label={t('fields.startDate')}
-              isRequired
               type="date"
               registration={register('startDate')}
               error={errors.startDate}
             />
             <CustomInput
               label={t('fields.dueDate')}
-              isRequired
               type="date"
               registration={register('dueDate')}
               error={errors.dueDate}
             />
-          </SimpleGrid>
+          </SimpleGrid> */}
           <CustomChakraReactSelect
             isSearchable
-            placeholder={`${t('common.choose')} ${t('common.assignee').toLowerCase()}`}
-            label={t('common.assignee')}
+            placeholder={`${t('common.choose')} ${t('fields.status').toLowerCase()}`}
+            isRequired
+            label={t('fields.status')}
+            size="lg"
+            options={listStatus.map((s) => ({
+              label: s.name,
+              value: s.id,
+            }))}
+            control={control}
+            name="statusId"
+          />
+          <CustomChakraReactSelect
+            isSearchable
+            placeholder={`${t('common.choose')} ${t('fields.assignee').toLowerCase()}`}
+            label={t('fields.assignee')}
             size="lg"
             options={members.map((user) => ({
-              label: `${user.fullName}`,
+              label: `${user.userName}`,
               value: user.id,
             }))}
             control={control}

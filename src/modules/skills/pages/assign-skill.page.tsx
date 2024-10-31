@@ -24,7 +24,7 @@ export function AssignSkillPage() {
     <>
       <Head title={t('common.assignSkill')} />
       <StateHandler showLoader={isLoading} showError={!!isError}>
-        <Grid templateColumns="repeat(3, 1fr)" gap="6" py={3}>
+        <Grid templateColumns="repeat(3, 1fr)" gap="6" py={3} overflowX="auto">
           <GridItem colSpan={1}>
             <UsersAsyncTable onUserSelect={handleUserSelect} />
           </GridItem>

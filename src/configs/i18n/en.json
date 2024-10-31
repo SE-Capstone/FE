@@ -64,6 +64,7 @@
     "createdBy": "Created by",
     "updated": "Updated",
     "updatedBy": "Updated by",
+    "lastUpdatedBy": "Last updated by",
     "error": "Error",
     "errors": "Errors",
     "success": "Success",
@@ -163,6 +164,8 @@
     "description": "Description",
     "permission": "Permissions",
     "overview": "Overview",
+    "priority": "Priority",
+    "percentageDone": "% Done",
     "noImage": "No image"
   },
   "actions": {

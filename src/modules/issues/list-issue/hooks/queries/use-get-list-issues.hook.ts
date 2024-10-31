@@ -32,22 +32,24 @@ export function getListIssueRequest(req: IGetListIssueRequest) {
 interface UseGetListIssueQueryProps {
   configs?: QueryConfig<typeof getListIssueRequest>;
   params?: DeepPartial<QueryListIssueInput>;
+  projectId: string;
 }
 
-export function useGetListIssueQuery(props: UseGetListIssueQueryProps = {}) {
+export function useGetListIssueQuery(props: UseGetListIssueQueryProps) {
   const { pageIndex, pageSize, setPaginate } = usePaginateReq();
-  const { configs, params } = props;
+  const { configs, params, projectId } = props;
 
   const currentParams = useMemo(
     () =>
       merge(
         {
+          projectId,
           pageIndex,
           pageSize,
         },
         params
       ),
-    [pageIndex, pageSize, params]
+    [pageIndex, pageSize, params, projectId]
   );
 
   const queryKey = useMemo(

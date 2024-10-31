@@ -22,7 +22,7 @@ export function Error403Page() {
         <AlertTitle mt={4} mb={1} fontSize="lg">
           403 - ACCESS DENIED
         </AlertTitle>
-        <AlertDescription maxWidth="md">{t('common.403PageMessage')}</AlertDescription>
+        <AlertDescription maxWidth="md">{t('messages.403PageMessage')}</AlertDescription>
         <Stack direction="row" spacing={2} mt={4}>
           <Button as={Link} to={APP_PATHS.HOME}>
             {t('common.back')}

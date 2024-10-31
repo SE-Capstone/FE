@@ -48,6 +48,8 @@ export interface CustomTabsProps extends Omit<TabsProps, 'children'> {
   valueOutlet?: any;
 
   tabsData: TabElementProps[];
+  isSelected: number;
+  onTabChange: (index: number) => void;
 }
 
 const CustomTab = forwardRef<CustomTabProps, 'button'>((props, ref) => {
@@ -86,16 +88,19 @@ export function CustomTabs({
   tabPanelsProps,
   useWithRouter,
   valueOutlet,
+  onTabChange,
+  isSelected,
   ...tabsProps
 }: CustomTabsProps) {
   return (
-    <Tabs isLazy w="full" h="full" {...tabsProps}>
+    <Tabs isLazy w="full" h="full" {...tabsProps} defaultIndex={isSelected}>
       <TabList bg="white" borderColor="gray.200" roundedTop={2} {...tabListProps}>
         {tabsData.map((tab, index) => (
           <CustomTab
             key={index}
             as={tab.link ? Link : undefined}
             to={tab.link ? tab.link : undefined}
+            onClick={() => onTabChange(index)}
             {...tab.tabProps}
           >
             {tab.title}

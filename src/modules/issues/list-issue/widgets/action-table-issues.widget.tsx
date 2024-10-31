@@ -1,19 +1,17 @@
 import { Box, Button, Grid, GridItem, HStack, Spacer } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 
 import { AddNewIssueWidget } from './add-new-issue.widget';
 import { useIssuesQueryFilterStateContext } from '../contexts';
 
+import type { ILabel } from '@/modules/labels/types';
+
 import { CustomChakraReactSelect, SearchInput } from '@/components/elements';
 import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
 
-export function ActionTableIssuesWidget() {
+export function ActionTableIssuesWidget({ listLabel }: { listLabel: ILabel[] }) {
   const { t } = useTranslation();
   const { issuesQueryState, setIssuesQueryFilterState } = useIssuesQueryFilterStateContext();
-  const { pathname } = useLocation();
-
-  const isShowFilterIssue = pathname.includes('issues');
 
   return (
     <Box p={5} py={3} mb={6} rounded={2.5} bg="white" w="full" shadow="0 1px 4px 0 #0002">
@@ -28,7 +26,7 @@ export function ActionTableIssuesWidget() {
         >
           <GridItem colSpan={2}>
             <SearchInput
-              placeholder="Enter name/code..."
+              placeholder={`${t('common.enter')} ${t('fields.subject').toLowerCase()}...`}
               initValue={issuesQueryState.filters.subject || ''}
               onHandleSearch={(keyword) => {
                 setIssuesQueryFilterState({ subject: keyword });
@@ -43,7 +41,7 @@ export function ActionTableIssuesWidget() {
           >
             <CustomChakraReactSelect
               isSearchable={false}
-              placeholder="Choose priority"
+              placeholder={`${t('common.choose')} ${t('fields.priority').toLowerCase()}`}
               options={ISSUE_PRIORITY_OPTIONS}
               onChange={(opt) => {
                 setIssuesQueryFilterState({
@@ -60,24 +58,23 @@ export function ActionTableIssuesWidget() {
           >
             <CustomChakraReactSelect
               isSearchable={false}
-              placeholder="Choose label"
-              options={ISSUE_PRIORITY_OPTIONS}
+              placeholder={`${t('common.choose')} ${t('common.label').toLowerCase()}`}
+              options={listLabel.map((label) => ({
+                label: label.title,
+                value: label.id,
+              }))}
               onChange={(opt) => {
                 setIssuesQueryFilterState({
-                  priority: opt?.value ? opt.value : undefined,
+                  labelId: opt?.value ? opt.value : undefined,
                 });
               }}
             />
           </GridItem>
         </Grid>
-        {isShowFilterIssue && (
-          <>
-            <Spacer />
-            <AddNewIssueWidget>
-              <Button leftIcon={<>+</>}>{t('common.create')}</Button>
-            </AddNewIssueWidget>
-          </>
-        )}
+        <Spacer />
+        <AddNewIssueWidget>
+          <Button leftIcon={<>+</>}>{t('common.create')}</Button>
+        </AddNewIssueWidget>
       </HStack>
     </Box>
   );

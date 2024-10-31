@@ -1,4 +1,6 @@
 /* eslint-disable react/jsx-no-useless-fragment */
+import { useEffect, useState } from 'react';
+
 import { Container } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,6 +11,17 @@ import { ListDefaultStatusPage } from '@/modules/statuses/pages/list-default-sta
 
 export function SettingsPage() {
   const { t, i18n } = useTranslation();
+  const [activeTabIndex, setActiveTabIndex] = useState<number>(() =>
+    parseInt(localStorage.getItem('activeSettingTabIndex') || '0', 10)
+  );
+
+  const handleTabChange = (index: number) => {
+    setActiveTabIndex(index);
+  };
+
+  useEffect(() => {
+    localStorage.setItem('activeSettingTabIndex', activeTabIndex.toString());
+  }, [activeTabIndex]);
 
   return (
     <>
@@ -32,6 +45,7 @@ export function SettingsPage() {
             tabListProps={{
               bg: 'transparent',
             }}
+            isSelected={activeTabIndex}
             tabsData={[
               {
                 title: i18n.language === 'vi' ? t('common.label') : t('common.labels'),
@@ -42,6 +56,7 @@ export function SettingsPage() {
                 childrenPanel: <ListDefaultStatusPage />,
               },
             ]}
+            onTabChange={handleTabChange}
           />
         </StateHandler>
       </Container>

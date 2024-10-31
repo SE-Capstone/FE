@@ -66,6 +66,7 @@ export function ListProjectPage() {
                     <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
                       <CustomLink
                         to={pathname.includes(APP_PATHS.listProject) ? String(project.id) : '#'}
+                        onClick={() => localStorage.setItem('activeTabIndex', '0')}
                       >
                         {project.name || ''}
                       </CustomLink>
@@ -78,7 +79,7 @@ export function ListProjectPage() {
                 </Text>
 
                 <Box mt={5} fontSize="12px" noOfLines={2}>
-                  {permissions[PermissionEnum.GET_LIST_PROJECT] && (
+                  {permissions[PermissionEnum.READ_LIST_PROJECT] && (
                     <Flex alignItems="center">
                       <Text fontSize="13px" mr={1}>
                         Visible:

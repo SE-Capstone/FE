@@ -14,16 +14,16 @@ import { allQueryKeysStore } from '@/services/query-keys-store';
 interface ICreateIssueRequest {
   body: {
     projectId: string;
-    labelId: string;
+    labelId?: string;
     statusId: string;
-    subject: string;
+    title: string;
     description?: string;
-    startDate: string;
-    dueDate: string;
+    startDate?: string;
+    dueDate?: string;
     parentIssueId?: string;
     percentage?: number;
-    priority: number;
-    assigneeId: string;
+    priority?: number;
+    assigneeId?: string;
     estimatedTime?: number;
   };
 }

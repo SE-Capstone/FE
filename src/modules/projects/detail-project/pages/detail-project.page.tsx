@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Button, Container, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { UpsertProjectWidget } from '../../list-project/widgets';
 import { useGetDetailProject } from '../apis/detail-project.api';
@@ -31,6 +31,9 @@ export function DetailProjectPage() {
   const { permissions } = useAuthentication();
   const { project: projectContext } = useProjectContext();
   const { projectId } = useParams();
+  const [activeTabIndex, setActiveTabIndex] = useState<number>(() =>
+    parseInt(localStorage.getItem('activeTabIndex') || '0', 10)
+  );
 
   const { project, isLoading, isError } = useGetDetailProject({ projectId: projectId || '' });
 
@@ -46,7 +49,15 @@ export function DetailProjectPage() {
     }
   }, [users, teamLeads]);
 
-  if (!permissions[PermissionEnum.GET_LIST_PROJECT] && !projectContext?.isVisible) {
+  const handleTabChange = (index: number) => {
+    setActiveTabIndex(index);
+  };
+
+  useEffect(() => {
+    localStorage.setItem('activeTabIndex', activeTabIndex.toString());
+  }, [activeTabIndex]);
+
+  if (!permissions[PermissionEnum.READ_LIST_PROJECT] && !projectContext?.isVisible) {
     return <Error403Page />;
   }
 
@@ -84,6 +95,7 @@ export function DetailProjectPage() {
             tabListProps={{
               bg: 'transparent',
             }}
+            isSelected={activeTabIndex}
             tabsData={[
               {
                 title: t('fields.overview'),
@@ -117,6 +129,7 @@ export function DetailProjectPage() {
                 ),
               },
             ].filter(Boolean)}
+            onTabChange={handleTabChange}
           />
         </StateHandler>
       </Container>

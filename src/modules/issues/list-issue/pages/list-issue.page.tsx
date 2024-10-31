@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 
 import { Container, Progress } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { BadgeIssue } from '../components/badge-issue';
 import { PriorityIssue } from '../components/priority-issue';
@@ -14,16 +15,30 @@ import type { ColumnsProps } from '@/components/elements';
 
 import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
 import { formatDate } from '@/libs/helpers';
+import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListIssuePage() {
+  const { projectId } = useParams();
+  const { t } = useTranslation();
   const { issuesQueryState, resetIssuesQueryState } = useIssuesQueryFilterStateContext();
   const { pathname } = useLocation();
 
   const { listIssue, meta, isError, isLoading, handlePaginate, isRefetching } =
     useGetListIssueQuery({
       params: issuesQueryState.filters,
+      projectId: projectId || '',
     });
+
+  const {
+    listLabel,
+    isError: isError2,
+    isLoading: isLoading2,
+  } = useGetListLabelQuery({
+    params: {
+      projectId: projectId || '',
+    },
+  });
 
   const columns = useMemo<ColumnsProps<IIssue>>(
     () => [
@@ -31,56 +46,56 @@ export function ListIssuePage() {
         header: 'Issue',
         columns: [
           {
-            key: 'id',
+            key: 'index',
             hasSort: false,
             title: '#',
             tableCellProps: { w: 4, pr: 2 },
-            Cell({ id, statusColor }) {
-              return <BadgeIssue content={id} colorScheme={statusColor} />;
+            Cell({ index, status }) {
+              return <BadgeIssue content={index} colorScheme={status.color} />;
             },
           },
           {
             key: 'label',
-            title: 'Label',
+            title: t('common.label'),
             hasSort: false,
-            Cell({ labelName }) {
-              return <>{labelName}</>;
+            Cell({ label }) {
+              return <>{label}</>;
             },
           },
           {
             key: 'status',
-            title: 'Status',
+            title: t('common.status'),
             hasSort: false,
-            Cell({ statusName }) {
-              return <>{statusName}</>;
+            Cell({ status }) {
+              return <>{status.name}</>;
             },
           },
           {
             key: 'priority',
-            title: 'Priority',
+            title: t('fields.priority'),
             hasSort: false,
             Cell({ priority }) {
               return <PriorityIssue priority={priority} />;
             },
           },
           {
-            key: 'subject',
-            title: 'Subject',
+            key: 'title',
+            title: t('fields.title'),
             hasSort: false,
-            Cell({ subject, id }) {
+            Cell({ title, id }) {
               return (
                 <CustomLink
                   to={pathname.includes(APP_PATHS.listIssue) ? String(id) : '#'}
                   noOfLines={1}
                 >
-                  {subject}
+                  {title}
                 </CustomLink>
               );
             },
           },
           {
             key: 'assigneeId',
-            title: 'Assignee',
+            title: t('fields.assignee'),
             hasSort: false,
             Cell({ assigneeName }) {
               return <>{assigneeName || ''}</>;
@@ -88,15 +103,15 @@ export function ListIssuePage() {
           },
           {
             key: 'percentage',
-            title: '$ Done',
+            title: t('fields.percentageDone'),
             hasSort: false,
             Cell({ percentage }) {
-              return <Progress value={percentage} />;
+              return <Progress rounded={1.5} value={percentage} />;
             },
           },
           {
             key: 'lastUpdatedBy',
-            title: 'Last updated by',
+            title: t('common.lastUpdatedBy'),
             hasSort: false,
             Cell({ lastUpdatedBy }) {
               return <>{lastUpdatedBy || ''}</>;
@@ -104,23 +119,23 @@ export function ListIssuePage() {
           },
           {
             key: 'startDate',
-            title: 'Start date',
+            title: t('fields.startDate'),
             hasSort: false,
             Cell({ startDate }) {
-              return <>{formatDate({ date: startDate, format: 'DD-MM-YYYY' }) || ''}</>;
+              return <>{startDate ? formatDate({ date: startDate, format: 'DD-MM-YYYY' }) : ''}</>;
             },
           },
           {
             key: 'dueDate',
-            title: 'Due date',
+            title: t('fields.dueDate'),
             hasSort: false,
             Cell({ dueDate }) {
-              return <>{formatDate({ date: dueDate, format: 'DD-MM-YYYY' }) || ''}</>;
+              return <>{dueDate ? formatDate({ date: dueDate, format: 'DD-MM-YYYY' }) : ''}</>;
             },
           },
           {
             key: 'updatedAt',
-            title: 'Updated at',
+            title: t('fields.updatedAt'),
             hasSort: false,
             Cell({ updatedAt, createdAt }) {
               return (
@@ -131,7 +146,7 @@ export function ListIssuePage() {
         ],
       },
     ],
-    [pathname]
+    [pathname, t]
   );
 
   return (
@@ -139,12 +154,12 @@ export function ListIssuePage() {
       <Head title="Issues" />
       <Container maxW="container.2xl" centerContent>
         <StateHandler
-          showLoader={isLoading}
-          showError={!!isError}
+          showLoader={isLoading || isLoading2}
+          showError={!!isError || !!isError2}
           retryHandler={resetIssuesQueryState}
         >
           <Container maxW="container.2xl" centerContent>
-            <ActionTableIssuesWidget />
+            <ActionTableIssuesWidget listLabel={listLabel} />
             <TableComponent
               currentPage={meta.pageIndex}
               perPage={meta.pageSize}

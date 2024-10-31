@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { useCreateIssueMutation } from '../../apis/create-issue.api';
 import { issueFormSchema } from '../../validations/issues.validations';
@@ -12,6 +13,7 @@ import { useFormWithSchema } from '@/libs/hooks';
 
 export function useCreateIssueHook() {
   const { t } = useTranslation();
+  const { projectId } = useParams();
   const formCreateIssue = useFormWithSchema({
     schema: issueFormSchema(t),
   });
@@ -28,23 +30,27 @@ export function useCreateIssueHook() {
         await mutate({
           body: {
             ...values,
-            projectId: values.projectId || '',
-            labelId: values.labelId || '',
+            projectId: projectId || '',
+            labelId: values.labelId,
             statusId: values.statusId || '',
-            assigneeId: values.assigneeId || '',
-            startDate: formatDate({
-              date: values.startDate,
-              format: 'YYYY-MM-DD',
-            }),
-            dueDate: formatDate({
-              date: values.dueDate,
-              format: 'YYYY-MM-DD',
-            }),
+            assigneeId: values.assigneeId,
+            startDate: values.startDate
+              ? formatDate({
+                  date: values.startDate,
+                  format: 'YYYY-MM-DD',
+                })
+              : undefined,
+            dueDate: values.dueDate
+              ? formatDate({
+                  date: values.dueDate,
+                  format: 'YYYY-MM-DD',
+                })
+              : undefined,
           },
         });
       } catch (error) {}
     },
-    [mutate, isLoading]
+    [isLoading, mutate, projectId]
   );
 
   return {

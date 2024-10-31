@@ -64,6 +64,7 @@
     "createdBy": "Tạo bởi",
     "updated": "Đã cập nhật",
     "updatedBy": "Cập nhật bởi",
+    "lastUpdatedBy": "Cập nhật lần cuối bởi",
     "error": "Lỗi",
     "errors": "Lỗi",
     "settings": "Cài đặt",
@@ -127,6 +128,8 @@
     "description": "Mô tả",
     "permission": "Quyền",
     "overview": "Tổng quan",
+    "priority": "Độ ưu tiên",
+    "percentageDone": "% Hoàn thành",
     "noImage": "Không có hình ảnh"
   },
   "actions": {

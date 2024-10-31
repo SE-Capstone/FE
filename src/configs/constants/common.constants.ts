@@ -176,7 +176,7 @@ export const PERMISSIONS_VALUES = (t: any): Record<PermissionEnum, string> => ({
   [PermissionEnum.TOGGLE_VISIBLE_PROJECT]: t('permissions.toggleVisibleProject'),
   [PermissionEnum.DELETE_PROJECT]: t('permissions.deleteProject'),
   [PermissionEnum.UPDATE_PROJECT]: t('permissions.updateProject'),
-  [PermissionEnum.GET_LIST_PROJECT]: t('permissions.getListProject'),
+  [PermissionEnum.READ_LIST_PROJECT]: t('permissions.getListProject'),
 
   // Role
   [PermissionEnum.ADD_ROLE]: t('permissions.addRole'),
