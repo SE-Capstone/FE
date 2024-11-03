@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { useCreateIssueMutation } from '../../apis/create-issue.api';
+import { useUpsertIssueMutation } from '../../apis/upsert-issue.api';
 import { issueFormSchema } from '../../validations/issues.validations';
 
 import type { IssueFormValues } from '../../validations/issues.validations';
@@ -11,18 +11,22 @@ import type { IssueFormValues } from '../../validations/issues.validations';
 import { formatDate } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
-export function useCreateIssueHook() {
+export function useUpsertIssueHook(content?: string, isUpdate?: boolean, id?: string) {
   const { t } = useTranslation();
-  const { projectId } = useParams();
-  const formCreateIssue = useFormWithSchema({
+  const { projectId, issueId } = useParams();
+  const formUpsertIssue = useFormWithSchema({
     schema: issueFormSchema(t),
   });
 
-  const { reset } = formCreateIssue;
+  const { reset } = formUpsertIssue;
 
-  const { mutate, isPending: isLoading, ...restData } = useCreateIssueMutation({ reset });
+  const {
+    mutate,
+    isPending: isLoading,
+    ...restData
+  } = useUpsertIssueMutation({ reset, id: issueId || id, isUpdate });
 
-  const handleCreateIssue = useCallback(
+  const handleUpsertIssue = useCallback(
     async (values: IssueFormValues) => {
       if (isLoading) return;
 
@@ -30,6 +34,7 @@ export function useCreateIssueHook() {
         await mutate({
           body: {
             ...values,
+            description: content,
             projectId: projectId || '',
             labelId: values.labelId,
             statusId: values.statusId || '',
@@ -50,12 +55,12 @@ export function useCreateIssueHook() {
         });
       } catch (error) {}
     },
-    [isLoading, mutate, projectId]
+    [isLoading, mutate, projectId, content]
   );
 
   return {
-    formCreateIssue,
-    handleCreateIssue,
+    formUpsertIssue,
+    handleUpsertIssue,
     isLoading,
     ...restData,
   };

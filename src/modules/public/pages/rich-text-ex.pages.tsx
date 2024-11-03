@@ -34,8 +34,10 @@ import RichTextEditor, {
 
 import 'reactjs-tiptap-editor/style.css';
 
-const extensions = [
-  BaseKit,
+export const extensions = [
+  BaseKit.configure({
+    characterCount: false,
+  }),
   Blockquote,
   Bold,
   BulletList,

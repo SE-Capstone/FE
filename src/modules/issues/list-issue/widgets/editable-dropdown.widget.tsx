@@ -2,11 +2,12 @@ import { useMemo } from 'react';
 
 import { Box } from '@atlaskit/primitives';
 
-import { useUpdateIssueMutation } from '../apis/update-issue.api';
+import { useUpsertIssueHook } from '../hooks/mutations';
 
 import type { IIssue } from '../types';
 
 import { CustomChakraReactSelect, type CustomOptionSelectBase } from '@/components/elements';
+import { formatDate } from '@/libs/helpers';
 
 export const InlineEditCustomSelect = ({
   options,
@@ -19,7 +20,7 @@ export const InlineEditCustomSelect = ({
   issue: IIssue;
   field: 'status' | 'priority';
 }) => {
-  const { mutate: updateIssueMutation } = useUpdateIssueMutation();
+  const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issue.id);
 
   const customComponents = useMemo(
     () => ({
@@ -49,12 +50,22 @@ export const InlineEditCustomSelect = ({
   );
 
   const handleSubmit = (option) => {
-    updateIssueMutation({
-      body: {
-        ...issue,
-        id: option?.value,
-        ...(field === 'status' ? { statusId: option?.value } : { priority: option?.value }),
-      },
+    handleUpsertIssue({
+      ...issue,
+      startDate: issue.startDate
+        ? (formatDate({
+            date: issue.startDate,
+            format: 'YYYY-MM-DD',
+          }) as unknown as Date)
+        : undefined,
+      dueDate: issue.dueDate
+        ? (formatDate({
+            date: issue.dueDate,
+            format: 'YYYY-MM-DD',
+          }) as unknown as Date)
+        : undefined,
+      statusId: field === 'status' ? option?.value : issue.status.id,
+      ...(field === 'priority' && { priority: option?.value }),
     });
   };
 

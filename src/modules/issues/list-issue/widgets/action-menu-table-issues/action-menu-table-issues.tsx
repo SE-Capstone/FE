@@ -1,6 +1,6 @@
 import { Icon } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { MdVisibility } from 'react-icons/md';
+import { MdOutlineSystemUpdateAlt, MdVisibility } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 import type { IIssue } from '../../types';
@@ -22,6 +22,11 @@ export function ActionMenuTableIssues({ issue }: ActionMenuTableIssuesProps) {
       label: t('actions.viewDetail'),
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`issues/${issue.id}`),
+    },
+    {
+      label: t('actions.edit'),
+      icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
+      onClick: () => navigate(`issues/${issue.id}/edit`),
     },
   ].filter(Boolean);
 

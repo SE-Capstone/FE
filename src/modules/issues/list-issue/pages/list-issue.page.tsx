@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { Progress } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { BadgeIssue } from '../components/badge-issue';
 import { PriorityIssue } from '../components/priority-issue';
@@ -18,13 +18,11 @@ import { CustomLink, Head, StateHandler, TableComponent } from '@/components/ele
 import { formatDate } from '@/libs/helpers';
 import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
-import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListIssuePage() {
   const { projectId } = useParams();
   const { t } = useTranslation();
   const { issuesQueryState, resetIssuesQueryState } = useIssuesQueryFilterStateContext();
-  const { pathname } = useLocation();
 
   const { listIssue, meta, isError, isLoading, handlePaginate, isRefetching } =
     useGetListIssueQuery({
@@ -99,10 +97,7 @@ export function ListIssuePage() {
             hasSort: false,
             Cell({ title, id }) {
               return (
-                <CustomLink
-                  to={pathname.includes(APP_PATHS.listIssue) ? String(id) : '#'}
-                  noOfLines={1}
-                >
+                <CustomLink to={String(id)} noOfLines={1}>
                   {title}
                 </CustomLink>
               );
@@ -121,7 +116,7 @@ export function ListIssuePage() {
             title: t('common.label'),
             hasSort: false,
             Cell({ label }) {
-              return <>{label}</>;
+              return <>{label?.title}</>;
             },
           },
           {
@@ -159,7 +154,7 @@ export function ListIssuePage() {
         ],
       },
     ],
-    [listStatus, pathname, t]
+    [listStatus, t]
   );
 
   return (

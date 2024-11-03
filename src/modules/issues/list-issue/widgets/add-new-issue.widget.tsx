@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { Button, Stack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { useCreateIssueHook } from '../hooks/mutations';
+import { useUpsertIssueHook } from '../hooks/mutations';
 
 import type { IOptionUserSelect } from '@/modules/projects/detail-project/components/users-async-select';
 
@@ -27,7 +27,7 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
   const { currentUser } = useAuthentication();
   const { children } = props;
   const { members, projectId } = useProjectContext();
-  const { data, formCreateIssue, handleCreateIssue, isLoading, reset } = useCreateIssueHook();
+  const { data, formUpsertIssue, handleUpsertIssue, isLoading, reset } = useUpsertIssueHook();
   const [value, setValue] = useState<IOptionUserSelect>();
 
   const { listStatus, isLoading: isLoading2 } = useGetListStatusQuery({
@@ -48,7 +48,7 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
     control,
     formState: { errors },
     setValue: setFieldValue,
-  } = formCreateIssue;
+  } = formUpsertIssue;
 
   const handleAssigneeChange = (option) => {
     setValue({
@@ -56,7 +56,7 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
       value: option?.value || '',
       image: option?.image || '',
     });
-    setFieldValue('assigneeId', option?.value || '');
+    setFieldValue('assigneeId', option?.value || undefined);
   };
 
   const assignToMe = () => {
@@ -85,8 +85,8 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
     >
       <CustomFormProvider
         id="form-create-issue"
-        form={formCreateIssue}
-        onSubmit={handleCreateIssue}
+        form={formUpsertIssue}
+        onSubmit={handleUpsertIssue}
       >
         <Stack spacing={5}>
           <CustomInput
@@ -95,20 +95,6 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
             registration={register('title')}
             error={errors.title}
           />
-          {/* <SimpleGrid columns={2} spacing={3}>
-            <CustomInput
-              label={t('fields.startDate')}
-              type="date"
-              registration={register('startDate')}
-              error={errors.startDate}
-            />
-            <CustomInput
-              label={t('fields.dueDate')}
-              type="date"
-              registration={register('dueDate')}
-              error={errors.dueDate}
-            />
-          </SimpleGrid> */}
           <CustomChakraReactSelect
             isSearchable
             placeholder={`${t('common.choose')} ${t('fields.status').toLowerCase()}`}

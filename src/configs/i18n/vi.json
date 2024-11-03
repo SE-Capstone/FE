@@ -132,6 +132,7 @@
     "priority": "Độ ưu tiên",
     "percentageDone": "% Hoàn thành",
     "teamLead": "Team lead",
+    "estimatedTime": "Thời gian dự kiến",
     "noImage": "Không có hình ảnh"
   },
   "actions": {

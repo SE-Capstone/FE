@@ -168,6 +168,7 @@
     "priority": "Priority",
     "percentageDone": "% Done",
     "teamLead": "Team lead",
+    "estimatedTime": "Estimated time",
     "noImage": "No image"
   },
   "actions": {

@@ -1,3 +1,4 @@
+import type { ILabel } from '@/modules/labels/types';
 import type { IStatus } from '@/modules/statuses/types';
 import type { IBaseEntity } from '@/types';
 
@@ -33,7 +34,7 @@ interface IUpdatedBy {
 
 export type IIssue = IBaseEntity & {
   projectId: string;
-  label?: string;
+  label?: ILabel;
   title: string;
   index: string;
   description?: string;
