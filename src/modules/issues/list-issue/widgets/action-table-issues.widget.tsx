@@ -41,6 +41,7 @@ export function ActionTableIssuesWidget({ listLabel }: { listLabel: ILabel[] }) 
           >
             <CustomChakraReactSelect
               isSearchable={false}
+              size="sm"
               placeholder={`${t('common.choose')} ${t('fields.priority').toLowerCase()}`}
               options={ISSUE_PRIORITY_OPTIONS}
               onChange={(opt) => {
@@ -58,6 +59,7 @@ export function ActionTableIssuesWidget({ listLabel }: { listLabel: ILabel[] }) 
           >
             <CustomChakraReactSelect
               isSearchable={false}
+              size="sm"
               placeholder={`${t('common.choose')} ${t('common.label').toLowerCase()}`}
               options={listLabel.map((label) => ({
                 label: label.title,

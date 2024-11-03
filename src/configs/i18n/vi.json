@@ -1,5 +1,6 @@
 {
   "common": {
+    "assignToMe": "Gán cho tôi",
     "assignSkill": "Gán kỹ năng",
     "selectedSkill": "Kỹ năng đã chọn",
     "retry": "Thử lại",
@@ -130,6 +131,7 @@
     "overview": "Tổng quan",
     "priority": "Độ ưu tiên",
     "percentageDone": "% Hoàn thành",
+    "teamLead": "Team lead",
     "noImage": "Không có hình ảnh"
   },
   "actions": {

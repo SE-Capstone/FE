@@ -17,11 +17,12 @@ export interface UpsertMembersWidgetProps {
   projectId: string;
   defaultUserValue: string[];
   defaultUsersOption: IOptionUserSelect[];
+  ignoreUserId?: string[];
 }
 
 export function UpsertMembersWidget(props: UpsertMembersWidgetProps) {
   const { t } = useTranslation();
-  const { children, defaultUserValue, defaultUsersOption, projectId } = props;
+  const { children, defaultUserValue, defaultUsersOption, ignoreUserId, projectId } = props;
 
   const { data, formUpsertMembers, handleUpsertMembers, isLoading, reset } = useUpsertMembersHook();
   const [selectedOptions, setSelectedOptions] = useState<IOptionUserSelect[]>(defaultUsersOption);
@@ -102,6 +103,7 @@ export function UpsertMembersWidget(props: UpsertMembersWidgetProps) {
             <UsersAsyncSelect
               isMulti
               defaultUserValue={defaultUserValue}
+              ignoreUserIds={ignoreUserId}
               defaultValue={selectedOptions}
               onChange={(options) => {
                 usersChecked.current = options.map((opt) => opt.value as string).filter(Boolean);

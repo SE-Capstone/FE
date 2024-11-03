@@ -1,15 +1,21 @@
-import { Button, Stack } from '@chakra-ui/react';
+import { useMemo, useState } from 'react';
+
+import { Button, Stack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { useCreateIssueHook } from '../hooks/mutations';
+
+import type { IOptionUserSelect } from '@/modules/projects/detail-project/components/users-async-select';
 
 import {
   CustomChakraReactSelect,
   CustomFormProvider,
   CustomInput,
+  CustomOptionComponentChakraReactSelect,
   ModalBase,
 } from '@/components/elements';
 import { useProjectContext } from '@/contexts/project/project-context';
+import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 
 export interface AddNewIssueWidgetProps {
@@ -18,10 +24,11 @@ export interface AddNewIssueWidgetProps {
 
 export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
   const { t } = useTranslation();
+  const { currentUser } = useAuthentication();
   const { children } = props;
   const { members, projectId } = useProjectContext();
-
   const { data, formCreateIssue, handleCreateIssue, isLoading, reset } = useCreateIssueHook();
+  const [value, setValue] = useState<IOptionUserSelect>();
 
   const { listStatus, isLoading: isLoading2 } = useGetListStatusQuery({
     params: {
@@ -29,11 +36,39 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
     },
   });
 
+  const customComponents = useMemo(
+    () => ({
+      Option: CustomOptionComponentChakraReactSelect,
+    }),
+    []
+  );
+
   const {
     register,
     control,
     formState: { errors },
+    setValue: setFieldValue,
   } = formCreateIssue;
+
+  const handleAssigneeChange = (option) => {
+    setValue({
+      label: option?.label || '',
+      value: option?.value || '',
+      image: option?.image || '',
+    });
+    setFieldValue('assigneeId', option?.value || '');
+  };
+
+  const assignToMe = () => {
+    const selectedOption = {
+      label: currentUser?.userName || '',
+      value: currentUser?.id || '',
+      image: currentUser?.avatar || '',
+    };
+
+    setValue(selectedOption);
+    handleAssigneeChange(selectedOption);
+  };
 
   return (
     <ModalBase
@@ -92,13 +127,32 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
             placeholder={`${t('common.choose')} ${t('fields.assignee').toLowerCase()}`}
             label={t('fields.assignee')}
             size="lg"
+            components={customComponents}
             options={members.map((user) => ({
-              label: `${user.userName}`,
+              label: user.userName,
               value: user.id,
+              image: user.avatar || '',
             }))}
             control={control}
             name="assigneeId"
+            setValue={value}
+            onChange={(option) => {
+              handleAssigneeChange(option);
+            }}
           />
+          <Text
+            as="button"
+            color="indicator.500"
+            mt={-4}
+            _hover={{
+              textDecoration: 'underline',
+            }}
+            display="inline-block"
+            textAlign="left"
+            onClick={assignToMe}
+          >
+            {t('common.assignToMe')}
+          </Text>
         </Stack>
       </CustomFormProvider>
     </ModalBase>

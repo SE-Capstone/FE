@@ -134,8 +134,8 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
           </SimpleGrid>
           <CustomChakraReactSelect
             isSearchable
-            placeholder={`${t('common.choose')} team lead`}
-            label="Team lead"
+            placeholder={`${t('common.choose')} ${t('fields.teamLead').toLowerCase()}`}
+            label={t('fields.teamLead')}
             size="lg"
             options={teamLeads.map((user) => ({
               label: `${user.fullName} (${user.userName})`,

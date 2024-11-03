@@ -33,6 +33,7 @@ export function UsersAsyncSelect<TFormValues extends FieldValues, IsMulti extend
   props: UsersAsyncSelectProps<TFormValues, IsMulti>
 ) {
   const { t } = useTranslation();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { defaultUserValue, ignoreUserIds, ...propsSelect } = props;
 
   const [inputValue, setInputValue] = useDebounce('');
@@ -53,13 +54,14 @@ export function UsersAsyncSelect<TFormValues extends FieldValues, IsMulti extend
   const options = listUser
     .filter((user) => !ignoreUserIds?.includes(user.id))
     ?.map((user) => {
-      const isDisabled = defaultUserValue?.includes(user.id);
+      // Turn on if you want to disable the option
+      // const isDisabled = defaultUserValue?.includes(user.id);
       const avatar = user.avatar ? getStorageUrl(user.avatar) : '';
       return {
         value: user.id,
         label: user.fullName,
         image: avatar,
-        isDisabled,
+        // isDisabled,
       };
     });
 

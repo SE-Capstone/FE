@@ -30,23 +30,24 @@ export function getListSkillRequest(req: IGetListSkillRequest) {
 interface UseGetListSkillQueryProps {
   configs?: QueryConfig<typeof getListSkillRequest>;
   params?: DeepPartial<QueryListSkillInput>;
+  size?: number;
 }
 
 export function useGetListSkillQuery(props: UseGetListSkillQueryProps = {}) {
   const { pageIndex, pageSize, setPaginate } = usePaginateReq();
-  const { configs, params } = props;
+  const { configs, params, size } = props;
 
   const currentParams = useMemo(
     () =>
       merge(
         {
           pageIndex,
-          pageSize,
+          pageSize: size || pageSize,
           orderBy: 'createdAt',
         },
         params
       ),
-    [pageIndex, pageSize, params]
+    [pageIndex, pageSize, params, size]
   );
 
   const queryKey = useMemo(

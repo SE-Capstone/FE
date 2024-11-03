@@ -23,8 +23,8 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
     project?.members?.map((member) =>
       tempDefaultUsers.push({
         value: member.id,
-        label: `${member.fullName} (${member.userName})`,
-        image: '',
+        label: member.userName,
+        image: member.avatar || '',
       })
     );
     if (project?.leadId) {
@@ -69,6 +69,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           <UpsertMembersWidget
             defaultUserValue={Array.from(initialMembers)}
             defaultUsersOption={defaultUsersOption}
+            ignoreUserId={[project?.leadId || '']}
             projectId={project?.id || ''}
           >
             <IconButton

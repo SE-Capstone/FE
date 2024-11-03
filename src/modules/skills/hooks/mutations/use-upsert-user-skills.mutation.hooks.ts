@@ -42,9 +42,6 @@ export function useUpsertUserSkillsHook({ userId }: { userId: string }) {
         values.newUserSkills
       );
 
-      console.log('addedItems: ', addedItems);
-      console.log('removedItems: ', removedItems);
-
       if (addedItems.length === 0 && removedItems.length === 0) {
         notify({
           type: 'error',

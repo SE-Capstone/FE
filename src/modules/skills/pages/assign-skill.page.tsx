@@ -12,7 +12,9 @@ import { Head, StateHandler } from '@/components/elements';
 export function AssignSkillPage() {
   const { t } = useTranslation();
 
-  const { listSkill, isError, isLoading, isRefetching } = useGetListSkillQuery();
+  const { listSkill, isError, isLoading, isRefetching } = useGetListSkillQuery({
+    size: 1000000,
+  });
 
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 

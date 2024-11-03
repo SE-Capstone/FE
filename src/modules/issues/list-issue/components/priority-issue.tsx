@@ -12,17 +12,17 @@ interface PriorityIssueProps {
 const PriorityIcon = (priority: IssuePriorityEnum) => {
   switch (priority) {
     case IssuePriorityEnum.Highest:
-      return <FaAnglesUp color="red" />;
+      return <FaAnglesUp color="#E65D3E" />;
     case IssuePriorityEnum.High:
-      return <FaAngleUp color="red" />;
+      return <FaAngleUp color="#fc5630" />;
     case IssuePriorityEnum.Medium:
       return <FaEquals color="orange" />;
     case IssuePriorityEnum.Low:
-      return <FaAngleDown color="primary" />;
+      return <FaAngleDown color="#0065ff" />;
     case IssuePriorityEnum.Lowest:
-      return <FaAnglesDown color="primary" />;
+      return <FaAnglesDown color="#146BE8" />;
     default:
-      return <FaEquals color="primary" />;
+      return <FaEquals color="orange" />;
   }
 };
 

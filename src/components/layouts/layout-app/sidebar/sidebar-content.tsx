@@ -207,7 +207,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
                     }
                     rootStyles={{
                       [`& > div`]: {
-                        width: 'fit-content',
+                        width: 'auto',
                         '&:hover': {
                           transition: 'ease 0.3s',
                         },

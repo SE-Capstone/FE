@@ -1,6 +1,5 @@
 import type { IStatus } from '@/modules/statuses/types';
 import type { IBaseEntity } from '@/types';
-import type { ThemingProps } from '@chakra-ui/react';
 
 export enum IssueStatusEnum {
   Pending = 1,
@@ -23,6 +22,15 @@ export type QueryListIssueInput = {
   priority?: IssuePriorityEnum;
 };
 
+interface IUpdatedBy {
+  id: string;
+  fullName: string;
+  userName: string;
+  roleName: string;
+  positionName: string;
+  avatar: string;
+}
+
 export type IIssue = IBaseEntity & {
   projectId: string;
   label?: string;
@@ -33,10 +41,10 @@ export type IIssue = IBaseEntity & {
   dueDate?: string;
   status: IStatus;
   priority: IssuePriorityEnum;
-  lastUpdatedBy?: string;
+  lastUpdatedBy?: IUpdatedBy;
+  reporter?: IUpdatedBy;
+  assignee?: IUpdatedBy;
   percentage: number;
-  assigneeId?: string;
-  assigneeName?: string;
   assigneeAvatar?: string;
   estimatedTime?: number;
 };

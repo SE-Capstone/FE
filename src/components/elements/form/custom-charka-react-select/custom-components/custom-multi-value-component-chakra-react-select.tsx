@@ -13,8 +13,12 @@ export function CustomMultiValueComponentChakraReactSelect<
 
   return (
     <chakraComponents.MultiValue {...props}>
-      <HStack w="full" role="group">
-        {data.image ? <Avatar src={data.image} boxSize={6} /> : null}
+      <HStack w="full" role="group" p={1}>
+        <Avatar
+          src={data.image}
+          boxSize={6}
+          name={(data.label as string).replace(/[^a-zA-Z ]/g, '')}
+        />
         {children}
         <Text color="inherit">{data.label}</Text>
       </HStack>

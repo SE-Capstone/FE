@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Button, Container, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { UpsertProjectWidget } from '../../list-project/widgets';
 import { useGetDetailProject } from '../apis/detail-project.api';

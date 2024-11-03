@@ -34,11 +34,11 @@ export function BaseInformationProjectWidget({
       label: t('fields.description'),
       text: project?.description || '',
     },
-    permissions[PermissionEnum.GET_ALL_PROJECT] && {
+    permissions[PermissionEnum.READ_LIST_PROJECT] && {
       label: t('fields.status'),
       text: <BadgeStatus status={project?.status as ProjectStatusEnum} />,
     },
-    permissions[PermissionEnum.GET_ALL_PROJECT] && {
+    permissions[PermissionEnum.READ_LIST_PROJECT] && {
       label: t('fields.visible'),
       text: (
         <ChangeStatus

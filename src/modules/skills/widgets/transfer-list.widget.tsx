@@ -52,28 +52,24 @@ export default function TransferListWidget({
     userId: userId || '',
   });
 
-  const { listSkill, isLoading: isLoadingUserSkills } = useGetListUserSkills({
+  const { listSkill: userSkill, isLoading: isLoadingUserSkills } = useGetListUserSkills({
     userId: userId || '',
   });
 
-  // useEffect(() => {
-  //   if (userId) {
-  //     setOldSkills(listSkill);
-  //     setRightItems(listSkill);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [listSkill]);
+  useEffect(() => {
+    setOldSkills(userSkill);
+    setRightItems(userSkill);
+  }, [userSkill]);
 
   useEffect(() => {
-    if (userId) {
+    if (userId && !isLoadingUserSkills && !isLoading) {
       const o = new Set(oldSkills.map((item) => item.id));
       setLeftItems(skills.filter((item) => !o.has(item.id)));
-      setOldSkills(listSkill);
-      setRightItems(listSkill);
+    } else {
+      setLeftItems(skills);
     }
-    console.log('listSkill', oldSkills);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, skills, listSkill]);
+  }, [userId, skills, oldSkills]);
 
   const handleToggle = (setChecked, checked, item) => {
     const updatedChecked = checked.includes(item)

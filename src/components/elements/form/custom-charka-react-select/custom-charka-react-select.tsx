@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { MayBeController } from '../types';
 import type { FieldWrapperProps } from '@/components/elements';
+import type { IOptionUserSelect } from '@/modules/projects/detail-project/components/users-async-select';
 import type {
   Props as ChakraSelectProps,
   ChakraStylesConfig,
@@ -42,6 +43,8 @@ export type CustomChakraReactSelectProps<
   Omit<FieldWrapperProps, 'error'> &
   MayBeController<TFormValues> & {
     onChangeLabel?: (value: string[]) => void;
+  } & {
+    setValue?: IOptionUserSelect;
   };
 
 export const CustomChakraReactSelect = <
@@ -62,6 +65,7 @@ export const CustomChakraReactSelect = <
     isMulti,
     components,
     chakraStyles,
+    setValue,
     onChangeLabel,
     ...selectProps
   } = props;
@@ -207,9 +211,11 @@ export const CustomChakraReactSelect = <
             ? selectProps.options?.filter(
                 (option) => 'value' in option && field.value.includes(option.value)
               )
-            : selectProps.options?.find(
+            : setValue ||
+              (selectProps.options?.find(
                 (option) => 'value' in option && option.value === field.value
-              ) ?? null;
+              ) ??
+                null);
 
         const propsWithController = {
           ref: field.ref,
@@ -232,9 +238,15 @@ export const CustomChakraReactSelect = <
 
             const singleOption = option as SingleValue<TOption>;
 
-            field.onChange(singleOption?.value ?? (undefined as any));
+            field.onChange(setValue ? setValue.value : singleOption?.value ?? (undefined as any));
 
-            onChangeLabel?.([typeof singleOption?.label === 'string' ? singleOption.label : '']);
+            onChangeLabel?.([
+              setValue
+                ? (setValue.label as string)
+                : typeof singleOption?.label === 'string'
+                ? singleOption.label
+                : '',
+            ]);
           },
         };
         return (
