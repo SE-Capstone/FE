@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Button, Container, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import RichTextEditor from 'reactjs-tiptap-editor';
 
 import { useGetDetailIssue } from '../apis/detail-issue.api';
 import { useUpsertIssueHook } from '../hooks/mutations';
+import { useEditorState } from '../hooks/use-editor-state';
 
 import type { IOptionUserSelect } from '@/modules/projects/detail-project/components/users-async-select';
 import type { ProjectMember } from '@/modules/projects/list-project/types';
@@ -32,14 +33,11 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
   const { projectId, issueId } = useParams();
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [value, setValue] = useState<IOptionUserSelect>();
+  const { editor, editorRef } = useEditorState();
+
   const [content, setContent] = useState('');
 
-  const contentRef = useRef(content);
-
-  const { formUpsertIssue, handleUpsertIssue, isLoading } = useUpsertIssueHook(
-    contentRef.current,
-    isUpdate
-  );
+  const { formUpsertIssue, handleUpsertIssue, isLoading } = useUpsertIssueHook(editor, isUpdate);
 
   const {
     register,
@@ -48,12 +46,6 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
     setValue: setFieldValue,
     reset: resetForm,
   } = formUpsertIssue;
-
-  useEffect(() => {
-    contentRef.current = content;
-    setFieldValue('description', contentRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [content]);
 
   const onChangeContent = (value: any) => {
     setContent(value);
@@ -134,8 +126,14 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
         }
       );
 
-      setContent(issue.description || '');
+      Promise.resolve().then(() => {
+        if (editor) {
+          editor.commands.setContent(issue.description || '');
+        }
+        setContent(issue.description || '');
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [issue, resetForm]);
 
   useEffect(() => {
@@ -286,6 +284,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
 
             <Text mb={-2}>{t('fields.description')}</Text>
             <RichTextEditor
+              ref={editorRef}
               dark={false}
               label={t('fields.description')}
               output="html"

@@ -1,5 +1,6 @@
 import { Box, Button, Grid, GridItem, HStack, Spacer } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { AddNewIssueWidget } from './add-new-issue.widget';
 import { useIssuesQueryFilterStateContext } from '../contexts';
@@ -77,6 +78,7 @@ export function ActionTableIssuesWidget({ listLabel }: { listLabel: ILabel[] }) 
         <AddNewIssueWidget>
           <Button leftIcon={<>+</>}>{t('common.create')}</Button>
         </AddNewIssueWidget>
+        <Link to="issues/create">{t('common.create')}</Link>
       </HStack>
     </Box>
   );

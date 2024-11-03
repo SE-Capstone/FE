@@ -7,11 +7,12 @@ import { useUpsertIssueMutation } from '../../apis/upsert-issue.api';
 import { issueFormSchema } from '../../validations/issues.validations';
 
 import type { IssueFormValues } from '../../validations/issues.validations';
+import type { Editor } from '@tiptap/core';
 
 import { formatDate } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
-export function useUpsertIssueHook(content?: string, isUpdate?: boolean, id?: string) {
+export function useUpsertIssueHook(editor?: Editor | null, isUpdate?: boolean, id?: string) {
   const { t } = useTranslation();
   const { projectId, issueId } = useParams();
   const formUpsertIssue = useFormWithSchema({
@@ -34,11 +35,12 @@ export function useUpsertIssueHook(content?: string, isUpdate?: boolean, id?: st
         await mutate({
           body: {
             ...values,
-            description: content,
+            description: editor?.getHTML(),
             projectId: projectId || '',
             labelId: values.labelId,
             statusId: values.statusId || '',
             assigneeId: values.assigneeId,
+            estimatedTime: values.estimatedTime || undefined,
             startDate: values.startDate
               ? formatDate({
                   date: values.startDate,
@@ -55,7 +57,7 @@ export function useUpsertIssueHook(content?: string, isUpdate?: boolean, id?: st
         });
       } catch (error) {}
     },
-    [isLoading, mutate, projectId, content]
+    [editor, isLoading, mutate, projectId]
   );
 
   return {
