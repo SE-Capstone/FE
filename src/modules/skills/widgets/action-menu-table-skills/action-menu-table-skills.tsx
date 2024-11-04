@@ -31,6 +31,7 @@ export function ActionMenuTableSkills({ skill }: ActionMenuTableSkillsProps) {
       },
     },
     {
+      type: 'danger',
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => handleRemoveSkill(skill),

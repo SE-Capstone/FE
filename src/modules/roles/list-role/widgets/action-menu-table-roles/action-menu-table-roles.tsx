@@ -34,6 +34,7 @@ export function ActionMenuTableRoles({ role }: ActionMenuTableRolesProps) {
     },
     // Todo: fix
     permissions[PermissionEnum.ADD_ROLE] && {
+      type: 'danger',
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {

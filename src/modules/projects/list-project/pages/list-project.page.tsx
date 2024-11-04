@@ -60,23 +60,25 @@ export function ListProjectPage() {
             onPageChange={handlePaginate}
           >
             {(project) => (
-              <>
-                <Heading as="h2" color="primary" size="md" noOfLines={2}>
-                  <Flex>
-                    <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-                      <CustomLink
-                        to={pathname.includes(APP_PATHS.listProject) ? String(project.id) : '#'}
-                        onClick={() => localStorage.setItem('activeTabIndex', '0')}
-                      >
-                        {project.name || ''}
-                      </CustomLink>
+              <Flex flexDirection="column" gap={0} justifyContent="space-between" h="full">
+                <Box>
+                  <Heading as="h2" color="primary" size="md" noOfLines={2}>
+                    <Flex>
+                      <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+                        <CustomLink
+                          to={pathname.includes(APP_PATHS.listProject) ? String(project.id) : '#'}
+                          onClick={() => localStorage.setItem('activeTabIndex', '0')}
+                        >
+                          {project.name || ''}
+                        </CustomLink>
+                      </Flex>
+                      <ActionMenuTableProjects project={project} teamLeads={teamLeads} />
                     </Flex>
-                    <ActionMenuTableProjects project={project} teamLeads={teamLeads} />
-                  </Flex>
-                </Heading>
-                <Text mt={1} fontSize="12px" noOfLines={3}>
-                  {project.description}
-                </Text>
+                  </Heading>
+                  <Text mt={1} fontSize="12px" noOfLines={3}>
+                    {project.description}
+                  </Text>
+                </Box>
 
                 <Box mt={5} fontSize="12px" noOfLines={2}>
                   {permissions[PermissionEnum.READ_LIST_PROJECT] && (
@@ -85,15 +87,15 @@ export function ListProjectPage() {
                         Visible:
                       </Text>
                       {project.isVisible ? (
-                        <MdCheck size="12px" color="green" />
+                        <MdCheck size="15px" color="green" />
                       ) : (
-                        <MdClose size="12px" color="red" />
+                        <MdClose size="13px" color="red" />
                       )}
                     </Flex>
                   )}
-                  <Text fontSize="14px">Code: {project.code}</Text>
+                  <Text fontSize="13px">Code: {project.code}</Text>
                 </Box>
-              </>
+              </Flex>
             )}
           </CardComponent>
         </StateHandler>

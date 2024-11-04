@@ -39,6 +39,7 @@ export function ActionMenuTablePhases({ phase }: ActionMenuTablePhasesProps) {
     !isDone &&
       !isRunning &&
       permissions[PermissionEnum.DELETE_PHASE] && {
+        type: 'danger',
         label: t('actions.delete'),
         icon: <Icon as={BiTrash} boxSize={5} />,
         onClick: () => handleRemovePhase(phase),

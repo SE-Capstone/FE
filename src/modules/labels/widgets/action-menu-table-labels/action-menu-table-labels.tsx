@@ -2,6 +2,7 @@ import { Icon, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
 import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
+import { useLocation } from 'react-router-dom';
 
 import { useRemoveLabelHook } from '../../hooks/mutations/use-remove-label.hooks';
 import { RemoveLabelWidget } from '../remove-label.widget';
@@ -21,16 +22,22 @@ interface ActionMenuTableLabelsProps {
 
 export function ActionMenuTableLabels({ label, listLabel, isDefault }: ActionMenuTableLabelsProps) {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
   const { permissions } = useAuthentication();
   const disclosureModal = useDisclosure();
   const disclosureModalRemoveLabel = useDisclosure();
   const { handleRemoveLabel } = useRemoveLabelHook(isDefault);
+
   const canUpdate =
-    permissions[PermissionEnum.UPDATE_LABEL] ||
-    (isDefault && permissions[PermissionEnum.UPDATE_DEFAULT_LABEL]);
+    (permissions[PermissionEnum.UPDATE_LABEL] && pathname.includes('projects')) ||
+    (isDefault &&
+      permissions[PermissionEnum.UPDATE_DEFAULT_LABEL] &&
+      pathname.includes('settings'));
   const canDelete =
-    permissions[PermissionEnum.DELETE_LABEL] ||
-    (isDefault && permissions[PermissionEnum.DELETE_DEFAULT_LABEL]);
+    (permissions[PermissionEnum.DELETE_LABEL] && pathname.includes('projects')) ||
+    (isDefault &&
+      permissions[PermissionEnum.DELETE_DEFAULT_LABEL] &&
+      pathname.includes('settings'));
 
   if (!label || !label.id) return null;
 
@@ -45,6 +52,7 @@ export function ActionMenuTableLabels({ label, listLabel, isDefault }: ActionMen
       },
     },
     canDelete && {
+      type: 'danger',
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () =>

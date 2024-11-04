@@ -7,6 +7,7 @@ export interface IActionMenuItems {
   icon?: React.ReactElement;
   onClick?: () => void;
   menuItemProps?: MenuItemProps;
+  type?: 'warning' | 'danger' | string;
 }
 
 export interface ActionMenuTableProps extends Omit<MenuProps, 'children'> {
@@ -51,18 +52,18 @@ export function ActionMenuTable({
               spacing={0}
               divider={<StackDivider borderColor="gray.200" />}
             >
-              {actionMenuItems.map(({ label, icon, onClick, menuItemProps }, index) => (
+              {actionMenuItems.map(({ label, icon, onClick, menuItemProps, type }, index) => (
                 <MenuItem
                   key={label?.toString() + index.toString()}
                   isDisabled={menuItemProps?.isDisabled}
                   icon={icon}
-                  color="textColor"
+                  color={type === 'danger' ? 'textColorDanger' : 'textColor'}
                   fontWeight={500}
                   fontSize="14px"
                   px={4}
                   py={3}
                   _hover={{
-                    color: 'primary',
+                    color: type === 'danger' ? 'indicator.400' : 'primary',
                     bg: 'gray.50',
                   }}
                   onClick={onClick}

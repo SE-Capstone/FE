@@ -68,6 +68,8 @@ export default function TransferListWidget({
     } else {
       setLeftItems(skills);
     }
+    setLeftChecked([]);
+    setRightChecked([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, skills, oldSkills]);
 
@@ -121,6 +123,7 @@ export default function TransferListWidget({
         maxH="32px"
         bg="white"
         h="32px"
+        borderColor="gray.300"
         rightIcon={
           <Box h="32px">
             {searchTerm ? (

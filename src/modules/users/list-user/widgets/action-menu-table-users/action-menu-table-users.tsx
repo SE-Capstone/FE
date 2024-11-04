@@ -45,6 +45,7 @@ export function ActionMenuTableUsers({ user }: ActionMenuTableUsersProps) {
       onClick: () => navigate(`/users/${user.id}`),
     },
     {
+      type: user.status === UserStatusEnum.Active ? 'danger' : '',
       label: user.status === UserStatusEnum.Active ? t('actions.inactive') : t('actions.active'),
       icon: (
         <Icon
@@ -58,7 +59,7 @@ export function ActionMenuTableUsers({ user }: ActionMenuTableUsersProps) {
             user.status === UserStatusEnum.Active
               ? `${t('actions.inactive')} ${t('common.user').toLowerCase()}`
               : `${t('actions.active')} ${t('common.user').toLowerCase()}`,
-          type: 'warning',
+          type: user.status === UserStatusEnum.Active ? 'error' : 'warning',
           textConfirm:
             user.status === UserStatusEnum.Active ? t('actions.inactive') : t('actions.active'),
           description:

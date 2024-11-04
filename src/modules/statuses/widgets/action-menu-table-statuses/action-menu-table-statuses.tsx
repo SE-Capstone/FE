@@ -2,6 +2,7 @@ import { Icon, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
 import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
+import { useLocation } from 'react-router-dom';
 
 import { useRemoveStatusHook } from '../../hooks/mutations/use-remove-status.hooks';
 import { RemoveStatusWidget } from '../remove-status.widget';
@@ -25,16 +26,21 @@ export function ActionMenuTableStatuses({
   isDefault,
 }: ActionMenuTableStatusesProps) {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
   const { permissions } = useAuthentication();
   const disclosureModal = useDisclosure();
   const disclosureModalRemoveStatus = useDisclosure();
   const { handleRemoveStatus } = useRemoveStatusHook(isDefault);
   const canUpdate =
-    permissions[PermissionEnum.UPDATE_STATUS] ||
-    (isDefault && permissions[PermissionEnum.UPDATE_DEFAULT_STATUS]);
+    (permissions[PermissionEnum.UPDATE_STATUS] && pathname.includes('projects')) ||
+    (isDefault &&
+      permissions[PermissionEnum.UPDATE_DEFAULT_STATUS] &&
+      pathname.includes('settings'));
   const canDelete =
-    permissions[PermissionEnum.DELETE_STATUS] ||
-    (isDefault && permissions[PermissionEnum.DELETE_DEFAULT_STATUS]);
+    (permissions[PermissionEnum.DELETE_STATUS] && pathname.includes('projects')) ||
+    (isDefault &&
+      permissions[PermissionEnum.DELETE_DEFAULT_STATUS] &&
+      pathname.includes('settings'));
 
   if (!status || !status.id) return null;
 
@@ -49,6 +55,7 @@ export function ActionMenuTableStatuses({
       },
     },
     canDelete && {
+      type: 'danger',
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
       onClick: () => {

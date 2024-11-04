@@ -56,6 +56,7 @@ export function ActionMenuTableProjects({ project, teamLeads }: ActionMenuTableP
       },
     },
     permissions[PermissionEnum.TOGGLE_VISIBLE_PROJECT] && {
+      type: project.isVisible ? 'warning' : 'danger',
       label: project.isVisible ? t('actions.archive') : t('actions.unarchive'),
       icon: <Icon as={project.isVisible ? HiArchiveBox : HiArchiveBoxXMark} boxSize={5} />,
       onClick: () => {
@@ -63,7 +64,7 @@ export function ActionMenuTableProjects({ project, teamLeads }: ActionMenuTableP
           title: project.isVisible
             ? `${t('actions.archive')} ${t('common.project').toLowerCase()}`
             : `${t('actions.unarchive')} ${t('common.project').toLowerCase()}`,
-          type: 'warning',
+          type: project.isVisible ? 'warning' : 'error',
           textConfirm: project.isVisible ? t('actions.archive') : t('actions.unarchive'),
           description: project.isVisible
             ? t('actions.archiveProject')

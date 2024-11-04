@@ -85,6 +85,7 @@ export function UsersAsyncTable({ onUserSelect }: UsersAsyncTableProps) {
       <Heading size="md">{t('common.users')}</Heading>
       <SearchInput
         bg="white"
+        borderColor="gray.300"
         placeholder={`${t('common.enter')} ${t('fields.fullName').toLowerCase()}...`}
         initValue=""
         onHandleSearch={(keyword) => {
@@ -129,7 +130,7 @@ export function UsersAsyncTable({ onUserSelect }: UsersAsyncTableProps) {
                     <Th
                       color="#8E96AF"
                       fontWeight={600}
-                      fontSize="md"
+                      fontSize="sm"
                       py={2}
                       lineHeight="21px"
                       textTransform="capitalize"
@@ -140,7 +141,7 @@ export function UsersAsyncTable({ onUserSelect }: UsersAsyncTableProps) {
                     <Th
                       color="#8E96AF"
                       fontWeight={600}
-                      fontSize="md"
+                      fontSize="sm"
                       py={2}
                       lineHeight="21px"
                       textTransform="capitalize"
@@ -150,7 +151,7 @@ export function UsersAsyncTable({ onUserSelect }: UsersAsyncTableProps) {
                     <Th
                       color="#8E96AF"
                       fontWeight={600}
-                      fontSize="md"
+                      fontSize="sm"
                       py={2}
                       lineHeight="21px"
                       textTransform="capitalize"
@@ -175,7 +176,6 @@ export function UsersAsyncTable({ onUserSelect }: UsersAsyncTableProps) {
                               type="radio"
                               borderColor="gray.300"
                               isChecked={selectedUserId === user.id}
-                              onChange={() => handleUserSelect(user.id)}
                             />
                           </Td>
                           <Td
@@ -214,6 +214,8 @@ export function UsersAsyncTable({ onUserSelect }: UsersAsyncTableProps) {
                           _hover={{
                             bgColor: 'gray.50',
                           }}
+                          cursor="pointer"
+                          onClick={() => handleUserSelect(user.id)}
                         >
                           {tdContent}
                         </Tr>

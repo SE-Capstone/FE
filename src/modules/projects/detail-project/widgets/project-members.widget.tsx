@@ -93,9 +93,11 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
       </Stack>
       {hasMembers ? (
         <Stack>
-          <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
-            {project?.leadName} (Leader)
-          </Text>
+          {project?.leadId && (
+            <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
+              {project?.leadName} (Leader)
+            </Text>
+          )}
           {project?.members.map((member, index) => (
             <Text key={index} wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
               {member.userName} ({member.positionName})

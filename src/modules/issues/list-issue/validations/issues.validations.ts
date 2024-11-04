@@ -1,3 +1,4 @@
+import { isNaN } from 'lodash-es';
 import { z } from 'zod';
 
 import { IssuePriorityEnum } from '../types';
@@ -24,13 +25,16 @@ export const issueFormSchema = (t: any) =>
     parentIssueId: z.string().trim().uuid().optional(),
     percentage: z
       .preprocess(
-        (arg) => Number(arg),
+        (val) => {
+          const numberValue = Number(val);
+          return isNaN(numberValue) ? undefined : numberValue;
+        },
         z
           .number({ message: t('validation.issue.percentageInteger') })
           .int({ message: t('validation.issue.percentageInteger') })
           .min(0, { message: t('validation.issue.percentageMin') })
           .max(100, { message: t('validation.issue.percentageMax') })
-          // .default(0)
+          .default(0)
           .optional()
       )
       .optional(),
@@ -43,7 +47,10 @@ export const issueFormSchema = (t: any) =>
       .uuid({ message: t('validation.fieldRequired') })
       .optional(),
     estimatedTime: z.preprocess(
-      (arg) => Number(arg),
+      (val) => {
+        const numberValue = Number(val);
+        return isNaN(numberValue) ? undefined : numberValue;
+      },
       z
         .number({ message: t('validation.issue.percentageInteger') })
         .min(0, { message: t('validation.issue.estimatedTimeMin') })

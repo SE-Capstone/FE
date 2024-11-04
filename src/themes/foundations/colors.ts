@@ -5,6 +5,7 @@ const colors = {
   white: '#fff',
   black: '#000',
   textColor: '#464649',
+  textColorDanger: '#fc5630',
   spectrum:
     'conic-gradient(from -90deg at 162.5% 100%, #536EFB 0deg, #2FB1FF 34.2deg, #4EEED3 69.01deg, #F7C850 112.33deg, #EE6C5A 142.6deg, #F12453 179.22deg, #EE6C5A 217.5deg, #F7C850 247.5deg, #4EEED3 286.87deg, #2FB1FF 324.38deg, #536EFB 360deg)',
   neutral: {
