@@ -1,5 +1,6 @@
 {
   "common": {
+    "me": "Me",
     "assignToMe": "Assign to me",
     "assignSkill": "Assign skill",
     "selectedSkill": "Selected skill",

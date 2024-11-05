@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Progress } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { BadgeIssue } from '../components/badge-issue';
+import InlineEditWithIcon from '../components/inline-edit-field-with-icon';
 import { PriorityIssue } from '../components/priority-issue';
 import { useIssuesQueryFilterStateContext } from '../contexts';
 import { useGetListIssueQuery } from '../hooks/queries';
@@ -13,8 +14,12 @@ import { InlineEditCustomSelect } from '../widgets/editable-dropdown.widget';
 
 import type { IIssue } from '../types';
 import type { ColumnsProps } from '@/components/elements';
+import type { ILabel } from '@/modules/labels/types';
+import type { IStatus } from '@/modules/statuses/types';
 
-import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
+import { Head, StateHandler, TableComponent } from '@/components/elements';
+import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { formatDate } from '@/libs/helpers';
 import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
@@ -22,6 +27,9 @@ import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 export function ListIssuePage() {
   const { projectId } = useParams();
   const { t } = useTranslation();
+  const { members } = useProjectContext();
+  const [labels, setLabels] = useState<ILabel[]>([]);
+  const [statuses, setStatuses] = useState<IStatus[]>([]);
   const { issuesQueryState, resetIssuesQueryState } = useIssuesQueryFilterStateContext();
 
   const { listIssue, meta, isError, isLoading, handlePaginate, isRefetching } =
@@ -50,6 +58,20 @@ export function ListIssuePage() {
     },
   });
 
+  useEffect(() => {
+    if (listLabel && JSON.stringify(listLabel) !== JSON.stringify(labels)) {
+      setLabels(listLabel);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listLabel]);
+
+  useEffect(() => {
+    if (listStatus && JSON.stringify(listStatus) !== JSON.stringify(statuses)) {
+      setStatuses(listStatus);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listStatus]);
+
   const columns = useMemo<ColumnsProps<IIssue>>(
     () => [
       {
@@ -72,7 +94,7 @@ export function ListIssuePage() {
               const { status } = issue;
               return (
                 <InlineEditCustomSelect
-                  options={listStatus.map((s) => ({ label: s.name, value: s.id }))}
+                  options={statuses.map((s) => ({ label: s.name, value: s.id }))}
                   defaultValue={{
                     label: status.name,
                     value: status.id,
@@ -87,8 +109,22 @@ export function ListIssuePage() {
             key: 'priority',
             title: t('fields.priority'),
             hasSort: false,
-            Cell({ priority }) {
-              return <PriorityIssue priority={priority} />;
+            Cell(issue) {
+              const { priority } = issue;
+              return (
+                <InlineEditCustomSelect
+                  options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
+                    label: <PriorityIssue priority={value} />,
+                    value,
+                  }))}
+                  defaultValue={{
+                    label: <PriorityIssue priority={priority} />,
+                    value: priority,
+                  }}
+                  field="priority"
+                  issue={issue}
+                />
+              );
             },
           },
           {
@@ -96,27 +132,52 @@ export function ListIssuePage() {
             title: t('fields.title'),
             hasSort: false,
             Cell({ title, id }) {
-              return (
-                <CustomLink to={String(id)} noOfLines={1}>
-                  {title}
-                </CustomLink>
-              );
+              return <InlineEditWithIcon id={id} initialValue={title} />;
             },
           },
           {
             key: 'assigneeId',
             title: t('fields.assignee'),
             hasSort: false,
-            Cell({ assignee }) {
-              return <>{assignee?.userName || ''}</>;
+            Cell(issue) {
+              const { assignee } = issue;
+              return (
+                <InlineEditCustomSelect
+                  options={members.map((member) => ({
+                    label: member.userName,
+                    value: member.id,
+                  }))}
+                  defaultValue={
+                    assignee && {
+                      label: assignee.userName,
+                      value: assignee.id,
+                    }
+                  }
+                  field="priority"
+                  issue={issue}
+                />
+              );
             },
           },
           {
             key: 'label',
             title: t('common.label'),
             hasSort: false,
-            Cell({ label }) {
-              return <>{label?.title}</>;
+            Cell(issue) {
+              const { label } = issue;
+              return (
+                <InlineEditCustomSelect
+                  options={labels.map((s) => ({ label: s.title, value: s.id }))}
+                  defaultValue={
+                    label && {
+                      label: label.title,
+                      value: label.id,
+                    }
+                  }
+                  field="label"
+                  issue={issue}
+                />
+              );
             },
           },
           {
@@ -154,7 +215,7 @@ export function ListIssuePage() {
         ],
       },
     ],
-    [listStatus, t]
+    [labels, members, statuses, t]
   );
 
   return (
@@ -165,7 +226,7 @@ export function ListIssuePage() {
         showError={!!isError || !!isError2 || !!isError3}
         retryHandler={resetIssuesQueryState}
       >
-        <ActionTableIssuesWidget listLabel={listLabel} />
+        <ActionTableIssuesWidget listLabel={labels} />
         <TableComponent
           currentPage={meta.pageIndex}
           perPage={meta.pageSize}

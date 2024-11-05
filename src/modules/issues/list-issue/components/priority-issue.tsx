@@ -1,4 +1,5 @@
-import { Stack } from '@chakra-ui/react';
+import { Stack, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { FaAnglesUp, FaAngleUp, FaAnglesDown, FaAngleDown, FaEquals } from 'react-icons/fa6';
 
 import { IssuePriorityEnum } from '../types';
@@ -28,11 +29,12 @@ const PriorityIcon = (priority: IssuePriorityEnum) => {
 
 export function PriorityIssue(props: PriorityIssueProps) {
   const { priority } = props;
+  const { t } = useTranslation();
 
   return (
-    <Stack flexDir="row" gap={1}>
+    <Stack flexDir="row" gap={2} alignItems="center">
       {PriorityIcon(priority)}
-      {ISSUE_PRIORITY_VALUES[priority]}
+      <Text>{ISSUE_PRIORITY_VALUES(t)[priority]}</Text>
     </Stack>
   );
 }

@@ -108,26 +108,11 @@ export const ROLES_LABEL: Record<Exclude<RolesEnum, RolesEnum.Employee>, string>
 };
 
 export const ISSUE_PRIORITY_OPTIONS = [
-  {
-    label: 'Lowest',
-    value: IssuePriorityEnum.Lowest,
-  },
-  {
-    label: 'Low',
-    value: IssuePriorityEnum.Low,
-  },
-  {
-    label: 'Medium',
-    value: IssuePriorityEnum.Medium,
-  },
-  {
-    label: 'High',
-    value: IssuePriorityEnum.High,
-  },
-  {
-    label: 'Highest',
-    value: IssuePriorityEnum.Highest,
-  },
+  IssuePriorityEnum.Highest,
+  IssuePriorityEnum.High,
+  IssuePriorityEnum.Medium,
+  IssuePriorityEnum.Low,
+  IssuePriorityEnum.Lowest,
 ];
 
 export const COLOR_OPTIONS = [

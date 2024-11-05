@@ -127,10 +127,10 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
             }}
           />
           <Text
-            as="button"
             color="indicator.500"
             mt={-4}
             _hover={{
+              cursor: 'pointer',
               textDecoration: 'underline',
             }}
             display="inline-block"

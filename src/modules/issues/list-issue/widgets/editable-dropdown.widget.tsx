@@ -16,9 +16,9 @@ export const InlineEditCustomSelect = ({
   field,
 }: {
   options: CustomOptionSelectBase[];
-  defaultValue: CustomOptionSelectBase;
+  defaultValue?: CustomOptionSelectBase;
   issue: IIssue;
-  field: 'status' | 'priority';
+  field: 'status' | 'priority' | 'assignee' | 'label';
 }) => {
   const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issue.id);
 
@@ -34,6 +34,17 @@ export const InlineEditCustomSelect = ({
       valueContainer: (provide) => ({
         ...provide,
         px: 0,
+      }),
+
+      singleValue: (provide) => ({
+        ...provide,
+        fontSize: { base: 'sm', '2xl': 'sm' },
+        minWidth: 'fit-content',
+      }),
+
+      menuList: (provide) => ({
+        ...provide,
+        minWidth: '160px',
       }),
 
       container: (provide) => ({
@@ -66,6 +77,8 @@ export const InlineEditCustomSelect = ({
         : undefined,
       statusId: field === 'status' ? option?.value : issue.status.id,
       ...(field === 'priority' && { priority: option?.value }),
+      ...(field === 'assignee' && { assigneeId: option?.value }),
+      ...(field === 'label' && { labelId: option?.value }),
     });
   };
 
@@ -77,6 +90,7 @@ export const InlineEditCustomSelect = ({
       isClearable={false}
       isSearchable={false}
       options={options}
+      placeholder=""
       components={customComponents}
       chakraStyles={stylesComponents}
       onChange={handleSubmit}

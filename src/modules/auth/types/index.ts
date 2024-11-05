@@ -16,6 +16,7 @@ export interface ICurrentUserResponse extends IBaseEntity {
   dob?: Date;
   bankAccount?: string;
   bankAccountName?: string;
+  positionName?: string;
   status: UserStatusEnum;
   deletedAt?: Date;
   permissions: IPermission[];

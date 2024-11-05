@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import RichTextEditor from 'reactjs-tiptap-editor';
 
 import { useGetDetailIssue } from '../apis/detail-issue.api';
+import { PriorityIssue } from '../components';
 import { useUpsertIssueHook } from '../hooks/mutations';
 import { useEditorState } from '../hooks/use-editor-state';
 
@@ -231,7 +232,10 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
               <CustomChakraReactSelect
                 placeholder={`${t('common.choose')} ${t('fields.priority').toLowerCase()}`}
                 label={t('fields.priority')}
-                options={ISSUE_PRIORITY_OPTIONS}
+                options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
+                  label: <PriorityIssue priority={value} />,
+                  value,
+                }))}
                 control={control}
                 name="priority"
               />

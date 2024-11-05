@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { AddNewIssueWidget } from './add-new-issue.widget';
+import { PriorityIssue } from '../components';
 import { useIssuesQueryFilterStateContext } from '../contexts';
 
 import type { ILabel } from '@/modules/labels/types';
@@ -44,7 +45,10 @@ export function ActionTableIssuesWidget({ listLabel }: { listLabel: ILabel[] }) 
               isSearchable={false}
               size="sm"
               placeholder={`${t('common.choose')} ${t('fields.priority').toLowerCase()}`}
-              options={ISSUE_PRIORITY_OPTIONS}
+              options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
+                label: <PriorityIssue priority={value} />,
+                value,
+              }))}
               onChange={(opt) => {
                 setIssuesQueryFilterState({
                   priority: opt?.value ? opt.value : undefined,
