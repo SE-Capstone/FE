@@ -44,7 +44,8 @@ export const InlineEditCustomSelect = ({
 
       menuList: (provide) => ({
         ...provide,
-        minWidth: '160px',
+        minWidth: 'fit-content',
+        maxWidth: '300px',
       }),
 
       container: (provide) => ({

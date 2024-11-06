@@ -22,8 +22,9 @@ const InlineEditRichtext = () => {
       <InlineEdit
         defaultValue={editValue}
         label="Team name"
+        keepEditViewOpenOnBlur
         editButtonLabel={editValue || initialValue}
-        editView={({ errorMessage, ...fieldProps }) => (
+        editView={({ errorMessage }) => (
           <RichTextEditor dark={false} output="html" content="" extensions={extensions} />
         )}
         readView={() => (

@@ -41,6 +41,7 @@ const InlineEditWithIcon = ({ id, initialValue }: { id: string; initialValue: st
         defaultValue={editValue}
         editButtonLabel={initialValue || editValue}
         isEditing={isEditing}
+        keepEditViewOpenOnBlur
         editView={({ ...fieldProps }) => (
           <Textfield style={{ minWidth: '200px' }} {...fieldProps} autoFocus />
         )}
