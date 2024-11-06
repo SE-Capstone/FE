@@ -17,7 +17,7 @@ export enum IssuePriorityEnum {
 }
 
 export type QueryListIssueInput = {
-  subject?: string;
+  title?: string;
   statusId?: string;
   labelId?: string;
   priority?: IssuePriorityEnum;

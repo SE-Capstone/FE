@@ -28,10 +28,10 @@ export function ActionTableIssuesWidget({ listLabel }: { listLabel: ILabel[] }) 
         >
           <GridItem colSpan={2}>
             <SearchInput
-              placeholder={`${t('common.enter')} ${t('fields.subject').toLowerCase()}...`}
-              initValue={issuesQueryState.filters.subject || ''}
+              placeholder={`${t('common.enter')} ${t('fields.title').toLowerCase()}...`}
+              initValue={issuesQueryState.filters.title || ''}
               onHandleSearch={(keyword) => {
-                setIssuesQueryFilterState({ subject: keyword });
+                setIssuesQueryFilterState({ title: keyword });
               }}
             />
           </GridItem>

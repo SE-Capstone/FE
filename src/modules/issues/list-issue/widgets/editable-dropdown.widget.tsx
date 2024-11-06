@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@atlaskit/primitives';
 
@@ -6,8 +6,17 @@ import { useUpsertIssueHook } from '../hooks/mutations';
 
 import type { IIssue } from '../types';
 
-import { CustomChakraReactSelect, type CustomOptionSelectBase } from '@/components/elements';
+import {
+  CustomChakraReactSelect,
+  CustomOptionComponentChakraReactSelect,
+  CustomSingleValueComponentChakraReactSelect,
+  type CustomOptionSelectBase,
+} from '@/components/elements';
 import { formatDate } from '@/libs/helpers';
+
+interface IOptionSelectWithImage extends CustomOptionSelectBase {
+  image?: string;
+}
 
 export const InlineEditCustomSelect = ({
   options,
@@ -15,17 +24,28 @@ export const InlineEditCustomSelect = ({
   issue,
   field,
 }: {
-  options: CustomOptionSelectBase[];
-  defaultValue?: CustomOptionSelectBase;
+  options: IOptionSelectWithImage[];
+  defaultValue?: IOptionSelectWithImage;
   issue: IIssue;
   field: 'status' | 'priority' | 'assignee' | 'label';
 }) => {
+  const [selectedOption, setSelectedOption] = useState(defaultValue);
+
+  useEffect(() => {
+    setSelectedOption(defaultValue);
+  }, [defaultValue]);
+
   const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issue.id);
 
   const customComponents = useMemo(
     () => ({
       DropdownIndicator: () => <Box />,
+      ...(field === 'assignee' && {
+        Option: CustomOptionComponentChakraReactSelect,
+        SingleValue: CustomSingleValueComponentChakraReactSelect,
+      }),
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -77,15 +97,17 @@ export const InlineEditCustomSelect = ({
           }) as unknown as Date)
         : undefined,
       statusId: field === 'status' ? option?.value : issue.status.id,
-      ...(field === 'priority' && { priority: option?.value }),
-      ...(field === 'assignee' && { assigneeId: option?.value }),
-      ...(field === 'label' && { labelId: option?.value }),
+      labelId: field === 'label' ? option?.value : issue.label?.id,
+      assigneeId: field === 'assignee' ? option?.value : issue.assignee?.id,
+      priority: field === 'priority' ? option?.value : issue.priority,
+      // TODO
+      // parentIssueId: issue.parentIssueId
     });
   };
 
   return (
     <CustomChakraReactSelect
-      defaultValue={defaultValue}
+      value={selectedOption}
       variant="subtle"
       size="lg"
       isClearable={false}

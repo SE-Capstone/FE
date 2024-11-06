@@ -38,7 +38,12 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
 
   const [content, setContent] = useState('');
 
-  const { formUpsertIssue, handleUpsertIssue, isLoading } = useUpsertIssueHook(editor, isUpdate);
+  const { formUpsertIssue, handleUpsertIssue, isLoading } = useUpsertIssueHook(
+    editor,
+    isUpdate,
+    undefined,
+    true
+  );
 
   const {
     register,

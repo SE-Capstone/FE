@@ -127,6 +127,8 @@
     "endDate": "Ngày kết thúc",
     "dueDate": "Ngày hết hạn",
     "assignee": "Người phụ trách",
+    "reporter": "Người báo cáo",
+    "details": "Chi tiết",
     "description": "Mô tả",
     "permission": "Quyền",
     "overview": "Tổng quan",

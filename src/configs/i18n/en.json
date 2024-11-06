@@ -163,6 +163,8 @@
     "endDate": "End date",
     "dueDate": "Due date",
     "assignee": "Assignee",
+    "reporter": "Reporter",
+    "details": "Details",
     "description": "Description",
     "permission": "Permissions",
     "overview": "Overview",

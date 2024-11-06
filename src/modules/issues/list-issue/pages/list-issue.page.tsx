@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { BadgeIssue } from '../components/badge-issue';
 import InlineEditWithIcon from '../components/inline-edit-field-with-icon';
 import { PriorityIssue } from '../components/priority-issue';
+import { UserWithAvatar } from '../components/user-with-avatar';
 import { useIssuesQueryFilterStateContext } from '../contexts';
 import { useGetListIssueQuery } from '../hooks/queries';
 import { ActionMenuTableIssues, ActionTableIssuesWidget } from '../widgets';
@@ -131,8 +132,8 @@ export function ListIssuePage() {
             key: 'title',
             title: t('fields.title'),
             hasSort: false,
-            Cell({ title, id }) {
-              return <InlineEditWithIcon id={id} initialValue={title} />;
+            Cell(issue) {
+              return <InlineEditWithIcon issue={issue} />;
             },
           },
           {
@@ -146,16 +147,28 @@ export function ListIssuePage() {
                   options={members.map((member) => ({
                     label: member.userName,
                     value: member.id,
+                    image: member.avatar,
                   }))}
                   defaultValue={
                     assignee && {
                       label: assignee.userName,
                       value: assignee.id,
+                      image: assignee.avatar,
                     }
                   }
-                  field="priority"
+                  field="assignee"
                   issue={issue}
                 />
+              );
+            },
+          },
+          {
+            key: 'reporterId',
+            title: t('fields.reporter'),
+            hasSort: false,
+            Cell({ reporter }) {
+              return (
+                <UserWithAvatar image={reporter?.avatar || ''} label={reporter?.userName || ''} />
               );
             },
           },
@@ -193,7 +206,12 @@ export function ListIssuePage() {
             title: t('common.lastUpdatedBy'),
             hasSort: false,
             Cell({ lastUpdatedBy }) {
-              return <>{lastUpdatedBy?.userName || ''}</>;
+              return (
+                <UserWithAvatar
+                  image={lastUpdatedBy?.avatar || ''}
+                  label={lastUpdatedBy?.userName || ''}
+                />
+              );
             },
           },
           {

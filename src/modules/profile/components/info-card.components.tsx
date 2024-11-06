@@ -2,17 +2,18 @@ import type React from 'react';
 
 import { Stack, Text } from '@chakra-ui/react';
 
-import type { TextProps } from '@chakra-ui/react';
+import type { StackProps, TextProps } from '@chakra-ui/react';
 
 export interface InfoCardProps {
   data: { label: string; text?: React.ReactNode }[];
   labelProps?: TextProps;
+  stackProps?: StackProps;
 }
 
-export const InfoCard: React.FC<InfoCardProps> = ({ data, labelProps }) => (
+export const InfoCard: React.FC<InfoCardProps> = ({ data, labelProps, stackProps }) => (
   <Stack direction="column" spacing="16px">
     {data.map(({ label, text }, index) => (
-      <Stack key={index} direction="row" spacing="16px">
+      <Stack key={index} direction="row" spacing="16px" {...stackProps}>
         <>
           <Text
             color="neutral.300"

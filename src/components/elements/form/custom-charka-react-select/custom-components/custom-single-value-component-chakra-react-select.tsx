@@ -14,7 +14,7 @@ export function CustomSingleValueComponentChakraReactSelect<
   return (
     <chakraComponents.SingleValue {...props}>
       <HStack w="full" role="group">
-        {data.image ? <Avatar src={data.image} boxSize={6} /> : null}
+        <Avatar src={data.image} boxSize={8} name={data.label as string} />
 
         <Text color="inherit">{data.label}</Text>
       </HStack>

@@ -12,7 +12,12 @@ import type { Editor } from '@tiptap/core';
 import { formatDate } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
-export function useUpsertIssueHook(editor?: Editor | null, isUpdate?: boolean, id?: string) {
+export function useUpsertIssueHook(
+  editor?: Editor | null,
+  isUpdate?: boolean,
+  id?: string,
+  isRedirect?: boolean
+) {
   const { t } = useTranslation();
   const { projectId, issueId } = useParams();
   const formUpsertIssue = useFormWithSchema({
@@ -25,7 +30,7 @@ export function useUpsertIssueHook(editor?: Editor | null, isUpdate?: boolean, i
     mutate,
     isPending: isLoading,
     ...restData
-  } = useUpsertIssueMutation({ reset, id: issueId || id, isUpdate });
+  } = useUpsertIssueMutation({ reset, id: issueId || id, isUpdate, isRedirect });
 
   const handleUpsertIssue = useCallback(
     async (values: IssueFormValues) => {
