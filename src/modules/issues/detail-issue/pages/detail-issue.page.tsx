@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { Button, Container, Stack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
@@ -7,9 +7,11 @@ import { Link, useParams } from 'react-router-dom';
 import { useGetDetailIssue } from '../../list-issue/apis/detail-issue.api';
 import { PriorityIssue } from '../../list-issue/components';
 import InlineEditableField from '../../list-issue/components/inline-edit-field';
+import InlineEditRichtext from '../../list-issue/components/inline-edit-richtext';
 import { UserWithAvatar } from '../../list-issue/components/user-with-avatar';
 import { IssuePriorityEnum } from '../../list-issue/types';
 import { InlineEditCustomSelect } from '../../list-issue/widgets/editable-dropdown.widget';
+import { CommentWidget } from '../widgets/comments.widget';
 
 import { Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
@@ -76,12 +78,12 @@ export function DetailIssuePage() {
           label: t('fields.dueDate'),
           text: issue?.dueDate ? formatDate({ date: issue?.dueDate, format: 'DD-MM-YYYY' }) : '',
         },
-        {
+        issue?.lastUpdatedBy && {
           label: t('common.lastUpdatedBy'),
-          text: issue?.lastUpdatedBy && (
+          text: issue.lastUpdatedBy && (
             <UserWithAvatar
-              image={issue?.lastUpdatedBy?.avatar || ''}
-              label={issue?.lastUpdatedBy?.userName || ''}
+              image={issue.lastUpdatedBy.avatar || ''}
+              label={issue.lastUpdatedBy.userName || ''}
             />
           ),
         },
@@ -94,6 +96,7 @@ export function DetailIssuePage() {
             />
           ),
         },
+        // TODO: Add phase field
       ].filter(Boolean),
     [issue, members, t]
   );
@@ -140,11 +143,38 @@ export function DetailIssuePage() {
                 >
                   <InlineEditableField issue={issue!} />
                 </Text>
-                <Text>{issue?.description}</Text>
+                <InlineEditRichtext issue={issue!} />
                 <Stack />
               </Stack>
+
+              <Stack w="full" spacing="24px">
+                <Stack padding="24px" borderRadius="8px" direction="column" spacing="24px">
+                  <Text
+                    sx={{
+                      fontWeight: 'semibold',
+                      fontSize: '20px',
+                      lineHeight: '27px',
+                      paddingBottom: '24px',
+                      borderBottom: '1px solid',
+                      borderColor: 'neutral.500',
+                    }}
+                  >
+                    {t('common.comments')}
+                  </Text>
+                  <CommentWidget />
+                  <Stack />
+                </Stack>
+              </Stack>
             </Stack>
-            <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} spacing={3}>
+            <Stack
+              bg="white"
+              p={5}
+              flex={1}
+              flexBasis="10%"
+              rounded={2.5}
+              spacing={3}
+              height="fit-content"
+            >
               <Stack
                 display="flex"
                 alignItems="center"

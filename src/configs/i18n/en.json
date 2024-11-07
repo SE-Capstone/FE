@@ -1,5 +1,7 @@
 {
   "common": {
+    "descPlaceholder": "Add a description...",
+    "comments": "Comments",
     "me": "Me",
     "assignToMe": "Assign to me",
     "assignSkill": "Assign skill",

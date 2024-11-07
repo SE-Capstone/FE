@@ -1,5 +1,7 @@
 {
   "common": {
+    "descPlaceholder": "Thêm mô tả...",
+    "comments": "Bình luận",
     "me": "Tôi",
     "assignToMe": "Gán cho tôi",
     "assignSkill": "Gán kỹ năng",

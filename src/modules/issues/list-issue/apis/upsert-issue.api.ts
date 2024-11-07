@@ -58,7 +58,7 @@ export function useUpsertIssueMutation({ configs, reset, id, isUpdate, isRedirec
   return useMutation({
     mutationFn: (req) => mutation(req, id, isUpdate),
 
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.issue.issues.queryKey,
       });
@@ -75,7 +75,9 @@ export function useUpsertIssueMutation({ configs, reset, id, isUpdate, isRedirec
       });
 
       if (isRedirect) {
-        navigate(APP_PATHS.listIssue(projectId || ''));
+        isUpdate
+          ? navigate(APP_PATHS.detailIssue(projectId || '', data.data.id))
+          : navigate(APP_PATHS.listIssue(projectId || ''));
       }
       reset && reset();
     },

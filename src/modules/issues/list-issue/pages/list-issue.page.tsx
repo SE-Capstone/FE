@@ -206,11 +206,14 @@ export function ListIssuePage() {
             title: t('common.lastUpdatedBy'),
             hasSort: false,
             Cell({ lastUpdatedBy }) {
-              return (
+              return lastUpdatedBy ? (
                 <UserWithAvatar
-                  image={lastUpdatedBy?.avatar || ''}
-                  label={lastUpdatedBy?.userName || ''}
+                  image={lastUpdatedBy.avatar || ''}
+                  label={lastUpdatedBy.userName || ''}
                 />
+              ) : (
+                // eslint-disable-next-line react/jsx-no-useless-fragment
+                <></>
               );
             },
           },

@@ -55,6 +55,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
 
   const onChangeContent = (value: any) => {
     setContent(value);
+    setFieldValue('description', value, { shouldDirty: true });
   };
 
   const { issue, isLoading: isLoading6 } = useGetDetailIssue({ issueId: issueId || '' });
@@ -101,6 +102,13 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
   };
 
   useEffect(() => {
+    if (editor && issue?.description) {
+      editor.commands.setContent(issue.description);
+      setContent(issue.description);
+    }
+  }, [editor, issue]);
+
+  useEffect(() => {
     if (issue) {
       resetForm(
         {
@@ -131,14 +139,8 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
           keepDirty: false,
         }
       );
-
-      Promise.resolve().then(() => {
-        if (editor) {
-          editor.commands.setContent(issue.description || '');
-        }
-        setContent(issue.description || '');
-      });
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [issue, resetForm]);
 
