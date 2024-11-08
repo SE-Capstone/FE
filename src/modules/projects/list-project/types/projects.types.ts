@@ -33,5 +33,6 @@ export type IProject = IBaseEntity & {
   leadId?: string;
   leadName?: string;
   leadPosition?: string;
+  leadAvatar?: string;
   members: ProjectMember[];
 };

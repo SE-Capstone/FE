@@ -19,7 +19,7 @@ export function useUpsertProjectHook({
 }: {
   id?: string;
   isUpdate?: boolean;
-  onClose: () => void;
+  onClose?: () => void;
 }) {
   const { t } = useTranslation();
   const formUpsertProject = useFormWithSchema({

@@ -71,23 +71,11 @@ export const USER_STATUS_OPTIONS = [
 ] as const;
 
 export const PROJECT_STATUS_OPTIONS = [
-  {
-    label: 'Completed',
-    value: ProjectStatusEnum.Completed,
-  },
-  {
-    label: 'In progress',
-    value: ProjectStatusEnum.InProgress,
-  },
-  {
-    label: 'Not started',
-    value: ProjectStatusEnum.NotStarted,
-  },
-  {
-    label: 'Canceled',
-    value: ProjectStatusEnum.Canceled,
-  },
-] as const;
+  ProjectStatusEnum.NotStarted,
+  ProjectStatusEnum.InProgress,
+  ProjectStatusEnum.Completed,
+  ProjectStatusEnum.Canceled,
+];
 
 export const PROJECT_VISIBILITY_OPTIONS = [
   {

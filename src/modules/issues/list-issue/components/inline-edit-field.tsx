@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
 
+import { DatePicker } from '@atlaskit/datetime-picker';
 import InlineEdit from '@atlaskit/inline-edit';
 import { Box as BoxAtlas, xcss } from '@atlaskit/primitives';
+import TextArea from '@atlaskit/textarea';
 import Textfield from '@atlaskit/textfield';
-import { Box } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { useUpsertIssueHook } from '../hooks/mutations';
-
-import type { IIssue } from '../types';
-
-import { formatDate } from '@/libs/helpers';
+import { isDateLessThan, notify } from '@/libs/helpers';
 
 const readViewContainerStyles = xcss({
   font: 'font.body',
@@ -18,9 +16,25 @@ const readViewContainerStyles = xcss({
   wordBreak: 'break-word',
 });
 
-const InlineEditableField = ({ issue }: { issue: IIssue }) => {
+const InlineEditableField = ({
+  fieldValue,
+  callback,
+  isTextArea,
+  fieldName,
+  type = 'normal',
+  styleProps,
+  startDate,
+}: {
+  fieldValue: string;
+  callback: (value: string, fieldName?: string) => void;
+  isTextArea?: boolean;
+  fieldName?: string;
+  type?: 'normal' | 'title' | 'date';
+  styleProps?: any;
+  startDate?: string;
+}) => {
   const { t } = useTranslation();
-  const [editValue, setEditValue] = useState(issue.title);
+  const [editValue, setEditValue] = useState(fieldValue);
 
   const validate = (value: string) => {
     if (value?.length === 0) {
@@ -30,34 +44,11 @@ const InlineEditableField = ({ issue }: { issue: IIssue }) => {
   };
 
   useEffect(() => {
-    setEditValue(issue.title);
-  }, [issue.title]);
-
-  const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issue.id);
+    setEditValue(fieldValue);
+  }, [fieldValue]);
 
   const handleSubmit = (value: string) => {
-    handleUpsertIssue({
-      ...issue,
-      startDate: issue.startDate
-        ? (formatDate({
-            date: issue.startDate,
-            format: 'YYYY-MM-DD',
-          }) as unknown as Date)
-        : undefined,
-      dueDate: issue.dueDate
-        ? (formatDate({
-            date: issue.dueDate,
-            format: 'YYYY-MM-DD',
-          }) as unknown as Date)
-        : undefined,
-      statusId: issue.status.id,
-      labelId: issue.label?.id,
-      assigneeId: issue.assignee?.id,
-      priority: issue.priority,
-      title: value || issue.title,
-      // TODO
-      // parentIssueId: issue.parentIssueId
-    });
+    callback(value, fieldName);
   };
 
   return (
@@ -67,28 +58,64 @@ const InlineEditableField = ({ issue }: { issue: IIssue }) => {
         editButtonLabel={editValue}
         // keepEditViewOpenOnBlur
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        editView={({ errorMessage, ...fieldProps }) => (
-          <Textfield
-            style={{
-              fontWeight: '600',
-              fontSize: '24px',
-            }}
-            {...fieldProps}
-            autoFocus
-          />
-        )}
-        readView={() => (
-          <BoxAtlas
-            xcss={readViewContainerStyles}
-            style={{ fontWeight: '600', fontSize: '24px' }}
-            testId="read-view"
-          >
-            {editValue}
-          </BoxAtlas>
-        )}
+        editView={({ errorMessage, ...fieldProps }, ref) =>
+          !isTextArea ? (
+            type === 'title' ? (
+              <Textfield
+                style={{
+                  fontWeight: '600',
+                  fontSize: '24px',
+                }}
+                {...fieldProps}
+                autoFocus
+              />
+            ) : type === 'normal' ? (
+              <Textfield {...fieldProps} autoFocus />
+            ) : (
+              <DatePicker {...fieldProps} locale="vi-VN" />
+            )
+          ) : (
+            // @ts-ignore - textarea does not pass through ref as a prop
+            <TextArea {...fieldProps} ref={ref} />
+          )
+        }
+        readView={() =>
+          type === 'title' ? (
+            <BoxAtlas
+              xcss={readViewContainerStyles}
+              style={{ fontWeight: '600', fontSize: '24px' }}
+              testId="read-view"
+            >
+              {editValue}
+            </BoxAtlas>
+          ) : (
+            <Text
+              className="adfbadfadfb"
+              wordBreak="break-all"
+              whiteSpace="normal"
+              flex={1}
+              fontWeight={500}
+              {...styleProps}
+            >
+              {editValue}
+            </Text>
+          )
+        }
         validate={validate}
         onConfirm={(value) => {
           if (value !== editValue) {
+            if (
+              type === 'date' &&
+              fieldName === 'endDate' &&
+              startDate &&
+              isDateLessThan({ date1: value, date2: startDate })
+            ) {
+              notify({
+                type: 'error',
+                message: t('validation.project.endDateInvalid'),
+              });
+              return;
+            }
             setEditValue(value);
             handleSubmit(value);
           }

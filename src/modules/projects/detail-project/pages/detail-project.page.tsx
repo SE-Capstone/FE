@@ -78,18 +78,8 @@ export function DetailProjectPage() {
             path={APP_PATHS.listProject}
             title={project?.name}
           >
-            {permissions[PermissionEnum.UPDATE_PROJECT] && (
-              <>
-                <Button onClick={disclosureModal.onOpen}>{t('actions.edit')}</Button>
-                <UpsertProjectWidget
-                  project={project}
-                  teamLeads={teamLeads}
-                  isUpdate
-                  isOpen={disclosureModal.isOpen}
-                  onClose={disclosureModal.onClose}
-                />
-              </>
-            )}
+            {/* eslint-disable-next-line react/jsx-no-useless-fragment */}
+            <></>
           </LayoutBack>
           <CustomTabs
             tabListProps={{
@@ -101,7 +91,11 @@ export function DetailProjectPage() {
                 title: t('fields.overview'),
                 link: `${APP_PATHS.listProject}/${projectId}`,
                 childrenPanel: (
-                  <BaseInformationProjectWidget project={project} permissions={permissions} />
+                  <BaseInformationProjectWidget
+                    teamLeads={teamLeads}
+                    project={project}
+                    permissions={permissions}
+                  />
                 ),
               },
               {

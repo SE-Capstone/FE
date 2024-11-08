@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Switch, Tooltip } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import type { SwitchProps } from '@chakra-ui/react';
 
@@ -18,6 +19,7 @@ interface ChangeStatusProps extends SwitchProps {
 
 export function ChangeStatus(props: ChangeStatusProps) {
   const { initStatus, isLoading, title, description, id, ...rest } = props;
+  const { t } = useTranslation();
   const [isInactive, setIsInactive] = useState(initStatus === false);
   const [loading, setLoading] = useState(false);
 
@@ -47,7 +49,7 @@ export function ChangeStatus(props: ChangeStatusProps) {
 
   return (
     <Tooltip
-      label={isInactive ? 'Unarchive' : 'Archrive'}
+      label={isInactive ? t('actions.unarchive') : t('actions.archive')}
       hasArrow
       placement="top"
       shouldWrapChildren

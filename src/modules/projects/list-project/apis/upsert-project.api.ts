@@ -39,7 +39,7 @@ function mutation(req: IUpsertProjectRequest, id?: string, isUpdate = false) {
 interface Props {
   configs?: MutationConfig<typeof mutation>;
   reset?: () => void;
-  onClose: () => void;
+  onClose?: () => void;
   id?: string;
   isUpdate?: boolean;
 }
@@ -67,7 +67,7 @@ export function useUpsertProjectMutation({ configs, reset, id, isUpdate, onClose
         message: isUpdate ? DEFAULT_MESSAGE(t).UPDATE_SUCCESS : DEFAULT_MESSAGE(t).CREATE_SUCCESS,
       });
       reset && reset();
-      onClose();
+      onClose && onClose();
     },
 
     onError(error) {

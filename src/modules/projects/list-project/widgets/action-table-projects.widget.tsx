@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { UpsertProjectWidget } from './upsert-project.widget';
+import { BadgeStatus } from '../../detail-project/components';
 import { useProjectsQueryFilterStateContext } from '../contexts';
 
 import type { IUser } from '@/modules/users/list-user/types';
@@ -51,7 +52,10 @@ export function ActionTableProjectsWidget({ teamLeads }: { teamLeads: IUser[] })
               isSearchable={false}
               size="sm"
               placeholder="Choose status"
-              options={PROJECT_STATUS_OPTIONS}
+              options={PROJECT_STATUS_OPTIONS.map((s) => ({
+                label: <BadgeStatus status={s} />,
+                value: s,
+              }))}
               onChange={(opt) => {
                 setProjectsQueryFilterState({
                   status: opt?.value ? opt.value : undefined,

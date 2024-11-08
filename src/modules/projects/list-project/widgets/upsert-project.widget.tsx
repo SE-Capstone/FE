@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { Button, SimpleGrid, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
+import { BadgeStatus } from '../../detail-project/components';
 import { useUpsertProjectHook } from '../../detail-project/hooks/mutations/use-upsert-project.mutation.hooks';
 
 import type { IProject } from '../types';
@@ -151,7 +152,10 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
               placeholder={`${t('common.choose')} ${t('common.status').toLowerCase()}`}
               label={t('common.status')}
               size="lg"
-              options={PROJECT_STATUS_OPTIONS}
+              options={PROJECT_STATUS_OPTIONS.map((s) => ({
+                label: <BadgeStatus status={s} />,
+                value: s,
+              }))}
               control={control}
               name="status"
             />

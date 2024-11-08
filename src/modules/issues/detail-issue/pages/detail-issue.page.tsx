@@ -9,6 +9,7 @@ import { PriorityIssue } from '../../list-issue/components';
 import InlineEditableField from '../../list-issue/components/inline-edit-field';
 import InlineEditRichtext from '../../list-issue/components/inline-edit-richtext';
 import { UserWithAvatar } from '../../list-issue/components/user-with-avatar';
+import { useUpsertIssueHook } from '../../list-issue/hooks/mutations';
 import { IssuePriorityEnum } from '../../list-issue/types';
 import { InlineEditCustomSelect } from '../../list-issue/widgets/editable-dropdown.widget';
 import { CommentWidget } from '../widgets/comments.widget';
@@ -26,6 +27,35 @@ export function DetailIssuePage() {
   const { issueId } = useParams();
 
   const { issue, isLoading, isError } = useGetDetailIssue({ issueId: issueId || '' });
+
+  const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issue?.id || '');
+
+  const handleSubmit = (value: string) => {
+    if (issue) {
+      handleUpsertIssue({
+        ...issue,
+        startDate: issue.startDate
+          ? (formatDate({
+              date: issue.startDate,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date)
+          : undefined,
+        dueDate: issue.dueDate
+          ? (formatDate({
+              date: issue.dueDate,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date)
+          : undefined,
+        statusId: issue.status.id,
+        labelId: issue.label?.id,
+        assigneeId: issue.assignee?.id,
+        priority: issue.priority,
+        title: value || issue.title,
+        // TODO
+        // parentIssueId: issue.parentIssueId
+      });
+    }
+  };
 
   const infoData = useMemo(
     () =>
@@ -141,7 +171,11 @@ export function DetailIssuePage() {
                     borderColor: 'neutral.500',
                   }}
                 >
-                  <InlineEditableField issue={issue!} />
+                  <InlineEditableField
+                    fieldValue={issue?.title || ''}
+                    callback={handleSubmit}
+                    type="title"
+                  />
                 </Text>
                 <InlineEditRichtext issue={issue!} />
                 <Stack />
