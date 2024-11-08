@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 
 import InlineEdit from '@atlaskit/inline-edit';
-import { Box, xcss } from '@atlaskit/primitives';
-import { Text } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import RichTextEditor from 'reactjs-tiptap-editor';
 
+import RichtextView from './richtext-view';
 import { useUpsertIssueHook } from '../hooks/mutations';
 import { useEditorState } from '../hooks/use-editor-state';
 
@@ -15,13 +15,6 @@ import type { IIssue } from '../types';
 
 import { formatDate } from '@/libs/helpers';
 import { extensions } from '@/modules/public/pages/rich-text-ex.pages';
-
-const readViewContainerStyles = xcss({
-  font: 'font.body',
-  paddingBlock: 'space.100',
-  paddingInline: 'space.075',
-  wordBreak: 'break-word',
-});
 
 const InlineEditRichtext = ({ issue }: { issue: IIssue }) => {
   const { t } = useTranslation();
@@ -86,15 +79,7 @@ const InlineEditRichtext = ({ issue }: { issue: IIssue }) => {
             onChangeContent={onChangeContent}
           />
         )}
-        readView={() => (
-          <Box xcss={readViewContainerStyles} testId="read-view">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: editValue || t('common.descPlaceholder'),
-              }}
-            />
-          </Box>
-        )}
+        readView={() => <RichtextView id="richtext-view1" content={editValue} />}
         onConfirm={(value) => {
           if (JSON.stringify(value) !== JSON.stringify(issue.description)) {
             setEditValue(value);

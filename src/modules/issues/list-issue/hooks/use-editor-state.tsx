@@ -8,7 +8,7 @@ export interface UseEditorStateReturn {
   editorRef: React.MutableRefObject<{ editor: Editor | null }>;
 }
 
-export function useEditorState(): UseEditorStateReturn {
+export function useEditorState(isView: boolean = false): UseEditorStateReturn {
   const editorRef = useRef<{ editor: Editor | null }>({ editor: null });
   const [isReady, setIsReady] = useState(false);
   const [editor, setEditor] = useState<Editor | null>(null);
@@ -17,8 +17,13 @@ export function useEditorState(): UseEditorStateReturn {
     if (editorRef.current?.editor) {
       setIsReady(true);
       setEditor(editorRef.current.editor);
+      if (isView) {
+        editorRef.current.editor.setOptions({
+          editable: false,
+        });
+      }
     }
-  }, [editorRef, editorRef.current?.editor]);
+  }, [editorRef, editorRef.current.editor, isView]);
 
   return { isReady, editor, editorRef };
 }

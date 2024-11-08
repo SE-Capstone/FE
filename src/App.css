@@ -13,3 +13,24 @@ img {
 ::-webkit-scrollbar {
   height: 6px;
 }
+
+.reactjs-tiptap-editor .richtext-outline  {
+  outline-color: #e2e8f0;
+}
+
+#rich-text-view .reactjs-tiptap-editor .richtext-outline  {
+  /* Override or remove the unwanted classes */
+  border-radius: 0; /* Remove rounded corners */
+  background: none; /* Remove background */
+  box-shadow: none; /* Remove shadow */
+  outline: none; /* Remove outline */
+}
+
+/* .reactjs-tiptap-editor .richtext-outline .ProseMirror {
+  padding-right: 16px 24px !important;
+} */
+
+#rich-text-view .reactjs-tiptap-editor .richtext-outline .ProseMirror  {
+  padding: 0;
+  min-height: fit-content;
+}
