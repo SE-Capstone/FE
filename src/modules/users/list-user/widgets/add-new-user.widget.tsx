@@ -148,7 +148,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
               control={control}
               name="roleId"
             />
-            <CustomChakraReactSelect
+            {/* <CustomChakraReactSelect
               isSearchable
               isRequired
               placeholder={`${t('common.choose')} ${t('common.position').toLowerCase()}`}
@@ -160,7 +160,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
               }))}
               control={control}
               name="positionId"
-            />
+            /> */}
           </HStack>
         </Stack>
       </CustomFormProvider>

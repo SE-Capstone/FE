@@ -29,10 +29,10 @@ export const updateUserFormSchema = (t: any) =>
       .string()
       .trim()
       .min(1, { message: t('validation.profile.roleRequired') }),
-    positionId: z
-      .string()
-      .trim()
-      .min(1, { message: t('validation.profile.positionRequired') }),
+    // positionId: z
+    //   .string()
+    //   .trim()
+    //   .min(1, { message: t('validation.profile.positionRequired') }),
   });
 
 export type UpdateUserFormType = z.infer<ReturnType<typeof updateUserFormSchema>>;

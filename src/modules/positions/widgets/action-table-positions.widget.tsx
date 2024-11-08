@@ -1,14 +1,15 @@
-import { Box, Button, Grid, GridItem, HStack, Spacer } from '@chakra-ui/react';
+import { Box, Button, Grid, GridItem, HStack, Spacer, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { AddNewPositionWidget } from './add-new-position.widget';
 import { usePositionsQueryFilterStateContext } from '../contexts';
+import { UpsertPositionWidget } from './upsert-position.widget';
 
 import { SearchInput } from '@/components/elements';
 
 export function ActionTablePositionsWidget() {
   const { t } = useTranslation();
+  const disclosureModal = useDisclosure();
   const { positionsQueryState, setPositionsQueryFilterState } =
     usePositionsQueryFilterStateContext();
   const { pathname } = useLocation();
@@ -28,7 +29,7 @@ export function ActionTablePositionsWidget() {
         >
           <GridItem colSpan={2}>
             <SearchInput
-              placeholder="Enter title..."
+              placeholder={`${t('common.enter')} ${t('fields.title').toLowerCase()}...`}
               initValue={positionsQueryState.filters.title || ''}
               onHandleSearch={(keyword) => {
                 setPositionsQueryFilterState({ title: keyword });
@@ -39,9 +40,13 @@ export function ActionTablePositionsWidget() {
         {isShowFilterPosition && (
           <>
             <Spacer />
-            <AddNewPositionWidget>
-              <Button leftIcon={<>+</>}>{t('common.create')}</Button>
-            </AddNewPositionWidget>
+            <Button size="md" leftIcon={<>+</>} onClick={disclosureModal.onOpen}>
+              {t('common.create')}
+            </Button>
+            <UpsertPositionWidget
+              isOpen={disclosureModal.isOpen}
+              onClose={disclosureModal.onClose}
+            />
           </>
         )}
       </HStack>

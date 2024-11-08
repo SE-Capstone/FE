@@ -214,7 +214,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                 control={control}
                 name="roleId"
               />
-              <CustomChakraReactSelect
+              {/* <CustomChakraReactSelect
                 isSearchable
                 isRequired
                 placeholder={`${t('common.choose')} ${t('common.position').toLowerCase()}`}
@@ -225,7 +225,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                 }))}
                 control={control}
                 name="positionId"
-              />
+              /> */}
             </HStack>
             <CustomInput
               label={t('fields.address')}

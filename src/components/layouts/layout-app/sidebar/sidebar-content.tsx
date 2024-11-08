@@ -189,6 +189,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
                         lineHeight="19px"
                         color={isActiveParent ? 'primary' : 'neutral.300'}
                         fontWeight="semibold"
+                        ml="-1px"
                       >
                         {link.name}
                       </Text>

@@ -1,48 +1,54 @@
-import { Icon } from '@chakra-ui/react';
+import { Icon, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
+import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
+
+import { useRemovePositionHook } from '../../hooks/mutations/use-remove-position.hooks';
+import { UpsertPositionWidget } from '../upsert-position.widget';
 
 import type { IPosition } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
-import { useAlertDialogStore } from '@/contexts';
 
 interface ActionMenuTablePositionsProps {
   position: IPosition;
 }
 export function ActionMenuTablePositions({ position }: ActionMenuTablePositionsProps) {
   const { t } = useTranslation();
-  // const { removePositionResult, handleRemovePosition } = useRemovePositionHook();
-
-  const { openAlert } = useAlertDialogStore(false);
-  // const { openAlert, closeAlert } = useAlertDialogStore(removePositionResult.loading);
+  const disclosureModal = useDisclosure();
+  const { handleRemovePosition } = useRemovePositionHook();
 
   if (!position || !position.id) return null;
 
   const menuOptions = [
     {
+      label: t('actions.edit'),
+      icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
+      onClick: () => {
+        if (!position.id) return;
+
+        disclosureModal.onOpen();
+      },
+    },
+    {
       type: 'danger',
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
-      onClick: () => {
-        openAlert({
-          title: t('actions.delete'),
-          description: `${t('actions.confirmDelete')} ${t('common.position').toLowerCase()} "${
-            position.name
-          }"?`,
-          onHandleConfirm() {
-            // TODO
-            // if (!position.id) return;
-            // handleRemovePosition(position.id, closeAlert);
-          },
-        });
-      },
+      onClick: () => handleRemovePosition(position),
     },
   ].filter(Boolean);
 
   return (
-    <ActionMenuTable actionMenuItems={menuOptions}>
-      {({ isOpen }) => <AdditionalFeature isOpen={isOpen} />}
-    </ActionMenuTable>
+    <>
+      <UpsertPositionWidget
+        position={position}
+        isUpdate
+        isOpen={disclosureModal.isOpen}
+        onClose={disclosureModal.onClose}
+      />
+      <ActionMenuTable actionMenuItems={menuOptions}>
+        {({ isOpen }) => <AdditionalFeature isOpen={isOpen} />}
+      </ActionMenuTable>
+    </>
   );
 }

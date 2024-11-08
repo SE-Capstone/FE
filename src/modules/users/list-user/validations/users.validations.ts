@@ -43,7 +43,7 @@ export const userFormSchema = (t: any) =>
       .min(1, { message: t('validation.profile.addressRequired') })
       .max(255, { message: t('validation.profile.addressMax') }),
     roleId: z.string().trim().min(1),
-    positionId: z.string().trim().min(1),
+    // positionId: z.string().trim().min(1),
   });
 
 export type UserFormValues = z.infer<ReturnType<typeof userFormSchema>>;

@@ -17,9 +17,10 @@ export function ListPositionPage() {
   const { t } = useTranslation();
   const { positionsQueryState, resetPositionsQueryState } = usePositionsQueryFilterStateContext();
 
-  const { listPosition, isError, isLoading, isRefetching } = useGetListPositionQuery({
-    params: positionsQueryState.filters,
-  });
+  const { listPosition, meta, isError, isLoading, isRefetching, handlePaginate } =
+    useGetListPositionQuery({
+      params: positionsQueryState.filters,
+    });
 
   const columns = useMemo<ColumnsProps<IPosition>>(
     () => [
@@ -36,11 +37,11 @@ export function ListPositionPage() {
             },
           },
           {
-            key: 'name',
-            title: t('fields.name'),
+            key: 'title',
+            title: t('fields.title'),
             hasSort: false,
-            Cell({ name }) {
-              return <>{name}</>;
+            Cell({ title }) {
+              return <>{title}</>;
             },
           },
           {
@@ -89,12 +90,15 @@ export function ListPositionPage() {
           <Container maxW="container.2xl" centerContent>
             <ActionTablePositionsWidget />
             <TableComponent
-              withoutPagination
+              currentPage={meta.pageIndex}
+              perPage={meta.pageSize}
               data={listPosition}
               groupColumns={columns}
+              totalCount={meta.totalCount}
               isLoading={isLoading || isRefetching}
               isError={!!isError}
               additionalFeature={(position) => <ActionMenuTablePositions position={position} />}
+              onPageChange={handlePaginate}
             />
           </Container>
         </StateHandler>
