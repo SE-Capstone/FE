@@ -23,6 +23,7 @@ export function CreateRolePage() {
       <CustomFormProvider form={form} style={{ height: 'fit-content' }} onSubmit={handleCreateRole}>
         <EditRow
           title={t('fields.name')}
+          isRequired
           stackProps={{
             maxW: 25,
             justifyContent: 'end',
@@ -43,6 +44,7 @@ export function CreateRolePage() {
         </EditRow>
         <EditRow
           title={t('fields.description')}
+          isRequired
           stackProps={{
             maxW: 25,
             justifyContent: 'end',

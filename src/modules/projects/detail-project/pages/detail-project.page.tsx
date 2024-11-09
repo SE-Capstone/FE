@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import { Button, Container, useDisclosure } from '@chakra-ui/react';
+import { Container } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { UpsertProjectWidget } from '../../list-project/widgets';
 import { useGetDetailProject } from '../apis/detail-project.api';
 import { BaseInformationProjectWidget } from '../widgets';
 
@@ -27,7 +26,6 @@ import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailProjectPage() {
   const { t, i18n } = useTranslation();
-  const disclosureModal = useDisclosure();
   const { permissions } = useAuthentication();
   const { project: projectContext } = useProjectContext();
   const { projectId } = useParams();

@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 
-import { Button, Container, Stack, Text } from '@chakra-ui/react';
+import { Container, Stack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { useGetDetailIssue } from '../../list-issue/apis/detail-issue.api';
-import { PriorityIssue } from '../../list-issue/components';
+import { BadgeIssue, PriorityIssue } from '../../list-issue/components';
 import InlineEditableField from '../../list-issue/components/inline-edit-field';
 import InlineEditRichtext from '../../list-issue/components/inline-edit-richtext';
 import { UserWithAvatar } from '../../list-issue/components/user-with-avatar';
@@ -20,17 +20,24 @@ import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { formatDate } from '@/libs/helpers';
 import { InfoCard } from '@/modules/profile/components';
+import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 
 export function DetailIssuePage() {
   const { t } = useTranslation();
   const { members } = useProjectContext();
-  const { issueId } = useParams();
+  const { projectId, issueId } = useParams();
 
   const { issue, isLoading, isError } = useGetDetailIssue({ issueId: issueId || '' });
 
   const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issue?.id || '');
 
-  const handleSubmit = (value: string) => {
+  const { listStatus, isLoading: isLoading2 } = useGetListStatusQuery({
+    params: {
+      projectId: projectId || '',
+    },
+  });
+
+  const handleSubmit = (value: string, fieldName?: string) => {
     if (issue) {
       handleUpsertIssue({
         ...issue,
@@ -50,7 +57,41 @@ export function DetailIssuePage() {
         labelId: issue.label?.id,
         assigneeId: issue.assignee?.id,
         priority: issue.priority,
-        title: value || issue.title,
+        ...(fieldName === 'title' && {
+          title: value || issue.title,
+        }),
+        ...(fieldName === 'estimatedTime' && {
+          estimatedTime: Number(value) || issue.estimatedTime,
+        }),
+        ...(fieldName === 'percentage' && {
+          percentage: Number(value) || issue.percentage,
+        }),
+        ...(fieldName === 'startDate' && {
+          startDate:
+            (formatDate({
+              date: value,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date) ||
+            (issue.startDate
+              ? (formatDate({
+                  date: issue.startDate,
+                  format: 'YYYY-MM-DD',
+                }) as unknown as Date)
+              : undefined),
+        }),
+        ...(fieldName === 'dueDate' && {
+          dueDate:
+            (formatDate({
+              date: value,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date) ||
+            (issue.dueDate
+              ? (formatDate({
+                  date: issue.dueDate,
+                  format: 'YYYY-MM-DD',
+                }) as unknown as Date)
+              : undefined),
+        }),
         // TODO
         // parentIssueId: issue.parentIssueId
       });
@@ -85,6 +126,27 @@ export function DetailIssuePage() {
           label: t('fields.status'),
           text: (
             <InlineEditCustomSelect
+              options={listStatus.map((s) => ({
+                label: <BadgeIssue content={s.name} colorScheme={s.color} />,
+                value: s.id,
+              }))}
+              defaultValue={
+                issue && {
+                  label: (
+                    <BadgeIssue content={issue.status.name} colorScheme={issue.status.color} />
+                  ),
+                  value: issue.status.id,
+                }
+              }
+              field="status"
+              issue={issue}
+            />
+          ),
+        },
+        {
+          label: t('fields.priority'),
+          text: (
+            <InlineEditCustomSelect
               options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
                 label: <PriorityIssue priority={value} />,
                 value,
@@ -99,14 +161,58 @@ export function DetailIssuePage() {
           ),
         },
         {
+          label: t('fields.percentageDone'),
+          text: (
+            <InlineEditableField
+              fieldValue={issue?.percentage?.toString() || '0'}
+              callback={handleSubmit}
+              fieldName="percentage"
+              type="progress"
+            />
+          ),
+        },
+        {
+          label: t('fields.estimatedTime'),
+          text: (
+            <InlineEditableField
+              fieldValue={issue?.estimatedTime?.toString() || ''}
+              callback={handleSubmit}
+              fieldName="estimatedTime"
+              styleProps={{ minW: '200px', minH: '20px' }}
+            />
+          ),
+        },
+        {
           label: t('fields.startDate'),
-          text: issue?.startDate
-            ? formatDate({ date: issue?.startDate, format: 'DD-MM-YYYY' })
-            : '',
+          text: (
+            <InlineEditableField
+              fieldValue={
+                issue?.startDate
+                  ? formatDate({ date: issue?.startDate, format: 'YYYY-MM-DD' }) || ''
+                  : ''
+              }
+              callback={handleSubmit}
+              fieldName="startDate"
+              type="date"
+              styleProps={{ transform: 'translate(0, -4px)' }}
+            />
+          ),
         },
         {
           label: t('fields.dueDate'),
-          text: issue?.dueDate ? formatDate({ date: issue?.dueDate, format: 'DD-MM-YYYY' }) : '',
+          text: (
+            <InlineEditableField
+              fieldValue={
+                issue?.dueDate
+                  ? formatDate({ date: issue?.dueDate, format: 'YYYY-MM-DD' }) || ''
+                  : ''
+              }
+              callback={handleSubmit}
+              fieldName="dueDate"
+              type="date"
+              styleProps={{ transform: 'translate(0, -4px)' }}
+            />
+          ),
         },
         issue?.lastUpdatedBy && {
           label: t('common.lastUpdatedBy'),
@@ -128,14 +234,15 @@ export function DetailIssuePage() {
         },
         // TODO: Add phase field
       ].filter(Boolean),
-    [issue, members, t]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [issue, listStatus, members, t]
   );
 
   return (
     <>
       <Head title={issue?.title} />
       <Container maxW="container.2xl" centerContent>
-        <StateHandler showLoader={isLoading} showError={!!isError}>
+        <StateHandler showLoader={isLoading || isLoading2} showError={!!isError}>
           <LayoutBack
             display="flex"
             flexDir="row"
@@ -147,9 +254,11 @@ export function DetailIssuePage() {
             pb={0}
             title={issue?.title}
           >
-            <Button as={Link} to="edit">
+            {/* <Button as={Link} to="edit">
               {t('actions.edit')}
-            </Button>
+            </Button> */}
+            {/* eslint-disable-next-line react/jsx-no-useless-fragment */}
+            <></>
           </LayoutBack>
 
           <Stack
@@ -182,7 +291,7 @@ export function DetailIssuePage() {
               </Stack>
 
               <Stack w="full" spacing="24px">
-                <Stack padding="24px" borderRadius="8px" direction="column" spacing="24px">
+                <Stack borderRadius="8px" direction="column" spacing="24px">
                   <Text
                     sx={{
                       fontWeight: 'semibold',

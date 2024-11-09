@@ -5,7 +5,7 @@ import InlineEdit from '@atlaskit/inline-edit';
 import { Box as BoxAtlas, xcss } from '@atlaskit/primitives';
 import TextArea from '@atlaskit/textarea';
 import Textfield from '@atlaskit/textfield';
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Progress, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { isDateLessThan, notify } from '@/libs/helpers';
@@ -29,7 +29,7 @@ const InlineEditableField = ({
   callback: (value: string, fieldName?: string) => void;
   isTextArea?: boolean;
   fieldName?: string;
-  type?: 'normal' | 'title' | 'date';
+  type?: 'normal' | 'title' | 'date' | 'progress';
   styleProps?: any;
   startDate?: string;
 }) => {
@@ -69,7 +69,7 @@ const InlineEditableField = ({
                 {...fieldProps}
                 autoFocus
               />
-            ) : type === 'normal' ? (
+            ) : type === 'normal' || type === 'progress' ? (
               <Textfield {...fieldProps} autoFocus />
             ) : (
               <DatePicker {...fieldProps} locale="vi-VN" />
@@ -88,16 +88,22 @@ const InlineEditableField = ({
             >
               {editValue}
             </BoxAtlas>
+          ) : type === 'progress' ? (
+            <Progress
+              minW="200px"
+              rounded={1.5}
+              colorScheme="green"
+              value={Number(editValue) || 0}
+            />
           ) : (
             <Text
-              className="adfbadfadfb"
               wordBreak="break-all"
               whiteSpace="normal"
               flex={1}
               fontWeight={500}
               {...styleProps}
             >
-              {editValue}
+              {type === 'date' ? editValue || 'yyyy-mm-dd' : editValue}
             </Text>
           )
         }
@@ -106,7 +112,7 @@ const InlineEditableField = ({
           if (value !== editValue) {
             if (
               type === 'date' &&
-              fieldName === 'endDate' &&
+              (fieldName === 'endDate' || fieldName === 'dueDate') &&
               startDate &&
               isDateLessThan({ date1: value, date2: startDate })
             ) {

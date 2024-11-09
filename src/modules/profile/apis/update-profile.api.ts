@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { useAuthentication } from '../hooks';
+
 import type { IUpdateUserResponse } from '../types';
 import type { GenderEnum } from '@/configs';
 import type { IResponseApi } from '@/configs/axios';
@@ -43,6 +45,7 @@ interface IProps {
 
 export function useUpdateProfileMutation({ configs }: IProps = {}) {
   const { t } = useTranslation();
+  const { handleLogin } = useAuthentication();
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
@@ -55,6 +58,7 @@ export function useUpdateProfileMutation({ configs }: IProps = {}) {
         notify({ type: 'error', message: DEFAULT_MESSAGE(t).SOMETHING_WRONG });
         return;
       }
+      handleLogin(data?.data);
 
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.user['user/profile'].queryKey,

@@ -291,7 +291,7 @@
     "project": "Project",
     "job": "Skill",
     "skill": "Skill",
-    "task": "Task",
+    "task": "Issue",
     "statusProject": "Issue status",
     "phase": "Project phase",
     "label": "Issue label"

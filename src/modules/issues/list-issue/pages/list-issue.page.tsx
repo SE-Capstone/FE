@@ -95,9 +95,12 @@ export function ListIssuePage() {
               const { status } = issue;
               return (
                 <InlineEditCustomSelect
-                  options={statuses.map((s) => ({ label: s.name, value: s.id }))}
+                  options={statuses.map((s) => ({
+                    label: <BadgeIssue content={s.name} colorScheme={s.color} />,
+                    value: s.id,
+                  }))}
                   defaultValue={{
-                    label: status.name,
+                    label: <BadgeIssue content={status.name} colorScheme={status.color} />,
                     value: status.id,
                   }}
                   field="status"

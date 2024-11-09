@@ -23,7 +23,7 @@ export function useEditorState(isView: boolean = false): UseEditorStateReturn {
         });
       }
     }
-  }, [editorRef, editorRef.current.editor, isView]);
+  }, [editorRef, editorRef.current?.editor, isView]);
 
   return { isReady, editor, editorRef };
 }

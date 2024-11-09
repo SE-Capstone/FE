@@ -29,14 +29,14 @@ export function EditRow({
         align="center"
         {...stackProps}
       >
+        <Text as="span" fontWeight="600">
+          {title}
+        </Text>
         {isRequired ? (
           <Text as="span" color="red.300">
             *
           </Text>
         ) : null}
-        <Text as="span" fontWeight="600">
-          {title}
-        </Text>
       </HStack>
       <Box flex={1}>{children}</Box>
     </HStack>

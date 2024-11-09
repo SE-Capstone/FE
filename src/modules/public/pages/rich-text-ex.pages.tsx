@@ -37,6 +37,14 @@ import 'reactjs-tiptap-editor/style.css';
 export const extensions = [
   BaseKit.configure({
     characterCount: false,
+    placeholder: {
+      emptyEditorClass: 'is-editor-empty',
+      emptyNodeClass: 'is-empty',
+      placeholder: 'Add content...',
+      showOnlyWhenEditable: false,
+      showOnlyCurrent: true,
+      includeChildren: false,
+    },
   }),
   Blockquote,
   Bold,

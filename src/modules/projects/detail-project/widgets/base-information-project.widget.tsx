@@ -15,6 +15,7 @@ import { ChangeStatus } from '@/components/widgets/change-status';
 import { PermissionEnum, PROJECT_STATUS_OPTIONS } from '@/configs';
 import { formatDate } from '@/libs/helpers';
 import InlineEditableField from '@/modules/issues/list-issue/components/inline-edit-field';
+import { UserWithAvatar } from '@/modules/issues/list-issue/components/user-with-avatar';
 import { InlineEditCustomSelect } from '@/modules/issues/list-issue/widgets/editable-dropdown.widget';
 import { InfoCard } from '@/modules/profile/components';
 
@@ -84,38 +85,44 @@ export function BaseInformationProjectWidget({
       [
         {
           label: t('fields.name'),
-          text: (
+          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
             <InlineEditableField
               fieldValue={project?.name || ''}
               callback={handleSubmit}
               fieldName="name"
             />
+          ) : (
+            project?.name || ''
           ),
         },
         {
           label: t('fields.code'),
-          text: (
+          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
             <InlineEditableField
               fieldValue={project?.code || ''}
               callback={handleSubmit}
               fieldName="code"
             />
+          ) : (
+            project?.code || ''
           ),
         },
         {
           label: t('fields.description'),
-          text: (
+          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
             <InlineEditableField
               fieldValue={project?.description || ''}
               callback={handleSubmit}
               fieldName="description"
               isTextArea
             />
+          ) : (
+            project?.description || ''
           ),
         },
         {
           label: t('fields.teamLead'),
-          text: (
+          text: !permissions[PermissionEnum.UPDATE_PROJECT] ? (
             <InlineEditCustomSelect
               options={teamLeads.map((user) => ({
                 label: user.userName,
@@ -134,11 +141,15 @@ export function BaseInformationProjectWidget({
               field="lead"
               project={project}
             />
+          ) : (
+            project?.leadId && (
+              <UserWithAvatar label={project.leadName!} image={project.leadAvatar || ''} />
+            )
           ),
         },
         permissions[PermissionEnum.READ_LIST_PROJECT] && {
           label: t('fields.status'),
-          text: (
+          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
             <InlineEditCustomSelect
               options={PROJECT_STATUS_OPTIONS.map((s) => ({
                 label: <BadgeStatus status={s} />,
@@ -151,6 +162,8 @@ export function BaseInformationProjectWidget({
               field="status"
               project={project}
             />
+          ) : (
+            <BadgeStatus status={project?.status as ProjectStatusEnum} />
           ),
         },
         permissions[PermissionEnum.READ_LIST_PROJECT] && {
@@ -164,6 +177,7 @@ export function BaseInformationProjectWidget({
                   ? `${t('actions.archive')} ${t('common.project').toLowerCase()}?`
                   : `${t('actions.unarchive')} ${t('common.project').toLowerCase()}?`
               }
+              isLoading={!permissions[PermissionEnum.UPDATE_PROJECT] && true}
               description={
                 project?.isVisible ? t('actions.archiveProject') : t('actions.unarchiveProject')
               }
@@ -172,10 +186,7 @@ export function BaseInformationProjectWidget({
         },
         {
           label: t('fields.startDate'),
-          // text: project?.startDate
-          //   ? formatDate({ date: project?.startDate, format: 'DD-MM-YYYY' })
-          //   : '',
-          text: (
+          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
             <InlineEditableField
               fieldValue={
                 project?.startDate
@@ -187,11 +198,15 @@ export function BaseInformationProjectWidget({
               type="date"
               styleProps={{ transform: 'translate(0, -4px)' }}
             />
+          ) : project?.startDate ? (
+            formatDate({ date: project.startDate, format: 'DD-MM-YYYY' })
+          ) : (
+            ''
           ),
         },
         {
           label: t('fields.endDate'),
-          text: (
+          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
             <InlineEditableField
               fieldValue={
                 project?.endDate
@@ -208,6 +223,10 @@ export function BaseInformationProjectWidget({
               }
               styleProps={{ transform: 'translate(0, -4px)' }}
             />
+          ) : project?.endDate ? (
+            formatDate({ date: project.endDate, format: 'DD-MM-YYYY' })
+          ) : (
+            ''
           ),
         },
       ].filter(Boolean),
