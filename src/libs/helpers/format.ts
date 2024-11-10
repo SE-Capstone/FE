@@ -14,6 +14,7 @@ enum FormatDateTimeEnum {
   'DD/MM/YYYY' = 'DD/MM/YYYY',
   'HH:mm - DD/MM/YYYY' = 'HH:mm - DD/MM/YYYY',
   'MMM DD' = 'MMM DD',
+  'DD MMM' = 'DD MMM',
   'MMM DD, YYYY' = 'MMM DD, YYYY',
   'hh : mm' = 'hh : mm',
   'DD.MM.YY hh:mm' = 'DD.MM.YY hh:mm',
@@ -67,4 +68,11 @@ export function isDateLessThan({ date1, date2 }: CompareDatesInput): boolean {
   const parsedDate2 = dayjs(date2).startOf('day');
 
   return parsedDate1.isBefore(parsedDate2);
+}
+
+export function isDateLessThanToday(date: Date | string | number | Dayjs): boolean {
+  const parsedDate1 = dayjs(date).startOf('day');
+  const today = dayjs().startOf('day');
+
+  return parsedDate1.isBefore(today);
 }

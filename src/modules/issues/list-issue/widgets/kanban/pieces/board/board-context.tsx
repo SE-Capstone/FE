@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 
 import invariant from 'tiny-invariant';
 
-import type { ColumnType } from '../../data/people';
+import type { ColumnType } from '../../data';
 import type { CleanupFn } from '@atlaskit/pragmatic-drag-and-drop/types';
 
 export type BoardContextValue = {

@@ -1,6 +1,5 @@
 import { forwardRef, memo, type Ref, useCallback, useEffect, useRef, useState } from 'react';
 
-import Avatar from '@atlaskit/avatar';
 import { IconButton } from '@atlaskit/button/new';
 import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdown-menu';
 import mergeRefs from '@atlaskit/ds-lib/merge-refs';
@@ -22,24 +21,28 @@ import {
   extractClosestEdge,
 } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
 import { DropIndicator } from '@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/box';
-import { Box, Grid, Stack, xcss } from '@atlaskit/primitives';
+import { Box, Stack, xcss } from '@atlaskit/primitives';
 import { token } from '@atlaskit/tokens';
+import { Badge, Stack as StackCharkra, Text } from '@chakra-ui/react';
 import ReactDOM from 'react-dom';
+import { IoCalendarOutline } from 'react-icons/io5';
 import invariant from 'tiny-invariant';
 
 import { useBoardContext } from './board-context';
 import { useColumnContext } from './column-context';
-import { type Person } from '../../data/people';
+import { type Issue } from '../../data';
+
+import { BadgeIssue, PriorityIssue } from '@/modules/issues/list-issue/components';
+import InlineEditWithIcon from '@/modules/issues/list-issue/components/inline-edit-field-with-icon';
+import { UserWithAvatar } from '@/modules/issues/list-issue/components/user-with-avatar';
 
 type State =
   | { type: 'idle' }
   | { type: 'preview'; container: HTMLElement; rect: DOMRect }
   | { type: 'dragging' };
-
 const idleState: State = { type: 'idle' };
 const draggingState: State = { type: 'dragging' };
 
-const noMarginStyles = xcss({ margin: 'space.0' });
 const baseStyles = xcss({
   width: '100%',
   padding: 'space.100',
@@ -66,23 +69,19 @@ const stateStyles: {
   preview: undefined,
 };
 
-const buttonColumnStyles = xcss({
-  alignSelf: 'start',
-});
-
 type CardPrimitiveProps = {
   closestEdge: Edge | null;
-  item: Person;
+  item: Issue;
   state: State;
   actionMenuTriggerRef?: Ref<HTMLButtonElement>;
 };
 
-function LazyDropdownItems({ userId }: { userId: string }) {
+function LazyDropdownItems({ id }: { id: string }) {
   const { reorderCard } = useBoardContext();
   const { columnId, getCardIndex, getNumCards } = useColumnContext();
 
   const numCards = getNumCards();
-  const startIndex = getCardIndex(userId);
+  const startIndex = getCardIndex(id);
 
   const moveToTop = useCallback(() => {
     reorderCard({ columnId, startIndex, finishIndex: 0 });
@@ -111,40 +110,21 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
   { closestEdge, item, state, actionMenuTriggerRef },
   ref
 ) {
-  const { avatarUrl, name, role, userId } = item;
+  const { issue, title, index, dueDate, isLate, statusId, statusColor, id } = item;
 
   return (
-    <Grid
-      ref={ref}
-      testId={`item-${userId}`}
-      templateColumns="auto 1fr auto"
-      columnGap="space.100"
-      alignItems="center"
-      xcss={[baseStyles, stateStyles[state.type]]}
-    >
-      <Avatar size="large" src={avatarUrl}>
-        {(props) => (
-          // Note: using `div` rather than `Box`.
-          // `CustomAvatarProps` passes through a `className`
-          // but `Box` does not accept `className` as a prop.
-          <div
-            {...props}
-            // Workaround to make `Avatar` not draggable.
-            // Ideally `Avatar` would have a `draggable` prop.
-            ref={props.ref as Ref<HTMLDivElement>}
-            style={{ pointerEvents: 'none' }}
-          />
-        )}
-      </Avatar>
-      <Stack space="space.050" grow="fill">
+    <Stack ref={ref} testId={`item-${id}`} xcss={[baseStyles, stateStyles[state.type]]}>
+      <StackCharkra display="flex" flexDir="row" justifyContent="space-between" alignItems="center">
         <Heading size="xsmall" as="span">
-          {name}
+          <InlineEditWithIcon
+            issue={issue}
+            buttonStyle={{
+              height: 'auto',
+            }}
+            textStyle={{ flex: 1 }}
+            statusId={statusId}
+          />
         </Heading>
-        <Box as="small" xcss={noMarginStyles}>
-          {role}
-        </Box>
-      </Stack>
-      <Box xcss={buttonColumnStyles}>
         <DropdownMenu
           trigger={({ triggerRef, ...triggerProps }) => (
             <IconButton
@@ -155,25 +135,58 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
                     mergeRefs([triggerRef])
               }
               icon={MoreIcon}
-              label={`Move ${name}`}
+              label={`Move ${title}`}
               appearance="default"
               spacing="compact"
               {...triggerProps}
             />
           )}
         >
-          <LazyDropdownItems userId={userId} />
+          <LazyDropdownItems id={id} />
         </DropdownMenu>
-      </Box>
+      </StackCharkra>
+      {(issue.label?.title || dueDate) && (
+        <StackCharkra mt={2} flexDir="row" justifyContent="start" alignItems="center" gap={2}>
+          {issue.label?.title && (
+            <Badge variant="outline" colorScheme="gray">
+              <Text fontSize="10px" fontWeight="700">
+                {issue.label.title}
+              </Text>
+            </Badge>
+          )}
+          {dueDate && (
+            <Badge variant="outline" colorScheme={isLate ? 'red' : 'gray'}>
+              <StackCharkra flexDir="row" alignItems="center" gap={1}>
+                <IoCalendarOutline />
+                <Text color={isLate ? 'red.400' : 'gray.500'} fontSize="10px" fontWeight="700">
+                  {dueDate}
+                </Text>
+              </StackCharkra>
+            </Badge>
+          )}
+        </StackCharkra>
+      )}
+      <StackCharkra mt={2} flexDir="row" justifyContent="space-between" alignItems="center" gap={2}>
+        <BadgeIssue content={index} variant="outline" colorScheme={statusColor} />
+        <StackCharkra flexDir="row" alignItems="center">
+          <PriorityIssue priority={issue.priority} hideText />
+          <UserWithAvatar
+            image={issue.assignee?.avatar || ''}
+            size={7}
+            label={issue.assignee?.userName || ''}
+            hideText
+          />
+        </StackCharkra>
+      </StackCharkra>
 
       {closestEdge && <DropIndicator edge={closestEdge} gap={token('space.100', '0')} />}
-    </Grid>
+    </Stack>
   );
 });
 
-export const Card = memo(function Card({ item }: { item: Person }) {
+export const Card = memo(function Card({ item }: { item: Issue }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const { userId } = item;
+  const { id } = item;
   const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
   const [state, setState] = useState<State>(idleState);
 
@@ -183,13 +196,13 @@ export const Card = memo(function Card({ item }: { item: Person }) {
     invariant(actionMenuTriggerRef.current);
     invariant(ref.current);
     return registerCard({
-      cardId: userId,
+      cardId: id,
       entry: {
         element: ref.current,
         actionMenuTrigger: actionMenuTriggerRef.current,
       },
     });
-  }, [registerCard, userId]);
+  }, [registerCard, id]);
 
   useEffect(() => {
     const element = ref.current;
@@ -197,7 +210,7 @@ export const Card = memo(function Card({ item }: { item: Person }) {
     return combine(
       draggable({
         element,
-        getInitialData: () => ({ type: 'card', itemId: userId, instanceId }),
+        getInitialData: () => ({ type: 'card', itemId: id, instanceId }),
         onGenerateDragPreview: ({ location, source, nativeSetDragImage }) => {
           const rect = source.element.getBoundingClientRect();
 
@@ -226,7 +239,7 @@ export const Card = memo(function Card({ item }: { item: Person }) {
           source.data.instanceId === instanceId && source.data.type === 'card',
         getIsSticky: () => true,
         getData: ({ input, element }) => {
-          const data = { type: 'card', itemId: userId };
+          const data = { type: 'card', itemId: id };
 
           return attachClosestEdge(data, {
             input,
@@ -235,12 +248,12 @@ export const Card = memo(function Card({ item }: { item: Person }) {
           });
         },
         onDragEnter: (args) => {
-          if (args.source.data.itemId !== userId) {
+          if (args.source.data.itemId !== id) {
             setClosestEdge(extractClosestEdge(args.self.data));
           }
         },
         onDrag: (args) => {
-          if (args.source.data.itemId !== userId) {
+          if (args.source.data.itemId !== id) {
             setClosestEdge(extractClosestEdge(args.self.data));
           }
         },
@@ -252,7 +265,7 @@ export const Card = memo(function Card({ item }: { item: Person }) {
         },
       })
     );
-  }, [instanceId, item, userId]);
+  }, [instanceId, item, id]);
 
   return (
     <>

@@ -8,6 +8,7 @@ import { ISSUE_PRIORITY_VALUES } from '@/configs';
 
 interface PriorityIssueProps {
   priority: IssuePriorityEnum;
+  hideText?: boolean;
 }
 
 const PriorityIcon = (priority: IssuePriorityEnum) => {
@@ -28,13 +29,13 @@ const PriorityIcon = (priority: IssuePriorityEnum) => {
 };
 
 export function PriorityIssue(props: PriorityIssueProps) {
-  const { priority } = props;
+  const { priority, hideText } = props;
   const { t } = useTranslation();
 
   return (
-    <Stack flexDir="row" gap={2} alignItems="center">
+    <Stack flexDir="row" gap={!hideText ? 2 : 0} alignItems="center">
       {PriorityIcon(priority)}
-      <Text>{ISSUE_PRIORITY_VALUES(t)[priority]}</Text>
+      <Text>{!hideText && ISSUE_PRIORITY_VALUES(t)[priority]}</Text>
     </Stack>
   );
 }

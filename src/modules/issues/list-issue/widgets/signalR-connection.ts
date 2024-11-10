@@ -7,6 +7,8 @@ class Connector {
 
   public orderStatusEvents: (onMessageReceived: (userId: string) => void) => void;
 
+  public orderCardEvents: (onMessageReceived: (userId: string) => void) => void;
+
   // eslint-disable-next-line no-use-before-define
   static instance: Connector;
 
@@ -39,6 +41,14 @@ class Connector {
         onMessageReceived(response);
       });
     };
+
+    this.orderCardEvents = (onMessageReceived) => {
+      this.connection.on('IssueOrderResponse', (response) => {
+        console.log('Event received');
+        console.log(response);
+        onMessageReceived(response);
+      });
+    };
   }
 
   private joinGroup(projectId: string) {
@@ -66,6 +76,29 @@ class Connector {
     });
     this.connection
       .invoke('StatusOrderRequest', projectId, statusId, position)
+      .then(() => console.log('Notification sent'))
+      .catch((err) => console.error(err.toString()));
+  };
+
+  public sendMessageCard = ({
+    projectId,
+    issueId,
+    statusId,
+    position,
+  }: {
+    projectId: string;
+    issueId: string;
+    statusId: string;
+    position: number;
+  }) => {
+    console.log('Start send message card with body', {
+      projectId,
+      issueId,
+      statusId,
+      position,
+    });
+    this.connection
+      .invoke('IssueOrderRequest', projectId, issueId, statusId, position)
       .then(() => console.log('Notification sent'))
       .catch((err) => console.error(err.toString()));
   };

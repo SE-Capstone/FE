@@ -2,6 +2,7 @@ import type { StringNumeric } from '@/types';
 
 const ENDPOINT_QUERIES = {
   list: 'issues',
+  kanban: 'issues/kanban',
   detail: (issueId: StringNumeric) => `issues/${issueId}`,
 } as const;
 

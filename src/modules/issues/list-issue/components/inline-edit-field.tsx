@@ -103,7 +103,7 @@ const InlineEditableField = ({
               fontWeight={500}
               {...styleProps}
             >
-              {type === 'date' ? editValue || 'yyyy-mm-dd' : editValue}
+              {type === 'date' ? editValue || 'None' : editValue}
             </Text>
           )
         }

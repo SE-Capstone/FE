@@ -20,7 +20,17 @@ const readViewContainerStyles = xcss({
   wordBreak: 'break-word',
 });
 
-const InlineEditWithIcon = ({ issue }: { issue: IIssue }) => {
+const InlineEditWithIcon = ({
+  issue,
+  buttonStyle,
+  textStyle,
+  statusId,
+}: {
+  issue: IIssue;
+  buttonStyle?: any;
+  textStyle?: any;
+  statusId?: string;
+}) => {
   const { t } = useTranslation();
   const [editValue, setEditValue] = useState(issue.title);
   const [isEditing, setIsEditing] = useState(false);
@@ -53,7 +63,7 @@ const InlineEditWithIcon = ({ issue }: { issue: IIssue }) => {
             format: 'YYYY-MM-DD',
           }) as unknown as Date)
         : undefined,
-      statusId: issue.status.id,
+      statusId: statusId || issue.status.id,
       labelId: issue.label?.id,
       assigneeId: issue.assignee?.id,
       priority: issue.priority,
@@ -84,9 +94,34 @@ const InlineEditWithIcon = ({ issue }: { issue: IIssue }) => {
         )}
         readView={() => (
           <BoxAtlas xcss={readViewContainerStyles} testId="read-view">
-            <CustomLink to={`issues/${String(issue.id)}`} noOfLines={1}>
-              {editValue}
-            </CustomLink>
+            <Box display="flex" alignItems="center">
+              <CustomLink
+                to={`issues/${String(issue.id)}`}
+                noOfLines={textStyle ? 5 : 2}
+                {...textStyle}
+              >
+                {editValue}
+              </CustomLink>
+              <IconButton
+                aria-label="edit"
+                bg="transparent"
+                className="edit-icon"
+                fontSize="sm"
+                ml={1}
+                display={isEditing ? 'none' : 'inline-block'}
+                color="transparent"
+                _hover={{
+                  color: 'gray.500',
+                  background: 'transparent',
+                }}
+                _focus={{
+                  background: 'transparent',
+                }}
+                icon={<RiEditFill />}
+                onClick={() => setIsEditing(true)}
+                {...buttonStyle}
+              />
+            </Box>
           </BoxAtlas>
         )}
         validate={validate}
@@ -99,14 +134,14 @@ const InlineEditWithIcon = ({ issue }: { issue: IIssue }) => {
           setIsEditing(false);
         }}
       />
-      <IconButton
+      {/* <IconButton
         aria-label="edit"
         bg="transparent"
         className="edit-icon"
         fontSize="sm"
         ml={1}
         display={isEditing ? 'none' : 'inline-block'}
-        color="white"
+        color="transparent"
         _hover={{
           color: 'gray.500',
           background: 'transparent',
@@ -116,7 +151,8 @@ const InlineEditWithIcon = ({ issue }: { issue: IIssue }) => {
         }}
         icon={<RiEditFill />}
         onClick={() => setIsEditing(true)}
-      />
+        {...buttonStyle}
+      /> */}
     </Box>
   );
 };

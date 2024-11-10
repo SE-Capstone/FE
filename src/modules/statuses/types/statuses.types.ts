@@ -1,3 +1,4 @@
+import type { IIssue } from '@/modules/issues/list-issue/types';
 import type { ThemingProps } from '@chakra-ui/react';
 
 export type QueryListStatusInput = {
@@ -12,4 +13,8 @@ export type IStatus = {
   color: ThemingProps['colorScheme'];
   projectId: string;
   issueCount: number;
+};
+
+export type IKanban = IStatus & {
+  issues: IIssue[];
 };

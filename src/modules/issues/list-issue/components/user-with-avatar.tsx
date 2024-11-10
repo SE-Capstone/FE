@@ -5,9 +5,11 @@ export function UserWithAvatar({
   label,
   size,
   stackProps,
+  hideText = false,
 }: {
   image: string;
   label: string;
+  hideText?: boolean;
   size?: number;
   stackProps?: any;
 }) {
@@ -15,7 +17,7 @@ export function UserWithAvatar({
     <HStack w="full" role="group" {...stackProps}>
       <Avatar src={image} boxSize={size || 8} name={label as string} />
 
-      <Text color="inherit">{label}</Text>
+      <Text color="inherit">{!hideText && label}</Text>
     </HStack>
   );
 }

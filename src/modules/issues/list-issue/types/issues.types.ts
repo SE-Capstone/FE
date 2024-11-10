@@ -16,6 +16,13 @@ export enum IssuePriorityEnum {
   Highest = 5,
 }
 
+export type QueryKanbanInput = {
+  title?: string;
+  statusId?: string;
+  labelId?: string;
+  priority?: IssuePriorityEnum;
+};
+
 export type QueryListIssueInput = {
   title?: string;
   statusId?: string;

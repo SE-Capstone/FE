@@ -19,6 +19,7 @@ import { LayoutBack } from '@/components/layouts';
 import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { formatDate } from '@/libs/helpers';
+import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
 import { InfoCard } from '@/modules/profile/components';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 
@@ -32,6 +33,12 @@ export function DetailIssuePage() {
   const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issue?.id || '');
 
   const { listStatus, isLoading: isLoading2 } = useGetListStatusQuery({
+    params: {
+      projectId: projectId || '',
+    },
+  });
+
+  const { listLabel, isLoading: isLoading3 } = useGetListLabelQuery({
     params: {
       projectId: projectId || '',
     },
@@ -144,6 +151,25 @@ export function DetailIssuePage() {
           ),
         },
         {
+          label: t('common.label'),
+          text: (
+            <InlineEditCustomSelect
+              options={listLabel.map((s) => ({
+                label: s.title,
+                value: s.id,
+              }))}
+              defaultValue={
+                issue?.label && {
+                  label: issue.label.title,
+                  value: issue.label.id,
+                }
+              }
+              field="label"
+              issue={issue}
+            />
+          ),
+        },
+        {
           label: t('fields.priority'),
           text: (
             <InlineEditCustomSelect
@@ -242,7 +268,7 @@ export function DetailIssuePage() {
     <>
       <Head title={issue?.title} />
       <Container maxW="container.2xl" centerContent>
-        <StateHandler showLoader={isLoading || isLoading2} showError={!!isError}>
+        <StateHandler showLoader={isLoading || isLoading2 || isLoading3} showError={!!isError}>
           <LayoutBack
             display="flex"
             flexDir="row"

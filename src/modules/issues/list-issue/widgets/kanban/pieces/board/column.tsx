@@ -34,7 +34,7 @@ import invariant from 'tiny-invariant';
 import { useBoardContext } from './board-context';
 import { Card } from './card';
 import { ColumnContext, type ColumnContextProps, useColumnContext } from './column-context';
-import { type ColumnType } from '../../data/people';
+import { type ColumnType } from '../../data';
 
 const columnStyles = xcss({
   backgroundColor: 'elevation.surface.raised',
@@ -171,11 +171,8 @@ function ActionMenuItems() {
       finishIndex: startIndex - 1,
     });
   }, [reorderColumn, startIndex]);
-  console.log(columnId);
-  console.log(startIndex);
+
   const moveRight = useCallback(() => {
-    console.log(startIndex);
-    console.log(startIndex + 1);
     reorderColumn({
       startIndex,
       finishIndex: startIndex + 1,
@@ -326,7 +323,7 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
   }, [column.items]);
 
   const getCardIndex = useCallback(
-    (userId: string) => stableItems.current.findIndex((item) => item.userId === userId),
+    (id: string) => stableItems.current.findIndex((item) => item.id === id),
     []
   );
 
@@ -345,10 +342,6 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
         direction="column"
         xcss={[columnStyles, stateStyles[state.type]]}
       >
-        {/* This element takes up the same visual space as the column.
-          We are using a separate element so we can have two drop targets
-          that take up the same visual space (one for cards, one for columns)
-        */}
         <Stack ref={columnInnerRef} xcss={stackStyles}>
           <Stack xcss={[stackStyles, isDragging ? isDraggingStyles : undefined]}>
             <Inline
@@ -366,7 +359,7 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
             <Box ref={scrollableRef} xcss={scrollContainerStyles}>
               <Stack xcss={cardListStyles} space="space.100">
                 {column.items.map((item) => (
-                  <Card key={item.userId} item={item} />
+                  <Card key={item.id} item={item} />
                 ))}
               </Stack>
             </Box>

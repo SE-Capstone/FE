@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom';
 import invariant from 'tiny-invariant';
 
 import Connector from '../signalR-connection';
-import { type ColumnMap, type ColumnType, type Person, useGetBasicData } from './data/people';
+import { type ColumnMap, type ColumnType, type Issue, useGetBasicData } from './data';
 import Board from './pieces/board/board';
 import { BoardContext, type BoardContextValue } from './pieces/board/board-context';
 import BoardSkeleton from './pieces/board/board-skeleton';
@@ -62,17 +62,21 @@ export default function KanbanWidget() {
   const accessToken = getAccessToken();
   const { columnMap, orderedColumnIds, isLoading, refetch, isRefetching } = useGetBasicData();
 
-  const [lastActionId, setLastActionId] = useState<string | null>(null);
+  const [tabId, setTabId] = useState<string | null>(null);
 
-  const { sendMessage, orderStatusEvents, connection } = Connector(
-    accessToken || '',
-    projectId || ''
-  );
+  const { sendMessage, orderStatusEvents, sendMessageCard, orderCardEvents, connection } =
+    Connector(accessToken || '', projectId || '');
 
   useEffect(() => {
     orderStatusEvents(() => {
-      const storedActionId = localStorage.getItem('lastActionId');
-      if (storedActionId !== lastActionId) {
+      const storedTabId = sessionStorage.getItem('tabId');
+      if (!storedTabId || storedTabId !== tabId) {
+        refetch();
+      }
+    });
+    orderCardEvents(() => {
+      const storedTabId = sessionStorage.getItem('tabId');
+      if (!storedTabId || storedTabId !== tabId) {
         refetch();
       }
     });
@@ -80,6 +84,7 @@ export default function KanbanWidget() {
     return () => {
       // Unsubscribe from the event when the component unmounts
       connection.off('StatusOrderResponse');
+      connection.off('IssueOrderResponse');
     };
   });
 
@@ -99,16 +104,6 @@ export default function KanbanWidget() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, isRefetching]);
-
-  useEffect(() => {
-    // Cleanup the stored action ID after a short period (optional)
-    const timer = setTimeout(() => {
-      localStorage.removeItem('lastActionId');
-      setLastActionId(null);
-    }, 5000); // Clear the ID after 5 seconds (adjust as needed)
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const stableData = useRef(data);
   useEffect(() => {
@@ -150,7 +145,7 @@ export default function KanbanWidget() {
       const column = columnMap[columnId];
       const item = column.items[finishIndex];
 
-      const entry = registry.getCard(item.userId);
+      const entry = registry.getCard(item.id);
       triggerPostMoveFlash(entry.element);
 
       if (trigger !== 'keyboard') {
@@ -158,7 +153,7 @@ export default function KanbanWidget() {
       }
 
       liveRegion.announce(
-        `You've moved ${item.name} from position ${startIndex + 1} to position ${
+        `You've moved ${item.title} from position ${startIndex + 1} to position ${
           finishIndex + 1
         } of ${column.items.length} in the ${column.title} column.`
       );
@@ -178,7 +173,7 @@ export default function KanbanWidget() {
           ? itemIndexInFinishColumn + 1
           : destinationColumn.items.length;
 
-      const entry = registry.getCard(item.userId);
+      const entry = registry.getCard(item.id);
       triggerPostMoveFlash(entry.element);
 
       if (trigger !== 'keyboard') {
@@ -186,7 +181,7 @@ export default function KanbanWidget() {
       }
 
       liveRegion.announce(
-        `You've moved ${item.name} from position ${
+        `You've moved ${item.title} from position ${
           itemIndexInStartColumn + 1
         } to position ${finishPosition} in the ${destinationColumn.title} column.`
       );
@@ -217,10 +212,12 @@ export default function KanbanWidget() {
       trigger?: Trigger;
     }) => {
       setData((data) => {
-        const actionId = Date.now().toString(); // Generate a unique ID (could use a library for unique IDs)
-        setLastActionId(actionId);
-        localStorage.setItem('lastActionId', actionId);
-
+        const storedTabId = sessionStorage.getItem('tabId');
+        if (!storedTabId) {
+          const tabId = Date.now().toString(); // Generate a unique ID (could use a library for unique IDs)
+          setTabId(tabId);
+          sessionStorage.setItem('tabId', tabId);
+        }
         const outcome: Outcome = {
           type: 'column-reorder',
           columnId: data.orderedColumnIds[startIndex],
@@ -228,7 +225,7 @@ export default function KanbanWidget() {
           finishIndex,
         };
 
-        const a = {
+        const result = {
           ...data,
           orderedColumnIds: reorder({
             list: data.orderedColumnIds,
@@ -248,7 +245,7 @@ export default function KanbanWidget() {
             position: outcome.finishIndex,
           });
         }
-        return a;
+        return result;
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -268,13 +265,20 @@ export default function KanbanWidget() {
       trigger?: Trigger;
     }) => {
       setData((data) => {
+        const storedTabId = sessionStorage.getItem('tabId');
+        if (!storedTabId) {
+          const tabId = Date.now().toString(); // Generate a unique ID (could use a library for unique IDs)
+          setTabId(tabId);
+          sessionStorage.setItem('tabId', tabId);
+        }
+
         const sourceColumn = data.columnMap[columnId];
         const updatedItems = reorder({
           list: sourceColumn.items,
           startIndex,
           finishIndex,
         });
-
+        const item: Issue = sourceColumn.items[startIndex];
         const updatedSourceColumn: ColumnType = {
           ...sourceColumn,
           items: updatedItems,
@@ -292,7 +296,7 @@ export default function KanbanWidget() {
           finishIndex,
         };
 
-        const a = {
+        const result = {
           ...data,
           columnMap: updatedMap,
           lastOperation: {
@@ -301,10 +305,19 @@ export default function KanbanWidget() {
           },
         };
 
-        console.log('result', a);
-        return a;
+        if (startIndex !== finishIndex) {
+          sendMessageCard({
+            projectId: projectId || '',
+            issueId: item.id,
+            statusId: sourceColumn.columnId,
+            position: finishIndex,
+          });
+        }
+
+        return result;
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -327,11 +340,20 @@ export default function KanbanWidget() {
         return;
       }
       setData((data) => {
+        const storedTabId = sessionStorage.getItem('tabId');
+        if (!storedTabId) {
+          const tabId = Date.now().toString(); // Generate a unique ID (could use a library for unique IDs)
+          setTabId(tabId);
+          sessionStorage.setItem('tabId', tabId);
+        }
+
         const sourceColumn = data.columnMap[startColumnId];
         const destinationColumn = data.columnMap[finishColumnId];
-        const item: Person = sourceColumn.items[itemIndexInStartColumn];
+
+        const item: Issue = sourceColumn.items[itemIndexInStartColumn];
 
         const destinationItems = Array.from(destinationColumn.items);
+
         // Going into the first position if no index is provided
         const newIndexInDestination = itemIndexInFinishColumn ?? 0;
         destinationItems.splice(newIndexInDestination, 0, item);
@@ -340,7 +362,7 @@ export default function KanbanWidget() {
           ...data.columnMap,
           [startColumnId]: {
             ...sourceColumn,
-            items: sourceColumn.items.filter((i) => i.userId !== item.userId),
+            items: sourceColumn.items.filter((i) => i.id !== item.id),
           },
           [finishColumnId]: {
             ...destinationColumn,
@@ -355,7 +377,7 @@ export default function KanbanWidget() {
           itemIndexInFinishColumn: newIndexInDestination,
         };
 
-        const a = {
+        const result = {
           ...data,
           columnMap: updatedMap,
           lastOperation: {
@@ -364,11 +386,17 @@ export default function KanbanWidget() {
           },
         };
 
-        console.log('result', a);
+        sendMessageCard({
+          projectId: projectId || '',
+          issueId: item.id,
+          statusId: outcome.finishColumnId,
+          position: outcome.itemIndexInFinishColumn,
+        });
 
-        return a;
+        return result;
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -421,7 +449,7 @@ export default function KanbanWidget() {
               const sourceId = startColumnRecord.data.columnId;
               invariant(typeof sourceId === 'string');
               const sourceColumn = data.columnMap[sourceId];
-              const itemIndex = sourceColumn.items.findIndex((item) => item.userId === itemId);
+              const itemIndex = sourceColumn.items.findIndex((item) => item.id === itemId);
 
               if (location.current.dropTargets.length === 1) {
                 const [destinationColumnRecord] = location.current.dropTargets;
@@ -466,7 +494,7 @@ export default function KanbanWidget() {
                 const destinationColumn = data.columnMap[destinationColumnId];
 
                 const indexOfTarget = destinationColumn.items.findIndex(
-                  (item) => item.userId === destinationCardRecord.data.itemId
+                  (item) => item.id === destinationCardRecord.data.itemId
                 );
                 const closestEdgeOfTarget: Edge | null = extractClosestEdge(
                   destinationCardRecord.data
