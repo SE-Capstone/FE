@@ -1,5 +1,6 @@
 import type { ILabel } from '@/modules/labels/types';
 import type { IStatus } from '@/modules/statuses/types';
+import type { IUser } from '@/modules/users/list-user/types';
 import type { IBaseEntity } from '@/types';
 
 export enum IssueStatusEnum {
@@ -39,6 +40,14 @@ interface IUpdatedBy {
   avatar: string;
 }
 
+export type IComment = IBaseEntity & {
+  id: string;
+  userId: string;
+  issueId: string;
+  content: string;
+  user: IUser;
+};
+
 export type IIssue = IBaseEntity & {
   projectId: string;
   label?: ILabel;
@@ -55,4 +64,5 @@ export type IIssue = IBaseEntity & {
   percentage: number;
   assigneeAvatar?: string;
   estimatedTime?: number;
+  comments: IComment[];
 };

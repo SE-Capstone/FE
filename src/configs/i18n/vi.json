@@ -1,7 +1,6 @@
 {
   "common": {
     "descPlaceholder": "Thêm mô tả...",
-    "comments": "Bình luận",
     "me": "Tôi",
     "assignToMe": "Gán cho tôi",
     "assignSkill": "Gán kỹ năng",
@@ -95,7 +94,9 @@
     "phases": "Giai đoạn",
     "phase": "Giai đoạn",
     "issues": "Công việc",
-    "issue": "Công việc"
+    "issue": "Công việc",
+    "comments": "Bình luận",
+    "comment": "Bình luận"
   },
   "fields": {
     "title": "Tiêu đề",

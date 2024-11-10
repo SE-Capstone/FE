@@ -8,7 +8,15 @@ import { useEditorState } from '../hooks/use-editor-state';
 
 import { extensions } from '@/modules/public/pages/rich-text-ex.pages';
 
-const RichtextView = ({ id, content }: { id: string; content: any }) => {
+const RichtextView = ({
+  id,
+  content,
+  isComment,
+}: {
+  id: string;
+  content: any;
+  isComment?: boolean;
+}) => {
   const { t } = useTranslation();
   const [editValue, setEditValue] = useState(content || '');
   const { editorRef } = useEditorState(true);
@@ -25,14 +33,14 @@ const RichtextView = ({ id, content }: { id: string; content: any }) => {
   }, [id]);
 
   return (
-    <Box id="rich-text-view">
+    <Box id={isComment ? 'rich-text-view2' : 'rich-text-view'}>
       <Box id={id}>
         <RichTextEditor
           ref={editorRef}
           dark={false}
           label={t('fields.description')}
           output="html"
-          content={editValue || t('common.descPlaceholder')}
+          content={editValue}
           extensions={extensions}
         />
       </Box>

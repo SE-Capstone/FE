@@ -2,6 +2,7 @@ import { mergeQueryKeys } from '@lukemorales/query-key-factory';
 
 import { applicantQueryKeys } from './applicants';
 import { authQueryKeys } from './auth';
+import { commentQueryKeys } from './comment';
 import { issueQueryKeys } from './issue';
 import { jobQueryKeys } from './job';
 import { labelQueryKeys } from './label';
@@ -27,5 +28,6 @@ export const allQueryKeysStore = mergeQueryKeys(
   labelQueryKeys,
   statusQueryKeys,
   skillQueryKeys,
-  phaseQueryKeys
+  phaseQueryKeys,
+  commentQueryKeys
 );

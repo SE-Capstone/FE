@@ -1,5 +1,6 @@
 import { APPLICANTS_ENDPOINT_URL } from './applicants';
 import { AUTH_ENDPOINT_URL } from './auth';
+import { COMMENTS_ENDPOINT_URL } from './comment';
 import { ISSUES_ENDPOINT_URL } from './issue/issue-endpoint-url';
 import { JOBS_ENDPOINT_URL } from './job';
 import { LABELS_ENDPOINT_URL } from './label';
@@ -26,4 +27,5 @@ export const ALL_ENDPOINT_URL_STORE = {
   labels: LABELS_ENDPOINT_URL,
   statuses: STATUSES_ENDPOINT_URL,
   phases: PHASES_ENDPOINT_URL,
+  comments: COMMENTS_ENDPOINT_URL,
 } as const;

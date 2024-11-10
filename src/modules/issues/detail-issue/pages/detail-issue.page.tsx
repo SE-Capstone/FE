@@ -330,7 +330,10 @@ export function DetailIssuePage() {
                   >
                     {t('common.comments')}
                   </Text>
-                  <CommentWidget />
+                  <CommentWidget index={0} />
+                  {issue?.comments?.map((comment, index) => (
+                    <CommentWidget key={comment.id} comment={comment} index={index + 1} />
+                  ))}
                   <Stack />
                 </Stack>
               </Stack>

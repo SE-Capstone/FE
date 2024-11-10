@@ -1,7 +1,6 @@
 {
   "common": {
     "descPlaceholder": "Add a description...",
-    "comments": "Comments",
     "me": "Me",
     "assignToMe": "Assign to me",
     "assignSkill": "Assign skill",
@@ -131,7 +130,9 @@
     "phases": "Phases",
     "phase": "Phase",
     "issues": "Issues",
-    "issue": "Issue"
+    "issue": "Issue",
+    "comments": "Comments",
+    "comment": "Comment"
   },
   "fields": {
     "title": "Title",

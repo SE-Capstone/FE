@@ -34,3 +34,34 @@ img {
   padding: 0;
   min-height: fit-content;
 }
+
+#rich-view2 .reactjs-tiptap-editor {
+  border-radius: 8px;
+}
+
+#rich-view2 .reactjs-tiptap-editor .richtext-outline  {
+  background: none;
+  box-shadow: none;
+  outline: none;
+}
+
+#rich-view2 .reactjs-tiptap-editor .richtext-outline .ProseMirror  {
+  padding: 12px 20px;
+  min-height: 100px;
+}
+
+#rich-text-view3 .reactjs-tiptap-editor {
+  background: none;
+}
+
+#rich-text-view3 .reactjs-tiptap-editor .richtext-outline  {
+  background: none;
+  box-shadow: none;
+  outline: none;
+}
+
+#rich-text-view3 .reactjs-tiptap-editor .richtext-outline .ProseMirror  {
+  padding: 0;
+  min-height: fit-content;
+  background: none;
+}

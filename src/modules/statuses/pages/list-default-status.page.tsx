@@ -81,7 +81,7 @@ export function ListDefaultStatusPage() {
         ],
       },
     ],
-    [t]
+    [permissions, t]
   );
 
   return (
