@@ -149,7 +149,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
         <StackCharkra mt={2} flexDir="row" justifyContent="start" alignItems="center" gap={2}>
           {issue.label?.title && (
             <Badge variant="outline" colorScheme="gray">
-              <Text fontSize="10px" fontWeight="700">
+              <Text color="gray.500" fontSize="10px" fontWeight="700">
                 {issue.label.title}
               </Text>
             </Badge>

@@ -15,10 +15,12 @@ export function useUpsertStatusHook({
   isUpdate,
   onClose,
   isDefault,
+  isNotReload,
 }: {
   id?: string;
   isUpdate?: boolean;
   isDefault?: boolean;
+  isNotReload?: boolean;
   onClose: () => void;
 }) {
   const { t } = useTranslation();
@@ -33,7 +35,7 @@ export function useUpsertStatusHook({
     mutate,
     isPending: isLoading,
     ...restData
-  } = useUpsertStatusMutation({ onClose, reset, id, isUpdate, isDefault });
+  } = useUpsertStatusMutation({ onClose, reset, id, isUpdate, isDefault, isNotReload });
 
   const handleUpsertStatus = useCallback(
     async (values: StatusFormValues) => {

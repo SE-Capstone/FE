@@ -10,6 +10,7 @@ import type { IStatus } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 
 import { Head, StateHandler, TableComponent } from '@/components/elements';
+import { ChangeStatus } from '@/components/widgets/change-status';
 import { PermissionEnum } from '@/configs';
 import { getNumericalOrder } from '@/libs/helpers';
 import { BadgeIssue } from '@/modules/issues/list-issue/components';
@@ -51,6 +52,29 @@ export function ListDefaultStatusPage() {
                 <Text noOfLines={3} whiteSpace="normal">
                   {description || ''}
                 </Text>
+              );
+            },
+          },
+          {
+            key: 'isDone',
+            title: t('fields.isDone'),
+            hasSort: false,
+            Cell(status) {
+              return (
+                <ChangeStatus
+                  id={status?.id || ''}
+                  initStatus={status?.isDone || false}
+                  isUpdateStatus
+                  title={
+                    status?.isDone
+                      ? `${t('actions.markAsUndone')} ${t('common.status').toLowerCase()}?`
+                      : `${t('actions.markAsDone')} ${t('common.status').toLowerCase()}?`
+                  }
+                  isDefault
+                  status={status}
+                  isLoading={!permissions[PermissionEnum.UPDATE_STATUS] && true}
+                  description={status?.isDone ? t('actions.markAsUndone') : t('actions.markAsDone')}
+                />
               );
             },
           },

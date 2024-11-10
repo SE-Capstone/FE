@@ -34,6 +34,7 @@ function getIssue(issue: IIssue, color: ThemingProps['colorScheme'], statusId: s
 export type ColumnType = {
   title: string;
   columnId: string;
+  isDone: boolean;
   items: Issue[];
 };
 
@@ -52,6 +53,7 @@ export function useGetBasicData() {
       acc[item.id] = {
         title: item.name,
         columnId: item.id,
+        isDone: item.isDone,
         items: item.issues.map((i) => getIssue(i, item.color, item.id)),
       };
       return acc;

@@ -12,6 +12,7 @@ export type IStatus = {
   position: number;
   color: ThemingProps['colorScheme'];
   projectId: string;
+  isDone: boolean;
   issueCount: number;
 };
 

@@ -16,6 +16,7 @@ interface IUpsertStatusRequest {
     name: string;
     description?: string;
     color: string;
+    isDone?: boolean;
     projectId: string;
   };
 }
@@ -42,6 +43,7 @@ interface Props {
   id?: string;
   isUpdate?: boolean;
   isDefault?: boolean;
+  isNotReload?: boolean;
 }
 
 export function useUpsertStatusMutation({
@@ -50,6 +52,7 @@ export function useUpsertStatusMutation({
   id,
   isUpdate,
   isDefault,
+  isNotReload,
   onClose,
 }: Props) {
   const queryClient = useQueryClient();
@@ -60,13 +63,15 @@ export function useUpsertStatusMutation({
 
     onSuccess: () => {
       if (isDefault) {
-        queryClient.invalidateQueries({
-          queryKey: allQueryKeysStore.status['statuses/default'].queryKey,
-        });
+        !isNotReload &&
+          queryClient.invalidateQueries({
+            queryKey: allQueryKeysStore.status['statuses/default'].queryKey,
+          });
       } else {
-        queryClient.invalidateQueries({
-          queryKey: allQueryKeysStore.status.statuses.queryKey,
-        });
+        !isNotReload &&
+          queryClient.invalidateQueries({
+            queryKey: allQueryKeysStore.status.statuses.queryKey,
+          });
         queryClient.invalidateQueries({
           queryKey: allQueryKeysStore.issue['issues/kanban'].queryKey,
         });

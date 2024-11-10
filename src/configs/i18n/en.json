@@ -174,6 +174,7 @@
     "percentageDone": "% Done",
     "teamLead": "Project leader",
     "estimatedTime": "Estimated time",
+    "isDone": "Mark as done",
     "noImage": "No image"
   },
   "actions": {
@@ -187,12 +188,16 @@
     "delete": "Delete",
     "archive": "Archive",
     "unarchive": "Unarchive",
+    "isDone": "Mark as done",
+    "unDone": "Mark as undone",
     "active": "Active",
     "inactive": "Inactive",
     "disableUser": "This user will be disable and can not access to the system",
     "enableUser": "This user will be enable and can access to the system",
     "archiveProject": "This project will be invisible to all members",
     "unarchiveProject": "This project will be visible to all members",
+    "markAsDone": "Mark this status as done",
+    "markAsUndone": "Mark this status as undone",
     "updatePassword": "Are you sure to update password for user",
     "updateUser": "Are you sure to update user",
     "confirmDelete": "Are you sure to delete"

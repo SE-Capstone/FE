@@ -16,6 +16,7 @@ export const statusFormSchema = (t: any) =>
       .string()
       .trim()
       .min(1, { message: t('validation.status.colorRequired') }),
+    isDone: z.boolean().optional(),
     projectId: z.string().optional(),
   });
 

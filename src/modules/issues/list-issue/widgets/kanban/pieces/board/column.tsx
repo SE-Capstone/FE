@@ -29,6 +29,7 @@ import { DropIndicator } from '@atlaskit/pragmatic-drag-and-drop-react-drop-indi
 import { Box, Flex, Inline, Stack, xcss } from '@atlaskit/primitives';
 import { token } from '@atlaskit/tokens';
 import { createPortal } from 'react-dom';
+import { MdCheck } from 'react-icons/md';
 import invariant from 'tiny-invariant';
 
 import { useBoardContext } from './board-context';
@@ -351,9 +352,12 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
               spread="space-between"
               alignBlock="center"
             >
-              <Heading size="xxsmall" as="span" testId={`column-header-title-${columnId}`}>
-                {column.title}
-              </Heading>
+              <Flex>
+                <Heading size="xxsmall" as="span" testId={`column-header-title-${columnId}`}>
+                  {column.title}
+                </Heading>
+                {column.isDone && <MdCheck size="15px" color="green" />}
+              </Flex>
               <ActionMenu />
             </Inline>
             <Box ref={scrollableRef} xcss={scrollContainerStyles}>

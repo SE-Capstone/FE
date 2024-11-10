@@ -138,6 +138,7 @@
     "percentageDone": "% Hoàn thành",
     "teamLead": "Project leader",
     "estimatedTime": "Thời gian dự kiến",
+    "isDone": "Đánh dấu hoàn thành",
     "noImage": "Không có hình ảnh"
   },
   "actions": {
@@ -151,12 +152,16 @@
     "delete": "Xóa",
     "archive": "Lưu trữ",
     "unarchive": "Bỏ lưu trữ",
+    "isDone": "Đánh dấu hoàn thành",
+    "unDone": "Đánh dấu chưa hoàn thành",
     "active": "Kích hoạt",
     "inactive": "Vô hiệu hoá",
     "disableUser": "Người dùng này sẽ bị vô hiệu hóa và không thể truy cập hệ thống",
     "enableUser": "Người dùng này sẽ được kích hoạt và có thể truy cập hệ thống",
     "archiveProject": "Các thành viên sẽ không thể xem dự án này",
     "unarchiveProject": "Các thành viên sẽ có thể xem dự án này",
+    "markAsDone": "Đánh dấu trạng thái này là hoàn thành",
+    "markAsUndone": "Đánh dấu trạng thái này là chưa hoàn thành",
     "updatePassword": "Bạn có chắc chắn muốn cập nhật mật khẩu cho người dùng",
     "updateUser": "Bạn có chắc chắn muốn cập nhật người dùng",
     "confirmDelete": "Bạn có chắc chắn muốn xóa"
