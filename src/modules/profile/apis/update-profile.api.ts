@@ -45,7 +45,7 @@ interface IProps {
 
 export function useUpdateProfileMutation({ configs }: IProps = {}) {
   const { t } = useTranslation();
-  const { handleLogin } = useAuthentication();
+  const { handleUpdateProfile } = useAuthentication();
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
@@ -58,7 +58,7 @@ export function useUpdateProfileMutation({ configs }: IProps = {}) {
         notify({ type: 'error', message: DEFAULT_MESSAGE(t).SOMETHING_WRONG });
         return;
       }
-      handleLogin(data?.data);
+      handleUpdateProfile(data?.data);
 
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.user['user/profile'].queryKey,

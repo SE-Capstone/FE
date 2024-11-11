@@ -6,7 +6,7 @@ import type { ITokenStorage } from '@/libs/helpers';
 import type { ICurrentUserResponse } from '@/modules/auth/types';
 
 import { RolesEnum } from '@/configs';
-import { clearStoredAuth, getStoredAuth } from '@/libs/helpers';
+import { clearStoredAuth, getStoredAuth, setStoredAuth } from '@/libs/helpers';
 
 export interface IAuthState {
   currentUser: ICurrentUserResponse | null;
@@ -35,6 +35,7 @@ export interface IAuthContext {
   roleName?: string;
   permissions: Record<string, boolean>;
   handleLogin: (user: ICurrentUserResponse) => void;
+  handleUpdateProfile: (user: ICurrentUserResponse) => void;
   resetAuthContext: () => void;
 }
 
@@ -76,6 +77,32 @@ export function AuthProvider({ children }) {
     });
   };
 
+  const handleUpdateProfile = (user: ICurrentUserResponse) => {
+    setAuthState((prev) => {
+      const storedAuth = getStoredAuth<ITokenStorage>();
+
+      if (storedAuth) {
+        setStoredAuth<ITokenStorage>({
+          ...storedAuth,
+          user: {
+            ...storedAuth.user,
+            ...user,
+          },
+        });
+      }
+
+      return {
+        ...prev,
+        fullName: user.fullName,
+        roleName: user.roleName,
+        currentUser: {
+          ...prev.currentUser,
+          ...user,
+        },
+      };
+    });
+  };
+
   const resetAuthContext = () => {
     clearStoredAuth();
     setAuthState({
@@ -90,7 +117,7 @@ export function AuthProvider({ children }) {
   };
 
   const contextValue = useMemo(
-    () => ({ ...authState, handleLogin, resetAuthContext }),
+    () => ({ ...authState, handleLogin, handleUpdateProfile, resetAuthContext }),
     [authState]
   );
 
