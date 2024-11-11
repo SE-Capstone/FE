@@ -1,6 +1,17 @@
 import { useMemo } from 'react';
 
-import { Container, Stack, Text } from '@chakra-ui/react';
+import IssuesIcon from '@atlaskit/icon/glyph/issues';
+import SubtaskIcon from '@atlaskit/icon/glyph/subtask';
+import {
+  Button,
+  Container,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -11,6 +22,7 @@ import InlineEditRichtext from '../../list-issue/components/inline-edit-richtext
 import { UserWithAvatar } from '../../list-issue/components/user-with-avatar';
 import { useUpsertIssueHook } from '../../list-issue/hooks/mutations';
 import { IssuePriorityEnum } from '../../list-issue/types';
+import { AddNewIssueWidget } from '../../list-issue/widgets';
 import { InlineEditCustomSelect } from '../../list-issue/widgets/editable-dropdown.widget';
 import { CommentWidget } from '../widgets/comments.widget';
 
@@ -99,8 +111,8 @@ export function DetailIssuePage() {
                 }) as unknown as Date)
               : undefined),
         }),
-        // TODO
-        // parentIssueId: issue.parentIssueId
+        parentIssueId: issue.parentIssue?.id,
+        // TODO: phase
       });
     }
   };
@@ -312,6 +324,31 @@ export function DetailIssuePage() {
                     type="title"
                   />
                 </Text>
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    w="fit-content"
+                    aria-label="Options"
+                    leftIcon={<>+</>}
+                    variant="solid"
+                    bg="primary"
+                  >
+                    {t('common.add')}
+                  </MenuButton>
+
+                  <MenuList>
+                    <AddNewIssueWidget parentIssueId={issue?.id || ''}>
+                      <MenuItem>
+                        <SubtaskIcon label="Subtask" />
+                        <Text ml={2}>{t('common.subTask')}</Text>
+                      </MenuItem>
+                    </AddNewIssueWidget>
+                    <MenuItem>
+                      <IssuesIcon label="LinkedIssue" />
+                      <Text ml={2}>{t('common.linkedIssue')}</Text>
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
                 <InlineEditRichtext issue={issue!} />
                 <Stack />
               </Stack>

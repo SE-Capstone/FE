@@ -18,6 +18,7 @@ import {
   CustomFormProvider,
   CustomInput,
   CustomOptionComponentChakraReactSelect,
+  CustomSingleValueComponentChakraReactSelect,
 } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
 import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
@@ -77,6 +78,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
   const customComponents = useMemo(
     () => ({
       Option: CustomOptionComponentChakraReactSelect,
+      SingleValue: CustomSingleValueComponentChakraReactSelect,
     }),
     []
   );
@@ -128,8 +130,8 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
                 format: 'YYYY-MM-DD',
               }) as unknown as Date)
             : undefined,
-          // TODO: check parent issue
-          // parentIssueId: issue.parentIssueId,
+          parentIssueId: issue.parentIssue?.id,
+          // TODO: phase
           percentage: issue.percentage,
           priority: issue.priority,
           assigneeId: issue.assignee?.id,
@@ -151,7 +153,10 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
         members.push({
           id: member.id,
           fullName: member.fullName,
-          userName: member.userName,
+          userName:
+            currentUser?.id === member.id
+              ? `${member.userName} (${t('common.me')})`
+              : member.userName,
           roleName: member.roleName,
           positionName: member.positionName,
           avatar: member.avatar || '',
@@ -159,12 +164,25 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
       );
       if (project?.leadId) {
         members.push({
-          id: project.id,
+          id: project.leadId,
           fullName: project.leadName || '',
-          userName: project.leadName || '',
+          userName:
+            currentUser?.id === project.leadId
+              ? `${project.leadName} (${t('common.me')})`
+              : project.leadName || '',
           roleName: 'Project lead',
           positionName: project.leadPosition || '',
           avatar: '',
+        });
+      }
+      if (!members.find((member) => member.id === currentUser?.id)) {
+        members.unshift({
+          id: currentUser?.id || '',
+          fullName: currentUser?.fullName || '',
+          userName: `${currentUser?.userName} (${t('common.me')})` || '',
+          roleName: currentUser?.roleName || '',
+          positionName: currentUser?.positionName || '',
+          avatar: currentUser?.avatar || '',
         });
       }
       setMembers(members);

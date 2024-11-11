@@ -18,7 +18,7 @@ import type { ColumnsProps } from '@/components/elements';
 import type { ILabel } from '@/modules/labels/types';
 import type { IStatus } from '@/modules/statuses/types';
 
-import { Head, StateHandler, TableComponent } from '@/components/elements';
+import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
 import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { formatDate } from '@/libs/helpers';
@@ -172,6 +172,26 @@ export function ListIssuePage() {
             Cell({ reporter }) {
               return (
                 <UserWithAvatar image={reporter?.avatar || ''} label={reporter?.userName || ''} />
+              );
+            },
+          },
+          {
+            key: 'parentIssueId',
+            title: t('common.parentIssue'),
+            hasSort: false,
+            Cell(issue) {
+              const { id, parentIssue } = issue;
+              return parentIssue ? (
+                <CustomLink to={`issues/${String(id)}`} noOfLines={2}>
+                  <BadgeIssue
+                    content={parentIssue.index}
+                    variant="solid"
+                    colorScheme={parentIssue.status.color}
+                  />
+                </CustomLink>
+              ) : (
+                // eslint-disable-next-line react/jsx-no-useless-fragment
+                <></>
               );
             },
           },

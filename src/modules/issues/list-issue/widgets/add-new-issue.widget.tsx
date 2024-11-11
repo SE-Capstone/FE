@@ -1,32 +1,37 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Button, Stack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { useUpsertIssueHook } from '../hooks/mutations';
 
 import type { IOptionUserSelect } from '@/modules/projects/detail-project/components/users-async-select';
+import type { ProjectMember } from '@/modules/projects/list-project/types';
 
 import {
   CustomChakraReactSelect,
   CustomFormProvider,
   CustomInput,
   CustomOptionComponentChakraReactSelect,
+  CustomSingleValueComponentChakraReactSelect,
   ModalBase,
 } from '@/components/elements';
-import { useProjectContext } from '@/contexts/project/project-context';
 import { useAuthentication } from '@/modules/profile/hooks';
+import { useGetDetailProject } from '@/modules/projects/detail-project/apis/detail-project.api';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 
 export interface AddNewIssueWidgetProps {
   children: React.ReactElement;
+  parentIssueId?: string;
 }
 
 export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
   const { t } = useTranslation();
   const { currentUser } = useAuthentication();
-  const { children } = props;
-  const { members, projectId } = useProjectContext();
+  const { children, parentIssueId } = props;
+  const { projectId } = useParams();
+  const [members, setMembers] = useState<ProjectMember[]>([]);
   const { data, formUpsertIssue, handleUpsertIssue, isLoading, reset } = useUpsertIssueHook();
   const [value, setValue] = useState<IOptionUserSelect>();
 
@@ -36,9 +41,12 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
     },
   });
 
+  const { project, isLoading: isLoading3 } = useGetDetailProject({ projectId: projectId || '' });
+
   const customComponents = useMemo(
     () => ({
       Option: CustomOptionComponentChakraReactSelect,
+      SingleValue: CustomSingleValueComponentChakraReactSelect,
     }),
     []
   );
@@ -70,6 +78,50 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
     handleAssigneeChange(selectedOption);
   };
 
+  useEffect(() => {
+    if (project) {
+      const members: ProjectMember[] = [];
+      project?.members?.map((member) =>
+        members.push({
+          id: member.id,
+          fullName: member.fullName,
+          userName:
+            currentUser?.id === member.id
+              ? `${member.userName} (${t('common.me')})`
+              : member.userName,
+          roleName: member.roleName,
+          positionName: member.positionName,
+          avatar: member.avatar || '',
+        })
+      );
+      if (project?.leadId) {
+        members.push({
+          id: project.leadId,
+          fullName: project.leadName || '',
+          userName:
+            currentUser?.id === project.leadId
+              ? `${project.leadName} (${t('common.me')})`
+              : project.leadName || '',
+          roleName: 'Project lead',
+          positionName: project.leadPosition || '',
+          avatar: '',
+        });
+      }
+      if (!members.find((member) => member.id === currentUser?.id)) {
+        members.unshift({
+          id: currentUser?.id || '',
+          fullName: currentUser?.fullName || '',
+          userName: `${currentUser?.userName} (${t('common.me')})` || '',
+          roleName: currentUser?.roleName || '',
+          positionName: currentUser?.positionName || '',
+          avatar: currentUser?.avatar || '',
+        });
+      }
+      setMembers(members);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project]);
+
   return (
     <ModalBase
       size="xl"
@@ -77,7 +129,12 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
       title={`${t('common.create')} ${t('common.issue').toLowerCase()}`}
       triggerButton={() => children}
       renderFooter={() => (
-        <Button form="form-create-issue" w={20} type="submit" isDisabled={isLoading || isLoading2}>
+        <Button
+          form="form-create-issue"
+          w={20}
+          type="submit"
+          isDisabled={isLoading || isLoading2 || isLoading3}
+        >
           {t('common.save')}
         </Button>
       )}
@@ -88,6 +145,12 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
         form={formUpsertIssue}
         onSubmit={handleUpsertIssue}
       >
+        <CustomInput
+          hidden
+          value={parentIssueId}
+          registration={register('parentIssueId')}
+          error={errors.parentIssueId}
+        />
         <Stack spacing={5}>
           <CustomInput
             label={t('fields.title')}
@@ -95,6 +158,7 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
             registration={register('title')}
             error={errors.title}
           />
+
           <CustomChakraReactSelect
             isSearchable
             placeholder={`${t('common.choose')} ${t('fields.status').toLowerCase()}`}

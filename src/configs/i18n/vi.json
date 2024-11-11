@@ -1,5 +1,8 @@
 {
   "common": {
+    "subTask": "Công việc con",
+    "linkedIssue": "Công việc liên quan",
+    "parentIssue": "Công việc cha",
     "descPlaceholder": "Thêm mô tả...",
     "me": "Tôi",
     "assignToMe": "Gán cho tôi",

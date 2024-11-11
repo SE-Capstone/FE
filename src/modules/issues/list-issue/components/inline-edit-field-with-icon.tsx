@@ -68,8 +68,8 @@ const InlineEditWithIcon = ({
       assigneeId: issue.assignee?.id,
       priority: issue.priority,
       title: value || issue.title,
-      // TODO
-      // parentIssueId: issue.parentIssueId
+      parentIssueId: issue.parentIssue?.id,
+      // TODO: phase
     });
   };
 

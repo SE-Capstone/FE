@@ -51,8 +51,8 @@ const InlineEditRichtext = ({ issue }: { issue: IIssue }) => {
       assigneeId: issue.assignee?.id,
       priority: issue.priority,
       description: value || issue.description,
-      // TODO
-      // parentIssueId: issue.parentIssueId
+      parentIssueId: issue.parentIssue?.id,
+      // TODO: phase
     });
   };
 

@@ -65,4 +65,6 @@ export type IIssue = IBaseEntity & {
   assigneeAvatar?: string;
   estimatedTime?: number;
   comments: IComment[];
+  parentIssue: IIssue;
+  subIssues: IIssue[];
 };

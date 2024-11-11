@@ -122,7 +122,7 @@ export function BaseInformationProjectWidget({
         },
         {
           label: t('fields.teamLead'),
-          text: !permissions[PermissionEnum.UPDATE_PROJECT] ? (
+          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
             <InlineEditCustomSelect
               options={teamLeads.map((user) => ({
                 label: user.userName,

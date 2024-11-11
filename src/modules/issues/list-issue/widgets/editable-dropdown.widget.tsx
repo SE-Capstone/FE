@@ -110,8 +110,8 @@ export const InlineEditCustomSelect = ({
         labelId: field === 'label' ? option?.value : issue.label?.id,
         assigneeId: field === 'assignee' ? option?.value : issue.assignee?.id,
         priority: field === 'priority' ? option?.value : issue.priority,
-        // TODO
-        // parentIssueId: issue.parentIssueId
+        parentIssueId: issue.parentIssue?.id,
+        // TODO: phase
       });
     }
 
