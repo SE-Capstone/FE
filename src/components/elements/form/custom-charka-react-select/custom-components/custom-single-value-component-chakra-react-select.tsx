@@ -8,7 +8,7 @@ export function CustomSingleValueComponentChakraReactSelect<
   Option extends CustomOptionSelectBase & { image?: string },
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
->(props: SingleValueProps<Option, IsMulti, Group>) {
+>(props: SingleValueProps<Option, IsMulti, Group>, noDisplayLabel?: boolean) {
   const { data } = props;
 
   return (
@@ -16,7 +16,7 @@ export function CustomSingleValueComponentChakraReactSelect<
       <HStack w="full" role="group">
         <Avatar src={data.image} boxSize={8} name={data.label as string} />
 
-        <Text color="inherit">{data.label}</Text>
+        {!noDisplayLabel && <Text color="inherit">{data.label}</Text>}
       </HStack>
     </chakraComponents.SingleValue>
   );

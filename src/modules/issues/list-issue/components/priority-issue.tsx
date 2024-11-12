@@ -35,7 +35,7 @@ export function PriorityIssue(props: PriorityIssueProps) {
   return (
     <Stack flexDir="row" gap={!hideText ? 2 : 0} alignItems="center">
       {PriorityIcon(priority)}
-      <Text>{!hideText && ISSUE_PRIORITY_VALUES(t)[priority]}</Text>
+      {!hideText && <Text>{ISSUE_PRIORITY_VALUES(t)[priority]}</Text>}
     </Stack>
   );
 }

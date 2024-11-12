@@ -24,12 +24,16 @@ const InlineEditWithIcon = ({
   issue,
   buttonStyle,
   textStyle,
+  boxStyle,
   statusId,
+  link,
 }: {
   issue: IIssue;
   buttonStyle?: any;
   textStyle?: any;
+  boxStyle?: any;
   statusId?: string;
+  link?: string;
 }) => {
   const { t } = useTranslation();
   const [editValue, setEditValue] = useState(issue.title);
@@ -80,6 +84,7 @@ const InlineEditWithIcon = ({
           color: 'gray.400',
         },
       }}
+      className="abc"
       display="flex"
       flexDir="row"
     >
@@ -94,10 +99,10 @@ const InlineEditWithIcon = ({
         )}
         readView={() => (
           <BoxAtlas xcss={readViewContainerStyles} testId="read-view">
-            <Box display="flex" alignItems="center">
+            <Box display="flex" alignItems="center" {...boxStyle}>
               <CustomLink
-                to={`issues/${String(issue.id)}`}
-                noOfLines={textStyle ? 5 : 2}
+                to={link || `issues/${String(issue.id)}`}
+                noOfLines={textStyle ? 5 : link ? 1 : 2}
                 {...textStyle}
               >
                 {editValue}

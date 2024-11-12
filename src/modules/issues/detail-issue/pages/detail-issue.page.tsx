@@ -3,8 +3,10 @@ import { useMemo } from 'react';
 import IssuesIcon from '@atlaskit/icon/glyph/issues';
 import SubtaskIcon from '@atlaskit/icon/glyph/subtask';
 import {
+  Box,
   Button,
   Container,
+  Flex,
   Menu,
   MenuButton,
   MenuItem,
@@ -18,6 +20,7 @@ import { useParams } from 'react-router-dom';
 import { useGetDetailIssue } from '../../list-issue/apis/detail-issue.api';
 import { BadgeIssue, PriorityIssue } from '../../list-issue/components';
 import InlineEditableField from '../../list-issue/components/inline-edit-field';
+import InlineEditWithIcon from '../../list-issue/components/inline-edit-field-with-icon';
 import InlineEditRichtext from '../../list-issue/components/inline-edit-richtext';
 import { UserWithAvatar } from '../../list-issue/components/user-with-avatar';
 import { useUpsertIssueHook } from '../../list-issue/hooks/mutations';
@@ -350,32 +353,128 @@ export function DetailIssuePage() {
                     </MenuItem>
                   </MenuList>
                 </Menu>
-                <InlineEditRichtext issue={issue!} isEditable={false} />
+                <InlineEditRichtext issue={issue!} />
 
-                <Stack>
-                  <Stack
-                    display="flex"
-                    flexDir="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Text fontSize="lg" fontWeight="600">
-                      {t('common.subTasks')}
-                    </Text>
-                    <AddNewIssueWidget parentIssueId={issue?.id || ''}>
-                      <Button
-                        bg="transparent"
-                        color="#464649"
-                        _hover={{
-                          bg: '#F4F4F9',
-                        }}
-                        fontSize="md"
-                      >
-                        +
-                      </Button>
-                    </AddNewIssueWidget>
+                {issue?.subIssues && issue?.subIssues.length > 0 && (
+                  <Stack gap={0}>
+                    <Stack
+                      display="flex"
+                      flexDir="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Text fontSize="lg" fontWeight="600">
+                        {t('common.subTasks')}
+                      </Text>
+                      <AddNewIssueWidget parentIssueId={issue?.id || ''}>
+                        <Button
+                          bg="transparent"
+                          color="#464649"
+                          _hover={{
+                            bg: '#F4F4F9',
+                          }}
+                          fontSize="md"
+                        >
+                          +
+                        </Button>
+                      </AddNewIssueWidget>
+                    </Stack>
+                    <Stack
+                      borderRadius="2px"
+                      boxShadow="0px 1px 1px #091E4240, 0px 0px 1px #091E424F"
+                      gap={0}
+                      mt={2}
+                    >
+                      {issue.subIssues.map((i, index) => (
+                        <Box
+                          key={index}
+                          padding={2}
+                          borderBottom={issue.subIssues.length !== index ? '1px solid #ccc' : ''}
+                        >
+                          <Flex alignItems="center" justifyContent="space-between" gap={2}>
+                            <Flex alignItems="center" gap={2}>
+                              <BadgeIssue
+                                content={`#${i.index}`}
+                                variant="solid"
+                                colorScheme={i.status?.color || 'gray'}
+                              />
+                              <InlineEditWithIcon
+                                issue={i}
+                                boxStyle={{
+                                  marginTop: '-4px',
+                                }}
+                                buttonStyle={{
+                                  maxHeight: 'fit-content',
+                                }}
+                              />
+                            </Flex>
+                            <Flex alignItems="center" gap={2}>
+                              <InlineEditCustomSelect
+                                options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
+                                  label: <PriorityIssue priority={value} />,
+                                  value,
+                                }))}
+                                defaultValue={
+                                  issue?.priority && {
+                                    label: <PriorityIssue priority={issue.priority} hideText />,
+                                    value: issue.priority,
+                                  }
+                                }
+                                size="sm"
+                                field="priority"
+                                issue={issue!}
+                              />
+                              <InlineEditCustomSelect
+                                size="sm"
+                                options={members.map((member) => ({
+                                  label: member.userName,
+                                  value: member.id,
+                                  image: member.avatar,
+                                }))}
+                                defaultValue={
+                                  issue?.assignee
+                                    ? {
+                                        label: issue?.assignee.userName,
+                                        value: issue?.assignee.id,
+                                        image: issue?.assignee.avatar,
+                                      }
+                                    : {
+                                        label: '',
+                                        value: '',
+                                        image:
+                                          'https://i.pinimg.com/1200x/bc/43/98/bc439871417621836a0eeea768d60944.jpg',
+                                      }
+                                }
+                                field="assignee"
+                                issue={i!}
+                              />
+                              <InlineEditCustomSelect
+                                options={listStatus.map((s) => ({
+                                  label: <BadgeIssue content={s.name} colorScheme={s.color} />,
+                                  value: s.id,
+                                }))}
+                                size="sm"
+                                defaultValue={
+                                  issue && {
+                                    label: (
+                                      <BadgeIssue
+                                        content={issue.status.name}
+                                        colorScheme={issue.status.color}
+                                      />
+                                    ),
+                                    value: issue.status.id,
+                                  }
+                                }
+                                field="status"
+                                issue={i}
+                              />
+                            </Flex>
+                          </Flex>
+                        </Box>
+                      ))}
+                    </Stack>
                   </Stack>
-                </Stack>
+                )}
                 <Stack />
               </Stack>
 

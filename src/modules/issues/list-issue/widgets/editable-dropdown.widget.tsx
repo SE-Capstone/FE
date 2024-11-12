@@ -6,6 +6,7 @@ import { useUpsertIssueHook } from '../hooks/mutations';
 
 import type { IIssue } from '../types';
 import type { IProject } from '@/modules/projects/list-project/types';
+import type { SizeProp } from 'chakra-react-select';
 
 import {
   CustomChakraReactSelect,
@@ -26,12 +27,14 @@ export const InlineEditCustomSelect = ({
   issue,
   project,
   field,
+  size,
 }: {
   options: IOptionSelectWithImage[];
   defaultValue?: IOptionSelectWithImage;
   issue?: IIssue;
   project?: IProject;
   field: 'status' | 'priority' | 'assignee' | 'label' | 'lead';
+  size?: SizeProp;
 }) => {
   const [selectedOption, setSelectedOption] = useState(defaultValue);
 
@@ -46,8 +49,8 @@ export const InlineEditCustomSelect = ({
     () => ({
       DropdownIndicator: () => <Box />,
       ...(field === 'assignee' && {
-        Option: CustomOptionComponentChakraReactSelect,
-        SingleValue: CustomSingleValueComponentChakraReactSelect,
+        Option: (props) => CustomOptionComponentChakraReactSelect(props, size),
+        SingleValue: (props) => CustomSingleValueComponentChakraReactSelect(props, size === 'sm'),
       }),
       ...(field === 'lead' && {
         Option: CustomOptionComponentChakraReactSelect,
@@ -74,7 +77,18 @@ export const InlineEditCustomSelect = ({
       menuList: (provide) => ({
         ...provide,
         minWidth: 'fit-content',
+        width: 'max-content',
         maxWidth: '300px',
+      }),
+
+      ...(size === 'sm' && {
+        control: (provide) => ({
+          ...provide,
+          pr: 0,
+          _disabled: { bg: 'white' },
+
+          borderRadius: { base: '6px !important', '2xl': '8px !important' },
+        }),
       }),
 
       container: (provide) => ({
@@ -136,7 +150,7 @@ export const InlineEditCustomSelect = ({
     <CustomChakraReactSelect
       value={selectedOption}
       variant="subtle"
-      size="lg"
+      size={size || 'lg'}
       isClearable={false}
       isSearchable={false}
       options={options}

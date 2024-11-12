@@ -11,7 +11,7 @@ export function BadgeIssue(props: BadgeIssueProps) {
   const { content, colorScheme, ...badgeProps } = props;
 
   return (
-    <Badge variant="outline" {...badgeProps} colorScheme={colorScheme}>
+    <Badge variant="outline" {...badgeProps} colorScheme={colorScheme} fontSize="smaller">
       {content}
     </Badge>
   );
