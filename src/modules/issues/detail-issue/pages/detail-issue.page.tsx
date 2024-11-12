@@ -21,7 +21,6 @@ import InlineEditableField from '../../list-issue/components/inline-edit-field';
 import InlineEditRichtext from '../../list-issue/components/inline-edit-richtext';
 import { UserWithAvatar } from '../../list-issue/components/user-with-avatar';
 import { useUpsertIssueHook } from '../../list-issue/hooks/mutations';
-import { IssuePriorityEnum } from '../../list-issue/types';
 import { AddNewIssueWidget } from '../../list-issue/widgets';
 import { InlineEditCustomSelect } from '../../list-issue/widgets/editable-dropdown.widget';
 import { CommentWidget } from '../widgets/comments.widget';
@@ -189,10 +188,12 @@ export function DetailIssuePage() {
                 label: <PriorityIssue priority={value} />,
                 value,
               }))}
-              defaultValue={{
-                label: <PriorityIssue priority={issue?.priority || IssuePriorityEnum.Medium} />,
-                value: IssuePriorityEnum.Medium,
-              }}
+              defaultValue={
+                issue?.priority && {
+                  label: <PriorityIssue priority={issue.priority} />,
+                  value: issue.priority,
+                }
+              }
               field="priority"
               issue={issue!}
             />
@@ -350,6 +351,31 @@ export function DetailIssuePage() {
                   </MenuList>
                 </Menu>
                 <InlineEditRichtext issue={issue!} />
+
+                <Stack>
+                  <Stack
+                    display="flex"
+                    flexDir="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Text fontSize="lg" fontWeight="600">
+                      {t('common.subTasks')}
+                    </Text>
+                    <AddNewIssueWidget parentIssueId={issue?.id || ''}>
+                      <Button
+                        bg="transparent"
+                        color="#464649"
+                        _hover={{
+                          bg: '#F4F4F9',
+                        }}
+                        fontSize="md"
+                      >
+                        +
+                      </Button>
+                    </AddNewIssueWidget>
+                  </Stack>
+                </Stack>
                 <Stack />
               </Stack>
 

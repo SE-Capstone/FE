@@ -1,6 +1,7 @@
 {
   "common": {
     "subTask": "Subtask",
+    "subTasks": "Subtasks",
     "linkedIssue": "Linked issue",
     "parentIssue": "Parent issue",
     "descPlaceholder": "Add a description...",
