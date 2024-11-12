@@ -16,7 +16,6 @@ import RichTextEditor, {
   History,
   HorizontalRule,
   Image,
-  ImageUpload,
   Italic,
   LineHeight,
   Link,
@@ -58,8 +57,7 @@ export const extensions = [
   Highlight,
   History,
   HorizontalRule,
-  Image,
-  ImageUpload.configure({
+  Image.configure({
     upload: (files: File) =>
       new Promise((resolve, reject) => {
         const reader = new FileReader();

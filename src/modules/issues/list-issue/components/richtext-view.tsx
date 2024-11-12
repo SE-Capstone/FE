@@ -46,6 +46,7 @@ const RichtextView = ({
           output="html"
           content={editValue}
           extensions={extensions}
+          disabled
         />
       </Box>
     </Box>
