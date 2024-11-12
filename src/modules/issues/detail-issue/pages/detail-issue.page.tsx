@@ -350,7 +350,7 @@ export function DetailIssuePage() {
                     </MenuItem>
                   </MenuList>
                 </Menu>
-                <InlineEditRichtext issue={issue!} />
+                <InlineEditRichtext issue={issue!} isEditable={false} />
 
                 <Stack>
                   <Stack
@@ -393,7 +393,7 @@ export function DetailIssuePage() {
                   >
                     {t('common.comments')}
                   </Text>
-                  <CommentWidget index={0} />
+                  <CommentWidget index={0} isComment={false} />
                   {issue?.comments?.map((comment, index) => (
                     <CommentWidget key={comment.id} comment={comment} index={index + 1} />
                   ))}

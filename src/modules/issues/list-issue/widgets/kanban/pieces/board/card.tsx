@@ -167,7 +167,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
         </StackCharkra>
       )}
       <StackCharkra mt={2} flexDir="row" justifyContent="space-between" alignItems="center" gap={2}>
-        <BadgeIssue content={index} variant="outline" colorScheme={statusColor} />
+        <BadgeIssue content={`#${index}`} variant="outline" colorScheme={statusColor} />
         <StackCharkra flexDir="row" alignItems="center">
           <PriorityIssue priority={issue.priority} hideText />
           <UserWithAvatar

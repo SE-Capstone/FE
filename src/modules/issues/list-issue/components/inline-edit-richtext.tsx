@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/no-danger */
 import { useEffect, useState } from 'react';
@@ -16,10 +17,16 @@ import type { IIssue } from '../types';
 import { formatDate } from '@/libs/helpers';
 import { extensions } from '@/modules/public/pages/rich-text-ex.pages';
 
-const InlineEditRichtext = ({ issue }: { issue: IIssue }) => {
+const InlineEditRichtext = ({
+  issue,
+  isEditable = true,
+}: {
+  issue: IIssue;
+  isEditable?: boolean;
+}) => {
   const { t } = useTranslation();
   const [editValue, setEditValue] = useState(issue.description || '');
-  const { editor, editorRef } = useEditorState();
+  const { editor, editorRef } = useEditorState(!isEditable);
 
   const onChangeContent = (value: any) => {
     setEditValue(value);
@@ -58,35 +65,53 @@ const InlineEditRichtext = ({ issue }: { issue: IIssue }) => {
 
   return (
     <Box>
-      <InlineEdit
-        defaultValue={editValue}
-        label={
-          <Text mt={-3} fontSize="md">
-            {t('fields.description')}
-          </Text>
-        }
-        keepEditViewOpenOnBlur
-        readViewFitContainerWidth
-        editButtonLabel={editValue}
-        editView={({ errorMessage }) => (
-          <RichTextEditor
-            ref={editorRef}
-            dark={false}
-            label={t('fields.description')}
-            output="html"
-            content={editValue}
-            extensions={extensions}
-            onChangeContent={onChangeContent}
-          />
-        )}
-        readView={() => <RichtextView id="richtext-view1" content={editValue} />}
-        onConfirm={(value) => {
-          if (JSON.stringify(value) !== JSON.stringify(issue.description)) {
-            setEditValue(value);
-            handleSubmit(value);
+      {isEditable ? (
+        <InlineEdit
+          defaultValue={editValue}
+          label={
+            <Text mt={-3} fontSize="md">
+              {t('fields.description')}
+            </Text>
           }
-        }}
-      />
+          keepEditViewOpenOnBlur
+          readViewFitContainerWidth
+          editButtonLabel={editValue}
+          editView={({ errorMessage }) => (
+            <RichTextEditor
+              ref={editorRef}
+              dark={false}
+              label={t('fields.description')}
+              output="html"
+              content={editValue}
+              extensions={extensions}
+              onChangeContent={onChangeContent}
+            />
+          )}
+          readView={() => <RichtextView id="richtext-view1" content={editValue} />}
+          onConfirm={(value) => {
+            if (JSON.stringify(value) !== JSON.stringify(issue.description)) {
+              setEditValue(value);
+              handleSubmit(value);
+            }
+          }}
+        />
+      ) : (
+        <InlineEdit
+          defaultValue={editValue}
+          label={
+            <Text mt={-3} fontSize="md">
+              {t('fields.description')}
+            </Text>
+          }
+          isEditing={false}
+          keepEditViewOpenOnBlur
+          readViewFitContainerWidth
+          editButtonLabel={editValue}
+          editView={({ errorMessage }) => <></>}
+          readView={() => <RichtextView id="richtext-view1" content={editValue} />}
+          onConfirm={() => {}}
+        />
+      )}
     </Box>
   );
 };

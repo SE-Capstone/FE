@@ -19,11 +19,15 @@ const RichtextView = ({
 }) => {
   const { t } = useTranslation();
   const [editValue, setEditValue] = useState(content || '');
-  const { editorRef } = useEditorState(true);
+  const { editor, editorRef } = useEditorState(true);
 
   useEffect(() => {
     // eslint-disable-next-line react/destructuring-assignment
     setEditValue(content.content || '');
+    if (editor) {
+      editor.commands.setContent(content.content || '');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content]);
 
   useEffect(() => {

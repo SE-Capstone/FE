@@ -84,7 +84,9 @@ export function ListIssuePage() {
             title: '#',
             tableCellProps: { w: 4, pr: 2 },
             Cell({ index, status }) {
-              return <BadgeIssue content={index} variant="solid" colorScheme={status.color} />;
+              return (
+                <BadgeIssue content={`#${index}`} variant="solid" colorScheme={status.color} />
+              );
             },
           },
           {
@@ -184,7 +186,7 @@ export function ListIssuePage() {
               return parentIssue ? (
                 <CustomLink to={`issues/${String(id)}`} noOfLines={2}>
                   <BadgeIssue
-                    content={parentIssue.index}
+                    content={`#${parentIssue.index}`}
                     variant="solid"
                     colorScheme={parentIssue.status.color}
                   />
