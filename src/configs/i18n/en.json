@@ -1,7 +1,7 @@
 {
   "common": {
-    "subTask": "Subtask",
-    "subTasks": "Subtasks",
+    "subTask": "Child issue",
+    "subTasks": "Child issues",
     "linkedIssue": "Linked issue",
     "parentIssue": "Parent issue",
     "descPlaceholder": "Add a description...",
@@ -71,7 +71,7 @@
     "createdBy": "Created by",
     "updated": "Updated",
     "updatedBy": "Updated by",
-    "lastUpdatedBy": "Last updated by",
+    "lastUpdateBy": "Last updated by",
     "error": "Error",
     "errors": "Errors",
     "success": "Success",

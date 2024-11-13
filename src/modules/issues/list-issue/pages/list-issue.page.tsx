@@ -181,10 +181,9 @@ export function ListIssuePage() {
             key: 'parentIssueId',
             title: t('common.parentIssue'),
             hasSort: false,
-            Cell(issue) {
-              const { id, parentIssue } = issue;
+            Cell({ parentIssue }) {
               return parentIssue ? (
-                <CustomLink to={`issues/${String(id)}`} noOfLines={2}>
+                <CustomLink to={`issues/${String(parentIssue.id)}`} noOfLines={2}>
                   <BadgeIssue
                     content={`#${parentIssue.index}`}
                     variant="solid"
@@ -227,14 +226,14 @@ export function ListIssuePage() {
             },
           },
           {
-            key: 'lastUpdatedBy',
-            title: t('common.lastUpdatedBy'),
+            key: 'lastUpdateBy',
+            title: t('common.lastUpdateBy'),
             hasSort: false,
-            Cell({ lastUpdatedBy }) {
-              return lastUpdatedBy ? (
+            Cell({ lastUpdateBy }) {
+              return lastUpdateBy ? (
                 <UserWithAvatar
-                  image={lastUpdatedBy.avatar || ''}
-                  label={lastUpdatedBy.userName || ''}
+                  image={lastUpdateBy.avatar || ''}
+                  label={lastUpdateBy.userName || ''}
                 />
               ) : (
                 // eslint-disable-next-line react/jsx-no-useless-fragment

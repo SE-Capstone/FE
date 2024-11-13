@@ -36,6 +36,7 @@ import { formatDate } from '@/libs/helpers';
 import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
 import { InfoCard } from '@/modules/profile/components';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
+import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailIssuePage() {
   const { t } = useTranslation();
@@ -256,12 +257,12 @@ export function DetailIssuePage() {
             />
           ),
         },
-        issue?.lastUpdatedBy && {
-          label: t('common.lastUpdatedBy'),
-          text: issue.lastUpdatedBy && (
+        issue?.lastUpdateBy && {
+          label: t('common.lastUpdateBy'),
+          text: issue.lastUpdateBy && (
             <UserWithAvatar
-              image={issue.lastUpdatedBy.avatar || ''}
-              label={issue.lastUpdatedBy.userName || ''}
+              image={issue.lastUpdateBy.avatar || ''}
+              label={issue.lastUpdateBy.userName || ''}
             />
           ),
         },
@@ -391,10 +392,10 @@ export function DetailIssuePage() {
                         <Box
                           key={index}
                           padding={2}
-                          borderBottom={issue.subIssues.length !== index ? '1px solid #ccc' : ''}
+                          borderBottom={issue.subIssues?.length !== index ? '1px solid #ccc' : ''}
                         >
                           <Flex alignItems="center" justifyContent="space-between" gap={2}>
-                            <Flex alignItems="center" gap={2}>
+                            <Flex alignItems="center" gap={2} flex={1}>
                               <BadgeIssue
                                 content={`#${i.index}`}
                                 variant="solid"
@@ -405,9 +406,13 @@ export function DetailIssuePage() {
                                 boxStyle={{
                                   marginTop: '-4px',
                                 }}
+                                fieldStyle={{
+                                  minWidth: '300px',
+                                }}
                                 buttonStyle={{
                                   maxHeight: 'fit-content',
                                 }}
+                                link={APP_PATHS.detailIssue(projectId || '', i.id)}
                               />
                             </Flex>
                             <Flex alignItems="center" gap={2}>
@@ -417,14 +422,14 @@ export function DetailIssuePage() {
                                   value,
                                 }))}
                                 defaultValue={
-                                  issue?.priority && {
-                                    label: <PriorityIssue priority={issue.priority} hideText />,
-                                    value: issue.priority,
+                                  i?.priority && {
+                                    label: <PriorityIssue priority={i.priority} hideText />,
+                                    value: i.priority,
                                   }
                                 }
                                 size="sm"
                                 field="priority"
-                                issue={issue!}
+                                issue={i}
                               />
                               <InlineEditCustomSelect
                                 size="sm"
@@ -434,11 +439,11 @@ export function DetailIssuePage() {
                                   image: member.avatar,
                                 }))}
                                 defaultValue={
-                                  issue?.assignee
+                                  i.assignee
                                     ? {
-                                        label: issue?.assignee.userName,
-                                        value: issue?.assignee.id,
-                                        image: issue?.assignee.avatar,
+                                        label: i?.assignee.userName,
+                                        value: i?.assignee.id,
+                                        image: i?.assignee.avatar,
                                       }
                                     : {
                                         label: '',
@@ -448,7 +453,7 @@ export function DetailIssuePage() {
                                       }
                                 }
                                 field="assignee"
-                                issue={i!}
+                                issue={i}
                               />
                               <InlineEditCustomSelect
                                 options={listStatus.map((s) => ({
@@ -457,14 +462,14 @@ export function DetailIssuePage() {
                                 }))}
                                 size="sm"
                                 defaultValue={
-                                  issue && {
+                                  i && {
                                     label: (
                                       <BadgeIssue
-                                        content={issue.status.name}
-                                        colorScheme={issue.status.color}
+                                        content={i.status?.name}
+                                        colorScheme={i.status?.color || 'gray'}
                                       />
                                     ),
-                                    value: issue.status.id,
+                                    value: i.status?.id,
                                   }
                                 }
                                 field="status"

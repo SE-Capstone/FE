@@ -66,6 +66,7 @@ export function CreateRolePage() {
         </EditRow>
         <EditRow
           title={t('fields.permission')}
+          isRequired
           stackProps={{
             maxW: 25,
             justifyContent: 'end',

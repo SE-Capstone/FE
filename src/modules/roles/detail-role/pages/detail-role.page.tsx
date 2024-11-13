@@ -143,7 +143,6 @@ export function DetailRolePage() {
             triggerClose={triggerClose}
             inputChildren={
               <CustomTextArea
-                isRequired
                 placeholder={`${t('common.enter')} ${t('fields.description')}`}
                 registration={register('description')}
                 error={errors.description}
@@ -160,6 +159,7 @@ export function DetailRolePage() {
           />
           <EditRow
             title={t('fields.permission')}
+            isRequired
             stackProps={{
               maxW: 25,
               justifyContent: 'end',

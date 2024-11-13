@@ -130,10 +130,10 @@ export function BaseInformationProjectWidget({
                 image: user.avatar,
               }))}
               defaultValue={
-                project?.leadId
+                project?.leadId && project?.leadName
                   ? {
-                      label: project?.leadName || '',
-                      value: project?.leadId || '',
+                      label: project.leadName,
+                      value: project.leadId,
                       image: project?.leadAvatar,
                     }
                   : undefined

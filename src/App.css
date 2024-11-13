@@ -65,3 +65,7 @@ img {
   min-height: fit-content;
   background: none;
 }
+
+.is-editor-empty {
+  font-size: 14px;
+}

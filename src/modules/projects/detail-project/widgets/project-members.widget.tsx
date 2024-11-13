@@ -100,7 +100,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           )}
           {project?.members.map((member, index) => (
             <Text key={index} wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
-              {member.userName} ({member.positionName})
+              {member.userName} {member.positionName && `(${member.positionName})`}
             </Text>
           ))}
         </Stack>

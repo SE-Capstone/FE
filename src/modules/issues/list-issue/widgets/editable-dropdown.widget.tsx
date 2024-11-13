@@ -53,8 +53,8 @@ export const InlineEditCustomSelect = ({
         SingleValue: (props) => CustomSingleValueComponentChakraReactSelect(props, size === 'sm'),
       }),
       ...(field === 'lead' && {
-        Option: CustomOptionComponentChakraReactSelect,
-        SingleValue: CustomSingleValueComponentChakraReactSelect,
+        Option: (props) => CustomOptionComponentChakraReactSelect(props, size),
+        SingleValue: (props) => CustomSingleValueComponentChakraReactSelect(props, size === 'sm'),
       }),
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,7 +76,7 @@ export const InlineEditCustomSelect = ({
 
       menuList: (provide) => ({
         ...provide,
-        minWidth: 'fit-content',
+        // minWidth: 'fit-content',
         width: 'max-content',
         maxWidth: '300px',
       }),
@@ -101,11 +101,15 @@ export const InlineEditCustomSelect = ({
         },
       }),
     }),
-    []
+    [size]
   );
 
   const handleSubmit = (option) => {
     if (issue) {
+      delete issue.lastUpdateBy;
+      delete issue.reporter;
+      delete issue.subIssues;
+      delete issue.comments;
       handleUpsertIssue({
         ...issue,
         startDate: issue.startDate
@@ -124,7 +128,7 @@ export const InlineEditCustomSelect = ({
         labelId: field === 'label' ? option?.value : issue.label?.id,
         assigneeId: field === 'assignee' ? option?.value : issue.assignee?.id,
         priority: field === 'priority' ? option?.value : issue.priority,
-        parentIssueId: issue.parentIssue?.id,
+        parentIssueId: issue.parentIssue?.id || issue.parentIssueId,
         // TODO: phase
       });
     }

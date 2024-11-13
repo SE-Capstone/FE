@@ -28,7 +28,6 @@ import RichTextEditor, {
   Emoji,
   Katex,
   TextDirection,
-  Mention,
 } from 'reactjs-tiptap-editor';
 
 import 'reactjs-tiptap-editor/style.css';
@@ -86,7 +85,6 @@ export const extensions = [
   Emoji,
   Katex,
   TextDirection,
-  Mention,
 ];
 
 const DEFAULT = '';

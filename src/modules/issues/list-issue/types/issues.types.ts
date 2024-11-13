@@ -58,14 +58,14 @@ export type IIssue = IBaseEntity & {
   dueDate?: string;
   status: IStatus;
   priority: IssuePriorityEnum;
-  lastUpdatedBy?: IUpdatedBy;
+  lastUpdateBy?: IUpdatedBy;
   reporter?: IUpdatedBy;
   assignee?: IUpdatedBy;
   percentage: number;
   assigneeAvatar?: string;
   estimatedTime?: number;
-  comments: IComment[];
+  comments?: IComment[];
   parentIssue: IIssue;
   parentIssueId?: string;
-  subIssues: IIssue[];
+  subIssues?: IIssue[];
 };

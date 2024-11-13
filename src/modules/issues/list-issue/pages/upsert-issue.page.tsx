@@ -77,8 +77,8 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
 
   const customComponents = useMemo(
     () => ({
-      Option: CustomOptionComponentChakraReactSelect,
-      SingleValue: CustomSingleValueComponentChakraReactSelect,
+      Option: (props) => CustomOptionComponentChakraReactSelect(props, 'sm'),
+      SingleValue: (props) => CustomSingleValueComponentChakraReactSelect(props, false),
     }),
     []
   );
@@ -172,7 +172,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
               : project.leadName || '',
           roleName: 'Project lead',
           positionName: project.leadPosition || '',
-          avatar: '',
+          avatar: project.leadAvatar || '',
         });
       }
       if (!members.find((member) => member.id === currentUser?.id)) {

@@ -30,7 +30,7 @@ export function useUpsertIssueHook(
     mutate,
     isPending: isLoading,
     ...restData
-  } = useUpsertIssueMutation({ reset, id: issueId || id, isUpdate, isRedirect });
+  } = useUpsertIssueMutation({ reset, id: id || issueId, isUpdate, isRedirect });
 
   const handleUpsertIssue = useCallback(
     async (values: IssueFormValues) => {

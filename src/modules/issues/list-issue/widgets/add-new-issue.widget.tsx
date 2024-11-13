@@ -45,8 +45,8 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
 
   const customComponents = useMemo(
     () => ({
-      Option: CustomOptionComponentChakraReactSelect,
-      SingleValue: CustomSingleValueComponentChakraReactSelect,
+      Option: (props) => CustomOptionComponentChakraReactSelect(props, 'sm'),
+      SingleValue: (props) => CustomSingleValueComponentChakraReactSelect(props, false),
     }),
     []
   );
@@ -104,7 +104,7 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
               : project.leadName || '',
           roleName: 'Project lead',
           positionName: project.leadPosition || '',
-          avatar: '',
+          avatar: project.leadAvatar || '',
         });
       }
       if (!members.find((member) => member.id === currentUser?.id)) {
@@ -126,7 +126,9 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
     <ModalBase
       size="xl"
       isDone={!!data}
-      title={`${t('common.create')} ${t('common.issue').toLowerCase()}`}
+      title={`${t('common.create')} ${
+        parentIssueId ? t('common.subTask').toLowerCase() : t('common.issue').toLowerCase()
+      }`}
       triggerButton={() => children}
       renderFooter={() => (
         <Button
@@ -145,12 +147,14 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
         form={formUpsertIssue}
         onSubmit={handleUpsertIssue}
       >
-        <CustomInput
-          hidden
-          value={parentIssueId}
-          registration={register('parentIssueId')}
-          error={errors.parentIssueId}
-        />
+        {parentIssueId && (
+          <CustomInput
+            hidden
+            value={parentIssueId}
+            registration={register('parentIssueId')}
+            error={errors.parentIssueId}
+          />
+        )}
         <Stack spacing={5}>
           <CustomInput
             label={t('fields.title')}

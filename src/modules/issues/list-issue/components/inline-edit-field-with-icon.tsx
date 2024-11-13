@@ -25,6 +25,7 @@ const InlineEditWithIcon = ({
   buttonStyle,
   textStyle,
   boxStyle,
+  fieldStyle,
   statusId,
   link,
 }: {
@@ -32,6 +33,7 @@ const InlineEditWithIcon = ({
   buttonStyle?: any;
   textStyle?: any;
   boxStyle?: any;
+  fieldStyle?: any;
   statusId?: string;
   link?: string;
 }) => {
@@ -84,7 +86,6 @@ const InlineEditWithIcon = ({
           color: 'gray.400',
         },
       }}
-      className="abc"
       display="flex"
       flexDir="row"
     >
@@ -95,7 +96,7 @@ const InlineEditWithIcon = ({
         // keepEditViewOpenOnBlur
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         editView={({ errorMessage, ...fieldProps }) => (
-          <Textfield style={{ minWidth: '200px' }} {...fieldProps} autoFocus />
+          <Textfield style={{ minWidth: '200px', ...fieldStyle }} {...fieldProps} autoFocus />
         )}
         readView={() => (
           <BoxAtlas xcss={readViewContainerStyles} testId="read-view">

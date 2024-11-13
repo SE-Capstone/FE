@@ -69,7 +69,7 @@ export function useGetDetailProject(params: UseGetDetailProjectOptionsType) {
             : project.leadName || '',
         roleName: 'Project lead',
         positionName: project.leadPosition || '',
-        avatar: '',
+        avatar: project.leadAvatar || '',
       });
     }
 
