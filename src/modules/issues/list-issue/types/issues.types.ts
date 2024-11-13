@@ -66,5 +66,6 @@ export type IIssue = IBaseEntity & {
   estimatedTime?: number;
   comments: IComment[];
   parentIssue: IIssue;
+  parentIssueId?: string;
   subIssues: IIssue[];
 };

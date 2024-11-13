@@ -341,12 +341,14 @@ export function DetailIssuePage() {
                   </MenuButton>
 
                   <MenuList>
-                    <AddNewIssueWidget parentIssueId={issue?.id || ''}>
-                      <MenuItem>
-                        <SubtaskIcon label="Subtask" />
-                        <Text ml={2}>{t('common.subTask')}</Text>
-                      </MenuItem>
-                    </AddNewIssueWidget>
+                    {!issue?.parentIssueId && (
+                      <AddNewIssueWidget parentIssueId={issue?.id || ''}>
+                        <MenuItem>
+                          <SubtaskIcon label="Subtask" />
+                          <Text ml={2}>{t('common.subTask')}</Text>
+                        </MenuItem>
+                      </AddNewIssueWidget>
+                    )}
                     <MenuItem>
                       <IssuesIcon label="LinkedIssue" />
                       <Text ml={2}>{t('common.linkedIssue')}</Text>
@@ -355,7 +357,7 @@ export function DetailIssuePage() {
                 </Menu>
                 <InlineEditRichtext issue={issue!} />
 
-                {issue?.subIssues && issue?.subIssues.length > 0 && (
+                {!issue?.parentIssueId && issue?.subIssues && issue?.subIssues.length > 0 && (
                   <Stack gap={0}>
                     <Stack
                       display="flex"
