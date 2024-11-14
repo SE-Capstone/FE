@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { Button, SimpleGrid, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
@@ -7,20 +7,22 @@ import { BadgeStatus } from '../../detail-project/components';
 import { useUpsertProjectHook } from '../../detail-project/hooks/mutations/use-upsert-project.mutation.hooks';
 
 import type { IProject } from '../types';
-import type { IUser } from '@/modules/users/list-user/types';
 
 import {
   CustomChakraReactSelect,
   CustomFormProvider,
   CustomInput,
+  CustomOptionComponentChakraReactSelect,
+  CustomSingleValueComponentChakraReactSelect,
   CustomTextArea,
   ModalBase,
 } from '@/components/elements';
-import { PROJECT_STATUS_OPTIONS } from '@/configs';
+import { PROJECT_STATUS_OPTIONS, UserStatusEnum } from '@/configs';
 import { formatDate } from '@/libs/helpers';
+import { useDebounce } from '@/libs/hooks';
+import { useGetInfiniteUserQuery } from '@/modules/users/list-user/hooks/queries';
 
 export interface UpsertProjectWidgetProps {
-  teamLeads: IUser[];
   isUpdate?: boolean;
   project?: IProject;
   isOpen: boolean;
@@ -29,7 +31,7 @@ export interface UpsertProjectWidgetProps {
 
 export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
   const { t } = useTranslation();
-  const { teamLeads, isUpdate, project, isOpen, onClose } = props;
+  const { isUpdate, project, isOpen, onClose } = props;
 
   const { formUpsertProject, handleUpsertProject, isLoading, reset } = useUpsertProjectHook({
     id: project?.id,
@@ -69,6 +71,43 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
     }
   }, [project, resetForm]);
 
+  const [inputValue, setInputValue] = useDebounce('');
+
+  const variables = {
+    filter: {
+      fullName: inputValue ? inputValue.toLocaleLowerCase() : undefined,
+      status: UserStatusEnum.Active,
+    },
+  };
+
+  const {
+    isLoading: isLoading2,
+    hasMore,
+    listUser,
+    fetchMore,
+    isFetching,
+    isRefetching,
+  } = useGetInfiniteUserQuery({
+    params: variables.filter,
+  });
+
+  const handleInputChange = (inputValue: string) => {
+    setInputValue(inputValue);
+  };
+
+  const handleMenuScrollToBottom = () => {
+    if (!hasMore || isFetching || isRefetching) return;
+    fetchMore();
+  };
+
+  const customComponents = useMemo(
+    () => ({
+      Option: (props) => CustomOptionComponentChakraReactSelect(props, 'sm'),
+      SingleValue: (props) => CustomSingleValueComponentChakraReactSelect(props, false),
+    }),
+    []
+  );
+
   if (!isOpen) return null;
 
   return (
@@ -79,7 +118,9 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
           form="form-upsert-project"
           w={20}
           type="submit"
-          isDisabled={isLoading || (isUpdate && !isDirty)}
+          isDisabled={
+            isLoading || (isUpdate && !isDirty) || isLoading2 || isFetching || isRefetching
+          }
         >
           {t('common.save')}
         </Button>
@@ -138,12 +179,16 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
             placeholder={`${t('common.choose')} ${t('fields.teamLead').toLowerCase()}`}
             label={t('fields.teamLead')}
             size="lg"
-            options={teamLeads.map((user) => ({
-              label: `${user.fullName} (${user.userName})`,
+            options={listUser.map((user) => ({
+              label: user.userName,
               value: user.id,
+              image: user.avatar || '',
             }))}
             control={control}
             name="leadId"
+            components={customComponents}
+            onInputChange={handleInputChange}
+            onMenuScrollToBottom={handleMenuScrollToBottom}
           />
           {isUpdate && (
             <CustomChakraReactSelect

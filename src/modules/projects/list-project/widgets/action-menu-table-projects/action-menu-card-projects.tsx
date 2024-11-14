@@ -10,7 +10,6 @@ import { useToggleVisibleProjectMutation } from '../../apis/toggle-visible-proje
 import { UpsertProjectWidget } from '../upsert-project.widget';
 
 import type { IProject } from '../../types';
-import type { IUser } from '@/modules/users/list-user/types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
 import { PermissionEnum } from '@/configs';
@@ -19,10 +18,9 @@ import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTableProjectsProps {
   project: IProject;
-  teamLeads: IUser[];
 }
 
-export function ActionMenuTableProjects({ project, teamLeads }: ActionMenuTableProjectsProps) {
+export function ActionMenuTableProjects({ project }: ActionMenuTableProjectsProps) {
   const { t } = useTranslation();
   const { permissions } = useAuthentication();
   const disclosureModal = useDisclosure();
@@ -82,7 +80,6 @@ export function ActionMenuTableProjects({ project, teamLeads }: ActionMenuTableP
     <>
       <UpsertProjectWidget
         project={project}
-        teamLeads={teamLeads}
         isUpdate
         isOpen={disclosureModal.isOpen}
         onClose={disclosureModal.onClose}

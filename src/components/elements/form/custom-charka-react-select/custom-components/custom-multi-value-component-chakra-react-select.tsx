@@ -16,7 +16,7 @@ export function CustomMultiValueComponentChakraReactSelect<
       <HStack w="full" role="group" p={1}>
         <Avatar
           src={data.image}
-          boxSize={6}
+          size="xs"
           name={(data.label as string).replace(/[^a-zA-Z ]/g, '')}
         />
         {children}

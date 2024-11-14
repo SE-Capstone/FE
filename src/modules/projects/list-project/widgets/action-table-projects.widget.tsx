@@ -6,14 +6,12 @@ import { UpsertProjectWidget } from './upsert-project.widget';
 import { BadgeStatus } from '../../detail-project/components';
 import { useProjectsQueryFilterStateContext } from '../contexts';
 
-import type { IUser } from '@/modules/users/list-user/types';
-
 import { CustomChakraReactSelect, SearchInput } from '@/components/elements';
 import { PermissionEnum, PROJECT_STATUS_OPTIONS, PROJECT_VISIBILITY_OPTIONS } from '@/configs';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
-export function ActionTableProjectsWidget({ teamLeads }: { teamLeads: IUser[] }) {
+export function ActionTableProjectsWidget() {
   const { t } = useTranslation();
   const { permissions } = useAuthentication();
   const disclosureModal = useDisclosure();
@@ -90,7 +88,6 @@ export function ActionTableProjectsWidget({ teamLeads }: { teamLeads: IUser[] })
             </Button>
             <UpsertProjectWidget
               isOpen={disclosureModal.isOpen}
-              teamLeads={teamLeads}
               onClose={disclosureModal.onClose}
             />
           </>

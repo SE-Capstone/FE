@@ -13,7 +13,6 @@ import {
   CustomOptionComponentChakraReactSelect,
 } from '@/components/elements';
 import { DEFAULT_PAGINATION, UserStatusEnum } from '@/configs';
-import { getStorageUrl } from '@/libs/helpers';
 import { useDebounce } from '@/libs/hooks';
 import { useGetInfiniteUserQuery } from '@/modules/users/list-user/hooks/queries';
 
@@ -56,7 +55,7 @@ export function UsersAsyncSelect<TFormValues extends FieldValues, IsMulti extend
     ?.map((user) => {
       // Turn on if you want to disable the option
       // const isDisabled = defaultUserValue?.includes(user.id);
-      const avatar = user.avatar ? getStorageUrl(user.avatar) : '';
+      const avatar = user.avatar || '';
       return {
         value: user.id,
         label: user.fullName,

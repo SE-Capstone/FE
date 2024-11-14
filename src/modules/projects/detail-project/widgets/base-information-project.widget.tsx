@@ -16,6 +16,7 @@ import { PermissionEnum, PROJECT_STATUS_OPTIONS } from '@/configs';
 import { formatDate } from '@/libs/helpers';
 import InlineEditableField from '@/modules/issues/list-issue/components/inline-edit-field';
 import { UserWithAvatar } from '@/modules/issues/list-issue/components/user-with-avatar';
+import { InlineEditCustomSelectInfinity } from '@/modules/issues/list-issue/widgets/editable-dropdown-infinity.widget';
 import { InlineEditCustomSelect } from '@/modules/issues/list-issue/widgets/editable-dropdown.widget';
 import { InfoCard } from '@/modules/profile/components';
 
@@ -123,12 +124,7 @@ export function BaseInformationProjectWidget({
         {
           label: t('fields.teamLead'),
           text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
-            <InlineEditCustomSelect
-              options={teamLeads.map((user) => ({
-                label: user.userName,
-                value: user.id,
-                image: user.avatar,
-              }))}
+            <InlineEditCustomSelectInfinity
               defaultValue={
                 project?.leadId && project?.leadName
                   ? {
@@ -138,7 +134,6 @@ export function BaseInformationProjectWidget({
                     }
                   : undefined
               }
-              field="lead"
               project={project}
             />
           ) : (
