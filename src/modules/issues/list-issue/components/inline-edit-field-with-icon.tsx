@@ -87,7 +87,8 @@ const InlineEditWithIcon = ({
         },
       }}
       display="flex"
-      flexDir="row"
+      flex={1}
+      flexDir="column"
     >
       <InlineEdit
         defaultValue={editValue}

@@ -28,6 +28,7 @@ export const InlineEditCustomSelect = ({
   project,
   field,
   size,
+  statusId,
 }: {
   options: IOptionSelectWithImage[];
   defaultValue?: IOptionSelectWithImage;
@@ -35,6 +36,7 @@ export const InlineEditCustomSelect = ({
   project?: IProject;
   field: 'status' | 'priority' | 'assignee' | 'label' | 'lead';
   size?: SizeProp;
+  statusId?: string;
 }) => {
   const [selectedOption, setSelectedOption] = useState(defaultValue);
 
@@ -124,7 +126,7 @@ export const InlineEditCustomSelect = ({
               format: 'YYYY-MM-DD',
             }) as unknown as Date)
           : undefined,
-        statusId: field === 'status' ? option?.value : issue.status.id,
+        statusId: field === 'status' ? option?.value : statusId || issue.status.id,
         labelId: field === 'label' ? option?.value : issue.label?.id,
         assigneeId: field === 'assignee' ? option?.value : issue.assignee?.id,
         priority: field === 'priority' ? option?.value : issue.priority,

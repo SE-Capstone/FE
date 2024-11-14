@@ -92,6 +92,11 @@ export const InlineEditCustomSelectInfinity = ({
         maxWidth: '300px',
       }),
 
+      dropdownIndicator: (provide) => ({
+        ...provide,
+        display: 'none',
+      }),
+
       container: (provide) => ({
         ...provide,
         px: 0,
@@ -139,7 +144,7 @@ export const InlineEditCustomSelectInfinity = ({
       }
       size="sm"
       isSearchable
-      variant="subtle"
+      variant="unstyled"
       isLoading={isLoading}
       isClearable={false}
       options={options}

@@ -23,18 +23,23 @@ import {
 import { DropIndicator } from '@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/box';
 import { Box, Stack, xcss } from '@atlaskit/primitives';
 import { token } from '@atlaskit/tokens';
-import { Badge, Stack as StackCharkra, Text } from '@chakra-ui/react';
+import { Badge, Stack as StackCharkra, Text, Tooltip } from '@chakra-ui/react';
 import ReactDOM from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { IoCalendarOutline } from 'react-icons/io5';
 import invariant from 'tiny-invariant';
 
 import { useBoardContext } from './board-context';
 import { useColumnContext } from './column-context';
+import { InlineEditCustomSelect } from '../../../editable-dropdown.widget';
 import { type Issue } from '../../data';
 
+import { ISSUE_PRIORITY_VALUES } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { BadgeIssue, PriorityIssue } from '@/modules/issues/list-issue/components';
 import InlineEditWithIcon from '@/modules/issues/list-issue/components/inline-edit-field-with-icon';
 import { UserWithAvatar } from '@/modules/issues/list-issue/components/user-with-avatar';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 type State =
   | { type: 'idle' }
@@ -111,6 +116,10 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
   ref
 ) {
   const { issue, title, index, dueDate, isLate, statusId, statusColor, id } = item;
+  const { t } = useTranslation();
+  const { members } = useProjectContext();
+  const { currentUser } = useAuthentication();
+  const canUpdate = currentUser?.id === issue.assignee?.id;
 
   return (
     <Stack ref={ref} testId={`item-${id}`} xcss={[baseStyles, stateStyles[state.type]]}>
@@ -169,13 +178,42 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
       <StackCharkra mt={2} flexDir="row" justifyContent="space-between" alignItems="center" gap={2}>
         <BadgeIssue content={`#${index}`} variant="outline" colorScheme={statusColor} />
         <StackCharkra flexDir="row" alignItems="center">
-          <PriorityIssue priority={issue.priority} hideText />
-          <UserWithAvatar
-            image={issue.assignee?.avatar || ''}
-            size={7}
-            label={issue.assignee?.userName || ''}
-            hideText
-          />
+          <Tooltip label={ISSUE_PRIORITY_VALUES(t)[issue.priority]}>
+            <PriorityIssue priority={issue.priority} hideText />
+          </Tooltip>
+          {!canUpdate ? (
+            <UserWithAvatar
+              image={issue.assignee?.avatar || ''}
+              size2="sm"
+              label={issue.assignee?.userName || ''}
+              hideText
+            />
+          ) : (
+            <InlineEditCustomSelect
+              size="sm"
+              options={members.map((member) => ({
+                label: member.userName,
+                value: member.id,
+                image: member.avatar,
+              }))}
+              defaultValue={
+                issue.assignee
+                  ? {
+                      label: issue.assignee.userName,
+                      value: issue.assignee.id,
+                      image: issue.assignee.avatar,
+                    }
+                  : {
+                      label: '',
+                      value: '',
+                      image:
+                        'https://i.pinimg.com/1200x/bc/43/98/bc439871417621836a0eeea768d60944.jpg',
+                    }
+              }
+              field="assignee"
+              issue={issue}
+            />
+          )}
         </StackCharkra>
       </StackCharkra>
 

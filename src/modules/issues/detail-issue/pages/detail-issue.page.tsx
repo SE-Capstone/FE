@@ -406,9 +406,6 @@ export function DetailIssuePage() {
                                 boxStyle={{
                                   marginTop: '-4px',
                                 }}
-                                fieldStyle={{
-                                  minWidth: '300px',
-                                }}
                                 buttonStyle={{
                                   maxHeight: 'fit-content',
                                 }}
