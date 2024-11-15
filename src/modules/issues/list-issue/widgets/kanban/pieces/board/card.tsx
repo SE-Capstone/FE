@@ -34,7 +34,7 @@ import { useColumnContext } from './column-context';
 import { InlineEditCustomSelect } from '../../../editable-dropdown.widget';
 import { type Issue } from '../../data';
 
-import { ISSUE_PRIORITY_VALUES } from '@/configs';
+import { ISSUE_PRIORITY_VALUES, ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { BadgeIssue, PriorityIssue } from '@/modules/issues/list-issue/components';
 import InlineEditWithIcon from '@/modules/issues/list-issue/components/inline-edit-field-with-icon';
@@ -117,9 +117,12 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
 ) {
   const { issue, title, index, dueDate, isLate, statusId, statusColor, id } = item;
   const { t } = useTranslation();
-  const { members } = useProjectContext();
+  const { members, permissions } = useProjectContext();
   const { currentUser } = useAuthentication();
-  const canUpdate = currentUser?.id === issue.assignee?.id;
+  const canUpdate =
+    currentUser?.id === issue.assignee?.id ||
+    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) ||
+    permissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
 
   return (
     <Stack ref={ref} testId={`item-${id}`} xcss={[baseStyles, stateStyles[state.type]]}>
@@ -132,6 +135,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
             }}
             textStyle={{ flex: 1 }}
             statusId={statusId}
+            isViewOnly={!canUpdate}
           />
         </Heading>
         <DropdownMenu

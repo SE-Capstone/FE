@@ -21,9 +21,9 @@ import { ActionMenuTablePhases } from './action-menu-table-phases';
 
 import type { IPhase } from '../types';
 
-import { PermissionEnum } from '@/configs';
+import { ProjectPermissionEnum } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { formatDate, isDateLessThan } from '@/libs/helpers';
-import { useAuthentication } from '@/modules/profile/hooks';
 
 interface MilestoneProps {
   phases: IPhase[];
@@ -111,7 +111,7 @@ const LineWithDot = ({ phase }: { phase?: IPhase }) => {
 const EmptyCard = () => <Box flex={{ base: 0, md: 1 }} p={{ base: 0, md: 6 }} bg="transparent" />;
 
 const Card = ({ phase, index }: { phase: IPhase; index: number }) => {
-  const { permissions } = useAuthentication();
+  const { permissions } = useProjectContext();
   const { title, description, expectedStartDate, expectedEndDate } = phase;
 
   // For even id show card on left side
@@ -161,7 +161,7 @@ const Card = ({ phase, index }: { phase: IPhase; index: number }) => {
             {formatDate({ date: expectedEndDate, format: 'MMM DD, YYYY' })}
           </Text>
 
-          {permissions[PermissionEnum.UPDATE_PHASE] && permissions[PermissionEnum.DELETE_PHASE] && (
+          {permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) && (
             <ActionMenuTablePhases phase={phase} />
           )}
         </Flex>

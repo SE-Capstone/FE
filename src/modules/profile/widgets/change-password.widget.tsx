@@ -56,6 +56,7 @@ export const ChangePasswordWidget: React.FC = () => {
             <CustomInput
               label={t('fields.currentPassword')}
               type="password"
+              isRequired
               registration={register('oldPassword')}
               error={errors?.oldPassword}
             />

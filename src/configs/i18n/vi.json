@@ -277,6 +277,7 @@
     "addProject": "Thêm dự án",
     "isProjectLead": "Gán cho người đứng trưởng dự án",
     "getListProject": "Lấy danh sách dự án",
+    "settingAllProject": "Quản lý tất cả dự án",
     "getDetailProject": "Xem chi tiết dự án",
     "deleteProject": "Cập nhật trạng thái dự án",
     "updateProject": "Cập nhật thông tin dự án",

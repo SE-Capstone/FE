@@ -24,28 +24,50 @@ import InlineEditWithIcon from '../../list-issue/components/inline-edit-field-wi
 import InlineEditRichtext from '../../list-issue/components/inline-edit-richtext';
 import { UserWithAvatar } from '../../list-issue/components/user-with-avatar';
 import { useUpsertIssueHook } from '../../list-issue/hooks/mutations';
+import { IssuePriorityEnum, type IUpdatedBy } from '../../list-issue/types';
 import { AddNewIssueWidget } from '../../list-issue/widgets';
 import { InlineEditCustomSelect } from '../../list-issue/widgets/editable-dropdown.widget';
 import { CommentWidget } from '../widgets/comments.widget';
 
 import { Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
-import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
+import { ISSUE_PRIORITY_OPTIONS, ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { formatDate } from '@/libs/helpers';
 import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
 import { InfoCard } from '@/modules/profile/components';
+import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailIssuePage() {
   const { t } = useTranslation();
-  const { members } = useProjectContext();
+  const { members, permissions } = useProjectContext();
+  const { currentUser } = useAuthentication();
   const { projectId, issueId } = useParams();
 
   const { issue, isLoading, isError } = useGetDetailIssue({ issueId: issueId || '' });
 
   const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issue?.id || '');
+
+  const canUpdate = (assignee?: IUpdatedBy) => {
+    if (currentUser?.id === assignee?.id) {
+      return true;
+    }
+    return (
+      permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) ||
+      permissions.includes(ProjectPermissionEnum.IsProjectConfigurator)
+    );
+  };
+  const canUpdateComment = (assignee?: IUpdatedBy) => {
+    if (currentUser?.id === assignee?.id) {
+      return true;
+    }
+    return (
+      permissions.includes(ProjectPermissionEnum.IsCommentConfigurator) ||
+      permissions.includes(ProjectPermissionEnum.IsProjectConfigurator)
+    );
+  };
 
   const { listStatus, isLoading: isLoading2 } = useGetListStatusQuery({
     params: {
@@ -125,7 +147,7 @@ export function DetailIssuePage() {
       [
         {
           label: t('fields.assignee'),
-          text: (
+          text: canUpdate(issue?.assignee) ? (
             <InlineEditCustomSelect
               options={members.map((member) => ({
                 label: member.userName,
@@ -142,11 +164,17 @@ export function DetailIssuePage() {
               field="assignee"
               issue={issue!}
             />
+          ) : (
+            <UserWithAvatar
+              image={issue?.assignee?.avatar || ''}
+              size2="sm"
+              label={issue?.assignee?.userName || ''}
+            />
           ),
         },
         {
           label: t('fields.status'),
-          text: (
+          text: canUpdate(issue?.assignee) ? (
             <InlineEditCustomSelect
               options={listStatus.map((s) => ({
                 label: <BadgeIssue content={s.name} colorScheme={s.color} />,
@@ -163,11 +191,13 @@ export function DetailIssuePage() {
               field="status"
               issue={issue}
             />
+          ) : (
+            <BadgeIssue content={issue?.status.name} colorScheme={issue?.status.color} />
           ),
         },
         {
           label: t('common.label'),
-          text: (
+          text: canUpdate(issue?.assignee) ? (
             <InlineEditCustomSelect
               options={listLabel.map((s) => ({
                 label: s.title,
@@ -182,11 +212,13 @@ export function DetailIssuePage() {
               field="label"
               issue={issue}
             />
+          ) : (
+            <>{issue?.label?.title}</>
           ),
         },
         {
           label: t('fields.priority'),
-          text: (
+          text: canUpdate(issue?.assignee) ? (
             <InlineEditCustomSelect
               options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
                 label: <PriorityIssue priority={value} />,
@@ -201,6 +233,8 @@ export function DetailIssuePage() {
               field="priority"
               issue={issue!}
             />
+          ) : (
+            <PriorityIssue priority={issue?.priority || IssuePriorityEnum.Medium} />
           ),
         },
         {
@@ -211,6 +245,7 @@ export function DetailIssuePage() {
               callback={handleSubmit}
               fieldName="percentage"
               type="progress"
+              isViewOnly={!canUpdate(issue?.assignee)}
             />
           ),
         },
@@ -222,6 +257,7 @@ export function DetailIssuePage() {
               callback={handleSubmit}
               fieldName="estimatedTime"
               styleProps={{ minW: '200px', minH: '20px' }}
+              isViewOnly={!canUpdate(issue?.assignee)}
             />
           ),
         },
@@ -238,6 +274,7 @@ export function DetailIssuePage() {
               fieldName="startDate"
               type="date"
               styleProps={{ transform: 'translate(0, -4px)' }}
+              isViewOnly={!canUpdate(issue?.assignee)}
             />
           ),
         },
@@ -254,6 +291,7 @@ export function DetailIssuePage() {
               fieldName="dueDate"
               type="date"
               styleProps={{ transform: 'translate(0, -4px)' }}
+              isViewOnly={!canUpdate(issue?.assignee)}
             />
           ),
         },
@@ -327,6 +365,7 @@ export function DetailIssuePage() {
                     fieldValue={issue?.title || ''}
                     callback={handleSubmit}
                     type="title"
+                    isViewOnly={!canUpdate(issue?.assignee)}
                   />
                 </Text>
                 <Menu>
@@ -356,7 +395,7 @@ export function DetailIssuePage() {
                     </MenuItem>
                   </MenuList>
                 </Menu>
-                <InlineEditRichtext issue={issue!} />
+                <InlineEditRichtext issue={issue!} isEditable={canUpdate(issue?.assignee)} />
 
                 {!issue?.parentIssueId && issue?.subIssues && issue?.subIssues.length > 0 && (
                   <Stack gap={0}>
@@ -404,74 +443,94 @@ export function DetailIssuePage() {
                               <InlineEditWithIcon
                                 issue={i}
                                 boxStyle={{
-                                  marginTop: '-4px',
+                                  marginTop: canUpdate(i.assignee) ? '-4px' : '0',
                                 }}
                                 buttonStyle={{
                                   maxHeight: 'fit-content',
                                 }}
                                 link={APP_PATHS.detailIssue(projectId || '', i.id)}
+                                isViewOnly={!canUpdate(i.assignee)}
                               />
                             </Flex>
                             <Flex alignItems="center" gap={2}>
-                              <InlineEditCustomSelect
-                                options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
-                                  label: <PriorityIssue priority={value} />,
-                                  value,
-                                }))}
-                                defaultValue={
-                                  i?.priority && {
-                                    label: <PriorityIssue priority={i.priority} hideText />,
-                                    value: i.priority,
+                              {canUpdate(issue?.assignee) ? (
+                                <InlineEditCustomSelect
+                                  options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
+                                    label: <PriorityIssue priority={value} />,
+                                    value,
+                                  }))}
+                                  defaultValue={
+                                    i?.priority && {
+                                      label: <PriorityIssue priority={i.priority} hideText />,
+                                      value: i.priority,
+                                    }
                                   }
-                                }
-                                size="sm"
-                                field="priority"
-                                issue={i}
-                              />
-                              <InlineEditCustomSelect
-                                size="sm"
-                                options={members.map((member) => ({
-                                  label: member.userName,
-                                  value: member.id,
-                                  image: member.avatar,
-                                }))}
-                                defaultValue={
-                                  i.assignee
-                                    ? {
-                                        label: i?.assignee.userName,
-                                        value: i?.assignee.id,
-                                        image: i?.assignee.avatar,
-                                      }
-                                    : {
-                                        label: '',
-                                        value: '',
-                                        image:
-                                          'https://i.pinimg.com/1200x/bc/43/98/bc439871417621836a0eeea768d60944.jpg',
-                                      }
-                                }
-                                field="assignee"
-                                issue={i}
-                              />
-                              <InlineEditCustomSelect
-                                options={listStatus.map((s) => ({
-                                  label: <BadgeIssue content={s.name} colorScheme={s.color} />,
-                                  value: s.id,
-                                }))}
-                                size="sm"
-                                defaultValue={
-                                  i && {
-                                    label: (
-                                      <BadgeIssue
-                                        content={i.status?.name}
-                                        colorScheme={i.status?.color || 'gray'}
-                                      />
-                                    ),
-                                    value: i.status?.id,
+                                  size="sm"
+                                  field="priority"
+                                  issue={i}
+                                />
+                              ) : (
+                                <PriorityIssue priority={i.priority} hideText />
+                              )}
+                              {canUpdate(issue?.assignee) ? (
+                                <InlineEditCustomSelect
+                                  size="sm"
+                                  options={members.map((member) => ({
+                                    label: member.userName,
+                                    value: member.id,
+                                    image: member.avatar,
+                                  }))}
+                                  defaultValue={
+                                    i.assignee
+                                      ? {
+                                          label: i?.assignee.userName,
+                                          value: i?.assignee.id,
+                                          image: i?.assignee.avatar,
+                                        }
+                                      : {
+                                          label: '',
+                                          value: '',
+                                          image:
+                                            'https://i.pinimg.com/1200x/bc/43/98/bc439871417621836a0eeea768d60944.jpg',
+                                        }
                                   }
-                                }
-                                field="status"
-                                issue={i}
-                              />
+                                  field="assignee"
+                                  issue={i}
+                                />
+                              ) : (
+                                <UserWithAvatar
+                                  image={i?.assignee?.avatar || ''}
+                                  label={i?.assignee?.userName || ''}
+                                  hideText
+                                />
+                              )}
+                              {canUpdate(issue?.assignee) ? (
+                                <InlineEditCustomSelect
+                                  options={listStatus.map((s) => ({
+                                    label: <BadgeIssue content={s.name} colorScheme={s.color} />,
+                                    value: s.id,
+                                  }))}
+                                  size="sm"
+                                  defaultValue={
+                                    i && {
+                                      label: (
+                                        <BadgeIssue
+                                          content={i.status?.name}
+                                          colorScheme={i.status?.color || 'gray'}
+                                        />
+                                      ),
+                                      value: i.status?.id,
+                                    }
+                                  }
+                                  field="status"
+                                  issue={i}
+                                />
+                              ) : (
+                                <BadgeIssue
+                                  content={i.status?.name}
+                                  colorScheme={i.status?.color || 'gray'}
+                                />
+                              )}
                             </Flex>
                           </Flex>
                         </Box>
@@ -498,7 +557,12 @@ export function DetailIssuePage() {
                   </Text>
                   <CommentWidget index={0} isComment={false} />
                   {issue?.comments?.map((comment, index) => (
-                    <CommentWidget key={comment.id} comment={comment} index={index + 1} />
+                    <CommentWidget
+                      key={comment.id}
+                      comment={comment}
+                      index={index + 1}
+                      isEditable={canUpdateComment(comment.user as any)}
+                    />
                   ))}
                   <Stack />
                 </Stack>

@@ -12,15 +12,15 @@ import type { ColumnsProps } from '@/components/elements';
 
 import { Head, StateHandler, TableComponent } from '@/components/elements';
 import { ChangeStatus } from '@/components/widgets/change-status';
-import { PermissionEnum } from '@/configs';
+import { ProjectPermissionEnum } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { getNumericalOrder } from '@/libs/helpers';
 import { BadgeIssue } from '@/modules/issues/list-issue/components';
-import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ListStatusPage() {
   const { t } = useTranslation();
   const { projectId } = useParams();
-  const { permissions } = useAuthentication();
+  const { permissions } = useProjectContext();
   const { listStatus, isError, isLoading, isRefetching } = useGetListStatusQuery({
     params: {
       projectId: projectId || '',
@@ -77,7 +77,9 @@ export function ListStatusPage() {
                       : `${t('actions.markAsDone')} ${t('common.status').toLowerCase()}?`
                   }
                   status={status}
-                  isLoading={!permissions[PermissionEnum.UPDATE_STATUS] && true}
+                  isLoading={
+                    !permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) && true
+                  }
                   description={status?.isDone ? t('actions.markAsUndone') : t('actions.markAsDone')}
                 />
               );
@@ -101,8 +103,7 @@ export function ListStatusPage() {
           isLoading={isLoading || isRefetching}
           isError={!!isError}
           additionalFeature={(status) =>
-            permissions[PermissionEnum.UPDATE_STATUS] ||
-            permissions[PermissionEnum.DELETE_STATUS] ? (
+            permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) ? (
               <ActionMenuTableStatuses status={status} listStatus={listStatus} />
             ) : undefined
           }

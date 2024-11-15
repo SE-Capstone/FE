@@ -12,8 +12,9 @@ import { UpsertProjectWidget } from '../upsert-project.widget';
 import type { IProject } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
-import { PermissionEnum } from '@/configs';
+import { PermissionEnum, ProjectPermissionEnum } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTableProjectsProps {
@@ -23,9 +24,18 @@ interface ActionMenuTableProjectsProps {
 export function ActionMenuTableProjects({ project }: ActionMenuTableProjectsProps) {
   const { t } = useTranslation();
   const { permissions } = useAuthentication();
+  const { permissions: projectPermissions } = useProjectContext();
   const disclosureModal = useDisclosure();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  const canUpdate =
+    permissions[PermissionEnum.UPDATE_PROJECT] ||
+    projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
+
+  const canToggle =
+    permissions[PermissionEnum.TOGGLE_VISIBLE_PROJECT] ||
+    projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
 
   const { openAlert, closeAlert } = useAlertDialogStore(loading);
   const { mutate, isPending: isLoading } = useToggleVisibleProjectMutation({
@@ -44,7 +54,7 @@ export function ActionMenuTableProjects({ project }: ActionMenuTableProjectsProp
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/projects/${project.id}`),
     },
-    permissions[PermissionEnum.UPDATE_PROJECT] && {
+    canUpdate && {
       label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => {
@@ -53,7 +63,7 @@ export function ActionMenuTableProjects({ project }: ActionMenuTableProjectsProp
         disclosureModal.onOpen();
       },
     },
-    permissions[PermissionEnum.TOGGLE_VISIBLE_PROJECT] && {
+    canToggle && {
       type: project.isVisible ? 'warning' : 'danger',
       label: project.isVisible ? t('actions.archive') : t('actions.unarchive'),
       icon: <Icon as={project.isVisible ? HiArchiveBox : HiArchiveBoxXMark} boxSize={5} />,

@@ -144,12 +144,11 @@ export const PERMISSIONS_VALUES = (t: any): Record<PermissionEnum, string> => ({
 
   // Project
   [PermissionEnum.ADD_PROJECT]: t('permissions.addProject'),
-  [PermissionEnum.IS_PROJECT_LEAD]: t('permissions.isProjectLead'),
   [PermissionEnum.ADD_MEMBER_TO_PROJECT]: t('permissions.addMemberToProject'),
   [PermissionEnum.TOGGLE_VISIBLE_PROJECT]: t('permissions.toggleVisibleProject'),
   [PermissionEnum.DELETE_PROJECT]: t('permissions.deleteProject'),
   [PermissionEnum.UPDATE_PROJECT]: t('permissions.updateProject'),
-  [PermissionEnum.READ_LIST_PROJECT]: t('permissions.getListProject'),
+  [PermissionEnum.SETTING_ALL_PROJECT]: t('permissions.settingAllProject'),
 
   // Role
   [PermissionEnum.ADD_ROLE]: t('permissions.addRole'),
@@ -160,28 +159,12 @@ export const PERMISSIONS_VALUES = (t: any): Record<PermissionEnum, string> => ({
   // Project status
   [PermissionEnum.UPDATE_DEFAULT_STATUS]: t('permissions.updateDefaultStatus'),
   [PermissionEnum.ADD_DEFAULT_STATUS]: t('permissions.addDefaultStatus'),
-  [PermissionEnum.DELETE_STATUS]: t('permissions.deleteStatusProject'),
   [PermissionEnum.DELETE_DEFAULT_STATUS]: t('permissions.deleteDefaultStatus'),
-  [PermissionEnum.UPDATE_STATUS]: t('permissions.updateStatusProject'),
-  [PermissionEnum.ADD_STATUS]: t('permissions.addStatusProject'),
 
   // Project label
-  [PermissionEnum.UPDATE_LABEL]: t('permissions.updateLabel'),
   [PermissionEnum.DELETE_DEFAULT_LABEL]: t('permissions.deleteDefaultLabel'),
-  [PermissionEnum.DELETE_LABEL]: t('permissions.deleteLabel'),
   [PermissionEnum.ADD_DEFAULT_LABEL]: t('permissions.addDefaultLabel'),
-  [PermissionEnum.ADD_LABEL]: t('permissions.addLabel'),
   [PermissionEnum.UPDATE_DEFAULT_LABEL]: t('permissions.updateDefaultLabel'),
-
-  // Phase
-  [PermissionEnum.DELETE_PHASE]: t('permissions.deletePhase'),
-  [PermissionEnum.UPDATE_PHASE]: t('permissions.updatePhase'),
-  [PermissionEnum.ADD_PHASE]: t('permissions.addPhase'),
-
-  // Issue
-  [PermissionEnum.DELETE_ISSUE]: t('permissions.deleteIssue'),
-  [PermissionEnum.ADD_ISSUE]: t('permissions.addIssue'),
-  [PermissionEnum.UPDATE_ISSUE]: t('permissions.updateIssue'),
 });
 
 export const GROUP_PERMISSIONS_VALUES = (t: any): Record<GroupPermissionEnum, string> => ({
@@ -189,7 +172,6 @@ export const GROUP_PERMISSIONS_VALUES = (t: any): Record<GroupPermissionEnum, st
   [GroupPermissionEnum.ROLE]: t('groupPermissions.role'),
   [GroupPermissionEnum.PROJECT]: t('groupPermissions.project'),
   [GroupPermissionEnum.JOB]: t('groupPermissions.job'),
-  [GroupPermissionEnum.ISSUE]: t('groupPermissions.task'),
   [GroupPermissionEnum.STATUS]: t('groupPermissions.statusProject'),
   [GroupPermissionEnum.PHASE]: t('groupPermissions.phase'),
   [GroupPermissionEnum.LABEL]: t('groupPermissions.label'),

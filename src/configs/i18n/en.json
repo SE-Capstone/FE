@@ -312,6 +312,7 @@
     "addProject": "Add project",
     "isProjectLead": "Assign as project lead",
     "getListProject": "Get list project",
+    "settingAllProject": "Setting all project",
     "getDetailProject": "Get project detail",
     "deleteProject": "Update project status",
     "updateProject": "Update project information",

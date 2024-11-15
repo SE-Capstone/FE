@@ -13,25 +13,37 @@ import { useGetListIssueQuery } from '../hooks/queries';
 import { ActionMenuTableIssues, ActionTableIssuesWidget } from '../widgets';
 import { InlineEditCustomSelect } from '../widgets/editable-dropdown.widget';
 
-import type { IIssue } from '../types';
+import type { IIssue, IUpdatedBy } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 import type { ILabel } from '@/modules/labels/types';
 import type { IStatus } from '@/modules/statuses/types';
 
 import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
-import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
+import { ISSUE_PRIORITY_OPTIONS, ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { formatDate } from '@/libs/helpers';
 import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
+import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 
 export function ListIssuePage() {
   const { projectId } = useParams();
   const { t } = useTranslation();
-  const { members } = useProjectContext();
+  const { currentUser } = useAuthentication();
+  const { members, permissions } = useProjectContext();
   const [labels, setLabels] = useState<ILabel[]>([]);
   const [statuses, setStatuses] = useState<IStatus[]>([]);
   const { issuesQueryState, resetIssuesQueryState } = useIssuesQueryFilterStateContext();
+
+  const canUpdate = (assignee?: IUpdatedBy) => {
+    if (currentUser?.id === assignee?.id) {
+      return true;
+    }
+    return (
+      permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) ||
+      permissions.includes(ProjectPermissionEnum.IsProjectConfigurator)
+    );
+  };
 
   const { listIssue, meta, isError, isLoading, handlePaginate, isRefetching } =
     useGetListIssueQuery({
@@ -94,8 +106,8 @@ export function ListIssuePage() {
             title: t('common.status'),
             hasSort: false,
             Cell(issue) {
-              const { status } = issue;
-              return (
+              const { status, assignee } = issue;
+              return canUpdate(assignee) ? (
                 <InlineEditCustomSelect
                   options={statuses.map((s) => ({
                     label: <BadgeIssue content={s.name} colorScheme={s.color} />,
@@ -108,6 +120,8 @@ export function ListIssuePage() {
                   field="status"
                   issue={issue}
                 />
+              ) : (
+                <BadgeIssue content={status.name} colorScheme={status.color} />
               );
             },
           },
@@ -116,8 +130,8 @@ export function ListIssuePage() {
             title: t('fields.priority'),
             hasSort: false,
             Cell(issue) {
-              const { priority } = issue;
-              return (
+              const { priority, assignee } = issue;
+              return canUpdate(assignee) ? (
                 <InlineEditCustomSelect
                   options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
                     label: <PriorityIssue priority={value} />,
@@ -130,6 +144,8 @@ export function ListIssuePage() {
                   field="priority"
                   issue={issue}
                 />
+              ) : (
+                <PriorityIssue priority={priority} />
               );
             },
           },
@@ -138,7 +154,8 @@ export function ListIssuePage() {
             title: t('fields.title'),
             hasSort: false,
             Cell(issue) {
-              return <InlineEditWithIcon issue={issue} />;
+              const { assignee } = issue;
+              return <InlineEditWithIcon issue={issue} isViewOnly={!canUpdate(assignee)} />;
             },
           },
           {
@@ -147,7 +164,7 @@ export function ListIssuePage() {
             hasSort: false,
             Cell(issue) {
               const { assignee } = issue;
-              return (
+              return canUpdate(assignee) ? (
                 <InlineEditCustomSelect
                   options={members.map((member) => ({
                     label: member.userName,
@@ -163,6 +180,12 @@ export function ListIssuePage() {
                   }
                   field="assignee"
                   issue={issue}
+                />
+              ) : (
+                <UserWithAvatar
+                  image={assignee?.avatar || ''}
+                  size2="sm"
+                  label={assignee?.userName || ''}
                 />
               );
             },
@@ -201,8 +224,8 @@ export function ListIssuePage() {
             title: t('common.label'),
             hasSort: false,
             Cell(issue) {
-              const { label } = issue;
-              return (
+              const { label, assignee } = issue;
+              return canUpdate(assignee) ? (
                 <InlineEditCustomSelect
                   options={labels.map((s) => ({ label: s.title, value: s.id }))}
                   defaultValue={
@@ -214,6 +237,8 @@ export function ListIssuePage() {
                   field="label"
                   issue={issue}
                 />
+              ) : (
+                <>{label?.title}</>
               );
             },
           },
@@ -260,6 +285,7 @@ export function ListIssuePage() {
         ],
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [labels, members, statuses, t]
   );
 

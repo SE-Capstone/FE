@@ -7,8 +7,6 @@ import { useParams } from 'react-router-dom';
 import { useGetDetailProject } from '../apis/detail-project.api';
 import { BaseInformationProjectWidget } from '../widgets';
 
-import type { IUser } from '@/modules/users/list-user/types';
-
 import { CustomTabs, Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
 import { PermissionEnum } from '@/configs';
@@ -21,7 +19,6 @@ import { ListLabelPage } from '@/modules/labels';
 import { ListPhasePage } from '@/modules/phases';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { ListStatusPage } from '@/modules/statuses';
-import { useGetUsersByPermission } from '@/modules/users/list-user/apis/get-user-by-permission.api';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailProjectPage() {
@@ -35,18 +32,6 @@ export function DetailProjectPage() {
 
   const { project, isLoading, isError } = useGetDetailProject({ projectId: projectId || '' });
 
-  const [teamLeads, setTeamLeads] = useState<IUser[]>([]);
-
-  const { users } = useGetUsersByPermission({
-    permissionName: PermissionEnum.IS_PROJECT_LEAD,
-  });
-
-  useEffect(() => {
-    if (JSON.stringify(users) !== JSON.stringify(teamLeads)) {
-      setTeamLeads(users);
-    }
-  }, [users, teamLeads]);
-
   const handleTabChange = (index: number) => {
     setActiveTabIndex(index);
   };
@@ -55,7 +40,7 @@ export function DetailProjectPage() {
     localStorage.setItem('activeTabIndex', activeTabIndex.toString());
   }, [activeTabIndex]);
 
-  if (!permissions[PermissionEnum.READ_LIST_PROJECT] && !projectContext?.isVisible) {
+  if (!permissions[PermissionEnum.SETTING_ALL_PROJECT] && !projectContext?.isVisible) {
     return <Error403Page />;
   }
 
@@ -89,11 +74,7 @@ export function DetailProjectPage() {
                 title: t('fields.overview'),
                 link: `${APP_PATHS.listProject}/${projectId}`,
                 childrenPanel: (
-                  <BaseInformationProjectWidget
-                    teamLeads={teamLeads}
-                    project={project}
-                    permissions={permissions}
-                  />
+                  <BaseInformationProjectWidget project={project} permissions={permissions} />
                 ),
               },
               {

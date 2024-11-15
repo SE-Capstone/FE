@@ -34,6 +34,11 @@ export type IProject = IBaseEntity & {
   leadName?: string;
   leadPosition?: string;
   leadAvatar?: string;
-  myPermissions: ['IsProjectConfigurator', 'IsIssueConfigurator'];
+  myPermissions: [
+    'IsProjectConfigurator',
+    'IsIssueConfigurator',
+    'IsPermissionConfigurator',
+    'IsCommentConfigurator'
+  ];
   members: ProjectMember[];
 };

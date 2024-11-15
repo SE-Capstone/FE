@@ -11,14 +11,14 @@ import type { ILabel } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 
 import { Head, StateHandler, TableComponent } from '@/components/elements';
-import { PermissionEnum } from '@/configs';
+import { ProjectPermissionEnum } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { getNumericalOrder } from '@/libs/helpers';
-import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ListLabelPage() {
   const { t } = useTranslation();
   const { projectId } = useParams();
-  const { permissions } = useAuthentication();
+  const { permissions } = useProjectContext();
   const { listLabel, isError, isLoading, isRefetching } = useGetListLabelQuery({
     params: {
       projectId: projectId || '',
@@ -77,7 +77,7 @@ export function ListLabelPage() {
           isLoading={isLoading || isRefetching}
           isError={!!isError}
           additionalFeature={(label) =>
-            permissions[PermissionEnum.UPDATE_LABEL] || permissions[PermissionEnum.DELETE_LABEL] ? (
+            permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) ? (
               <ActionMenuTableLabels label={label} listLabel={listLabel} />
             ) : undefined
           }

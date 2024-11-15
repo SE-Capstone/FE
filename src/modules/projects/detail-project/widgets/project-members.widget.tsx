@@ -10,9 +10,19 @@ import { UpsertMembersWidget } from './upsert-members.widget';
 import type { IProject } from '../../list-project/types';
 import type { IOptionUserSelect } from '../components/users-async-select';
 
+import { PermissionEnum, ProjectPermissionEnum } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
+import { useAuthentication } from '@/modules/profile/hooks';
+
 export function ProjectMembersWidget({ project }: { project?: IProject }) {
   const { t } = useTranslation();
+  const { permissions } = useAuthentication();
+  const { permissions: projectPermissions } = useProjectContext();
   const hasMembers = (project?.members?.length || 0) > 0 || !!project?.leadId;
+
+  const canUpdate =
+    permissions[PermissionEnum.ADD_MEMBER_TO_PROJECT] ||
+    projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
 
   const [initialMembers, setInitialMembers] = useState<Set<string>>(new Set());
   const [defaultUsersOption, setDefaultUsersOption] = useState<IOptionUserSelect[]>([]);
@@ -65,7 +75,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           <Icon boxSize={5} color="neutral.300" mr={3} as={PiUsersThreeFill} />
           {t('fields.members')}
         </Text>
-        {hasMembers && (
+        {hasMembers && canUpdate && (
           <UpsertMembersWidget
             defaultUserValue={Array.from(initialMembers)}
             defaultUsersOption={defaultUsersOption}
@@ -105,15 +115,17 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           ))}
         </Stack>
       ) : (
-        <UpsertMembersWidget
-          defaultUserValue={Array.from(initialMembers)}
-          defaultUsersOption={defaultUsersOption}
-          projectId={project?.id || ''}
-        >
-          <Button width="fit-content" leftIcon={<>+</>}>
-            {`${t('common.add')} ${t('fields.members').toLowerCase()}`}
-          </Button>
-        </UpsertMembersWidget>
+        canUpdate && (
+          <UpsertMembersWidget
+            defaultUserValue={Array.from(initialMembers)}
+            defaultUsersOption={defaultUsersOption}
+            projectId={project?.id || ''}
+          >
+            <Button width="fit-content" leftIcon={<>+</>}>
+              {`${t('common.add')} ${t('fields.members').toLowerCase()}`}
+            </Button>
+          </UpsertMembersWidget>
+        )
       )}
     </Stack>
   );

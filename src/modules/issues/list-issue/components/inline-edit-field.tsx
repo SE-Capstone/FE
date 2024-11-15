@@ -24,6 +24,7 @@ const InlineEditableField = ({
   type = 'normal',
   styleProps,
   startDate,
+  isViewOnly = false,
 }: {
   fieldValue: string;
   callback: (value: string, fieldName?: string) => void;
@@ -32,6 +33,7 @@ const InlineEditableField = ({
   type?: 'normal' | 'title' | 'date' | 'progress';
   styleProps?: any;
   startDate?: string;
+  isViewOnly?: boolean;
 }) => {
   const { t } = useTranslation();
   const [editValue, setEditValue] = useState(fieldValue);
@@ -53,80 +55,96 @@ const InlineEditableField = ({
 
   return (
     <Box>
-      <InlineEdit
-        defaultValue={editValue}
-        editButtonLabel={editValue}
-        // keepEditViewOpenOnBlur
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        editView={({ errorMessage, ...fieldProps }, ref) =>
-          !isTextArea ? (
-            type === 'title' ? (
-              <Textfield
-                style={{
-                  fontWeight: '600',
-                  fontSize: '24px',
-                }}
-                {...fieldProps}
-                autoFocus
-              />
-            ) : type === 'normal' || type === 'progress' ? (
-              <Textfield {...fieldProps} autoFocus />
+      {!isViewOnly ? (
+        <InlineEdit
+          defaultValue={editValue}
+          editButtonLabel={editValue}
+          // keepEditViewOpenOnBlur
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          editView={({ errorMessage, ...fieldProps }, ref) =>
+            !isTextArea ? (
+              type === 'title' ? (
+                <Textfield
+                  style={{
+                    fontWeight: '600',
+                    fontSize: '24px',
+                  }}
+                  {...fieldProps}
+                  autoFocus
+                />
+              ) : type === 'normal' || type === 'progress' ? (
+                <Textfield {...fieldProps} autoFocus />
+              ) : (
+                <DatePicker {...fieldProps} locale="vi-VN" />
+              )
             ) : (
-              <DatePicker {...fieldProps} locale="vi-VN" />
+              // @ts-ignore - textarea does not pass through ref as a prop
+              <TextArea {...fieldProps} ref={ref} />
             )
-          ) : (
-            // @ts-ignore - textarea does not pass through ref as a prop
-            <TextArea {...fieldProps} ref={ref} />
-          )
-        }
-        readView={() =>
-          type === 'title' ? (
-            <BoxAtlas
-              xcss={readViewContainerStyles}
-              style={{ fontWeight: '600', fontSize: '24px' }}
-              testId="read-view"
-            >
-              {editValue}
-            </BoxAtlas>
-          ) : type === 'progress' ? (
-            <Progress
-              minW="200px"
-              rounded={1.5}
-              colorScheme="green"
-              value={Number(editValue) || 0}
-            />
-          ) : (
-            <Text
-              wordBreak="break-all"
-              whiteSpace="normal"
-              flex={1}
-              fontWeight={500}
-              {...styleProps}
-            >
-              {type === 'date' ? editValue || 'None' : editValue}
-            </Text>
-          )
-        }
-        validate={validate}
-        onConfirm={(value) => {
-          if (value !== editValue) {
-            if (
-              type === 'date' &&
-              (fieldName === 'endDate' || fieldName === 'dueDate') &&
-              startDate &&
-              isDateLessThan({ date1: value, date2: startDate })
-            ) {
-              notify({
-                type: 'error',
-                message: t('validation.project.endDateInvalid'),
-              });
-              return;
-            }
-            setEditValue(value);
-            handleSubmit(value);
           }
-        }}
-      />
+          readView={() =>
+            type === 'title' ? (
+              <BoxAtlas
+                xcss={readViewContainerStyles}
+                style={{ fontWeight: '600', fontSize: '24px' }}
+                testId="read-view"
+              >
+                {editValue}
+              </BoxAtlas>
+            ) : type === 'progress' ? (
+              <Progress
+                minW="200px"
+                rounded={1.5}
+                colorScheme="green"
+                value={Number(editValue) || 0}
+              />
+            ) : (
+              <Text
+                wordBreak="break-all"
+                whiteSpace="normal"
+                flex={1}
+                fontWeight={500}
+                {...styleProps}
+              >
+                {type === 'date' ? editValue || 'None' : editValue}
+              </Text>
+            )
+          }
+          validate={validate}
+          onConfirm={(value) => {
+            if (value !== editValue) {
+              if (
+                type === 'date' &&
+                (fieldName === 'endDate' || fieldName === 'dueDate') &&
+                startDate &&
+                isDateLessThan({ date1: value, date2: startDate })
+              ) {
+                notify({
+                  type: 'error',
+                  message: t('validation.project.endDateInvalid'),
+                });
+                return;
+              }
+              setEditValue(value);
+              handleSubmit(value);
+            }
+          }}
+        />
+      ) : type === 'title' ? (
+        <BoxAtlas
+          xcss={readViewContainerStyles}
+          style={{ fontWeight: '600', fontSize: '24px' }}
+          testId="read-view"
+        >
+          {editValue}
+        </BoxAtlas>
+      ) : type === 'progress' ? (
+        <Progress minW="200px" rounded={1.5} colorScheme="green" value={Number(editValue) || 0} />
+      ) : (
+        <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500} {...styleProps}>
+          {type === 'date' ? editValue || 'None' : editValue}
+        </Text>
+      )}
     </Box>
   );
 };

@@ -21,6 +21,7 @@ enum FormatDateTimeEnum {
   'DD/MM/YY hh:mm a' = 'DD/MM/YY hh:mm a',
   'h:mm a' = 'h:mm a',
   'DD-MM-YYYY: HH:mm' = 'DD-MM-YYYY: HH:mm',
+  'DD-MM-YYYY - HH:mm' = 'DD-MM-YYYY - HH:mm',
   'MMMM DD, YYYY' = 'MMMM DD, YYYY',
 }
 

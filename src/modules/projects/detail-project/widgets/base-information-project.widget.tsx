@@ -8,11 +8,10 @@ import { ProjectStatusEnum, type IProject } from '../../list-project/types';
 import { BadgeStatus } from '../components';
 import { useUpsertProjectHook } from '../hooks/mutations/use-upsert-project.mutation.hooks';
 
-import type { IUser } from '@/modules/users/list-user/types';
-
 import { Head } from '@/components/elements';
 import { ChangeStatus } from '@/components/widgets/change-status';
-import { PermissionEnum, PROJECT_STATUS_OPTIONS } from '@/configs';
+import { PermissionEnum, PROJECT_STATUS_OPTIONS, ProjectPermissionEnum } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { formatDate } from '@/libs/helpers';
 import InlineEditableField from '@/modules/issues/list-issue/components/inline-edit-field';
 import { UserWithAvatar } from '@/modules/issues/list-issue/components/user-with-avatar';
@@ -22,14 +21,17 @@ import { InfoCard } from '@/modules/profile/components';
 
 export function BaseInformationProjectWidget({
   project,
-  teamLeads,
   permissions,
 }: {
-  teamLeads: IUser[];
   project?: IProject;
   permissions: Record<string, boolean>;
 }) {
   const { t } = useTranslation();
+  const { permissions: projectPermissions } = useProjectContext();
+
+  const canUpdate =
+    permissions[PermissionEnum.UPDATE_PROJECT] ||
+    projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
 
   const { handleUpsertProject } = useUpsertProjectHook({ id: project?.id || '', isUpdate: true });
 
@@ -86,7 +88,7 @@ export function BaseInformationProjectWidget({
       [
         {
           label: t('fields.name'),
-          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
+          text: canUpdate ? (
             <InlineEditableField
               fieldValue={project?.name || ''}
               callback={handleSubmit}
@@ -98,7 +100,7 @@ export function BaseInformationProjectWidget({
         },
         {
           label: t('fields.code'),
-          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
+          text: canUpdate ? (
             <InlineEditableField
               fieldValue={project?.code || ''}
               callback={handleSubmit}
@@ -110,7 +112,7 @@ export function BaseInformationProjectWidget({
         },
         {
           label: t('fields.description'),
-          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
+          text: canUpdate ? (
             <InlineEditableField
               fieldValue={project?.description || ''}
               callback={handleSubmit}
@@ -123,7 +125,7 @@ export function BaseInformationProjectWidget({
         },
         {
           label: t('fields.teamLead'),
-          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
+          text: canUpdate ? (
             <InlineEditCustomSelectInfinity
               defaultValue={
                 project?.leadId && project?.leadName
@@ -142,9 +144,9 @@ export function BaseInformationProjectWidget({
             )
           ),
         },
-        permissions[PermissionEnum.READ_LIST_PROJECT] && {
+        canUpdate && {
           label: t('fields.status'),
-          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
+          text: canUpdate ? (
             <InlineEditCustomSelect
               options={PROJECT_STATUS_OPTIONS.map((s) => ({
                 label: <BadgeStatus status={s} />,
@@ -161,7 +163,7 @@ export function BaseInformationProjectWidget({
             <BadgeStatus status={project?.status as ProjectStatusEnum} />
           ),
         },
-        permissions[PermissionEnum.READ_LIST_PROJECT] && {
+        canUpdate && {
           label: t('fields.visible'),
           text: (
             <ChangeStatus
@@ -172,7 +174,7 @@ export function BaseInformationProjectWidget({
                   ? `${t('actions.archive')} ${t('common.project').toLowerCase()}?`
                   : `${t('actions.unarchive')} ${t('common.project').toLowerCase()}?`
               }
-              isLoading={!permissions[PermissionEnum.UPDATE_PROJECT] && true}
+              isLoading={!canUpdate && true}
               description={
                 project?.isVisible ? t('actions.archiveProject') : t('actions.unarchiveProject')
               }
@@ -181,7 +183,7 @@ export function BaseInformationProjectWidget({
         },
         {
           label: t('fields.startDate'),
-          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
+          text: canUpdate ? (
             <InlineEditableField
               fieldValue={
                 project?.startDate
@@ -201,7 +203,7 @@ export function BaseInformationProjectWidget({
         },
         {
           label: t('fields.endDate'),
-          text: permissions[PermissionEnum.UPDATE_PROJECT] ? (
+          text: canUpdate ? (
             <InlineEditableField
               fieldValue={
                 project?.endDate
@@ -226,7 +228,7 @@ export function BaseInformationProjectWidget({
         },
       ].filter(Boolean),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [permissions, project, t, teamLeads]
+    [permissions, project, t]
   );
 
   return (

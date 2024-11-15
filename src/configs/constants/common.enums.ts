@@ -35,12 +35,11 @@ export enum PermissionEnum {
 
   // Project
   ADD_PROJECT = 'ADD_PROJECT',
-  IS_PROJECT_LEAD = 'IS_PROJECT_LEAD',
   ADD_MEMBER_TO_PROJECT = 'ADD_MEMBER_TO_PROJECT',
   TOGGLE_VISIBLE_PROJECT = 'TOGGLE_VISIBLE_PROJECT',
   DELETE_PROJECT = 'DELETE_PROJECT',
   UPDATE_PROJECT = 'UPDATE_PROJECT',
-  READ_LIST_PROJECT = 'READ_LIST_PROJECT',
+  SETTING_ALL_PROJECT = 'SETTING_ALL_PROJECT',
 
   // Role
   ADD_ROLE = 'ADD_ROLE',
@@ -51,28 +50,19 @@ export enum PermissionEnum {
   // Project status
   UPDATE_DEFAULT_STATUS = 'UPDATE_DEFAULT_STATUS',
   ADD_DEFAULT_STATUS = 'ADD_DEFAULT_STATUS',
-  DELETE_STATUS = 'DELETE_STATUS',
   DELETE_DEFAULT_STATUS = 'DELETE_DEFAULT_STATUS',
-  UPDATE_STATUS = 'UPDATE_STATUS',
-  ADD_STATUS = 'ADD_STATUS',
 
   // Project label
-  UPDATE_LABEL = 'UPDATE_LABEL',
   DELETE_DEFAULT_LABEL = 'DELETE_DEFAULT_LABEL',
-  DELETE_LABEL = 'DELETE_LABEL',
   ADD_DEFAULT_LABEL = 'ADD_DEFAULT_LABEL',
-  ADD_LABEL = 'ADD_LABEL',
   UPDATE_DEFAULT_LABEL = 'UPDATE_DEFAULT_LABEL',
+}
 
-  // Phase
-  ADD_PHASE = 'ADD_PHASE',
-  UPDATE_PHASE = 'UPDATE_PHASE',
-  DELETE_PHASE = 'DELETE_PHASE',
-
-  // Issue
-  DELETE_ISSUE = 'DELETE_ISSUE',
-  ADD_ISSUE = 'ADD_ISSUE',
-  UPDATE_ISSUE = 'UPDATE_ISSUE',
+export enum ProjectPermissionEnum {
+  IsProjectConfigurator = 'IsProjectConfigurator',
+  IsIssueConfigurator = 'IsIssueConfigurator',
+  IsPermissionConfigurator = 'IsPermissionConfigurator',
+  IsCommentConfigurator = 'IsCommentConfigurator',
 }
 
 export enum GroupPermissionEnum {
@@ -80,7 +70,6 @@ export enum GroupPermissionEnum {
   ROLE = 'ROLE',
   PROJECT = 'PROJECT',
   JOB = 'JOB',
-  ISSUE = 'ISSUE',
   STATUS = 'STATUS',
   PHASE = 'PHASE',
   LABEL = 'LABEL',

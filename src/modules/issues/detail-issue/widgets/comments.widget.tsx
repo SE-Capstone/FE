@@ -15,6 +15,7 @@ import { useRemoveCommentHook } from '../hooks/mutations/use-remove-comment.hook
 
 import type { IComment } from '../../list-issue/types';
 
+import { formatDate } from '@/libs/helpers';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { extensions } from '@/modules/public/pages/rich-text-ex.pages';
 
@@ -63,8 +64,16 @@ export const CommentWidget = ({
         image={comment ? comment.user.avatar || '' : currentUser?.avatar || ''}
         label={comment ? comment.user.fullName || '' : currentUser?.fullName || ''}
         size={10}
+        date={
+          comment?.createdAt &&
+          formatDate({
+            date: comment?.updatedAt || comment?.createdAt,
+            format: 'DD-MM-YYYY - HH:mm',
+          })
+        }
         stackProps={{ marginBottom: '10px' }}
       />
+      <Text fontSize="sm" color="gray.500" />
       {isEditable ? (
         <InlineEdit
           defaultValue={editValue}
@@ -135,21 +144,23 @@ export const CommentWidget = ({
             </Button>
           )}
           {isEditable && <Text>&#8226;</Text>}
-          <Button
-            type="button"
-            bg="transparent"
-            color="gray.500"
-            fontSize="sm"
-            ml={-1}
-            p={0}
-            _hover={{
-              color: 'gray.400',
-              bg: 'transparent',
-            }}
-            onClick={handleRemoveComment}
-          >
-            {t('actions.delete')}
-          </Button>
+          {isEditable && (
+            <Button
+              type="button"
+              bg="transparent"
+              color="gray.500"
+              fontSize="sm"
+              ml={-1}
+              p={0}
+              _hover={{
+                color: 'gray.400',
+                bg: 'transparent',
+              }}
+              onClick={handleRemoveComment}
+            >
+              {t('actions.delete')}
+            </Button>
+          )}
         </Stack>
       )}
     </Stack>

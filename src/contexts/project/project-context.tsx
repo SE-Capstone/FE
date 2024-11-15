@@ -5,18 +5,21 @@ import { isEqual } from 'lodash-es';
 import type { IProject, ProjectMember } from '@/modules/projects/list-project/types';
 
 export interface IProjectState {
+  permissions: string[];
   members: ProjectMember[];
   project: IProject | null;
   projectId: string | null;
 }
 
 const initialState: IProjectState = {
+  permissions: [],
   members: [],
   project: null,
   projectId: null,
 };
 
 export interface IProjectContext {
+  permissions: string[];
   members: ProjectMember[];
   project: IProject | null;
   projectId: string | null;
@@ -31,6 +34,7 @@ export function ProjectProvider({ children }) {
 
   useEffect(() => {
     setProjectState({
+      permissions: [],
       members: [],
       project: null,
       projectId: null,
@@ -41,6 +45,7 @@ export function ProjectProvider({ children }) {
     setProjectState((prevState) => {
       if (prevState.projectId !== state.projectId || !isEqual(prevState.members, state.members)) {
         return {
+          permissions: state.permissions,
           members: state.members,
           project: state.project,
           projectId: state.projectId,
@@ -53,6 +58,7 @@ export function ProjectProvider({ children }) {
 
   const resetProjectContext = () => {
     setProjectState({
+      permissions: [],
       members: [],
       project: null,
       projectId: null,

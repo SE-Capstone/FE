@@ -11,7 +11,8 @@ import { UpsertStatusWidget } from '../upsert-status.widget';
 import type { IStatus } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
-import { PermissionEnum } from '@/configs';
+import { PermissionEnum, ProjectPermissionEnum } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTableStatusesProps {
@@ -28,16 +29,19 @@ export function ActionMenuTableStatuses({
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const { permissions } = useAuthentication();
+  const { permissions: projectPermissions } = useProjectContext();
   const disclosureModal = useDisclosure();
   const disclosureModalRemoveStatus = useDisclosure();
   const { handleRemoveStatus } = useRemoveStatusHook(isDefault);
   const canUpdate =
-    (permissions[PermissionEnum.UPDATE_STATUS] && pathname.includes('projects')) ||
+    (projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
+      pathname.includes('projects')) ||
     (isDefault &&
       permissions[PermissionEnum.UPDATE_DEFAULT_STATUS] &&
       pathname.includes('settings'));
   const canDelete =
-    (permissions[PermissionEnum.DELETE_STATUS] && pathname.includes('projects')) ||
+    (projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
+      pathname.includes('projects')) ||
     (isDefault &&
       permissions[PermissionEnum.DELETE_DEFAULT_STATUS] &&
       pathname.includes('settings'));

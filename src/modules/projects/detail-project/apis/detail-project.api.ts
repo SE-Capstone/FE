@@ -85,6 +85,7 @@ export function useGetDetailProject(params: UseGetDetailProjectOptionsType) {
     }
 
     setProjectContext({
+      permissions: data?.data?.myPermissions || [],
       members,
       project: data?.data || null,
       projectId: data?.data?.id || '',

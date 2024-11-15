@@ -28,6 +28,7 @@ const InlineEditWithIcon = ({
   fieldStyle,
   statusId,
   link,
+  isViewOnly = false,
 }: {
   issue: IIssue;
   buttonStyle?: any;
@@ -36,6 +37,7 @@ const InlineEditWithIcon = ({
   fieldStyle?: any;
   statusId?: string;
   link?: string;
+  isViewOnly?: boolean;
 }) => {
   const { t } = useTranslation();
   const [editValue, setEditValue] = useState(issue.title);
@@ -90,57 +92,70 @@ const InlineEditWithIcon = ({
       flex={1}
       flexDir="column"
     >
-      <InlineEdit
-        defaultValue={editValue}
-        editButtonLabel={editValue}
-        isEditing={isEditing}
-        // keepEditViewOpenOnBlur
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        editView={({ errorMessage, ...fieldProps }) => (
-          <Textfield style={{ minWidth: '200px', ...fieldStyle }} {...fieldProps} autoFocus />
-        )}
-        readView={() => (
-          <BoxAtlas xcss={readViewContainerStyles} testId="read-view">
-            <Box display="flex" alignItems="center" {...boxStyle}>
-              <CustomLink
-                to={link || `issues/${String(issue.id)}`}
-                noOfLines={textStyle ? 5 : link ? 1 : 2}
-                {...textStyle}
-              >
-                {editValue}
-              </CustomLink>
-              <IconButton
-                aria-label="edit"
-                bg="transparent"
-                className="edit-icon"
-                fontSize="sm"
-                ml={1}
-                display={isEditing ? 'none' : 'inline-block'}
-                color="transparent"
-                _hover={{
-                  color: 'gray.500',
-                  background: 'transparent',
-                }}
-                _focus={{
-                  background: 'transparent',
-                }}
-                icon={<RiEditFill />}
-                onClick={() => setIsEditing(true)}
-                {...buttonStyle}
-              />
-            </Box>
-          </BoxAtlas>
-        )}
-        validate={validate}
-        onCancel={() => setIsEditing(false)}
-        onConfirm={(value) => {
-          if (value !== editValue) {
-            setEditValue(value);
-            handleSubmit(value);
-          }
-          setIsEditing(false);
-        }}
-      />
+      {!isViewOnly ? (
+        <InlineEdit
+          defaultValue={editValue}
+          editButtonLabel={editValue}
+          isEditing={isEditing}
+          // keepEditViewOpenOnBlur
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          editView={({ errorMessage, ...fieldProps }) => (
+            <Textfield style={{ minWidth: '200px', ...fieldStyle }} {...fieldProps} autoFocus />
+          )}
+          readView={() => (
+            <BoxAtlas xcss={readViewContainerStyles} testId="read-view">
+              <Box display="flex" alignItems="center" {...boxStyle}>
+                <CustomLink
+                  to={link || `issues/${String(issue.id)}`}
+                  noOfLines={textStyle ? 5 : link ? 1 : 2}
+                  {...textStyle}
+                >
+                  {editValue}
+                </CustomLink>
+                <IconButton
+                  aria-label="edit"
+                  bg="transparent"
+                  className="edit-icon"
+                  fontSize="sm"
+                  ml={1}
+                  display={isEditing ? 'none' : 'inline-block'}
+                  color="transparent"
+                  _hover={{
+                    color: 'gray.500',
+                    background: 'transparent',
+                  }}
+                  _focus={{
+                    background: 'transparent',
+                  }}
+                  icon={<RiEditFill />}
+                  onClick={() => setIsEditing(true)}
+                  {...buttonStyle}
+                />
+              </Box>
+            </BoxAtlas>
+          )}
+          validate={validate}
+          onCancel={() => setIsEditing(false)}
+          onConfirm={(value) => {
+            if (value !== editValue) {
+              setEditValue(value);
+              handleSubmit(value);
+            }
+            setIsEditing(false);
+          }}
+        />
+      ) : (
+        <Box display="flex" alignItems="center" {...boxStyle}>
+          <CustomLink
+            to={link || `issues/${String(issue.id)}`}
+            noOfLines={textStyle ? 5 : link ? 1 : 2}
+            fontSize="14px"
+            {...textStyle}
+          >
+            {editValue}
+          </CustomLink>
+        </Box>
+      )}
       {/* <IconButton
         aria-label="edit"
         bg="transparent"

@@ -31,7 +31,7 @@ export type QueryListIssueInput = {
   priority?: IssuePriorityEnum;
 };
 
-interface IUpdatedBy {
+export interface IUpdatedBy {
   id: string;
   fullName: string;
   userName: string;
