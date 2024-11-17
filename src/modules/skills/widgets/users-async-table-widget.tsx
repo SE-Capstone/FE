@@ -146,7 +146,7 @@ export function UsersAsyncTable({ onUserSelect }: UsersAsyncTableProps) {
                       lineHeight="21px"
                       textTransform="capitalize"
                     >
-                      <Box>Full name</Box>
+                      <Box>{t('fields.fullName')}</Box>
                     </Th>
                     <Th
                       color="#8E96AF"
@@ -160,7 +160,7 @@ export function UsersAsyncTable({ onUserSelect }: UsersAsyncTableProps) {
                       bg="white"
                       zIndex={1}
                     >
-                      <Box>Alias name</Box>
+                      <Box>{t('fields.aliasName')}</Box>
                     </Th>
                   </Tr>
                 </Thead>

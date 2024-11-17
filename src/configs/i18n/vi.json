@@ -145,6 +145,9 @@
     "teamLead": "Project leader",
     "estimatedTime": "Thời gian dự kiến",
     "isDone": "Đánh dấu hoàn thành",
+    "IsProjectConfigurator": "Quản lý dự án",
+    "IsIssueConfigurator": "Quản lý công việc",
+    "IsCommentConfigurator": "Quản lý bình luận",
     "noImage": "Không có hình ảnh"
   },
   "actions": {
@@ -170,7 +173,9 @@
     "markAsUndone": "Đánh dấu trạng thái này là chưa hoàn thành",
     "updatePassword": "Bạn có chắc chắn muốn cập nhật mật khẩu cho người dùng",
     "updateUser": "Bạn có chắc chắn muốn cập nhật người dùng",
-    "confirmDelete": "Bạn có chắc chắn muốn xóa"
+    "confirmDelete": "Bạn có chắc chắn muốn xóa",
+    "enableMemberPermission": "Bạn có chắc muốn cấp quyền \"{{permissionName}}\" của thành viên \"{{userName}}\"?",
+    "disableMemberPermission": "Bạn có chắc muốn xoá quyền \"{{permissionName}}\" của thành viên \"{{userName}}\"?"
   },
   "header": {
     "personalInformation": "Thông tin cá nhân",

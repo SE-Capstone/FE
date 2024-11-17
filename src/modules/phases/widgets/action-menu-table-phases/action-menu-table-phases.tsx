@@ -9,8 +9,7 @@ import { UpsertPhaseWidget } from '../upsert-phase.widget';
 import type { IPhase } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
-import { PermissionEnum, ProjectPermissionEnum } from '@/configs';
-import { useAuthentication } from '@/modules/profile/hooks';
+import { ProjectPermissionEnum } from '@/configs';
 
 interface ActionMenuTablePhasesProps {
   phase: IPhase;

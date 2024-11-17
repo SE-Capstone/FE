@@ -181,6 +181,9 @@
     "teamLead": "Project leader",
     "estimatedTime": "Estimated time",
     "isDone": "Mark as done",
+    "IsProjectConfigurator": "Project configurator",
+    "IsIssueConfigurator": "Issue configurator",
+    "IsCommentConfigurator": "Comment configurator",
     "noImage": "No image"
   },
   "actions": {
@@ -206,7 +209,9 @@
     "markAsUndone": "Mark this status as undone",
     "updatePassword": "Are you sure to update password for user",
     "updateUser": "Are you sure to update user",
-    "confirmDelete": "Are you sure to delete"
+    "confirmDelete": "Are you sure to delete",
+    "enableMemberPermission": "Are you sure to enable permission \"{{permissionName}}\" for user \"{{userName}}\"?",
+    "disableMemberPermission": "Are you sure to disable permission \"{{permissionName}}\" for user \"{{userName}}\"?"
   },
   "header": {
     "personalInformation": "Personal information",

@@ -230,7 +230,7 @@ export function BaseInformationProjectWidget({
     <>
       <Head title={`Project - ${project?.name}`} />
       <Stack direction={{ base: 'column', xl: 'row' }} alignItems="stretch" spacing="24px" w="100%">
-        <Stack w="full" spacing="24px" flex={2.8}>
+        <Stack w="full" spacing="24px" flex={2.5}>
           <Stack padding="24px" borderRadius="8px" direction="column" spacing="24px" bg="white">
             <Text
               sx={{

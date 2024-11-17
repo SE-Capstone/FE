@@ -1,18 +1,228 @@
 import { useEffect, useState } from 'react';
 
-import { Button, Icon, IconButton, Stack, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Icon,
+  IconButton,
+  Stack,
+  Text,
+  Box,
+  Flex,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  Table,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { PiUsersThreeFill } from 'react-icons/pi';
 import { RiEditFill } from 'react-icons/ri';
 
 import { UpsertMembersWidget } from './upsert-members.widget';
+import { ChangePermissionStatus } from '../components/change-permission-status';
 
-import type { IProject } from '../../list-project/types';
+import type { IProject, ProjectMember } from '../../list-project/types';
 import type { IOptionUserSelect } from '../components/users-async-select';
 
 import { PermissionEnum, ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { useAuthentication } from '@/modules/profile/hooks';
+
+const MemberSetting = ({
+  members,
+  projectId,
+  permissions,
+}: {
+  members: ProjectMember[];
+  projectId: string;
+  permissions: string[];
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <TableContainer overflowY="auto" maxH="580px" rounded={2}>
+      <Table size="sm" variant="simple" position="relative" borderRadius={2}>
+        <Thead>
+          <Tr>
+            <Th
+              color="#8E96AF"
+              fontWeight={600}
+              fontSize="sm"
+              py={2}
+              lineHeight="21px"
+              textTransform="capitalize"
+            >
+              <Box>{t('fields.aliasName')}</Box>
+            </Th>
+            <Th
+              color="#8E96AF"
+              fontWeight={600}
+              fontSize="sm"
+              py={2}
+              lineHeight="21px"
+              textTransform="capitalize"
+            >
+              <Box>{t('fields.IsProjectConfigurator')}</Box>
+            </Th>
+            <Th
+              color="#8E96AF"
+              fontWeight={600}
+              fontSize="sm"
+              py={2}
+              lineHeight="21px"
+              textTransform="capitalize"
+              top={0}
+              bg="white"
+              zIndex={1}
+            >
+              <Box>{t('fields.IsIssueConfigurator')}</Box>
+            </Th>
+            <Th
+              color="#8E96AF"
+              fontWeight={600}
+              fontSize="sm"
+              py={2}
+              lineHeight="21px"
+              textTransform="capitalize"
+              top={0}
+              bg="white"
+              zIndex={1}
+            >
+              <Box>{t('fields.IsCommentConfigurator')}</Box>
+            </Th>
+          </Tr>
+        </Thead>
+
+        <Tbody rounded="12px" bg="white">
+          {members &&
+            members.map((user) => {
+              const tdContent = (
+                <>
+                  <Td
+                    border="none"
+                    py={2}
+                    isNumeric={false}
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: '14px',
+                      lineHeight: '21px',
+                      color: 'textColor',
+                    }}
+                  >
+                    {user.userName}
+                  </Td>
+                  <Td border="none" py={2} isNumeric={false}>
+                    <ChangePermissionStatus
+                      projectId={projectId}
+                      initStatus={user.isProjectConfigurator || false}
+                      title={
+                        user?.isProjectConfigurator ? t('actions.inactive') : t('actions.active')
+                      }
+                      isLoading={
+                        !(
+                          permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) ||
+                          user.isConfigurator
+                        ) && true
+                      }
+                      description={
+                        user?.isProjectConfigurator
+                          ? t('actions.disableMemberPermission', {
+                              permissionName: t('fields.IsProjectConfigurator').toLowerCase(),
+                              userName: user.userName,
+                            })
+                          : t('actions.enableMemberPermission', {
+                              permissionName: t('fields.IsProjectConfigurator').toLowerCase(),
+                              userName: user.userName,
+                            })
+                      }
+                      field="isProjectConfigurator"
+                      member={user}
+                    />
+                  </Td>
+                  <Td border="none" py={2} isNumeric={false}>
+                    {user.isIssueConfigurator || false}
+                    <ChangePermissionStatus
+                      projectId={projectId}
+                      initStatus={user.isIssueConfigurator || false}
+                      title={
+                        user?.isIssueConfigurator ? t('actions.inactive') : t('actions.active')
+                      }
+                      isLoading={
+                        !(
+                          permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) ||
+                          user.isConfigurator
+                        ) && true
+                      }
+                      description={
+                        user?.isIssueConfigurator
+                          ? t('actions.disableMemberPermission', {
+                              permissionName: t('fields.IsIssueConfigurator').toLowerCase(),
+                              userName: user.userName,
+                            })
+                          : t('actions.enableMemberPermission', {
+                              permissionName: t('fields.IsIssueConfigurator').toLowerCase(),
+                              userName: user.userName,
+                            })
+                      }
+                      field="isIssueConfigurator"
+                      member={user}
+                    />
+                  </Td>
+                  <Td border="none" py={2} isNumeric={false}>
+                    <ChangePermissionStatus
+                      projectId={projectId}
+                      initStatus={user.isCommentConfigurator || false}
+                      title={
+                        user?.isCommentConfigurator ? t('actions.inactive') : t('actions.active')
+                      }
+                      isLoading={
+                        !(
+                          permissions.includes(ProjectPermissionEnum.IsCommentConfigurator) ||
+                          user.isConfigurator
+                        ) && true
+                      }
+                      description={
+                        user?.isCommentConfigurator
+                          ? t('actions.disableMemberPermission', {
+                              permissionName: t('fields.IsCommentConfigurator').toLowerCase(),
+                              userName: user.userName,
+                            })
+                          : t('actions.enableMemberPermission', {
+                              permissionName: t('fields.IsCommentConfigurator').toLowerCase(),
+                              userName: user.userName,
+                            })
+                      }
+                      field="isCommentConfigurator"
+                      member={user}
+                    />
+                  </Td>
+                </>
+              );
+
+              return (
+                <Tr
+                  key={user.id}
+                  _hover={{
+                    bgColor: 'gray.50',
+                  }}
+                  cursor="pointer"
+                >
+                  {tdContent}
+                </Tr>
+              );
+            })}
+        </Tbody>
+      </Table>
+      {members && !members.length && (
+        <Flex my={4} justify="center">
+          <Text>{t('common.noData')}</Text>
+        </Flex>
+      )}
+    </TableContainer>
+  );
+};
 
 export function ProjectMembersWidget({ project }: { project?: IProject }) {
   const { t } = useTranslation();
@@ -46,7 +256,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
   }, [project]);
 
   return (
-    <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} spacing={3}>
+    <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} spacing={3} overflowX="auto">
       <Stack
         display="flex"
         alignItems="center"
@@ -103,16 +313,30 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
       </Stack>
       {hasMembers ? (
         <Stack>
-          {project?.leadId && (
+          {/* {project?.leadId && (
             <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
               {project?.leadName} (Leader)
             </Text>
-          )}
-          {project?.members.map((member, index) => (
+          )} */}
+          {/* {project?.members.map((member, index) => (
             <Text key={index} wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
               {member.userName} {member.positionName && `(${member.positionName})`}
             </Text>
-          ))}
+          ))} */}
+          {project?.members &&
+          projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator) ? (
+            <MemberSetting
+              members={project?.members}
+              projectId={project?.id || ''}
+              permissions={projectPermissions}
+            />
+          ) : (
+            project?.members.map((member, index) => (
+              <Text key={index} wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
+                {member.userName} {member.positionName && `(${member.positionName})`}
+              </Text>
+            ))
+          )}
         </Stack>
       ) : (
         canUpdate && (

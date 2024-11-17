@@ -10,6 +10,8 @@ const ENDPOINT_MUTATIONS = {
   create: 'projects',
   upsertMembers: 'projects/members',
   toggleVisible: (projectId: StringNumeric) => `projects/${projectId}/visible/toggle`,
+  updateMemberPermission: (projectId: StringNumeric, memberId: StringNumeric) =>
+    `projects/${projectId}/members/${memberId}`,
 } as const;
 
 export const PROJECTS_ENDPOINT_URL = {

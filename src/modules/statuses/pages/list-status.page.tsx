@@ -79,11 +79,7 @@ export function ListStatusPage() {
                   id={status?.id || ''}
                   initStatus={status?.isDone || false}
                   isUpdateStatus
-                  title={
-                    status?.isDone
-                      ? `${t('actions.markAsUndone')} ${t('common.status').toLowerCase()}?`
-                      : `${t('actions.markAsDone')} ${t('common.status').toLowerCase()}?`
-                  }
+                  title={status?.isDone ? `${t('actions.inactive')}?` : `${t('actions.active')}?`}
                   status={status}
                   isLoading={
                     !permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) && true

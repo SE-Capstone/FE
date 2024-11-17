@@ -14,6 +14,10 @@ export type ProjectMember = {
   roleName?: string;
   positionName: string;
   avatar?: string;
+  isConfigurator?: boolean;
+  isProjectConfigurator?: boolean;
+  isIssueConfigurator?: boolean;
+  isCommentConfigurator?: boolean;
 };
 
 export type QueryListProjectInput = {
