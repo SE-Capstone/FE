@@ -42,7 +42,7 @@ export const userFormSchema = (t: any) =>
       .trim()
       .min(1, { message: t('validation.profile.addressRequired') })
       .max(255, { message: t('validation.profile.addressMax') }),
-    roleId: z.string().trim().min(1),
+    roleId: z.string().trim().min(1).optional(),
     // positionId: z.string().trim().min(1),
   });
 

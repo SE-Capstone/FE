@@ -4,6 +4,7 @@ import { Container, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
+import { useRolesQueryFilterStateContext } from '../contexts';
 import { useGetListRoleQuery } from '../hooks/queries';
 import { ActionMenuTableRoles } from '../widgets';
 import { ActionTableRolesWidget } from '../widgets/action-table-roles.widget';
@@ -11,14 +12,17 @@ import { ActionTableRolesWidget } from '../widgets/action-table-roles.widget';
 import type { IRole } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 
-import { CustomLink, Head, TableComponent } from '@/components/elements';
+import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListRolePage() {
   const { t } = useTranslation();
   const { pathname } = useLocation();
+  const { rolesQueryState, resetRolesQueryState } = useRolesQueryFilterStateContext();
 
-  const { listRole, isError, isLoading } = useGetListRoleQuery({});
+  const { listRole, isError, isLoading } = useGetListRoleQuery({
+    params: rolesQueryState.filters,
+  });
 
   const columns = useMemo<ColumnsProps<IRole>>(
     () => [
@@ -82,15 +86,21 @@ export function ListRolePage() {
     <>
       <Head title="Roles" />
       <Container maxW="container.2xl" centerContent>
-        <ActionTableRolesWidget />
-        <TableComponent
-          withoutPagination
-          data={listRole}
-          groupColumns={columns}
-          isLoading={isLoading}
-          isError={!!isError}
-          additionalFeature={(role) => <ActionMenuTableRoles role={role} />}
-        />
+        <StateHandler
+          showLoader={isLoading}
+          showError={!!isError}
+          retryHandler={resetRolesQueryState}
+        >
+          <ActionTableRolesWidget />
+          <TableComponent
+            withoutPagination
+            data={listRole}
+            groupColumns={columns}
+            isLoading={isLoading}
+            isError={!!isError}
+            additionalFeature={(role) => <ActionMenuTableRoles role={role} />}
+          />
+        </StateHandler>
       </Container>
     </>
   );

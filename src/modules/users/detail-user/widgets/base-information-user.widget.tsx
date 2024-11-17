@@ -204,7 +204,6 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
             </Stack>
             <HStack align="stretch">
               <CustomChakraReactSelect
-                isRequired
                 isSearchable
                 label={t('fields.role')}
                 options={roles.map((role) => ({

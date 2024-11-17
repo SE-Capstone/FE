@@ -200,6 +200,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
                 value: member.id,
                 image: member.avatar,
               }))}
+              statusId={statusId}
               defaultValue={
                 issue.assignee
                   ? {

@@ -28,7 +28,8 @@ export const updateUserFormSchema = (t: any) =>
     roleId: z
       .string()
       .trim()
-      .min(1, { message: t('validation.profile.roleRequired') }),
+      // .min(1, { message: t('validation.profile.roleRequired') })
+      .optional(),
     // positionId: z
     //   .string()
     //   .trim()

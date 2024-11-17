@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import type { ReactNode } from 'react';
 
-import { Box, Checkbox, Icon, Stack, Th, Thead, Tr } from '@chakra-ui/react';
+import { Box, Checkbox, Flex, Icon, Stack, Th, Thead, Tr } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { HiArrowNarrowUp, HiArrowNarrowDown } from 'react-icons/hi';
 import { TbArrowsDownUp } from 'react-icons/tb';
@@ -197,7 +197,14 @@ const TableHeader = <T extends object>({
             fontSize="14px"
             hasSort={col?.hasSort}
           >
-            {col.title}
+            {col.additionalTitle ? (
+              <Flex alignItems="center">
+                {col.title}
+                {col.additionalTitle}
+              </Flex>
+            ) : (
+              col.title
+            )}
           </HeaderCell>
         ))}
         {additionalFeature && (

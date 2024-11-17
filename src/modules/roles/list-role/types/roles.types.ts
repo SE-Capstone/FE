@@ -1,4 +1,6 @@
-export type QueryListRoleInput = {};
+export type QueryListRoleInput = {
+  name?: string;
+};
 
 type IPermission = {
   id: string;

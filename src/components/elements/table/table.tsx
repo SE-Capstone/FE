@@ -29,6 +29,7 @@ import Pagination from '@/components/elements/pagination';
 interface ColumnItems<ObjectType> {
   key: UnionAndString<keyof ObjectType>;
   title: string;
+  additionalTitle?: JSX.Element | null;
   Cell?: (value: ObjectType, index: number) => JSX.Element | null;
   isNumeric?: boolean;
   tableCellProps?: TableCellProps;

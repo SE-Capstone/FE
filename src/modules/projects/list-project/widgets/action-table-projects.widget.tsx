@@ -61,24 +61,26 @@ export function ActionTableProjectsWidget() {
               }}
             />
           </GridItem>
-          <GridItem
-            colSpan={{
-              base: 2,
-              md: 1,
-            }}
-          >
-            <CustomChakraReactSelect
-              isSearchable={false}
-              size="sm"
-              placeholder="Choose visible status"
-              options={PROJECT_VISIBILITY_OPTIONS}
-              onChange={(opt) => {
-                setProjectsQueryFilterState({
-                  isVisible: opt?.value ? opt.value === 'true' : undefined,
-                });
+          {permissions[PermissionEnum.READ_ALL_PROJECTS] && (
+            <GridItem
+              colSpan={{
+                base: 2,
+                md: 1,
               }}
-            />
-          </GridItem>
+            >
+              <CustomChakraReactSelect
+                isSearchable={false}
+                size="sm"
+                placeholder="Choose visible status"
+                options={PROJECT_VISIBILITY_OPTIONS}
+                onChange={(opt) => {
+                  setProjectsQueryFilterState({
+                    isVisible: opt?.value ? opt.value === 'true' : undefined,
+                  });
+                }}
+              />
+            </GridItem>
+          )}
         </Grid>
         {isShowFilterProject && permissions[PermissionEnum.ADD_PROJECT] && (
           <>

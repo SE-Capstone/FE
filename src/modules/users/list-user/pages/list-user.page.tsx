@@ -126,7 +126,8 @@ export function ListUserPage() {
             title: t('fields.role'),
             hasSort: false,
             Cell({ roleName }) {
-              return <BadgeRole role={roleName as unknown as RolesEnum} />;
+              // eslint-disable-next-line react/jsx-no-useless-fragment
+              return roleName ? <BadgeRole role={roleName as unknown as RolesEnum} /> : <></>;
             },
           },
           {

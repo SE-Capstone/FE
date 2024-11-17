@@ -102,7 +102,7 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
             currentUser?.id === project.leadId
               ? `${project.leadName} (${t('common.me')})`
               : project.leadName || '',
-          roleName: 'Project lead',
+          roleName: t('fields.teamLead'),
           positionName: project.leadPosition || '',
           avatar: project.leadAvatar || '',
         });

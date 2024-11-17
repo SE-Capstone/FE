@@ -12,9 +12,8 @@ import { UpsertProjectWidget } from '../upsert-project.widget';
 import type { IProject } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
-import { PermissionEnum, ProjectPermissionEnum } from '@/configs';
+import { PermissionEnum } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
-import { useProjectContext } from '@/contexts/project/project-context';
 import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTableProjectsProps {
@@ -24,18 +23,13 @@ interface ActionMenuTableProjectsProps {
 export function ActionMenuTableProjects({ project }: ActionMenuTableProjectsProps) {
   const { t } = useTranslation();
   const { permissions } = useAuthentication();
-  const { permissions: projectPermissions } = useProjectContext();
   const disclosureModal = useDisclosure();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const canUpdate =
-    permissions[PermissionEnum.UPDATE_PROJECT] ||
-    projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
+  const canUpdate = permissions[PermissionEnum.UPDATE_PROJECT];
 
-  const canToggle =
-    permissions[PermissionEnum.TOGGLE_VISIBLE_PROJECT] ||
-    projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
+  const canToggle = permissions[PermissionEnum.TOGGLE_VISIBLE_PROJECT];
 
   const { openAlert, closeAlert } = useAlertDialogStore(loading);
   const { mutate, isPending: isLoading } = useToggleVisibleProjectMutation({

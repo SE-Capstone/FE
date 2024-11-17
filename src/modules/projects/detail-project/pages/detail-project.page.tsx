@@ -40,7 +40,11 @@ export function DetailProjectPage() {
     localStorage.setItem('activeTabIndex', activeTabIndex.toString());
   }, [activeTabIndex]);
 
-  if (!permissions[PermissionEnum.SETTING_ALL_PROJECT] && !projectContext?.isVisible) {
+  if (!permissions[PermissionEnum.READ_ALL_PROJECTS] && !projectContext?.isVisible) {
+    if (!projectContext) {
+      // eslint-disable-next-line react/jsx-no-useless-fragment
+      return <></>;
+    }
     return <Error403Page />;
   }
 

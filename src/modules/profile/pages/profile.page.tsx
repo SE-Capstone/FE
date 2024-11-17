@@ -35,7 +35,9 @@ export function ProfilePage() {
     },
     {
       label: t('fields.role'),
-      text: <BadgeRole role={currentUser?.roleName as unknown as RolesEnum} />,
+      text: currentUser?.roleName && (
+        <BadgeRole role={currentUser.roleName as unknown as RolesEnum} />
+      ),
     },
     {
       label: t('fields.gender'),

@@ -10,8 +10,7 @@ import { useUpsertProjectHook } from '../hooks/mutations/use-upsert-project.muta
 
 import { Head } from '@/components/elements';
 import { ChangeStatus } from '@/components/widgets/change-status';
-import { PermissionEnum, PROJECT_STATUS_OPTIONS, ProjectPermissionEnum } from '@/configs';
-import { useProjectContext } from '@/contexts/project/project-context';
+import { PermissionEnum, PROJECT_STATUS_OPTIONS } from '@/configs';
 import { formatDate } from '@/libs/helpers';
 import InlineEditableField from '@/modules/issues/list-issue/components/inline-edit-field';
 import { UserWithAvatar } from '@/modules/issues/list-issue/components/user-with-avatar';
@@ -27,11 +26,7 @@ export function BaseInformationProjectWidget({
   permissions: Record<string, boolean>;
 }) {
   const { t } = useTranslation();
-  const { permissions: projectPermissions } = useProjectContext();
-
-  const canUpdate =
-    permissions[PermissionEnum.UPDATE_PROJECT] ||
-    projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
+  const canUpdate = permissions[PermissionEnum.UPDATE_PROJECT];
 
   const { handleUpsertProject } = useUpsertProjectHook({ id: project?.id || '', isUpdate: true });
 

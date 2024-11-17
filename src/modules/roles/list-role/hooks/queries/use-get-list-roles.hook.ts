@@ -22,10 +22,11 @@ export const defaultFilterRoles: QueryListRoleInput = {};
 
 export function getListRoleRequest(req: IGetListRoleRequest) {
   const { params } = req;
+
   return makeRequest<typeof params, IResponseApi<IRole[]>>({
     method: 'GET',
     url: ALL_ENDPOINT_URL_STORE.roles.listRole,
-    data: params,
+    params,
   });
 }
 

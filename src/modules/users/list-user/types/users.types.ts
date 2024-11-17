@@ -11,6 +11,6 @@ export type QueryListUserInput = {
 };
 
 export type IUser = ICurrentUserResponse & {
-  roleId: string;
-  roleName: string;
+  roleId?: string;
+  roleName?: string;
 };

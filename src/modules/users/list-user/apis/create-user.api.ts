@@ -22,7 +22,7 @@ interface ICreateUserRequest {
     gender: GenderEnum;
     dob: Date | string;
     phone: string;
-    roleId: string;
+    roleId?: string;
   };
 }
 

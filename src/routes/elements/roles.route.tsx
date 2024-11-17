@@ -4,6 +4,7 @@ import { PermissionCheck } from '../permisstion-check';
 
 import { PermissionEnum } from '@/configs';
 import { lazyImport } from '@/libs/utils';
+import { RolesQueryProvider } from '@/modules/roles/list-role/contexts';
 
 const { ListRolePage } = lazyImport(() => import('@/modules/roles/list-role'), 'ListRolePage');
 const { DetailRolePage } = lazyImport(
@@ -24,7 +25,9 @@ export function rolesRoutes(): RouteObject {
         index: true,
         element: (
           <PermissionCheck permissions={[PermissionEnum.READ_LIST_ROLE]}>
-            <ListRolePage />
+            <RolesQueryProvider>
+              <ListRolePage />
+            </RolesQueryProvider>
           </PermissionCheck>
         ),
       },

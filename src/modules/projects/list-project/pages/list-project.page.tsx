@@ -64,7 +64,7 @@ export function ListProjectPage() {
                 </Box>
 
                 <Box mt={5} fontSize="12px" noOfLines={2}>
-                  {permissions[PermissionEnum.READ_LIST_PROJECT] && (
+                  {permissions[PermissionEnum.READ_ALL_PROJECTS] && (
                     <Flex alignItems="center">
                       <Text fontSize="13px" mr={1}>
                         Visible:

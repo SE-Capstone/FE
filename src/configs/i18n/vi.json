@@ -1,5 +1,6 @@
 {
   "common": {
+    "isDoneTooltip": "Khi bật, trạng thái này đánh dấu công việc đã hoàn thành và không còn thực hiện nữa.",
     "subTask": "Công việc con",
     "subTasks": "Công việc con",
     "linkedIssue": "Công việc liên quan",
@@ -276,7 +277,7 @@
     "getListUser": "Lấy danh sách người dùng",
     "addProject": "Thêm dự án",
     "isProjectLead": "Gán cho người đứng trưởng dự án",
-    "getListProject": "Lấy danh sách dự án",
+    "getListProject": "Xem danh sách dự án",
     "settingAllProject": "Quản lý tất cả dự án",
     "getDetailProject": "Xem chi tiết dự án",
     "deleteProject": "Cập nhật trạng thái dự án",

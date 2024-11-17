@@ -119,7 +119,6 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
           <HStack align="stretch">
             <CustomChakraReactSelect
               isSearchable
-              isRequired
               placeholder={`${t('common.choose')} ${t('fields.role').toLowerCase()}`}
               label={t('fields.role')}
               size="lg"

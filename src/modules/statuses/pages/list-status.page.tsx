@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 
-import { Text } from '@chakra-ui/react';
+import { Text, Tooltip } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { LuInfo } from 'react-icons/lu';
 import { useParams } from 'react-router-dom';
 
 import { useGetListStatusQuery } from '../hooks/queries';
@@ -65,6 +66,13 @@ export function ListStatusPage() {
             key: 'isDone',
             title: t('fields.isDone'),
             hasSort: false,
+            additionalTitle: (
+              <Tooltip label={t('common.isDoneTooltip')}>
+                <Text ml={1} as="span" color="textColor" fontSize="17px" fontWeight="600">
+                  <LuInfo />
+                </Text>
+              </Tooltip>
+            ),
             Cell(status) {
               return (
                 <ChangeStatus

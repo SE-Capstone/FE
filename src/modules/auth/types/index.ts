@@ -10,8 +10,8 @@ export interface ICurrentUserResponse extends IBaseEntity {
   phone?: string;
   address?: string;
   email: string;
-  roleId: string;
-  roleName: string;
+  roleId?: string;
+  roleName?: string;
   gender?: GenderEnum;
   dob?: Date;
   bankAccount?: string;
