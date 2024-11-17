@@ -58,7 +58,7 @@ export function UsersAsyncSelect<TFormValues extends FieldValues, IsMulti extend
       const avatar = user.avatar || '';
       return {
         value: user.id,
-        label: user.fullName,
+        label: `${user.fullName} (${user.userName})`,
         image: avatar,
         // isDisabled,
       };

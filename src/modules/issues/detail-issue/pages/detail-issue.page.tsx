@@ -4,6 +4,9 @@ import IssuesIcon from '@atlaskit/icon/glyph/issues';
 import SubtaskIcon from '@atlaskit/icon/glyph/subtask';
 import {
   Box,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
   Button,
   Container,
   Flex,
@@ -15,6 +18,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { MdOutlineChevronRight } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 
 import { useGetDetailIssue } from '../../list-issue/apis/detail-issue.api';
@@ -29,7 +33,7 @@ import { AddNewIssueWidget } from '../../list-issue/widgets';
 import { InlineEditCustomSelect } from '../../list-issue/widgets/editable-dropdown.widget';
 import { CommentWidget } from '../widgets/comments.widget';
 
-import { Head, StateHandler } from '@/components/elements';
+import { CustomLink, Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
 import { ISSUE_PRIORITY_OPTIONS, ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
@@ -324,6 +328,41 @@ export function DetailIssuePage() {
       <Head title={issue?.title} />
       <Container maxW="container.2xl" centerContent>
         <StateHandler showLoader={isLoading || isLoading2 || isLoading3} showError={!!isError}>
+          <Breadcrumb
+            textAlign="start"
+            spacing="8px"
+            w="full"
+            separator={<MdOutlineChevronRight color="neutral.300" />}
+          >
+            <BreadcrumbItem>
+              <CustomLink color="neutral.300" to={APP_PATHS.detailProject(projectId || '')}>
+                {t('common.project')}
+              </CustomLink>
+            </BreadcrumbItem>
+
+            <BreadcrumbItem>
+              {issue?.parentIssueId ? (
+                <CustomLink
+                  color="neutral.300"
+                  to={APP_PATHS.detailIssue(projectId || '', issue?.parentIssueId || '')}
+                >
+                  #{issue?.parentIssue && issue?.parentIssue.index}
+                </CustomLink>
+              ) : (
+                <Text fontSize="16px" color="neutral.300">
+                  #{issue?.index}
+                </Text>
+              )}
+            </BreadcrumbItem>
+
+            {issue?.parentIssueId && (
+              <BreadcrumbItem>
+                <Text fontSize="16px" color="neutral.300">
+                  #{issue?.index}
+                </Text>
+              </BreadcrumbItem>
+            )}
+          </Breadcrumb>
           <LayoutBack
             display="flex"
             flexDir="row"
@@ -422,7 +461,7 @@ export function DetailIssuePage() {
                       </AddNewIssueWidget>
                     </Stack>
                     <Stack
-                      borderRadius="2px"
+                      borderRadius="3px"
                       boxShadow="0px 1px 1px #091E4240, 0px 0px 1px #091E424F"
                       gap={0}
                       mt={2}

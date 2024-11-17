@@ -4,6 +4,7 @@ import { Button, Stack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
+import { BadgeIssue } from '../components';
 import { useUpsertIssueHook } from '../hooks/mutations';
 
 import type { IOptionUserSelect } from '@/modules/projects/detail-project/components/users-async-select';
@@ -170,7 +171,7 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
             label={t('fields.status')}
             size="lg"
             options={listStatus.map((s) => ({
-              label: s.name,
+              label: <BadgeIssue content={s.name} colorScheme={s.color} />,
               value: s.id,
             }))}
             control={control}
