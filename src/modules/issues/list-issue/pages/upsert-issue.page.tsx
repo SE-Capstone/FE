@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import RichTextEditor from 'reactjs-tiptap-editor';
 
 import { useGetDetailIssue } from '../apis/detail-issue.api';
-import { PriorityIssue } from '../components';
+import { BadgeIssue, PriorityIssue } from '../components';
 import { useUpsertIssueHook } from '../hooks/mutations';
 import { useEditorState } from '../hooks/use-editor-state';
 
@@ -24,6 +24,7 @@ import { LayoutBack } from '@/components/layouts';
 import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
 import { formatDate } from '@/libs/helpers';
 import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
+import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetDetailProject } from '@/modules/projects/detail-project/apis/detail-project.api';
 import { extensions } from '@/modules/public/pages/rich-text-ex.pages';
@@ -70,6 +71,12 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
   });
 
   const { listStatus, isLoading: isLoading2 } = useGetListStatusQuery({
+    params: {
+      projectId: projectId || '',
+    },
+  });
+
+  const { listPhase, isLoading: isLoading8 } = useGetListPhaseQuery({
     params: {
       projectId: projectId || '',
     },
@@ -131,7 +138,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
               }) as unknown as Date)
             : undefined,
           parentIssueId: issue.parentIssue?.id,
-          // TODO: phase
+          phaseId: issue.phase?.id,
           percentage: issue.percentage,
           priority: issue.priority,
           assigneeId: issue.assignee?.id,
@@ -234,7 +241,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
                 isRequired
                 label={t('fields.status')}
                 options={listStatus.map((s) => ({
-                  label: s.name,
+                  label: <BadgeIssue content={s.name} colorScheme={s.color} />,
                   value: s.id,
                 }))}
                 control={control}
@@ -280,36 +287,52 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
               />
             </SimpleGrid>
 
-            <CustomChakraReactSelect
-              isSearchable
-              placeholder={`${t('common.choose')} ${t('fields.assignee').toLowerCase()}`}
-              label={t('fields.assignee')}
-              components={customComponents}
-              options={members.map((user) => ({
-                label: user.userName,
-                value: user.id,
-                image: user.avatar || '',
-              }))}
-              control={control}
-              name="assigneeId"
-              setValue={value}
-              onChange={(option) => {
-                handleAssigneeChange(option);
-              }}
-            />
-            <Text
-              color="indicator.500"
-              mt={-4}
-              _hover={{
-                cursor: 'pointer',
-                textDecoration: 'underline',
-              }}
-              display="inline-block"
-              textAlign="left"
-              onClick={assignToMe}
-            >
-              {t('common.assignToMe')}
-            </Text>
+            <SimpleGrid columns={isUpdate ? 2 : 1} spacing={3}>
+              <Stack gap={5}>
+                <CustomChakraReactSelect
+                  isSearchable
+                  placeholder={`${t('common.choose')} ${t('fields.assignee').toLowerCase()}`}
+                  label={t('fields.assignee')}
+                  components={customComponents}
+                  options={members.map((user) => ({
+                    label: user.userName,
+                    value: user.id,
+                    image: user.avatar || '',
+                  }))}
+                  control={control}
+                  name="assigneeId"
+                  setValue={value}
+                  onChange={(option) => {
+                    handleAssigneeChange(option);
+                  }}
+                />
+                <Text
+                  color="indicator.500"
+                  mt={-4}
+                  _hover={{
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                  }}
+                  display="inline-block"
+                  textAlign="left"
+                  onClick={assignToMe}
+                >
+                  {t('common.assignToMe')}
+                </Text>
+              </Stack>
+              {isUpdate && (
+                <CustomChakraReactSelect
+                  placeholder={`${t('common.choose')} ${t('common.phase').toLowerCase()}`}
+                  label={t('common.phase')}
+                  options={listPhase.map((s) => ({
+                    label: s.title,
+                    value: s.id,
+                  }))}
+                  control={control}
+                  name="phaseId"
+                />
+              )}
+            </SimpleGrid>
 
             <Text mb={-2}>{t('fields.description')}</Text>
             <RichTextEditor
@@ -332,6 +355,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
                   isLoading3 ||
                   isLoading5 ||
                   isLoading6 ||
+                  isLoading8 ||
                   (isUpdate && !isDirty)
                 }
                 isLoading={isLoading}

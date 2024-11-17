@@ -45,6 +45,7 @@ export function useUpsertIssueHook(
             labelId: values.labelId,
             statusId: values.statusId || '',
             assigneeId: values.assigneeId,
+            phaseId: values.phaseId,
             estimatedTime: values.estimatedTime || undefined,
             startDate: values.startDate
               ? formatDate({

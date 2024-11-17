@@ -74,10 +74,10 @@ const InlineEditWithIcon = ({
       statusId: statusId || issue.status.id,
       labelId: issue.label?.id,
       assigneeId: issue.assignee?.id,
+      phaseId: issue.phase?.id,
       priority: issue.priority,
       title: value || issue.title,
       parentIssueId: issue.parentIssue?.id,
-      // TODO: phase
     });
   };
 

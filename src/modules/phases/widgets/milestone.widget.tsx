@@ -162,7 +162,7 @@ const Card = ({ phase, index }: { phase: IPhase; index: number }) => {
           </Text>
 
           {permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) && (
-            <ActionMenuTablePhases phase={phase} />
+            <ActionMenuTablePhases phase={phase} permissions={permissions} />
           )}
         </Flex>
 

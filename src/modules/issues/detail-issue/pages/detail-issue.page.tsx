@@ -6,7 +6,6 @@ import {
   Box,
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   Button,
   Container,
   Flex,
@@ -39,6 +38,7 @@ import { ISSUE_PRIORITY_OPTIONS, ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { formatDate } from '@/libs/helpers';
 import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
+import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
 import { InfoCard } from '@/modules/profile/components';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
@@ -85,6 +85,12 @@ export function DetailIssuePage() {
     },
   });
 
+  const { listPhase, isLoading: isLoading5 } = useGetListPhaseQuery({
+    params: {
+      projectId: projectId || '',
+    },
+  });
+
   const handleSubmit = (value: string, fieldName?: string) => {
     if (issue) {
       handleUpsertIssue({
@@ -104,6 +110,7 @@ export function DetailIssuePage() {
         statusId: issue.status.id,
         labelId: issue.label?.id,
         assigneeId: issue.assignee?.id,
+        phaseId: issue.phase?.id,
         priority: issue.priority,
         ...(fieldName === 'title' && {
           title: value || issue.title,
@@ -141,7 +148,6 @@ export function DetailIssuePage() {
               : undefined),
         }),
         parentIssueId: issue.parentIssue?.id,
-        // TODO: phase
       });
     }
   };
@@ -200,27 +206,6 @@ export function DetailIssuePage() {
           ),
         },
         {
-          label: t('common.label'),
-          text: canUpdate(issue?.assignee) ? (
-            <InlineEditCustomSelect
-              options={listLabel.map((s) => ({
-                label: s.title,
-                value: s.id,
-              }))}
-              defaultValue={
-                issue?.label && {
-                  label: issue.label.title,
-                  value: issue.label.id,
-                }
-              }
-              field="label"
-              issue={issue}
-            />
-          ) : (
-            <>{issue?.label?.title}</>
-          ),
-        },
-        {
           label: t('fields.priority'),
           text: canUpdate(issue?.assignee) ? (
             <InlineEditCustomSelect
@@ -239,6 +224,48 @@ export function DetailIssuePage() {
             />
           ) : (
             <PriorityIssue priority={issue?.priority || IssuePriorityEnum.Medium} />
+          ),
+        },
+        {
+          label: t('common.phase'),
+          text: canUpdate(issue?.assignee) ? (
+            <InlineEditCustomSelect
+              options={listPhase.map((p) => ({
+                label: p.title,
+                value: p.id,
+              }))}
+              defaultValue={
+                issue?.phase && {
+                  label: issue.phase.title,
+                  value: issue.phase.id,
+                }
+              }
+              field="phase"
+              issue={issue!}
+            />
+          ) : (
+            <PriorityIssue priority={issue?.priority || IssuePriorityEnum.Medium} />
+          ),
+        },
+        {
+          label: t('common.label'),
+          text: canUpdate(issue?.assignee) ? (
+            <InlineEditCustomSelect
+              options={listLabel.map((s) => ({
+                label: s.title,
+                value: s.id,
+              }))}
+              defaultValue={
+                issue?.label && {
+                  label: issue.label.title,
+                  value: issue.label.id,
+                }
+              }
+              field="label"
+              issue={issue}
+            />
+          ) : (
+            <>{issue?.label?.title}</>
           ),
         },
         {
@@ -327,7 +354,10 @@ export function DetailIssuePage() {
     <>
       <Head title={issue?.title} />
       <Container maxW="container.2xl" centerContent>
-        <StateHandler showLoader={isLoading || isLoading2 || isLoading3} showError={!!isError}>
+        <StateHandler
+          showLoader={isLoading || isLoading2 || isLoading3 || isLoading5}
+          showError={!!isError}
+        >
           <Breadcrumb
             textAlign="start"
             spacing="8px"

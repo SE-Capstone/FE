@@ -10,6 +10,7 @@ export const issueFormSchema = (t: any) =>
     id: z.string().trim().uuid().optional(),
     projectId: z.string().trim().uuid().optional(),
     labelId: z.string().trim().uuid().optional(),
+    phaseId: z.string().trim().uuid().optional(),
     statusId: z
       .string({ message: t('validation.fieldRequired') })
       .trim()

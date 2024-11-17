@@ -25,6 +25,7 @@ interface IUpsertIssueRequest {
     parentIssueId?: string;
     percentage?: number;
     priority?: number;
+    phaseId?: string;
     assigneeId?: string;
     estimatedTime?: number;
   };

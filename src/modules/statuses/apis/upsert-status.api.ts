@@ -75,6 +75,9 @@ export function useUpsertStatusMutation({
         queryClient.invalidateQueries({
           queryKey: allQueryKeysStore.issue['issues/kanban'].queryKey,
         });
+        queryClient.invalidateQueries({
+          queryKey: allQueryKeysStore.issue.issues.queryKey,
+        });
       }
       notify({
         type: 'success',

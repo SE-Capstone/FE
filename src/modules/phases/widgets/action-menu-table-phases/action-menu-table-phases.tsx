@@ -9,17 +9,17 @@ import { UpsertPhaseWidget } from '../upsert-phase.widget';
 import type { IPhase } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
-import { PermissionEnum } from '@/configs';
+import { PermissionEnum, ProjectPermissionEnum } from '@/configs';
 import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTablePhasesProps {
   phase: IPhase;
+  permissions: string[];
 }
 
-export function ActionMenuTablePhases({ phase }: ActionMenuTablePhasesProps) {
+export function ActionMenuTablePhases({ phase, permissions }: ActionMenuTablePhasesProps) {
   const { t } = useTranslation();
   const disclosureModal = useDisclosure();
-  const { permissions } = useAuthentication();
   const { handleRemovePhase } = useRemovePhaseHook();
   const isDone = !!phase?.actualEndDate;
   const isRunning = !!phase?.actualStartDate && !phase?.actualEndDate;
@@ -27,7 +27,7 @@ export function ActionMenuTablePhases({ phase }: ActionMenuTablePhasesProps) {
   if (!phase || !phase.id) return null;
 
   const menuOptions = [
-    permissions[PermissionEnum.UPDATE_PHASE] && {
+    permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) && {
       label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => {
@@ -38,7 +38,7 @@ export function ActionMenuTablePhases({ phase }: ActionMenuTablePhasesProps) {
     },
     !isDone &&
       !isRunning &&
-      permissions[PermissionEnum.DELETE_PHASE] && {
+      permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) && {
         type: 'danger',
         label: t('actions.delete'),
         icon: <Icon as={BiTrash} boxSize={5} />,

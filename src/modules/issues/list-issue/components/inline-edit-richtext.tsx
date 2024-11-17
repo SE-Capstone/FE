@@ -56,10 +56,10 @@ const InlineEditRichtext = ({
       statusId: issue.status.id,
       labelId: issue.label?.id,
       assigneeId: issue.assignee?.id,
+      phaseId: issue.phase?.id,
       priority: issue.priority,
       description: value || issue.description,
       parentIssueId: issue.parentIssue?.id,
-      // TODO: phase
     });
   };
 

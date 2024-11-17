@@ -1,4 +1,5 @@
 import type { ILabel } from '@/modules/labels/types';
+import type { IPhase } from '@/modules/phases/types';
 import type { IStatus } from '@/modules/statuses/types';
 import type { IUser } from '@/modules/users/list-user/types';
 import type { IBaseEntity } from '@/types';
@@ -68,4 +69,5 @@ export type IIssue = IBaseEntity & {
   parentIssue: IIssue;
   parentIssueId?: string;
   subIssues?: IIssue[];
+  phase?: IPhase;
 };

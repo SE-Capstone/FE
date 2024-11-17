@@ -52,6 +52,9 @@ export function useUpsertPhaseMutation({ configs, reset, id, isUpdate, onClose }
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.phase.phases.queryKey,
       });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.issue.issues.queryKey,
+      });
       notify({
         type: 'success',
         message: isUpdate ? DEFAULT_MESSAGE(t).UPDATE_SUCCESS : DEFAULT_MESSAGE(t).CREATE_SUCCESS,

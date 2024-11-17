@@ -16,6 +16,7 @@ import { InlineEditCustomSelect } from '../widgets/editable-dropdown.widget';
 import type { IIssue, IUpdatedBy } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 import type { ILabel } from '@/modules/labels/types';
+import type { IPhase } from '@/modules/phases/types';
 import type { IStatus } from '@/modules/statuses/types';
 
 import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
@@ -23,6 +24,7 @@ import { ISSUE_PRIORITY_OPTIONS, ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { formatDate } from '@/libs/helpers';
 import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
+import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 
@@ -33,6 +35,7 @@ export function ListIssuePage() {
   const { members, permissions } = useProjectContext();
   const [labels, setLabels] = useState<ILabel[]>([]);
   const [statuses, setStatuses] = useState<IStatus[]>([]);
+  const [phases, setPhases] = useState<IPhase[]>([]);
   const { issuesQueryState, resetIssuesQueryState } = useIssuesQueryFilterStateContext();
 
   const canUpdate = (assignee?: IUpdatedBy) => {
@@ -71,6 +74,16 @@ export function ListIssuePage() {
     },
   });
 
+  const {
+    listPhase,
+    isLoading: isLoading5,
+    isError: isError5,
+  } = useGetListPhaseQuery({
+    params: {
+      projectId: projectId || '',
+    },
+  });
+
   useEffect(() => {
     if (listLabel && JSON.stringify(listLabel) !== JSON.stringify(labels)) {
       setLabels(listLabel);
@@ -84,6 +97,13 @@ export function ListIssuePage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listStatus]);
+
+  useEffect(() => {
+    if (listPhase && JSON.stringify(listPhase) !== JSON.stringify(statuses)) {
+      setPhases(listPhase);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listPhase]);
 
   const columns = useMemo<ColumnsProps<IIssue>>(
     () => [
@@ -220,6 +240,29 @@ export function ListIssuePage() {
             },
           },
           {
+            key: 'phase',
+            title: t('common.phase'),
+            hasSort: false,
+            Cell(issue) {
+              const { phase, assignee } = issue;
+              return canUpdate(assignee) ? (
+                <InlineEditCustomSelect
+                  options={phases.map((s) => ({ label: s.title, value: s.id }))}
+                  defaultValue={
+                    phase && {
+                      label: phase.title,
+                      value: phase.id,
+                    }
+                  }
+                  field="phase"
+                  issue={issue}
+                />
+              ) : (
+                <>{phase?.title}</>
+              );
+            },
+          },
+          {
             key: 'label',
             title: t('common.label'),
             hasSort: false,
@@ -293,8 +336,8 @@ export function ListIssuePage() {
     <>
       <Head title="Issues" />
       <StateHandler
-        showLoader={isLoading || isLoading2 || isLoading3}
-        showError={!!isError || !!isError2 || !!isError3}
+        showLoader={isLoading || isLoading2 || isLoading3 || isLoading5}
+        showError={!!isError || !!isError2 || !!isError3 || !!isError5}
         retryHandler={resetIssuesQueryState}
       >
         <ActionTableIssuesWidget listLabel={labels} />
