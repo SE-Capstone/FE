@@ -42,10 +42,7 @@ export function ListIssuePage() {
     if (currentUser?.id === assignee?.id) {
       return true;
     }
-    return (
-      permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) ||
-      permissions.includes(ProjectPermissionEnum.IsProjectConfigurator)
-    );
+    return permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
   };
 
   const { listIssue, meta, isError, isLoading, handlePaginate, isRefetching } =

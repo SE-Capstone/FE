@@ -25,7 +25,7 @@ import {
   phoneNumberAutoFormat,
 } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
-import { BadgeIssue } from '@/modules/issues/list-issue/components';
+import { BadgeIssue, BadgeIssue as BadgeRole } from '@/modules/issues/list-issue/components';
 import { useGetListPositionQuery } from '@/modules/positions/hooks/queries';
 import { useGetBanks } from '@/modules/profile/apis/get-banks.api';
 import { useAuthentication } from '@/modules/profile/hooks';
@@ -207,7 +207,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                 isSearchable
                 label={t('fields.role')}
                 options={roles.map((role) => ({
-                  label: role.name,
+                  label: <BadgeRole content={role.name} colorScheme={role.color} />,
                   value: role.id,
                 }))}
                 control={control}

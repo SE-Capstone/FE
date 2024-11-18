@@ -12,7 +12,8 @@ export type ProjectMember = {
   fullName: string;
   userName: string;
   roleName?: string;
-  positionName: string;
+  positionName?: string;
+  positionId?: string;
   avatar?: string;
   isConfigurator?: boolean;
   isProjectConfigurator?: boolean;
@@ -41,7 +42,7 @@ export type IProject = IBaseEntity & {
   myPermissions: [
     'IsProjectConfigurator',
     'IsIssueConfigurator',
-    'IsPermissionConfigurator',
+    'IsMemberConfigurator',
     'IsCommentConfigurator'
   ];
   members: ProjectMember[];

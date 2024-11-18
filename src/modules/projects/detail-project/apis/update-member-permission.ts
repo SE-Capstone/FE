@@ -12,6 +12,7 @@ import { allQueryKeysStore } from '@/services/query-keys-store';
 
 export interface IUpdateMemberPermissionRequest {
   body: {
+    positionId?: string;
     isProjectConfigurator: boolean;
     isIssueConfigurator: boolean;
     isCommentConfigurator: boolean;
@@ -29,7 +30,7 @@ function mutation(req: IUpdateMemberPermissionRequest, projectId: string, member
 
 interface IProps {
   configs?: MutationConfig<typeof mutation>;
-  closeAlert: () => void;
+  closeAlert?: () => void;
   projectId: string;
   memberId: string;
 }
@@ -56,7 +57,7 @@ export function useUpdateMemberPermissionMutation({
         message: DEFAULT_MESSAGE(t).UPDATE_SUCCESS,
       });
 
-      closeAlert();
+      closeAlert && closeAlert();
     },
 
     onError(error) {

@@ -121,8 +121,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
   const { currentUser } = useAuthentication();
   const canUpdate =
     currentUser?.id === issue.assignee?.id ||
-    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) ||
-    permissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
+    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
 
   return (
     <Stack ref={ref} testId={`item-${id}`} xcss={[baseStyles, stateStyles[state.type]]}>

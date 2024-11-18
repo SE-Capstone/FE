@@ -26,6 +26,7 @@ import type { IRole } from '@/modules/roles/list-role/types';
 import { CustomChakraReactSelect, SearchInput } from '@/components/elements';
 import { GENDER_OPTIONS, PermissionEnum, USER_STATUS_OPTIONS } from '@/configs';
 import { cleanPhoneNumber, phoneNumberAutoFormat } from '@/libs/helpers';
+import { BadgeIssue } from '@/modules/issues/list-issue/components';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetRoles } from '@/modules/roles/list-role/apis/get-roles.api';
 
@@ -194,7 +195,7 @@ export function ActionTableUsersWidget() {
                 size="sm"
                 placeholder={`${t('common.filterBy')} ${t('fields.role').toLowerCase()}`}
                 options={roles.map((role) => ({
-                  label: role.name,
+                  label: <BadgeIssue content={role.name} colorScheme={role.color} />,
                   value: role.id,
                 }))}
                 onChange={(opt) => {

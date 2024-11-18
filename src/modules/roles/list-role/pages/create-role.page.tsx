@@ -5,8 +5,15 @@ import { useGetGroupPermissions } from '../../detail-role/apis/get-permissions.a
 import { ListPermissionWidget } from '../../detail-role/widgets/list-permission.widget';
 import { useCreateRoleHook } from '../hooks/mutations';
 
-import { CustomFormProvider, CustomInput, CustomTextArea } from '@/components/elements';
+import {
+  CustomChakraReactSelect,
+  CustomFormProvider,
+  CustomInput,
+  CustomTextArea,
+} from '@/components/elements';
 import { EditRow } from '@/components/widgets';
+import { COLOR_OPTIONS } from '@/configs';
+import { BadgeIssue as BadgeRole } from '@/modules/issues/list-issue/components';
 
 export function CreateRolePage() {
   const { t } = useTranslation();
@@ -14,6 +21,7 @@ export function CreateRolePage() {
   const { form, handleCreateRole, isLoading: isCreating } = useCreateRoleHook();
 
   const {
+    control,
     register,
     formState: { errors },
   } = form;
@@ -63,6 +71,36 @@ export function CreateRolePage() {
             registration={register('description')}
             error={errors.description}
           />
+        </EditRow>
+        <EditRow
+          title={t('fields.theme')}
+          isRequired
+          stackProps={{
+            maxW: 25,
+            justifyContent: 'end',
+            alignSelf: 'start',
+          }}
+        >
+          <Stack
+            mt={2}
+            maxW={{
+              base: '100%',
+              md: '100%',
+              lg: '60%',
+            }}
+          >
+            <CustomChakraReactSelect
+              isRequired
+              placeholder={`${t('common.choose')} ${t('fields.theme').toLowerCase()}`}
+              size="md"
+              options={COLOR_OPTIONS.map((color) => ({
+                label: <BadgeRole content="Role" colorScheme={color} />,
+                value: color,
+              }))}
+              control={control}
+              name="color"
+            />
+          </Stack>
         </EditRow>
         <EditRow
           title={t('fields.permission')}

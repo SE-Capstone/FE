@@ -25,9 +25,7 @@ export function ActionMenuTableIssues({ issue }: ActionMenuTableIssuesProps) {
   const { handleRemoveIssue } = useRemoveIssueHook(issue.id);
   const canUpdate =
     currentUser?.id === issue.assignee?.id ||
-    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) ||
-    permissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
-
+    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
   if (!issue || !issue.id) return null;
 
   const menuOptions = [

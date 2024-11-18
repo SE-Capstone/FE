@@ -187,6 +187,7 @@
     "noImage": "No image"
   },
   "actions": {
+    "memberConfigurator": "Can not edit permission of member with setting member permissions",
     "startPhase": "Start",
     "startPhaseDesc": "This action can not be undone. Are you want to start running phase?.",
     "completePhase": "Complete",
@@ -210,6 +211,7 @@
     "updatePassword": "Are you sure to update password for user",
     "updateUser": "Are you sure to update user",
     "confirmDelete": "Are you sure to delete",
+    "deleteRole": "Are you sure to delete role \"{{roleName}}\"? All user with this role will be lose their role.",
     "enableMemberPermission": "Are you sure to enable permission \"{{permissionName}}\" for user \"{{userName}}\"?",
     "disableMemberPermission": "Are you sure to disable permission \"{{permissionName}}\" for user \"{{userName}}\"?"
   },
@@ -326,6 +328,7 @@
     "getAllProject": "View list project",
     "addMemberToProject": "Add member to project",
     "addRole": "Create role",
+    "deleteRole": "Delete role",
     "getRole": "Get role",
     "addRoleForUser": "Add role for user",
     "upsertRole": "Insert or update role",

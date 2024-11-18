@@ -14,6 +14,7 @@ import {
 } from '@/components/elements';
 import { GENDER_OPTIONS } from '@/configs';
 import { phoneNumberAutoFormat } from '@/libs/helpers';
+import { BadgeIssue } from '@/modules/issues/list-issue/components';
 
 export interface AddNewUserWidgetProps {
   children: React.ReactElement;
@@ -123,7 +124,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
               label={t('fields.role')}
               size="lg"
               options={roles.map((role) => ({
-                label: role.name,
+                label: <BadgeIssue content={role.name} colorScheme={role.color} />,
                 value: role.id,
               }))}
               control={control}

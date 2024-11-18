@@ -13,6 +13,7 @@ import type { IRole } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 
 import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
+import { BadgeIssue as BagdeRole } from '@/modules/issues/list-issue/components';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListRolePage() {
@@ -42,13 +43,13 @@ export function ListRolePage() {
             key: 'name',
             title: t('fields.name'),
             hasSort: false,
-            Cell({ name, id }) {
+            Cell({ name, color, id }) {
               return (
                 <CustomLink
                   to={pathname.includes(APP_PATHS.listRole) ? String(id) : '#'}
                   noOfLines={1}
                 >
-                  {name || ''}
+                  <BagdeRole content={name} colorScheme={color} />
                 </CustomLink>
               );
             },

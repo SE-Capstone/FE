@@ -58,19 +58,13 @@ export function DetailIssuePage() {
     if (currentUser?.id === assignee?.id) {
       return true;
     }
-    return (
-      permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) ||
-      permissions.includes(ProjectPermissionEnum.IsProjectConfigurator)
-    );
+    return permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
   };
   const canUpdateComment = (assignee?: IUpdatedBy) => {
     if (currentUser?.id === assignee?.id) {
       return true;
     }
-    return (
-      permissions.includes(ProjectPermissionEnum.IsCommentConfigurator) ||
-      permissions.includes(ProjectPermissionEnum.IsProjectConfigurator)
-    );
+    return permissions.includes(ProjectPermissionEnum.IsCommentConfigurator);
   };
 
   const { listStatus, isLoading: isLoading2 } = useGetListStatusQuery({

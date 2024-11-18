@@ -35,7 +35,6 @@ export enum PermissionEnum {
 
   // Project
   ADD_PROJECT = 'ADD_PROJECT',
-  ADD_MEMBER_TO_PROJECT = 'ADD_MEMBER_TO_PROJECT',
   TOGGLE_VISIBLE_PROJECT = 'TOGGLE_VISIBLE_PROJECT',
   DELETE_PROJECT = 'DELETE_PROJECT',
   UPDATE_PROJECT = 'UPDATE_PROJECT',
@@ -44,6 +43,7 @@ export enum PermissionEnum {
 
   // Role
   ADD_ROLE = 'ADD_ROLE',
+  DELETE_ROLE = 'DELETE_ROLE',
   READ_DETAIL_ROLE = 'READ_DETAIL_ROLE',
   READ_LIST_ROLE = 'READ_LIST_ROLE',
   UPSERT_ROLE = 'UPSERT_ROLE',
@@ -62,7 +62,7 @@ export enum PermissionEnum {
 export enum ProjectPermissionEnum {
   IsProjectConfigurator = 'IsProjectConfigurator',
   IsIssueConfigurator = 'IsIssueConfigurator',
-  IsPermissionConfigurator = 'IsPermissionConfigurator',
+  IsMemberConfigurator = 'IsMemberConfigurator',
   IsCommentConfigurator = 'IsCommentConfigurator',
 }
 

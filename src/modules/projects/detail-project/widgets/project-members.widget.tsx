@@ -22,24 +22,19 @@ import { RiEditFill } from 'react-icons/ri';
 
 import { UpsertMembersWidget } from './upsert-members.widget';
 import { ChangePermissionStatus } from '../components/change-permission-status';
+import { InlineEditPositionSelect } from '../components/editable-dropdown.widget';
 
 import type { IProject, ProjectMember } from '../../list-project/types';
 import type { IOptionUserSelect } from '../components/users-async-select';
 
-import { PermissionEnum, ProjectPermissionEnum } from '@/configs';
+import { ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
-import { useAuthentication } from '@/modules/profile/hooks';
+import { useGetListPositionQuery } from '@/modules/positions/hooks/queries';
 
-const MemberSetting = ({
-  members,
-  projectId,
-  permissions,
-}: {
-  members: ProjectMember[];
-  projectId: string;
-  permissions: string[];
-}) => {
+const MemberSetting = ({ members, projectId }: { members: ProjectMember[]; projectId: string }) => {
   const { t } = useTranslation();
+
+  const { listPosition } = useGetListPositionQuery({ size: 100000000 });
 
   return (
     <TableContainer overflowY="auto" maxH="580px" rounded={2}>
@@ -55,6 +50,16 @@ const MemberSetting = ({
               textTransform="capitalize"
             >
               <Box>{t('fields.aliasName')}</Box>
+            </Th>
+            <Th
+              color="#8E96AF"
+              fontWeight={600}
+              fontSize="sm"
+              py={2}
+              lineHeight="21px"
+              textTransform="capitalize"
+            >
+              <Box>{t('common.position')}</Box>
             </Th>
             <Th
               color="#8E96AF"
@@ -114,18 +119,31 @@ const MemberSetting = ({
                     {user.userName}
                   </Td>
                   <Td border="none" py={2} isNumeric={false}>
+                    <InlineEditPositionSelect
+                      options={listPosition.map((p) => ({
+                        label: p.title,
+                        value: p.id,
+                      }))}
+                      defaultValue={
+                        user?.positionName && user?.positionId
+                          ? {
+                              label: user.positionName,
+                              value: user.positionId,
+                            }
+                          : undefined
+                      }
+                      projectId={projectId}
+                      member={user}
+                    />
+                  </Td>
+                  <Td border="none" py={2} isNumeric={false}>
                     <ChangePermissionStatus
                       projectId={projectId}
-                      initStatus={user.isProjectConfigurator || false}
+                      initStatus={user.isConfigurator ? true : user.isProjectConfigurator || false}
                       title={
                         user?.isProjectConfigurator ? t('actions.inactive') : t('actions.active')
                       }
-                      isLoading={
-                        !(
-                          permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) ||
-                          user.isConfigurator
-                        ) && true
-                      }
+                      isLoading={user.isConfigurator}
                       description={
                         user?.isProjectConfigurator
                           ? t('actions.disableMemberPermission', {
@@ -145,16 +163,11 @@ const MemberSetting = ({
                     {user.isIssueConfigurator || false}
                     <ChangePermissionStatus
                       projectId={projectId}
-                      initStatus={user.isIssueConfigurator || false}
+                      initStatus={user.isConfigurator ? true : user.isIssueConfigurator || false}
                       title={
                         user?.isIssueConfigurator ? t('actions.inactive') : t('actions.active')
                       }
-                      isLoading={
-                        !(
-                          permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) ||
-                          user.isConfigurator
-                        ) && true
-                      }
+                      isLoading={user.isConfigurator}
                       description={
                         user?.isIssueConfigurator
                           ? t('actions.disableMemberPermission', {
@@ -173,16 +186,11 @@ const MemberSetting = ({
                   <Td border="none" py={2} isNumeric={false}>
                     <ChangePermissionStatus
                       projectId={projectId}
-                      initStatus={user.isCommentConfigurator || false}
+                      initStatus={user.isConfigurator ? true : user.isCommentConfigurator || false}
                       title={
                         user?.isCommentConfigurator ? t('actions.inactive') : t('actions.active')
                       }
-                      isLoading={
-                        !(
-                          permissions.includes(ProjectPermissionEnum.IsCommentConfigurator) ||
-                          user.isConfigurator
-                        ) && true
-                      }
+                      isLoading={user.isConfigurator}
                       description={
                         user?.isCommentConfigurator
                           ? t('actions.disableMemberPermission', {
@@ -226,13 +234,11 @@ const MemberSetting = ({
 
 export function ProjectMembersWidget({ project }: { project?: IProject }) {
   const { t } = useTranslation();
-  const { permissions } = useAuthentication();
   const { permissions: projectPermissions } = useProjectContext();
-  const hasMembers = (project?.members?.length || 0) > 0 || !!project?.leadId;
+  const hasMembers = (project?.members?.length || 0) > 0;
+  // const hasMembers = (project?.members?.length || 0) > 0 || !!project?.leadId;
 
-  const canUpdate =
-    permissions[PermissionEnum.ADD_MEMBER_TO_PROJECT] ||
-    projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
+  const canUpdate = projectPermissions.includes(ProjectPermissionEnum.IsMemberConfigurator);
 
   const [initialMembers, setInitialMembers] = useState<Set<string>>(new Set());
   const [defaultUsersOption, setDefaultUsersOption] = useState<IOptionUserSelect[]>([]);
@@ -256,7 +262,16 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
   }, [project]);
 
   return (
-    <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} spacing={3} overflowX="auto">
+    <Stack
+      bg="white"
+      p={5}
+      flex={1}
+      mt={5}
+      flexBasis="10%"
+      rounded={2.5}
+      spacing={3}
+      overflowX="auto"
+    >
       <Stack
         display="flex"
         alignItems="center"
@@ -324,12 +339,8 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
             </Text>
           ))} */}
           {project?.members &&
-          projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator) ? (
-            <MemberSetting
-              members={project?.members}
-              projectId={project?.id || ''}
-              permissions={projectPermissions}
-            />
+          projectPermissions.includes(ProjectPermissionEnum.IsMemberConfigurator) ? (
+            <MemberSetting members={project?.members} projectId={project?.id || ''} />
           ) : (
             project?.members.map((member, index) => (
               <Text key={index} wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>

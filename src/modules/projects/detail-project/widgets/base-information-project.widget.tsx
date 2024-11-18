@@ -256,9 +256,8 @@ export function BaseInformationProjectWidget({
             <Stack />
           </Stack>
         </Stack>
-
-        <ProjectMembersWidget project={project} />
       </Stack>
+      <ProjectMembersWidget project={project} />
     </>
   );
 }

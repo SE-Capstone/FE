@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { IResponseApi } from '@/configs/axios';
 import type { MutationConfig } from '@/libs/react-query';
+import type { ThemingProps } from '@chakra-ui/react';
 
 import { DEFAULT_MESSAGE } from '@/configs';
 import { getErrorMessage, notify } from '@/libs/helpers';
@@ -14,6 +15,7 @@ export interface IUpdateRoleRequest {
   body: {
     id: string;
     name: string;
+    color: ThemingProps['colorScheme'];
     description: string;
     permissionsId: string[];
   };

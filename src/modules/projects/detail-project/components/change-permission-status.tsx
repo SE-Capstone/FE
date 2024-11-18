@@ -26,7 +26,7 @@ export function ChangePermissionStatus(props: ChangeStatusProps) {
   const [isInactive, setIsInactive] = useState(initStatus === false);
   const [loading, setLoading] = useState(false);
 
-  const { openAlert, closeAlert } = useAlertDialogStore(isLoading || loading);
+  const { openAlert, closeAlert } = useAlertDialogStore(loading);
   const { mutate, isPending: isLoadingUpdate } = useUpdateMemberPermissionMutation({
     closeAlert,
     projectId,
@@ -68,7 +68,13 @@ export function ChangePermissionStatus(props: ChangeStatusProps) {
 
   return (
     <Tooltip
-      label={isInactive ? t('actions.active') : t('actions.inactive')}
+      label={
+        member.isConfigurator
+          ? t('actions.memberConfigurator')
+          : isInactive
+          ? t('actions.active')
+          : t('actions.inactive')
+      }
       hasArrow
       placement="top"
       shouldWrapChildren

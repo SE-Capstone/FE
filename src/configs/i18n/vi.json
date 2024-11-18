@@ -151,6 +151,7 @@
     "noImage": "Không có hình ảnh"
   },
   "actions": {
+    "memberConfigurator": "Không thể cập nhật quyền của thành viên với cài đặt quyền thành viên",
     "startPhase": "Bắt đầu",
     "startPhaseDesc": "Hành động này không thể hoàn tác. Bạn có muốn bắt đầu chạy giai đoạn đầu tiên không?",
     "completePhase": "Hoàn thành",
@@ -174,6 +175,7 @@
     "updatePassword": "Bạn có chắc chắn muốn cập nhật mật khẩu cho người dùng",
     "updateUser": "Bạn có chắc chắn muốn cập nhật người dùng",
     "confirmDelete": "Bạn có chắc chắn muốn xóa",
+    "deleteRole": "Bạn có chắc chắn muốn xóa vai trò \"{{roleName}}\"? Tất cả người dùng với vai trò này sẽ bị mất vai trò.",
     "enableMemberPermission": "Bạn có chắc muốn cấp quyền \"{{permissionName}}\" của thành viên \"{{userName}}\"?",
     "disableMemberPermission": "Bạn có chắc muốn xoá quyền \"{{permissionName}}\" của thành viên \"{{userName}}\"?"
   },
@@ -291,6 +293,7 @@
     "getAllProject": "Xem danh sách dự án",
     "addMemberToProject": "Thêm thành viên vào dự án",
     "addRole": "Tạo vai trò",
+    "deleteRole": "Xóa vai trò",
     "getRole": "Lấy vai trò",
     "addRoleForUser": "Thêm vai trò cho người dùng",
     "upsertRole": "Tạo mới vai trò hoặc cập nhật vai trò",

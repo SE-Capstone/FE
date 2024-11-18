@@ -10,6 +10,10 @@ export const createRoleFormSchema = (t: any) =>
       .string()
       .trim()
       .min(1, { message: t('validation.descriptionRequired') }),
+    color: z
+      .string()
+      .trim()
+      .min(1, { message: t('validation.status.colorRequired') }),
     permissionsId: z.array(z.string().uuid()).min(1),
   });
 

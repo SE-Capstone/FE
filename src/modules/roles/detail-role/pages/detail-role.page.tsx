@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { useGetGroupPermissions } from '../apis/get-permissions.api';
 import { useGetRole } from '../apis/get-role-detail.api';
 import { useUpdateRoleMutation } from '../apis/update-role.api';
+import { InlineEditRoleSelect } from '../components/editable-dropdown.widget';
 import { updateRoleFormSchema } from '../validations/update-role.validation';
 import { ListPermissionWidget } from '../widgets/list-permission.widget';
 
@@ -17,9 +18,10 @@ import { CustomFormProvider, CustomInput, CustomTextArea } from '@/components/el
 import { CustomEditableInput } from '@/components/elements/form/custom-editable-input';
 import { LayoutBack } from '@/components/layouts';
 import { EditRow } from '@/components/widgets';
-import { PermissionEnum } from '@/configs';
+import { COLOR_OPTIONS, PermissionEnum } from '@/configs';
 import { notify } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
+import { BadgeIssue as BadgeRole } from '@/modules/issues/list-issue/components';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
@@ -64,6 +66,7 @@ export function DetailRolePage() {
       body: {
         ...values,
         id: roleId || '',
+        color: role.color,
         permissionsId: role.permissions.map((permission) => permission.id),
       },
     });
@@ -81,6 +84,7 @@ export function DetailRolePage() {
       body: {
         id: roleId || '',
         name: role.name,
+        color: role.color,
         description: role.description,
         permissionsId: Array.from(permissions),
       },
@@ -158,8 +162,37 @@ export function DetailRolePage() {
             }
           />
           <EditRow
+            title={t('fields.theme')}
+            stackProps={{
+              maxW: 25,
+              justifyContent: 'end',
+              alignSelf: 'start',
+            }}
+          >
+            <Stack
+              maxW={{
+                base: '100%',
+                md: '100%',
+                lg: '60%',
+              }}
+            >
+              <InlineEditRoleSelect
+                options={COLOR_OPTIONS.map((color) => ({
+                  label: <BadgeRole content="Role" colorScheme={color} />,
+                  value: color,
+                }))}
+                defaultValue={
+                  role?.color && {
+                    label: <BadgeRole content="Role" colorScheme={role.color} />,
+                    value: role.color,
+                  }
+                }
+                role={role}
+              />
+            </Stack>
+          </EditRow>
+          <EditRow
             title={t('fields.permission')}
-            isRequired
             stackProps={{
               maxW: 25,
               justifyContent: 'end',

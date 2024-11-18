@@ -8,6 +8,7 @@ const ENDPOINT_QUERIES = {
 const ENDPOINT_MUTATIONS = {
   create: 'roles',
   addRoleForUser: 'roles/add-role-for-user',
+  delete: (roleId: StringNumeric) => `roles/${roleId}`,
   update: 'roles',
 } as const;
 
