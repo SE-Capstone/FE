@@ -25,6 +25,8 @@ export type QueryListProjectInput = {
   search?: string;
   status?: ProjectStatusEnum;
   isVisible?: boolean;
+  startDate?: string;
+  endDate?: string;
 };
 
 export type IProject = IBaseEntity & {

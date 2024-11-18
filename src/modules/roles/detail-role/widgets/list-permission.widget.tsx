@@ -86,6 +86,7 @@ function PermissionGroup({
         <Checkbox
           isChecked={allChecked}
           borderColor="gray.300"
+          zIndex={0}
           isIndeterminate={isIndeterminate}
           isDisabled={isDisabled}
           onChange={handleParentChange}
@@ -108,6 +109,7 @@ function PermissionGroup({
                 key={permission.id}
                 borderColor="gray.300"
                 paddingLeft={3}
+                zIndex={0}
                 isDisabled={isDisabled}
                 isChecked={checkedPermissions[index]}
                 onChange={handleChildChange(index)}

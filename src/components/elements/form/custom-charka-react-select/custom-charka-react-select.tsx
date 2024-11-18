@@ -153,7 +153,6 @@ export const CustomChakraReactSelect = <
       container: (provide) => ({
         ...provide,
         bg: 'white',
-        zIndex: 9,
         rounded: { base: '6px !important', '2xl': '8px !important' },
       }),
       noOptionsMessage: (provide) => ({
