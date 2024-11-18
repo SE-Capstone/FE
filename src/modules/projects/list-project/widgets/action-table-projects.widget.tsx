@@ -147,7 +147,9 @@ export function ActionTableProjectsWidget() {
               <CustomChakraReactSelect
                 isSearchable={false}
                 size="sm"
-                placeholder="Choose status"
+                placeholder={`${t('common.choose')} ${t('fields.status').toLowerCase()} ${t(
+                  'common.project'
+                ).toLowerCase()}`}
                 options={PROJECT_STATUS_OPTIONS.map((s) => ({
                   label: <BadgeStatus status={s} />,
                   value: s,
@@ -165,7 +167,9 @@ export function ActionTableProjectsWidget() {
               <CustomChakraReactSelect
                 isSearchable={false}
                 size="sm"
-                placeholder="Choose visible status"
+                placeholder={`${t('common.choose')} ${t('fields.status').toLowerCase()} ${t(
+                  'fields.visible'
+                ).toLowerCase()}`}
                 options={PROJECT_VISIBILITY_OPTIONS}
                 onChange={(opt) => {
                   setProjectsQueryFilterState({
