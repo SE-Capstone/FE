@@ -9,7 +9,7 @@ interface HeadProps extends HelmetProps {
   description?: string;
 }
 
-const ogImage = '/public/logo.png';
+const ogImage = '/public/logo.svg';
 const hostname = isClient ? PUBLIC_URL : '';
 
 export const Head = ({ title = '', description = '', ...props }: HeadProps) => (
