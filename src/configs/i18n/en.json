@@ -234,6 +234,7 @@
     "emailInvalid": "Invalid email address",
     "passwordMin": "Password must be at least 6 characters",
     "passwordMax": "Password must be at most 255 characters",
+    "passwordDiff": "New password must be different from old password",
     "passwordComplexity": "Password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character",
     "titleRequired": "Title is required",
     "descriptionRequired": "Description is required",

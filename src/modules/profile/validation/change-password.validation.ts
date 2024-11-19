@@ -22,6 +22,10 @@ export const changePasswordSchema = (t: any) =>
     .refine((data) => data.newPassword === data.confirmPassword, {
       message: t('validation.passwordSame'),
       path: ['confirmPassword'],
+    })
+    .refine((data) => data.newPassword !== data.oldPassword, {
+      message: t('validation.passwordDiff'),
+      path: ['newPassword'],
     });
 
 export type ChangePasswordFormType = z.infer<ReturnType<typeof changePasswordSchema>>;

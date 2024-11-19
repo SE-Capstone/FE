@@ -198,6 +198,7 @@
     "emailInvalid": "Email không hợp lệ",
     "passwordMin": "Mật khẩu phải có ít nhất 6 ký tự",
     "passwordMax": "Mật khẩu phải có ít nhất 255 ký tự",
+    "passwordDiff": "Mật khẩu mới phải khác so với mật khẩu cũ",
     "passwordComplexity": "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 chữ số và 1 ký tự đặc biệt",
     "passwordSame": "Mật khẩu không khớp",
     "titleRequired": "Tiêu đề là bắt buộc",
