@@ -27,8 +27,13 @@ export type QueryKanbanInput = {
 
 export type QueryListIssueInput = {
   title?: string;
-  statusId?: string;
-  labelId?: string;
+  statusIds?: string[];
+  labelIds?: string[];
+  startDate?: string;
+  dueDate?: string;
+  reporterId?: string;
+  assigneeIds: string[];
+  phaseIds: string[];
   priority?: IssuePriorityEnum;
 };
 

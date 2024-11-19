@@ -337,7 +337,12 @@ export function ListIssuePage() {
         showError={!!isError || !!isError2 || !!isError3 || !!isError5}
         retryHandler={resetIssuesQueryState}
       >
-        <ActionTableIssuesWidget listLabel={labels} />
+        <ActionTableIssuesWidget
+          listLabel={labels}
+          listPhase={phases}
+          listStatus={statuses}
+          members={members}
+        />
         <TableComponent
           currentPage={meta.pageIndex}
           perPage={meta.pageSize}

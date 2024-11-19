@@ -4,16 +4,19 @@ import { useLocation } from 'react-router-dom';
 
 import { UpsertLabelWidget } from './upsert-label.widget';
 
-import { PermissionEnum } from '@/configs';
+import { PermissionEnum, ProjectPermissionEnum } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ActionTableLabelsWidget({ isDefault }: { isDefault?: boolean }) {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const { permissions } = useAuthentication();
+  const { permissions: permissionProject } = useProjectContext();
   const disclosureModal = useDisclosure();
   const canCreate =
-    (permissions[PermissionEnum.ADD_LABEL] && pathname.includes('projects')) ||
+    (permissionProject.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
+      pathname.includes('projects')) ||
     (isDefault && permissions[PermissionEnum.ADD_DEFAULT_LABEL] && pathname.includes('settings'));
 
   return (

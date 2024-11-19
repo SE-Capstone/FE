@@ -72,7 +72,7 @@ export function ListDefaultStatusPage() {
                   }
                   isDefault
                   status={status}
-                  isLoading={!permissions[PermissionEnum.UPDATE_STATUS] && true}
+                  isLoading={!permissions[PermissionEnum.UPDATE_DEFAULT_STATUS] && true}
                   description={status?.isDone ? t('actions.markAsUndone') : t('actions.markAsDone')}
                 />
               );

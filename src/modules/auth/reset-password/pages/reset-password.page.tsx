@@ -75,7 +75,7 @@ export function ResetPasswordPage() {
 
   return (
     <LayoutAuth
-      title={`${t('common.reset')} - ${t('fields.password')}`}
+      title={`${t('common.reset')} ${t('fields.password')}`}
       Icon={<ChakraIcon as={MdOutlineVerifiedUser} w={8} h={8} />}
     >
       <CustomFormProvider

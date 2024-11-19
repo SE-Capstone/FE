@@ -15,8 +15,10 @@ import {
   Thead,
   Tr,
   Table,
+  Tooltip,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { LuInfo } from 'react-icons/lu';
 import { PiUsersThreeFill } from 'react-icons/pi';
 import { RiEditFill } from 'react-icons/ri';
 
@@ -69,7 +71,14 @@ const MemberSetting = ({ members, projectId }: { members: ProjectMember[]; proje
               lineHeight="21px"
               textTransform="capitalize"
             >
-              <Box>{t('fields.IsProjectConfigurator')}</Box>
+              <Flex alignItems="center">
+                <Box>{t('fields.IsProjectConfigurator')}</Box>
+                <Tooltip label={t('common.IsProjectConfigurator')}>
+                  <Text ml={1} as="span" color="textColor" fontSize="17px" fontWeight="600">
+                    <LuInfo />
+                  </Text>
+                </Tooltip>
+              </Flex>
             </Th>
             <Th
               color="#8E96AF"
@@ -82,7 +91,14 @@ const MemberSetting = ({ members, projectId }: { members: ProjectMember[]; proje
               bg="white"
               zIndex={1}
             >
-              <Box>{t('fields.IsIssueConfigurator')}</Box>
+              <Flex alignItems="center">
+                <Box>{t('fields.IsIssueConfigurator')}</Box>
+                <Tooltip label={t('common.IsIssueConfigurator')}>
+                  <Text ml={1} as="span" color="textColor" fontSize="17px" fontWeight="600">
+                    <LuInfo />
+                  </Text>
+                </Tooltip>
+              </Flex>
             </Th>
             <Th
               color="#8E96AF"
@@ -95,7 +111,14 @@ const MemberSetting = ({ members, projectId }: { members: ProjectMember[]; proje
               bg="white"
               zIndex={1}
             >
-              <Box>{t('fields.IsCommentConfigurator')}</Box>
+              <Flex alignItems="center">
+                <Box>{t('fields.IsCommentConfigurator')}</Box>
+                <Tooltip label={t('common.IsCommentConfiguratorTooltip')}>
+                  <Text ml={1} as="span" color="textColor" fontSize="17px" fontWeight="600">
+                    <LuInfo />
+                  </Text>
+                </Tooltip>
+              </Flex>
             </Th>
           </Tr>
         </Thead>

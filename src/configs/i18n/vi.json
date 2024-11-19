@@ -1,6 +1,9 @@
 {
   "common": {
     "kanban": "Bảng",
+    "IsCommentConfiguratorTooltip": "Bật tùy chọn này để cho phép kiểm soát việc bình luận của tất cả thành viên",
+    "IsIssueConfigurator": "Bật tùy chọn này để cho phép cập nhật công việc của người khác",
+    "IsProjectConfigurator": "Bật tùy chọn này để cho phép cập nhật giai đoạn, trạng thái và nhãn của dự án này",
     "isDoneTooltip": "Khi bật, trạng thái này đánh dấu công việc đã hoàn thành và không còn thực hiện nữa.",
     "subTask": "Công việc con",
     "subTasks": "Công việc con",

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { merge } from 'lodash-es';
+import qs from 'qs';
 
 import type { IIssue } from '../../types';
 import type { QueryListIssueInput } from '../../types/issues.types';
@@ -26,6 +27,7 @@ export function getListIssueRequest(req: IGetListIssueRequest) {
     method: 'GET',
     url: ALL_ENDPOINT_URL_STORE.issues.list,
     params,
+    paramsSerializer: (params) => qs.stringify(params),
   });
 }
 

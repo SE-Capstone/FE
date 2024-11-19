@@ -57,8 +57,12 @@ export function ChangeStatus(props: ChangeStatusProps) {
 
   function handleChangeSwitch() {
     openAlert({
-      title,
-      description,
+      title: isUpdateStatus ? (isInactive ? t('actions.active') : t('actions.inactive')) : title,
+      description: isUpdateStatus
+        ? isInactive
+          ? t('actions.markAsDone')
+          : t('actions.markAsUndone')
+        : description,
       type: isUpdateStatus ? 'info' : 'warning',
       onHandleConfirm() {
         try {
@@ -85,12 +89,12 @@ export function ChangeStatus(props: ChangeStatusProps) {
   return (
     <Tooltip
       label={
-        isInactive
-          ? isUpdateStatus
+        isUpdateStatus
+          ? isInactive
             ? t('actions.isDone')
-            : t('actions.unarchive')
-          : isUpdateStatus
-          ? t('actions.unDone')
+            : t('actions.unDone')
+          : isInactive
+          ? t('actions.unarchive')
           : t('actions.archive')
       }
       hasArrow
