@@ -34,7 +34,7 @@ export const InlineEditCustomSelect = ({
   defaultValue?: IOptionSelectWithImage;
   issue?: IIssue;
   project?: IProject;
-  field: 'status' | 'priority' | 'assignee' | 'label' | 'lead' | 'phase';
+  field: 'status' | 'priority' | 'assignee' | 'label' | 'lead';
   size?: SizeProp;
   statusId?: string;
 }) => {
@@ -81,6 +81,9 @@ export const InlineEditCustomSelect = ({
         // minWidth: 'fit-content',
         width: 'max-content',
         maxWidth: '300px',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        borderColor: '#EDF2F7',
+        rounded: { base: '6px !important', '2xl': '8px !important' },
       }),
 
       ...(size === 'sm' && {
@@ -130,8 +133,8 @@ export const InlineEditCustomSelect = ({
         labelId: field === 'label' ? option?.value : issue.label?.id,
         assigneeId: field === 'assignee' ? option?.value : issue.assignee?.id,
         priority: field === 'priority' ? option?.value : issue.priority,
-        phaseId: field === 'phase' ? option?.value : issue.phase?.id,
         parentIssueId: issue.parentIssue?.id || issue.parentIssueId,
+        // TODO: phase
       });
     }
 

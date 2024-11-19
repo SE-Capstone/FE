@@ -94,7 +94,7 @@ export function DetailProjectPage() {
                 childrenPanel: <ListPhasePage />,
               },
               {
-                title: 'Kanban',
+                title: t('common.kanban'),
                 childrenPanel: <KanbanWidget />,
               },
               {

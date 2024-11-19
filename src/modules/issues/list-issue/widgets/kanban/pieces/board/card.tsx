@@ -115,7 +115,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
   { closestEdge, item, state, actionMenuTriggerRef },
   ref
 ) {
-  const { issue, title, index, dueDate, isLate, statusId, statusColor, id } = item;
+  const { issue, title, index, dueDate, isLate, statusId, statusColor, id, isDone } = item;
   const { t } = useTranslation();
   const { members, permissions } = useProjectContext();
   const { currentUser } = useAuthentication();
@@ -168,10 +168,14 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
             </Badge>
           )}
           {dueDate && (
-            <Badge variant="outline" colorScheme={isLate ? 'red' : 'gray'}>
+            <Badge variant="outline" colorScheme={isLate && !isDone ? 'red' : 'gray'}>
               <StackCharkra flexDir="row" alignItems="center" gap={1}>
                 <IoCalendarOutline />
-                <Text color={isLate ? 'red.400' : 'gray.500'} fontSize="10px" fontWeight="700">
+                <Text
+                  color={isLate && !isDone ? 'red.400' : 'gray.500'}
+                  fontSize="10px"
+                  fontWeight="700"
+                >
                   {dueDate}
                 </Text>
               </StackCharkra>

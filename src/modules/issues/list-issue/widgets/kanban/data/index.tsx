@@ -15,10 +15,16 @@ export type Issue = {
   dueDate?: string;
   issue: IIssue;
   isLate: boolean;
+  isDone: boolean;
   statusColor: ThemingProps['colorScheme'];
 };
 
-function getIssue(issue: IIssue, color: ThemingProps['colorScheme'], statusId: string): Issue {
+function getIssue(
+  issue: IIssue,
+  color: ThemingProps['colorScheme'],
+  statusId: string,
+  isDone: boolean
+): Issue {
   return {
     issue,
     statusId,
@@ -26,6 +32,7 @@ function getIssue(issue: IIssue, color: ThemingProps['colorScheme'], statusId: s
     index: issue.index,
     title: issue.title,
     statusColor: color,
+    isDone,
     dueDate: issue.dueDate && formatDate({ date: issue.dueDate, format: 'DD MMM' }),
     isLate: (issue.dueDate && isDateLessThanToday(issue.dueDate)) || false,
   };
@@ -54,7 +61,7 @@ export function useGetBasicData() {
         title: item.name,
         columnId: item.id,
         isDone: item.isDone,
-        items: item.issues.map((i) => getIssue(i, item.color, item.id)),
+        items: item.issues.map((i) => getIssue(i, item.color, item.id, item.isDone)),
       };
       return acc;
     }, {});
