@@ -1,5 +1,6 @@
 {
   "common": {
+    "kanban": "Board",
     "isDoneTooltip": "When enabled, this status marks the task as finished and no longer worked on.",
     "subTask": "Child issue",
     "subTasks": "Child issues",

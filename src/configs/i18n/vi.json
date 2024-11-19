@@ -1,5 +1,6 @@
 {
   "common": {
+    "kanban": "Bảng",
     "isDoneTooltip": "Khi bật, trạng thái này đánh dấu công việc đã hoàn thành và không còn thực hiện nữa.",
     "subTask": "Công việc con",
     "subTasks": "Công việc con",
