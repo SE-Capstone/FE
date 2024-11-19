@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 
 import { DatePicker } from '@atlaskit/datetime-picker';
+import ErrorIcon from '@atlaskit/icon/glyph/error';
+import InlineDialog from '@atlaskit/inline-dialog';
 import InlineEdit from '@atlaskit/inline-edit';
 import { Box as BoxAtlas, xcss } from '@atlaskit/primitives';
 import TextArea from '@atlaskit/textarea';
 import Textfield from '@atlaskit/textfield';
 import { Box, Progress, Text } from '@chakra-ui/react';
+import { isInteger, isNaN } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
 
 import { isDateLessThan, notify } from '@/libs/helpers';
@@ -14,6 +17,10 @@ const readViewContainerStyles = xcss({
   font: 'font.body',
   margin: '0',
   wordBreak: 'break-word',
+});
+const errorIconContainerStyles = xcss({
+  paddingInlineEnd: 'space.075',
+  lineHeight: '100%',
 });
 
 const InlineEditableField = ({
@@ -42,6 +49,31 @@ const InlineEditableField = ({
     if (value?.length === 0) {
       return t('validation.fieldRequired');
     }
+
+    if (type === 'progress') {
+      if (!isInteger(Number(value))) {
+        return t('validation.issue.percentageInteger');
+      }
+      if (Number(value) < 0) {
+        return t('validation.issue.percentageMin');
+      }
+      if (Number(value) > 100) {
+        return t('validation.issue.percentageMax');
+      }
+    }
+
+    if (fieldName === 'estimatedTime') {
+      if (isNaN(Number(value))) {
+        return t('validation.issue.estimatedNumber');
+      }
+      if (Number(value) < 0) {
+        return t('validation.issue.estimatedTimeMin');
+      }
+      if (Number(value) > 1000) {
+        return t('validation.issue.estimatedTimeMax');
+      }
+    }
+
     return undefined;
   };
 
@@ -64,16 +96,53 @@ const InlineEditableField = ({
           editView={({ errorMessage, ...fieldProps }, ref) =>
             !isTextArea ? (
               type === 'title' ? (
-                <Textfield
-                  style={{
-                    fontWeight: '600',
-                    fontSize: '24px',
-                  }}
-                  {...fieldProps}
-                  autoFocus
-                />
+                <InlineDialog
+                  isOpen={fieldProps.isInvalid}
+                  content={
+                    <Box id="error-message" color="indicator.400" style={{ fontSize: '14px' }}>
+                      {errorMessage}
+                    </Box>
+                  }
+                  placement="bottom-start"
+                >
+                  <Textfield
+                    style={{
+                      fontWeight: '600',
+                      fontSize: '24px',
+                    }}
+                    {...fieldProps}
+                    elemAfterInput={
+                      fieldProps.isInvalid && (
+                        <BoxAtlas xcss={errorIconContainerStyles}>
+                          <ErrorIcon label="error" primaryColor="#F12453" />
+                        </BoxAtlas>
+                      )
+                    }
+                    autoFocus
+                  />
+                </InlineDialog>
               ) : type === 'normal' || type === 'progress' ? (
-                <Textfield {...fieldProps} autoFocus />
+                <InlineDialog
+                  isOpen={fieldProps.isInvalid}
+                  content={
+                    <Box id="error-message" color="indicator.400">
+                      {errorMessage}
+                    </Box>
+                  }
+                  placement="bottom-start"
+                >
+                  <Textfield
+                    {...fieldProps}
+                    autoFocus
+                    elemAfterInput={
+                      fieldProps.isInvalid && (
+                        <BoxAtlas xcss={errorIconContainerStyles}>
+                          <ErrorIcon label="error" primaryColor="#F12453" />
+                        </BoxAtlas>
+                      )
+                    }
+                  />
+                </InlineDialog>
               ) : (
                 <DatePicker {...fieldProps} locale="vi-VN" />
               )
@@ -124,6 +193,29 @@ const InlineEditableField = ({
                   message: t('validation.project.endDateInvalid'),
                 });
                 return;
+              }
+              if (type === 'progress') {
+                if (isNaN(value)) {
+                  notify({
+                    type: 'error',
+                    message: t('validation.issue.percentageInteger'),
+                  });
+                  return;
+                }
+                if (Number(value) < 0) {
+                  notify({
+                    type: 'error',
+                    message: t('validation.issue.percentageMin'),
+                  });
+                  return;
+                }
+                if (Number(value) > 100) {
+                  notify({
+                    type: 'error',
+                    message: t('validation.issue.percentageMax'),
+                  });
+                  return;
+                }
               }
               setEditValue(value);
               handleSubmit(value);

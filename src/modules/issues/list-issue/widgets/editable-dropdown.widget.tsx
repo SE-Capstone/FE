@@ -34,7 +34,7 @@ export const InlineEditCustomSelect = ({
   defaultValue?: IOptionSelectWithImage;
   issue?: IIssue;
   project?: IProject;
-  field: 'status' | 'priority' | 'assignee' | 'label' | 'lead';
+  field: 'status' | 'priority' | 'assignee' | 'label' | 'lead' | 'phase';
   size?: SizeProp;
   statusId?: string;
 }) => {
@@ -133,8 +133,8 @@ export const InlineEditCustomSelect = ({
         labelId: field === 'label' ? option?.value : issue.label?.id,
         assigneeId: field === 'assignee' ? option?.value : issue.assignee?.id,
         priority: field === 'priority' ? option?.value : issue.priority,
+        phaseId: field === 'phase' ? option?.value : issue.phase?.id,
         parentIssueId: issue.parentIssue?.id || issue.parentIssueId,
-        // TODO: phase
       });
     }
 

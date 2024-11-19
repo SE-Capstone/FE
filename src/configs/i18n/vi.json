@@ -227,10 +227,11 @@
       "descriptionRequired": "Mô tả là bắt buộc",
       "percentageInteger": "Giá trị phải là số nguyên",
       "percentageMin": "Giá trị phải ít nhất 0",
-      "percentageMax": "Giá trị phải ít nhất 100",
+      "percentageMax": "Giá trị tối đa là 100",
       "invalidPriority": "Dữ liệu không hợp lệ",
-      "estimatedTimeMin": "Thời gian được dự đoán phải ít nhất 0",
-      "estimatedTimeMax": "Thời gian được dự đoán phải ít nhất 1000"
+      "estimatedNumber": "Thời gian được dự kiến phải là một số",
+      "estimatedTimeMin": "Thời gian được dự kiến phải ít nhất 0",
+      "estimatedTimeMax": "Thời gian được dự kiến tối đa là 1000"
     },
     "label": {
       "titleMax": "Tiêu đề không được quá 20 ký tự",

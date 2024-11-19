@@ -53,7 +53,7 @@ export const issueFormSchema = (t: any) =>
         return isNaN(numberValue) ? undefined : numberValue;
       },
       z
-        .number({ message: t('validation.issue.percentageInteger') })
+        .number({ message: t('validation.issue.estimatedNumber') })
         .min(0, { message: t('validation.issue.estimatedTimeMin') })
         .max(1000, { message: t('validation.issue.estimatedTimeMax') })
         .optional()

@@ -264,6 +264,7 @@
       "percentageMin": "Percentage must be at least 0",
       "percentageMax": "Percentage must be at most 100",
       "invalidPriority": "Invalid priority value",
+      "estimatedNumber": "Estimated time must be a number",
       "estimatedTimeMin": "Estimated time must be at least 0",
       "estimatedTimeMax": "Estimated time must be at most 1000"
     },
