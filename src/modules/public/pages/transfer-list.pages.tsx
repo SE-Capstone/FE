@@ -88,6 +88,7 @@ export default function TransferListExample() {
           <Checkbox
             key={item}
             size="md"
+            borderColor="gray.300"
             isChecked={checked.includes(item)}
             onChange={() => handleToggle(setChecked, checked, item)}
           >

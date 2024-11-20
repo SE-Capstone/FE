@@ -259,6 +259,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                           <Td pl="16px" border="none">
                             <Checkbox
                               pt="2px"
+                              borderColor="gray.300"
                               isChecked={persistData.some((pd) => pd.id === object.id)}
                               size="md"
                               onChange={(e) => {

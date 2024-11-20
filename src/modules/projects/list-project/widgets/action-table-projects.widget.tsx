@@ -194,6 +194,7 @@ export function ActionTableProjectsWidget() {
                 <MenuItem key={option.value}>
                   <Checkbox
                     w="full"
+                    borderColor="gray.300"
                     isChecked={selectedFilters.includes(option.value)}
                     onChange={() => handleFilterChange(option.value)}
                   >

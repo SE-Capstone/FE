@@ -20,7 +20,6 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { FiFilter } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
 
 import { AddNewIssueWidget } from './add-new-issue.widget';
 import { BadgeIssue, PriorityIssue } from '../components';
@@ -400,7 +399,6 @@ export function ActionTableIssuesWidget({
                 <MenuItem key={option.value}>
                   <Checkbox
                     w="full"
-                    borderColor="gray.300"
                     isChecked={selectedFilters.includes(option.value)}
                     onChange={() => handleFilterChange(option.value)}
                   >
@@ -413,7 +411,6 @@ export function ActionTableIssuesWidget({
           <AddNewIssueWidget>
             <Button leftIcon={<>+</>}>{t('common.create')}</Button>
           </AddNewIssueWidget>
-          <Link to="issues/create">{t('common.create')}</Link>
         </Box>
       </HStack>
     </Box>

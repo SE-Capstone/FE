@@ -170,6 +170,7 @@ export default function TransferListWidget({
             <Checkbox
               key={item.id}
               size="md"
+              borderColor="gray.300"
               disabled={!userId}
               isChecked={checked.includes(item)}
               onChange={() => handleToggle(setChecked, checked, item)}
