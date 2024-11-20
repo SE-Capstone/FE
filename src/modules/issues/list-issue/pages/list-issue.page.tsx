@@ -341,7 +341,7 @@ export function ListIssuePage() {
           listLabel={labels}
           listPhase={phases}
           listStatus={statuses}
-          members={members}
+          projectId={projectId || ''}
         />
         <TableComponent
           currentPage={meta.pageIndex}

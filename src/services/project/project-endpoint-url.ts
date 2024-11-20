@@ -3,6 +3,7 @@ import type { StringNumeric } from '@/types';
 const ENDPOINT_QUERIES = {
   list: 'projects',
   detail: (projectId: StringNumeric) => `projects/${projectId}`,
+  members: (projectId: StringNumeric) => `projects/${projectId}/members`,
 } as const;
 
 const ENDPOINT_MUTATIONS = {

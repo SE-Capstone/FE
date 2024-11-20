@@ -211,7 +211,7 @@ export function ActionTableUsersWidget() {
 
         <Menu closeOnSelect={false}>
           <MenuButton as={IconButton} aria-label="Options" icon={<FiFilter />} variant="outline" />
-          <MenuList>
+          <MenuList borderColor="#E2E8F0">
             {listFilterOptions.map((option) => (
               <MenuItem key={option.value}>
                 <Checkbox

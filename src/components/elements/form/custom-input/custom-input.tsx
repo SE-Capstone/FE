@@ -86,6 +86,7 @@ export const CustomInput = forwardRef<CustomInputProps, 'input'>((props, ref) =>
           type={renderType()}
           focusBorderColor="primary"
           maxLength={255}
+          borderColor="#E2E8F0"
           max={
             type === 'date' && registration?.name === 'dob'
               ? formatDate({

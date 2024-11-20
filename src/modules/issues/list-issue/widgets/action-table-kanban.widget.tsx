@@ -394,7 +394,7 @@ export function ActionTableIssuesWidget({
               icon={<FiFilter />}
               variant="outline"
             />
-            <MenuList>
+            <MenuList borderColor="#E2E8F0">
               {listFilterOptions.map((option) => (
                 <MenuItem key={option.value}>
                   <Checkbox

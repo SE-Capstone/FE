@@ -24,7 +24,8 @@ export function UpsertMembersWidget(props: UpsertMembersWidgetProps) {
   const { t } = useTranslation();
   const { children, defaultUserValue, defaultUsersOption, ignoreUserId, projectId } = props;
 
-  const { data, formUpsertMembers, handleUpsertMembers, isLoading, reset } = useUpsertMembersHook();
+  const { data, formUpsertMembers, handleUpsertMembers, isLoading, reset } =
+    useUpsertMembersHook(projectId);
   const [selectedOptions, setSelectedOptions] = useState<IOptionUserSelect[]>(defaultUsersOption);
 
   const usersChecked = useRef<string[]>([]);

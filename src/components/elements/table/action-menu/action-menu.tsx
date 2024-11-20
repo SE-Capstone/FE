@@ -44,6 +44,7 @@ export function ActionMenuTable({
               sx={{
                 boxShadow: '0px 4px 10px rgba(142, 150, 175, 0.3)',
               }}
+              borderColor="#E2E8F0"
               rounded="8px"
               border="none"
               py={0}

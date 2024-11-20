@@ -443,7 +443,7 @@ export function DetailIssuePage() {
                     {t('common.add')}
                   </MenuButton>
 
-                  <MenuList>
+                  <MenuList borderColor="#E2E8F0">
                     {!issue?.parentIssueId && (
                       <AddNewIssueWidget parentIssueId={issue?.id || ''}>
                         <MenuItem>

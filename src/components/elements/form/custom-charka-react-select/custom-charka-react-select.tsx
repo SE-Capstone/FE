@@ -127,6 +127,14 @@ export const CustomChakraReactSelect = <
         pr: '0 !important',
         borderColor: 'transparent !important',
       }),
+
+      menuList: (provide) => ({
+        ...provide,
+        borderColor: '#EDF2F7',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        rounded: '5px',
+      }),
+
       dropdownIndicator: (provide, { isFocused }) => ({
         ...provide,
         background: 'none',
@@ -144,7 +152,7 @@ export const CustomChakraReactSelect = <
 
       option: (provide, state) => ({
         ...provide,
-        bg: state.isSelected ? 'primary' : 'white',
+        bg: state.isSelected ? 'primary !important' : 'white !important',
         _hover: { bg: 'primary', color: 'white' },
         transition: 'background 0.3s ease',
         fontSize: { base: 'sm', '2xl': 'sm' },
@@ -153,6 +161,7 @@ export const CustomChakraReactSelect = <
       container: (provide) => ({
         ...provide,
         bg: 'white',
+        borderColor: '#E2E8F0',
         rounded: { base: '6px !important', '2xl': '8px !important' },
       }),
       noOptionsMessage: (provide) => ({

@@ -9,7 +9,7 @@ import type { UpsertMembersFormType } from '../../validations/upsert-members.val
 
 import { useFormWithSchema } from '@/libs/hooks';
 
-export function useUpsertMembersHook() {
+export function useUpsertMembersHook(projectId?: string) {
   const { t } = useTranslation();
   const formUpsertMembers = useFormWithSchema({
     schema: upsertMembersFormSchema(t),
@@ -17,7 +17,11 @@ export function useUpsertMembersHook() {
 
   const { reset } = formUpsertMembers;
 
-  const { mutate, isPending: isLoading, ...restData } = useUpsertMembersMutation({ reset });
+  const {
+    mutate,
+    isPending: isLoading,
+    ...restData
+  } = useUpsertMembersMutation({ reset, projectId });
 
   const handleUpsertMembers = useCallback(
     async (values: UpsertMembersFormType) => {

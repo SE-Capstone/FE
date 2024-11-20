@@ -29,24 +29,26 @@ function mutation(req: IUpsertMembersRequest) {
 interface IProps {
   configs?: MutationConfig<typeof mutation>;
   reset?: () => void;
+  projectId?: string;
 }
 
-export function useUpsertMembersMutation({ configs, reset }: IProps = {}) {
+export function useUpsertMembersMutation({ configs, reset, projectId }: IProps = {}) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: mutation,
 
-    onSuccess: (data) => {
-      if (data.statusCode !== 204) {
-        notify({ type: 'error', message: DEFAULT_MESSAGE(t).SOMETHING_WRONG });
-        return;
-      }
-
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.project.detail._def,
       });
+
+      if (projectId) {
+        queryClient.invalidateQueries({
+          queryKey: allQueryKeysStore.project.members(projectId).queryKey,
+        });
+      }
 
       reset && reset();
 

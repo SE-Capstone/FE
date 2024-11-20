@@ -23,6 +23,7 @@ import { FiFilter } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 import { AddNewIssueWidget } from './add-new-issue.widget';
+import { useGetProjectMembers } from '../apis/get-list-filter-member.api';
 import { BadgeIssue, PriorityIssue } from '../components';
 import { UserWithAvatar } from '../components/user-with-avatar';
 import { useIssuesQueryFilterStateContext } from '../contexts';
@@ -39,26 +40,66 @@ import {
   SearchInput,
 } from '@/components/elements';
 import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ActionTableIssuesWidget({
   listLabel,
   listPhase,
   listStatus,
-  members,
+  projectId,
 }: {
   listLabel: ILabel[];
   listStatus: IStatus[];
   listPhase: IPhase[];
-  members: ProjectMember[];
+  projectId: string;
 }) {
   const { t } = useTranslation();
+  const { currentUser } = useAuthentication();
   const [labelChecked, setLabelChecked] = useState<string[]>([]);
   const [phaseChecked, setPhaseChecked] = useState<string[]>([]);
   const [assigneeChecked, setAssigneeChecked] = useState<string[]>([]);
   const [statusChecked, setStatusChecked] = useState<string[]>([]);
+  const [members, setMembers] = useState<ProjectMember[]>([]);
 
   const { issuesQueryState, setIssuesQueryFilterState } = useIssuesQueryFilterStateContext();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+
+  const { listMember } = useGetProjectMembers({
+    projectId,
+  });
+
+  useEffect(() => {
+    if (listMember) {
+      setMembers([]);
+      listMember.forEach((member) => {
+        const mem = {
+          id: member.id,
+          fullName: '',
+          avatar: member.avatar,
+          userName:
+            currentUser?.id === member.id
+              ? `${member.userName} (${t('common.me')})`
+              : member.userName,
+        };
+        setMembers((prev) => [...prev, mem]);
+      });
+
+      const mem = {
+        id: currentUser?.id || '',
+        fullName: currentUser?.fullName || '',
+        userName: `${currentUser?.userName} (${t('common.me')})` || '',
+        roleName: currentUser?.roleName || '',
+        positionName: currentUser?.positionName || '',
+        avatar: currentUser?.avatar || '',
+      };
+
+      setMembers((prev) =>
+        !prev.find((member) => member.id === currentUser?.id) ? [mem, ...prev] : prev
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listMember, currentUser, t]);
+
   const toggle = (name: string, field: 'phase' | 'label' | 'assignee' | 'status') => {
     if (field === 'label') {
       setLabelChecked((prev) => {
@@ -395,7 +436,7 @@ export function ActionTableIssuesWidget({
               icon={<FiFilter />}
               variant="outline"
             />
-            <MenuList>
+            <MenuList borderColor="#E2E8F0">
               {listFilterOptions.map((option) => (
                 <MenuItem key={option.value}>
                   <Checkbox
