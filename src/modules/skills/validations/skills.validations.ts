@@ -9,7 +9,8 @@ export const skillFormSchema = (t: any) =>
     description: z
       .string()
       .trim()
-      .min(1, { message: t('validation.descriptionRequired') }),
+      .min(1, { message: t('validation.descriptionRequired') })
+      .max(500, { message: t('validation.descriptionMax') }),
   });
 
 export type SkillFormValues = z.infer<ReturnType<typeof skillFormSchema>>;

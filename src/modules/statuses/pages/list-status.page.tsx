@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { Text, Tooltip } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { LuInfo } from 'react-icons/lu';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { useGetListStatusQuery } from '../hooks/queries';
 import { ActionMenuTableStatuses, ActionTableStatusesWidget } from '../widgets';
@@ -22,6 +22,22 @@ export function ListStatusPage() {
   const { t } = useTranslation();
   const { projectId } = useParams();
   const { permissions } = useProjectContext();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const setTab = () => {
+    const params = new URLSearchParams();
+    params.set('tab', 'status');
+    setSearchParams(params);
+  };
+
+  useEffect(() => {
+    // Only set the tab if it is not already set
+    if (searchParams.get('tab') !== 'status') {
+      setTab();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
   const { listStatus, isError, isLoading, isRefetching } = useGetListStatusQuery({
     params: {
       projectId: projectId || '',

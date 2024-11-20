@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { useGetListLabelQuery } from '../hooks/queries';
 import { ActionMenuTableLabels, ActionTableLabelsWidget } from '../widgets';
@@ -19,6 +19,22 @@ export function ListLabelPage() {
   const { t } = useTranslation();
   const { projectId } = useParams();
   const { permissions } = useProjectContext();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const setTab = () => {
+    const params = new URLSearchParams();
+    params.set('tab', 'label');
+    setSearchParams(params);
+  };
+
+  useEffect(() => {
+    // Only set the tab if it is not already set
+    if (searchParams.get('tab') !== 'label') {
+      setTab();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
   const { listLabel, isError, isLoading, isRefetching } = useGetListLabelQuery({
     params: {
       projectId: projectId || '',

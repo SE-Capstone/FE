@@ -105,6 +105,10 @@ const RequestInterceptor = () => {
               originalRequest.headers.Authorization = `Bearer ${accessToken}`;
               return await axiosClient(originalRequest);
             } catch (err) {
+              if ((err as AxiosError)?.status === 400) {
+                clearStoredAuth();
+                window.location.href = '/auth/login';
+              }
               failedQueue.forEach((promise) => promise.reject(err as AxiosError));
               failedQueue = [];
               return await Promise.reject(err); // Reject if refresh fails

@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { Stack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
 import { ProjectMembersWidget } from './project-members.widget';
 import { ProjectStatusEnum, type IProject } from '../../list-project/types';
@@ -27,6 +28,21 @@ export function BaseInformationProjectWidget({
 }) {
   const { t } = useTranslation();
   const canUpdate = permissions[PermissionEnum.UPDATE_PROJECT];
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const setTab = () => {
+    const params = new URLSearchParams();
+    params.set('tab', 'overview');
+    setSearchParams(params);
+  };
+
+  useEffect(() => {
+    // Only set the tab if it is not already set
+    if (searchParams.get('tab') !== 'overview') {
+      setTab();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   const { handleUpsertProject } = useUpsertProjectHook({ id: project?.id || '', isUpdate: true });
 

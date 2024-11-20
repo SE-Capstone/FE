@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Container } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { useGetDetailProject } from '../apis/detail-project.api';
 import { BaseInformationProjectWidget } from '../widgets';
@@ -23,12 +23,40 @@ import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailProjectPage() {
   const { t, i18n } = useTranslation();
+  const [searchParams, _] = useSearchParams();
   const { permissions } = useAuthentication();
   const { project: projectContext } = useProjectContext();
   const { projectId } = useParams();
   const [activeTabIndex, setActiveTabIndex] = useState<number>(() =>
     parseInt(localStorage.getItem('activeTabIndex') || '0', 10)
   );
+
+  const getTab = () => {
+    const tab = searchParams.get('tab');
+    switch (tab) {
+      case 'overview':
+        setActiveTabIndex(0);
+        break;
+      case 'label':
+        setActiveTabIndex(1);
+        break;
+      case 'status':
+        setActiveTabIndex(2);
+        break;
+      case 'phase':
+        setActiveTabIndex(3);
+        break;
+      case 'kanban':
+        setActiveTabIndex(4);
+        break;
+      case 'issue':
+        setActiveTabIndex(5);
+        break;
+      default:
+        setActiveTabIndex(0);
+        break;
+    }
+  };
 
   const { project, isLoading, isError } = useGetDetailProject({ projectId: projectId || '' });
 
@@ -37,8 +65,9 @@ export function DetailProjectPage() {
   };
 
   useEffect(() => {
-    localStorage.setItem('activeTabIndex', activeTabIndex.toString());
-  }, [activeTabIndex]);
+    getTab();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!permissions[PermissionEnum.READ_ALL_PROJECTS] && !projectContext?.isVisible) {
     if (!projectContext) {

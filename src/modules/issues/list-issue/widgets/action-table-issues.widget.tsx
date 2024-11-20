@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import DropdownMenu, {
   DropdownItemCheckbox,
@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { FiFilter } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import { AddNewIssueWidget } from './add-new-issue.widget';
 import { useGetProjectMembers } from '../apis/get-list-filter-member.api';
@@ -55,11 +55,43 @@ export function ActionTableIssuesWidget({
 }) {
   const { t } = useTranslation();
   const { currentUser } = useAuthentication();
-  const [labelChecked, setLabelChecked] = useState<string[]>([]);
-  const [phaseChecked, setPhaseChecked] = useState<string[]>([]);
-  const [assigneeChecked, setAssigneeChecked] = useState<string[]>([]);
-  const [statusChecked, setStatusChecked] = useState<string[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [labelChecked, setLabelChecked] = useState<string[]>(searchParams.getAll('labelIds') || []);
+  const [phaseChecked, setPhaseChecked] = useState<string[]>(searchParams.getAll('phaseIds') || []);
+  const [assigneeChecked, setAssigneeChecked] = useState<string[]>(
+    searchParams.getAll('assigneeIds') || []
+  );
+  const [statusChecked, setStatusChecked] = useState<string[]>(
+    searchParams.getAll('statusIds') || []
+  );
   const [members, setMembers] = useState<ProjectMember[]>([]);
+
+  // Update filters in query params
+  const updateQueryParams = useCallback(
+    (key: string, values?: string[], value?: string) => {
+      setSearchParams((prevParams) => {
+        const params = new URLSearchParams(prevParams);
+
+        params.set('tab', 'issue');
+
+        if (values) {
+          if (values.length > 0) {
+            params.delete(key);
+            values.forEach((val, i) => (i === 0 ? params.set(key, val) : params.append(key, val)));
+          } else {
+            params.delete(key);
+          }
+        } else if (value) {
+          params.set(key, value);
+        } else {
+          params.delete(key);
+        }
+
+        return params;
+      });
+    },
+    [setSearchParams]
+  );
 
   const { issuesQueryState, setIssuesQueryFilterState } = useIssuesQueryFilterStateContext();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
@@ -69,22 +101,18 @@ export function ActionTableIssuesWidget({
   });
 
   useEffect(() => {
-    if (listMember) {
-      setMembers([]);
-      listMember.forEach((member) => {
-        const mem = {
-          id: member.id,
-          fullName: '',
-          avatar: member.avatar,
-          userName:
-            currentUser?.id === member.id
-              ? `${member.userName} (${t('common.me')})`
-              : member.userName,
-        };
-        setMembers((prev) => [...prev, mem]);
-      });
+    if (listMember && JSON.stringify(listMember) !== JSON.stringify(members)) {
+      const updatedMembers = listMember.map((member) => ({
+        id: member.id,
+        fullName: '',
+        avatar: member.avatar,
+        userName:
+          currentUser?.id === member.id
+            ? `${member.userName} (${t('common.me')})`
+            : member.userName,
+      }));
 
-      const mem = {
+      const currentUserMember = !updatedMembers.find((mem) => mem.id === currentUser?.id) && {
         id: currentUser?.id || '',
         fullName: currentUser?.fullName || '',
         userName: `${currentUser?.userName} (${t('common.me')})` || '',
@@ -93,59 +121,65 @@ export function ActionTableIssuesWidget({
         avatar: currentUser?.avatar || '',
       };
 
-      setMembers((prev) =>
-        !prev.find((member) => member.id === currentUser?.id) ? [mem, ...prev] : prev
-      );
+      if (currentUserMember) {
+        updatedMembers.unshift(currentUserMember);
+      }
+      setMembers(updatedMembers);
     }
+  }, [listMember, currentUser, t, members]);
+
+  const toggle = useCallback(
+    (name: string, field: 'phase' | 'label' | 'assignee' | 'status') => {
+      if (field === 'label') {
+        setLabelChecked((prev) => {
+          const updated = prev.includes(name)
+            ? prev.filter((item) => item !== name)
+            : [...prev, name];
+          updateQueryParams('labelIds', updated); // Update URL after state
+          return updated;
+        });
+      }
+      if (field === 'phase') {
+        setPhaseChecked((prev) => {
+          const updated = prev.includes(name)
+            ? prev.filter((item) => item !== name)
+            : [...prev, name];
+          updateQueryParams('phaseIds', updated);
+          return updated;
+        });
+      }
+      if (field === 'status') {
+        setStatusChecked((prev) => {
+          const updated = prev.includes(name)
+            ? prev.filter((item) => item !== name)
+            : [...prev, name];
+          updateQueryParams('statusIds', updated);
+          return updated;
+        });
+      }
+      if (field === 'assignee') {
+        setAssigneeChecked((prev) => {
+          const updated = prev.includes(name)
+            ? prev.filter((item) => item !== name)
+            : [...prev, name];
+          updateQueryParams('assigneeIds', updated);
+          return updated;
+        });
+      }
+    },
+    [updateQueryParams]
+  );
+
+  useEffect(() => {
+    setIssuesQueryFilterState({
+      labelIds: labelChecked,
+      phaseIds: phaseChecked,
+      statusIds: statusChecked,
+      assigneeIds: assigneeChecked,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listMember, currentUser, t]);
+  }, [labelChecked, phaseChecked, statusChecked, assigneeChecked]);
 
-  const toggle = (name: string, field: 'phase' | 'label' | 'assignee' | 'status') => {
-    if (field === 'label') {
-      setLabelChecked((prev) => {
-        const newChecked = prev.includes(name)
-          ? prev.filter((item) => item !== name)
-          : [...prev, name];
-
-        setIssuesQueryFilterState({ labelIds: newChecked });
-
-        return newChecked;
-      });
-    }
-    if (field === 'phase') {
-      setPhaseChecked((prev) => {
-        const newChecked = prev.includes(name)
-          ? prev.filter((item) => item !== name)
-          : [...prev, name];
-
-        setIssuesQueryFilterState({ phaseIds: newChecked });
-
-        return newChecked;
-      });
-    }
-    if (field === 'status') {
-      setStatusChecked((prev) => {
-        const newChecked = prev.includes(name)
-          ? prev.filter((item) => item !== name)
-          : [...prev, name];
-
-        setIssuesQueryFilterState({ statusIds: newChecked });
-
-        return newChecked;
-      });
-    }
-    if (field === 'assignee') {
-      setAssigneeChecked((prev) => {
-        const newChecked = prev.includes(name)
-          ? prev.filter((item) => item !== name)
-          : [...prev, name];
-
-        setIssuesQueryFilterState({ assigneeIds: newChecked });
-
-        return newChecked;
-      });
-    }
-  };
   const filterMapping = {
     title: 'title',
     priority: 'priority',
@@ -194,36 +228,45 @@ export function ActionTableIssuesWidget({
         {
           value: 'priority',
           label: t('fields.priority'),
+          default: searchParams.getAll('priority').length > 0,
         },
         {
           value: 'assigneeIds',
           label: t('fields.assignee'),
+          default: assigneeChecked.length > 0,
         },
         {
           value: 'reporterId',
           label: t('fields.reporter'),
+          default: searchParams.getAll('reporterId').length > 0,
         },
         {
           value: 'statusIds',
           label: t('fields.status'),
+          default: statusChecked.length > 0,
         },
         {
           value: 'labelIds',
           label: t('common.label'),
+          default: labelChecked.length > 0,
         },
         {
           value: 'phaseIds',
           label: t('common.phase'),
+          default: phaseChecked.length > 0,
         },
         {
           value: 'startDate',
           label: t('fields.startDate'),
+          default: searchParams.getAll('startDate').length > 0,
         },
         {
           value: 'dueDate',
           label: t('fields.dueDate'),
+          default: searchParams.getAll('dueDate').length > 0,
         },
       ].filter(Boolean),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [t]
   );
 
@@ -263,9 +306,10 @@ export function ActionTableIssuesWidget({
             <GridItem colSpan={2}>
               <SearchInput
                 placeholder={`${t('common.enter')} ${t('fields.title').toLowerCase()}...`}
-                initValue={issuesQueryState.filters.title || ''}
+                initValue={issuesQueryState.filters.title || searchParams.getAll('title')[0] || ''}
                 onHandleSearch={(keyword) => {
                   setIssuesQueryFilterState({ title: keyword });
+                  updateQueryParams('title', undefined, keyword);
                 }}
               />
             </GridItem>
@@ -280,10 +324,23 @@ export function ActionTableIssuesWidget({
                   label: <PriorityIssue priority={value} />,
                   value,
                 }))}
+                defaultValue={
+                  searchParams.getAll('priority').length > 0
+                    ? {
+                        label: (
+                          <PriorityIssue
+                            priority={Number(searchParams.getAll('priority')[0]) as any}
+                          />
+                        ),
+                        value: searchParams.getAll('priority')[0] as any,
+                      }
+                    : undefined
+                }
                 onChange={(opt) => {
                   setIssuesQueryFilterState({
                     priority: opt?.value ? opt.value : undefined,
                   });
+                  updateQueryParams('priority', undefined, opt?.value as any);
                 }}
               />
             </GridItem>
@@ -299,11 +356,24 @@ export function ActionTableIssuesWidget({
                   value: member.id,
                   image: member.avatar,
                 }))}
+                defaultValue={
+                  searchParams.getAll('reporterId').length > 0
+                    ? {
+                        label:
+                          members.find((m) => m.id === searchParams.getAll('reporterId')[0])
+                            ?.userName || '',
+                        value: searchParams.getAll('reporterId')[0],
+                        image: members.find((m) => m.id === searchParams.getAll('reporterId')[0])
+                          ?.avatar,
+                      }
+                    : undefined
+                }
                 components={customComponents}
                 onChange={(opt) => {
                   setIssuesQueryFilterState({
                     reporterId: opt?.value ? opt.value : undefined,
                   });
+                  updateQueryParams('reporterId', undefined, opt?.value as any);
                 }}
               />
             </GridItem>
@@ -317,6 +387,7 @@ export function ActionTableIssuesWidget({
                 type="date"
                 onHandleSearch={(keyword) => {
                   setIssuesQueryFilterState({ startDate: keyword });
+                  updateQueryParams('startDate', undefined, keyword);
                 }}
               />
             </GridItem>
@@ -330,6 +401,7 @@ export function ActionTableIssuesWidget({
                 type="date"
                 onHandleSearch={(keyword) => {
                   setIssuesQueryFilterState({ dueDate: keyword });
+                  updateQueryParams('dueDate', undefined, keyword);
                 }}
               />
             </GridItem>

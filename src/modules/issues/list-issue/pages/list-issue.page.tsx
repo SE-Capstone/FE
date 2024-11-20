@@ -85,22 +85,19 @@ export function ListIssuePage() {
     if (listLabel && JSON.stringify(listLabel) !== JSON.stringify(labels)) {
       setLabels(listLabel);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listLabel]);
+  }, [labels, listLabel]);
 
   useEffect(() => {
     if (listStatus && JSON.stringify(listStatus) !== JSON.stringify(statuses)) {
       setStatuses(listStatus);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listStatus]);
+  }, [listStatus, statuses]);
 
   useEffect(() => {
-    if (listPhase && JSON.stringify(listPhase) !== JSON.stringify(statuses)) {
+    if (listPhase && JSON.stringify(listPhase) !== JSON.stringify(phases)) {
       setPhases(listPhase);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listPhase]);
+  }, [listPhase, phases]);
 
   const columns = useMemo<ColumnsProps<IIssue>>(
     () => [

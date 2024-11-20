@@ -50,6 +50,7 @@ export const CustomTextArea = forwardRef<CustomTextAreaProps, 'textarea'>((props
           ref={ref}
           as={ResizeTextarea}
           w="full"
+          borderColor="#E2E8F0"
           focusBorderColor="primary"
           {...textAreaProps}
           {...registration}
