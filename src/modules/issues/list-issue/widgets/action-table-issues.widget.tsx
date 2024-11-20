@@ -32,7 +32,12 @@ import type { IPhase } from '@/modules/phases/types';
 import type { ProjectMember } from '@/modules/projects/list-project/types';
 import type { IStatus } from '@/modules/statuses/types';
 
-import { CustomChakraReactSelect, SearchInput } from '@/components/elements';
+import {
+  CustomChakraReactSelect,
+  CustomOptionComponentChakraReactSelect,
+  CustomSingleValueComponentChakraReactSelect,
+  SearchInput,
+} from '@/components/elements';
 import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
 
 export function ActionTableIssuesWidget({
@@ -188,6 +193,15 @@ export function ActionTableIssuesWidget({
     setSelectedFilters(defaults);
   }, [listFilterOptions]);
 
+  const customComponents = useMemo(
+    () => ({
+      Option: (props) => CustomOptionComponentChakraReactSelect(props, 'sm'),
+      SingleValue: (props) => CustomSingleValueComponentChakraReactSelect(props, false),
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   return (
     <Box p={5} py={3} mb={6} rounded={2.5} bg="white" w="full" shadow="0 1px 4px 0 #0002">
       <HStack justify="space-between">
@@ -205,7 +219,7 @@ export function ActionTableIssuesWidget({
           }}
         >
           {selectedFilters.includes('title') && (
-            <GridItem colSpan={3}>
+            <GridItem colSpan={2}>
               <SearchInput
                 placeholder={`${t('common.enter')} ${t('fields.title').toLowerCase()}...`}
                 initValue={issuesQueryState.filters.title || ''}
@@ -228,6 +242,26 @@ export function ActionTableIssuesWidget({
                 onChange={(opt) => {
                   setIssuesQueryFilterState({
                     priority: opt?.value ? opt.value : undefined,
+                  });
+                }}
+              />
+            </GridItem>
+          )}
+          {selectedFilters.includes('reporterId') && (
+            <GridItem colSpan={1}>
+              <CustomChakraReactSelect
+                isSearchable={false}
+                size="sm"
+                placeholder={`${t('common.choose')} ${t('fields.reporter').toLowerCase()}`}
+                options={members.map((member) => ({
+                  label: member.userName,
+                  value: member.id,
+                  image: member.avatar,
+                }))}
+                components={customComponents}
+                onChange={(opt) => {
+                  setIssuesQueryFilterState({
+                    reporterId: opt?.value ? opt.value : undefined,
                   });
                 }}
               />
@@ -259,7 +293,7 @@ export function ActionTableIssuesWidget({
               />
             </GridItem>
           )}
-          <GridItem colSpan={3} className="parent-atlaskit-dropdown">
+          <GridItem colSpan={2} className="parent-atlaskit-dropdown">
             <Box gap={2} display="flex" alignItems="center">
               {selectedFilters.includes('labelIds') && (
                 <DropdownMenu
