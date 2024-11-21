@@ -6,14 +6,16 @@ import { merge } from 'lodash-es';
 import type { QueryKanbanInput } from '../../types/issues.types';
 import type { IResponseApi } from '@/configs/axios';
 import type { IKanban } from '@/modules/statuses/types';
-import type { DeepPartial } from '@/types';
+import type { DeepPartial, IBaseQueryParams } from '@/types';
 
 import { makeRequest, type QueryConfig } from '@/libs/react-query';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
 
+export type IParamsGetKanban = IBaseQueryParams<QueryKanbanInput>;
+
 interface IGetKanbanRequest {
-  params: QueryKanbanInput;
+  params: IParamsGetKanban;
 }
 
 export function getKanbanRequest(req: IGetKanbanRequest) {
@@ -38,6 +40,8 @@ export function useGetKanbanQuery(props: UseGetKanbanQueryProps) {
     () =>
       merge(
         {
+          pageIndex: 1,
+          pageSize: 10000,
           projectId,
         },
         params

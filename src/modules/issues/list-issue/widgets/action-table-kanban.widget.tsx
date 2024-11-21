@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import DropdownMenu, {
   DropdownItemCheckbox,
@@ -20,11 +20,13 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { FiFilter } from 'react-icons/fi';
+import { useSearchParams } from 'react-router-dom';
 
 import { AddNewIssueWidget } from './add-new-issue.widget';
+import { useGetProjectMembers } from '../apis/get-list-filter-member.api';
 import { BadgeIssue, PriorityIssue } from '../components';
 import { UserWithAvatar } from '../components/user-with-avatar';
-import { useIssuesQueryFilterStateContext } from '../contexts';
+import { useKanbanQueryFilterStateContext } from '../contexts/kanban-query-filters.contexts';
 
 import type { ILabel } from '@/modules/labels/types';
 import type { IPhase } from '@/modules/phases/types';
@@ -38,72 +40,169 @@ import {
   SearchInput,
 } from '@/components/elements';
 import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
-export function ActionTableIssuesWidget({
+export function ActionTableKanbanWidget({
   listLabel,
   listPhase,
   listStatus,
-  members,
+  projectId,
 }: {
   listLabel: ILabel[];
   listStatus: IStatus[];
   listPhase: IPhase[];
-  members: ProjectMember[];
+  projectId: string;
 }) {
   const { t } = useTranslation();
-  const [labelChecked, setLabelChecked] = useState<string[]>([]);
-  const [phaseChecked, setPhaseChecked] = useState<string[]>([]);
-  const [assigneeChecked, setAssigneeChecked] = useState<string[]>([]);
-  const [statusChecked, setStatusChecked] = useState<string[]>([]);
+  const { currentUser } = useAuthentication();
+  const prevMembersRef = useRef<ProjectMember[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [labelChecked, setLabelChecked] = useState<string[]>(searchParams.getAll('labelIds') || []);
+  const [defaultPriority] = useState<string | undefined>(
+    searchParams.getAll('priority')[0] || undefined
+  );
+  const [phaseChecked, setPhaseChecked] = useState<string[]>(searchParams.getAll('phaseIds') || []);
+  const [assigneeChecked, setAssigneeChecked] = useState<string[]>(
+    searchParams.getAll('assigneeIds') || []
+  );
+  const [statusChecked, setStatusChecked] = useState<string[]>(
+    searchParams.getAll('statusIds') || []
+  );
+  const [members, setMembers] = useState<ProjectMember[]>([]);
+  const [defaultReporter, setDefaultReporter] = useState<ProjectMember | undefined>(undefined);
+  const [defaultReporterId, _] = useState<string | undefined>(
+    searchParams.getAll('reporterId')[0] || undefined
+  );
 
-  const { issuesQueryState, setIssuesQueryFilterState } = useIssuesQueryFilterStateContext();
+  // Update filters in query params
+  const updateQueryParams = useCallback(
+    (key: string, values?: string[], value?: string) => {
+      setSearchParams((prevParams) => {
+        const params = new URLSearchParams(prevParams);
+
+        params.set('tab', 'kanban');
+
+        if (values) {
+          if (values.length > 0) {
+            params.delete(key);
+            values.forEach((val, i) => (i === 0 ? params.set(key, val) : params.append(key, val)));
+          } else {
+            params.delete(key);
+          }
+        } else if (value) {
+          params.set(key, value);
+        } else {
+          params.delete(key);
+        }
+
+        return params;
+      });
+    },
+    [setSearchParams]
+  );
+
+  const { kanbanQueryState, setKanbanQueryFilterState } = useKanbanQueryFilterStateContext();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-  const toggle = (name: string, field: 'phase' | 'label' | 'assignee' | 'status') => {
-    if (field === 'label') {
-      setLabelChecked((prev) => {
-        const newChecked = prev.includes(name)
-          ? prev.filter((item) => item !== name)
-          : [...prev, name];
 
-        setIssuesQueryFilterState({ labelIds: newChecked });
+  const { listMember } = useGetProjectMembers({
+    projectId,
+  });
 
-        return newChecked;
-      });
+  useEffect(() => {
+    if (listMember && JSON.stringify(listMember) !== JSON.stringify(prevMembersRef.current)) {
+      const updatedMembers = listMember.map((member) => ({
+        id: member.id,
+        fullName: '',
+        avatar: member.avatar,
+        userName:
+          currentUser?.id === member.id
+            ? `${member.userName} (${t('common.me')})`
+            : member.userName,
+      }));
+
+      const currentUserMember = !updatedMembers.find((mem) => mem.id === currentUser?.id) && {
+        id: currentUser?.id || '',
+        fullName: currentUser?.fullName || '',
+        userName: `${currentUser?.userName} (${t('common.me')})` || '',
+        roleName: currentUser?.roleName || '',
+        positionName: currentUser?.positionName || '',
+        avatar: currentUser?.avatar || '',
+      };
+
+      if (currentUserMember) {
+        updatedMembers.unshift(currentUserMember);
+      }
+      setMembers(updatedMembers);
+      prevMembersRef.current = updatedMembers;
+
+      const reporterId = searchParams.getAll('reporterId')[0];
+      if (reporterId) {
+        const reporter = updatedMembers.find((m) => m.id === reporterId);
+        setDefaultReporter({
+          id: reporterId,
+          fullName: reporter?.fullName || '',
+          avatar: reporter?.avatar || '',
+          userName: reporter?.userName || '',
+        });
+      }
     }
-    if (field === 'phase') {
-      setPhaseChecked((prev) => {
-        const newChecked = prev.includes(name)
-          ? prev.filter((item) => item !== name)
-          : [...prev, name];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listMember, currentUser, t]);
 
-        setIssuesQueryFilterState({ phaseIds: newChecked });
+  const toggle = useCallback(
+    (name: string, field: 'phase' | 'label' | 'assignee' | 'status') => {
+      if (field === 'label') {
+        setLabelChecked((prev) => {
+          const updated = prev.includes(name)
+            ? prev.filter((item) => item !== name)
+            : [...prev, name];
+          updateQueryParams('labelIds', updated); // Update URL after state
+          return updated;
+        });
+      }
+      if (field === 'phase') {
+        setPhaseChecked((prev) => {
+          const updated = prev.includes(name)
+            ? prev.filter((item) => item !== name)
+            : [...prev, name];
+          updateQueryParams('phaseIds', updated);
+          return updated;
+        });
+      }
+      if (field === 'status') {
+        setStatusChecked((prev) => {
+          const updated = prev.includes(name)
+            ? prev.filter((item) => item !== name)
+            : [...prev, name];
+          updateQueryParams('statusIds', updated);
+          return updated;
+        });
+      }
+      if (field === 'assignee') {
+        setAssigneeChecked((prev) => {
+          const updated = prev.includes(name)
+            ? prev.filter((item) => item !== name)
+            : [...prev, name];
+          updateQueryParams('assigneeIds', updated);
+          return updated;
+        });
+      }
+    },
+    [updateQueryParams]
+  );
 
-        return newChecked;
-      });
-    }
-    if (field === 'status') {
-      setStatusChecked((prev) => {
-        const newChecked = prev.includes(name)
-          ? prev.filter((item) => item !== name)
-          : [...prev, name];
+  useEffect(() => {
+    setKanbanQueryFilterState({
+      ...(defaultPriority && { priority: Number(defaultPriority) }),
+      ...(defaultReporterId && { reporterId: defaultReporterId }),
+      labelIds: labelChecked,
+      phaseIds: phaseChecked,
+      statusIds: statusChecked,
+      assigneeIds: assigneeChecked,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [labelChecked, phaseChecked, statusChecked, assigneeChecked, defaultPriority]);
 
-        setIssuesQueryFilterState({ statusIds: newChecked });
-
-        return newChecked;
-      });
-    }
-    if (field === 'assignee') {
-      setAssigneeChecked((prev) => {
-        const newChecked = prev.includes(name)
-          ? prev.filter((item) => item !== name)
-          : [...prev, name];
-
-        setIssuesQueryFilterState({ assigneeIds: newChecked });
-
-        return newChecked;
-      });
-    }
-  };
   const filterMapping = {
     title: 'title',
     priority: 'priority',
@@ -122,7 +221,7 @@ export function ActionTableIssuesWidget({
       const updatedFilters = isSelected ? prev.filter((f) => f !== filter) : [...prev, filter];
 
       if (isSelected) {
-        setIssuesQueryFilterState({ [filterMapping[filter]]: undefined });
+        setKanbanQueryFilterState({ [filterMapping[filter]]: undefined });
         if (filter === 'labelIds') {
           setLabelChecked([]);
         }
@@ -152,36 +251,45 @@ export function ActionTableIssuesWidget({
         {
           value: 'priority',
           label: t('fields.priority'),
+          default: searchParams.getAll('priority').length > 0,
         },
         {
           value: 'assigneeIds',
           label: t('fields.assignee'),
+          default: assigneeChecked.length > 0,
         },
         {
           value: 'reporterId',
           label: t('fields.reporter'),
+          default: searchParams.getAll('reporterId').length > 0,
         },
         {
           value: 'statusIds',
           label: t('fields.status'),
+          default: statusChecked.length > 0,
         },
         {
           value: 'labelIds',
           label: t('common.label'),
+          default: labelChecked.length > 0,
         },
         {
           value: 'phaseIds',
           label: t('common.phase'),
+          default: phaseChecked.length > 0,
         },
         {
           value: 'startDate',
           label: t('fields.startDate'),
+          default: searchParams.getAll('startDate').length > 0,
         },
         {
           value: 'dueDate',
           label: t('fields.dueDate'),
+          default: searchParams.getAll('dueDate').length > 0,
         },
       ].filter(Boolean),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [t]
   );
 
@@ -189,7 +297,9 @@ export function ActionTableIssuesWidget({
     const defaults = listFilterOptions
       .filter((option) => option.default)
       .map((option) => option.value);
+
     setSelectedFilters(defaults);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listFilterOptions]);
 
   const customComponents = useMemo(
@@ -197,7 +307,6 @@ export function ActionTableIssuesWidget({
       Option: (props) => CustomOptionComponentChakraReactSelect(props, 'sm'),
       SingleValue: (props) => CustomSingleValueComponentChakraReactSelect(props, false),
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -221,9 +330,10 @@ export function ActionTableIssuesWidget({
             <GridItem colSpan={2}>
               <SearchInput
                 placeholder={`${t('common.enter')} ${t('fields.title').toLowerCase()}...`}
-                initValue={issuesQueryState.filters.title || ''}
+                initValue={kanbanQueryState.filters.title || searchParams.getAll('title')[0] || ''}
                 onHandleSearch={(keyword) => {
-                  setIssuesQueryFilterState({ title: keyword });
+                  setKanbanQueryFilterState({ title: keyword });
+                  updateQueryParams('title', undefined, keyword);
                 }}
               />
             </GridItem>
@@ -238,10 +348,23 @@ export function ActionTableIssuesWidget({
                   label: <PriorityIssue priority={value} />,
                   value,
                 }))}
+                defaultValue={
+                  searchParams.getAll('priority').length > 0
+                    ? {
+                        label: (
+                          <PriorityIssue
+                            priority={Number(searchParams.getAll('priority')[0]) as any}
+                          />
+                        ),
+                        value: searchParams.getAll('priority')[0] as any,
+                      }
+                    : undefined
+                }
                 onChange={(opt) => {
-                  setIssuesQueryFilterState({
+                  setKanbanQueryFilterState({
                     priority: opt?.value ? opt.value : undefined,
                   });
+                  updateQueryParams('priority', undefined, opt?.value as any);
                 }}
               />
             </GridItem>
@@ -249,6 +372,7 @@ export function ActionTableIssuesWidget({
           {selectedFilters.includes('reporterId') && (
             <GridItem colSpan={1}>
               <CustomChakraReactSelect
+                key={defaultReporter?.id}
                 isSearchable={false}
                 size="sm"
                 placeholder={`${t('common.choose')} ${t('fields.reporter').toLowerCase()}`}
@@ -257,11 +381,19 @@ export function ActionTableIssuesWidget({
                   value: member.id,
                   image: member.avatar,
                 }))}
+                defaultValue={
+                  defaultReporter && {
+                    label: defaultReporter.userName,
+                    value: defaultReporter.id,
+                    image: defaultReporter.avatar,
+                  }
+                }
                 components={customComponents}
                 onChange={(opt) => {
-                  setIssuesQueryFilterState({
+                  setKanbanQueryFilterState({
                     reporterId: opt?.value ? opt.value : undefined,
                   });
+                  updateQueryParams('reporterId', undefined, opt?.value as any);
                 }}
               />
             </GridItem>
@@ -271,10 +403,13 @@ export function ActionTableIssuesWidget({
               <SearchInput
                 w="full"
                 placeholder={`${t('common.choose')} ${t('fields.startDate').toLowerCase()}...`}
-                initValue={issuesQueryState.filters.startDate || ''}
+                initValue={
+                  kanbanQueryState.filters.startDate || searchParams.getAll('startDate')[0] || ''
+                }
                 type="date"
                 onHandleSearch={(keyword) => {
-                  setIssuesQueryFilterState({ startDate: keyword });
+                  setKanbanQueryFilterState({ startDate: keyword });
+                  updateQueryParams('startDate', undefined, keyword);
                 }}
               />
             </GridItem>
@@ -284,10 +419,13 @@ export function ActionTableIssuesWidget({
               <SearchInput
                 w="full"
                 placeholder={`${t('common.choose')} ${t('fields.dueDate').toLowerCase()}...`}
-                initValue={issuesQueryState.filters.dueDate || ''}
+                initValue={
+                  kanbanQueryState.filters.dueDate || searchParams.getAll('dueDate')[0] || ''
+                }
                 type="date"
                 onHandleSearch={(keyword) => {
-                  setIssuesQueryFilterState({ dueDate: keyword });
+                  setKanbanQueryFilterState({ dueDate: keyword });
+                  updateQueryParams('dueDate', undefined, keyword);
                 }}
               />
             </GridItem>
@@ -399,6 +537,7 @@ export function ActionTableIssuesWidget({
                 <MenuItem key={option.value}>
                   <Checkbox
                     w="full"
+                    borderColor="gray.300"
                     isChecked={selectedFilters.includes(option.value)}
                     onChange={() => handleFilterChange(option.value)}
                   >

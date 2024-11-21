@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 
+import { useKanbanQueryFilterStateContext } from '../../../contexts/kanban-query-filters.contexts';
 import { useGetKanbanQuery } from '../../../hooks/queries/use-get-kanban.hook';
 
 import type { IIssue } from '../../../types';
@@ -49,8 +50,10 @@ export type ColumnMap = { [columnId: string]: ColumnType };
 
 export function useGetBasicData() {
   const { projectId } = useParams();
+  const { kanbanQueryState } = useKanbanQueryFilterStateContext();
+
   const { kanban, ...rest } = useGetKanbanQuery({
-    params: {},
+    params: kanbanQueryState.filters,
     projectId: projectId || '',
   });
 

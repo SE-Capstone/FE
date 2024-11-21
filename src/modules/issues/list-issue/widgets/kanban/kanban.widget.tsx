@@ -14,15 +14,22 @@ import invariant from 'tiny-invariant';
 
 import Connector from '../signalR-connection';
 import { type ColumnMap, type ColumnType, type Issue, useGetBasicData } from './data';
+import { ActionTableKanbanWidget } from '../action-table-kanban.widget';
 import Board from './pieces/board/board';
 import { BoardContext, type BoardContextValue } from './pieces/board/board-context';
 import BoardSkeleton from './pieces/board/board-skeleton';
 import { Column } from './pieces/board/column';
 import { createRegistry } from './pieces/board/registry';
 
+import type { ILabel } from '@/modules/labels/types';
+import type { IPhase } from '@/modules/phases/types';
+import type { IStatus } from '@/modules/statuses/types';
 import type { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/types';
 
 import { getAccessToken } from '@/libs/helpers';
+import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
+import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
+import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 
 type Outcome =
   | {
@@ -537,6 +544,45 @@ export default function KanbanWidget() {
     [data, instanceId, moveCard, reorderCard, reorderColumn]
   );
 
+  const [labels, setLabels] = useState<ILabel[]>([]);
+  const [statuses, setStatuses] = useState<IStatus[]>([]);
+  const [phases, setPhases] = useState<IPhase[]>([]);
+  const { listLabel, isLoading: isLoading2 } = useGetListLabelQuery({
+    params: {
+      projectId: projectId || '',
+    },
+  });
+
+  const { listStatus, isLoading: isLoading3 } = useGetListStatusQuery({
+    params: {
+      projectId: projectId || '',
+    },
+  });
+
+  const { listPhase, isLoading: isLoading5 } = useGetListPhaseQuery({
+    params: {
+      projectId: projectId || '',
+    },
+  });
+
+  useEffect(() => {
+    if (listLabel && JSON.stringify(listLabel) !== JSON.stringify(labels)) {
+      setLabels(listLabel);
+    }
+  }, [labels, listLabel]);
+
+  useEffect(() => {
+    if (listStatus && JSON.stringify(listStatus) !== JSON.stringify(statuses)) {
+      setStatuses(listStatus);
+    }
+  }, [listStatus, statuses]);
+
+  useEffect(() => {
+    if (listPhase && JSON.stringify(listPhase) !== JSON.stringify(phases)) {
+      setPhases(listPhase);
+    }
+  }, [listPhase, phases]);
+
   const contextValue: BoardContextValue = useMemo(
     () => ({
       getColumns,
@@ -550,23 +596,31 @@ export default function KanbanWidget() {
     [getColumns, reorderColumn, reorderCard, registry, moveCard, instanceId]
   );
 
-  if (isLoading || isRefetching) return <BoardSkeleton />;
+  if (isLoading || isLoading2 || isLoading3 || isLoading5 || isRefetching) return <BoardSkeleton />;
 
   return (
-    <AppProvider>
-      <BoardContext.Provider value={contextValue}>
-        {data.orderedColumnIds.length > 0 ? (
-          <Board>
-            {data.orderedColumnIds.map((columnId) => (
-              <Column key={columnId} column={data.columnMap[columnId]} />
-            ))}
-          </Board>
-        ) : (
-          <Box w="full" bg="white" p={5} rounded={2} textAlign="center">
-            <Text fontSize="20px">No data</Text>
-          </Box>
-        )}
-      </BoardContext.Provider>
-    </AppProvider>
+    <>
+      <ActionTableKanbanWidget
+        listLabel={labels}
+        listPhase={phases}
+        listStatus={statuses}
+        projectId={projectId || ''}
+      />
+      <AppProvider>
+        <BoardContext.Provider value={contextValue}>
+          {data.orderedColumnIds.length > 0 ? (
+            <Board>
+              {data.orderedColumnIds.map((columnId) => (
+                <Column key={columnId} column={data.columnMap[columnId]} />
+              ))}
+            </Board>
+          ) : (
+            <Box w="full" bg="white" p={5} rounded={2} textAlign="center">
+              <Text fontSize="20px">No data</Text>
+            </Box>
+          )}
+        </BoardContext.Provider>
+      </AppProvider>
+    </>
   );
 }

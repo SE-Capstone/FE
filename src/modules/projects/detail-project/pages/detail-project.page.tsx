@@ -14,6 +14,7 @@ import { useProjectContext } from '@/contexts/project/project-context';
 import { Error403Page } from '@/modules/errors';
 import { ListIssuePage } from '@/modules/issues/list-issue';
 import { IssuesQueryProvider } from '@/modules/issues/list-issue/contexts';
+import { KanbanQueryProvider } from '@/modules/issues/list-issue/contexts/kanban-query-filters.contexts';
 import KanbanWidget from '@/modules/issues/list-issue/widgets/kanban/kanban.widget';
 import { ListLabelPage } from '@/modules/labels';
 import { ListPhasePage } from '@/modules/phases';
@@ -124,7 +125,11 @@ export function DetailProjectPage() {
               },
               {
                 title: t('common.kanban'),
-                childrenPanel: <KanbanWidget />,
+                childrenPanel: (
+                  <KanbanQueryProvider>
+                    <KanbanWidget />
+                  </KanbanQueryProvider>
+                ),
               },
               {
                 title: i18n.language === 'vi' ? t('common.issue') : t('common.issues'),

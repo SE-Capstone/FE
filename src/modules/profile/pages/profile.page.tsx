@@ -8,9 +8,9 @@ import { useAuthentication } from '../hooks';
 
 import { Head } from '@/components/elements';
 import { PreviewImage } from '@/components/elements/preview-image';
-import { getGender, type RolesEnum } from '@/configs';
+import { getGender } from '@/configs';
 import { formatDate, phoneNumberAutoFormat } from '@/libs/helpers';
-import { BadgeRole } from '@/modules/users/detail-user/components';
+import { BadgeIssue } from '@/modules/issues/list-issue/components';
 
 export function ProfilePage() {
   const { t } = useTranslation();
@@ -35,8 +35,8 @@ export function ProfilePage() {
     },
     {
       label: t('fields.role'),
-      text: currentUser?.roleName && (
-        <BadgeRole role={currentUser.roleName as unknown as RolesEnum} />
+      text: currentUser?.roleName && currentUser?.roleColor && (
+        <BadgeIssue content={currentUser.roleName} colorScheme={currentUser.roleColor} />
       ),
     },
     {

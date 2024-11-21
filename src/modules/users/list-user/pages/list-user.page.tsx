@@ -4,7 +4,6 @@ import { Container } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { BadgeRole } from '../../detail-user/components';
 import { BadgeStatus } from '../../detail-user/components/badge-status';
 import { useUsersQueryFilterStateContext } from '../contexts';
 import { useGetListUserQuery } from '../hooks/queries';
@@ -17,6 +16,7 @@ import type { RolesEnum } from '@/configs';
 import { CustomLink, Head, TableComponent } from '@/components/elements';
 import { GENDER_VALUES } from '@/configs';
 import { getNumericalOrder } from '@/libs/helpers';
+import { BadgeIssue } from '@/modules/issues/list-issue/components';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListUserPage() {
@@ -125,9 +125,13 @@ export function ListUserPage() {
             key: 'role',
             title: t('fields.role'),
             hasSort: false,
-            Cell({ roleName }) {
-              // eslint-disable-next-line react/jsx-no-useless-fragment
-              return roleName ? <BadgeRole role={roleName as unknown as RolesEnum} /> : <></>;
+            Cell({ roleName, roleColor }) {
+              return roleName && roleColor ? (
+                <BadgeIssue content={roleName as unknown as RolesEnum} colorScheme={roleColor} />
+              ) : (
+                // eslint-disable-next-line react/jsx-no-useless-fragment
+                <></>
+              );
             },
           },
           {

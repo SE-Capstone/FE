@@ -18,13 +18,6 @@ export enum IssuePriorityEnum {
   Highest = 5,
 }
 
-export type QueryKanbanInput = {
-  title?: string;
-  statusId?: string;
-  labelId?: string;
-  priority?: IssuePriorityEnum;
-};
-
 export type QueryListIssueInput = {
   title?: string;
   statusIds?: string[];
@@ -32,10 +25,12 @@ export type QueryListIssueInput = {
   startDate?: string;
   dueDate?: string;
   reporterId?: string;
-  assigneeIds: string[];
+  assigneeIds?: string[];
   phaseIds: string[];
   priority?: IssuePriorityEnum;
 };
+
+export type QueryKanbanInput = QueryListIssueInput;
 
 export interface IUpdatedBy {
   id: string;
