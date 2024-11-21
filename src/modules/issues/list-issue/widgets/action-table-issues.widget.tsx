@@ -58,6 +58,9 @@ export function ActionTableIssuesWidget({
   const prevMembersRef = useRef<ProjectMember[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [labelChecked, setLabelChecked] = useState<string[]>(searchParams.getAll('labelIds') || []);
+  const [defaultPriority] = useState<string | undefined>(
+    searchParams.getAll('priority')[0] || undefined
+  );
   const [phaseChecked, setPhaseChecked] = useState<string[]>(searchParams.getAll('phaseIds') || []);
   const [assigneeChecked, setAssigneeChecked] = useState<string[]>(
     searchParams.getAll('assigneeIds') || []
@@ -67,6 +70,9 @@ export function ActionTableIssuesWidget({
   );
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [defaultReporter, setDefaultReporter] = useState<ProjectMember | undefined>(undefined);
+  const [defaultReporterId, _] = useState<string | undefined>(
+    searchParams.getAll('reporterId')[0] || undefined
+  );
 
   // Update filters in query params
   const updateQueryParams = useCallback(
@@ -187,13 +193,15 @@ export function ActionTableIssuesWidget({
 
   useEffect(() => {
     setIssuesQueryFilterState({
+      ...(defaultPriority && { priority: Number(defaultPriority) }),
+      ...(defaultReporterId && { reporterId: defaultReporterId }),
       labelIds: labelChecked,
       phaseIds: phaseChecked,
       statusIds: statusChecked,
       assigneeIds: assigneeChecked,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [labelChecked, phaseChecked, statusChecked, assigneeChecked]);
+  }, [labelChecked, phaseChecked, statusChecked, assigneeChecked, defaultPriority]);
 
   const filterMapping = {
     title: 'title',
@@ -289,7 +297,9 @@ export function ActionTableIssuesWidget({
     const defaults = listFilterOptions
       .filter((option) => option.default)
       .map((option) => option.value);
+
     setSelectedFilters(defaults);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listFilterOptions]);
 
   const customComponents = useMemo(
@@ -393,7 +403,9 @@ export function ActionTableIssuesWidget({
               <SearchInput
                 w="full"
                 placeholder={`${t('common.choose')} ${t('fields.startDate').toLowerCase()}...`}
-                initValue={issuesQueryState.filters.startDate || ''}
+                initValue={
+                  issuesQueryState.filters.startDate || searchParams.getAll('startDate')[0] || ''
+                }
                 type="date"
                 onHandleSearch={(keyword) => {
                   setIssuesQueryFilterState({ startDate: keyword });
@@ -407,7 +419,9 @@ export function ActionTableIssuesWidget({
               <SearchInput
                 w="full"
                 placeholder={`${t('common.choose')} ${t('fields.dueDate').toLowerCase()}...`}
-                initValue={issuesQueryState.filters.dueDate || ''}
+                initValue={
+                  issuesQueryState.filters.dueDate || searchParams.getAll('dueDate')[0] || ''
+                }
                 type="date"
                 onHandleSearch={(keyword) => {
                   setIssuesQueryFilterState({ dueDate: keyword });
