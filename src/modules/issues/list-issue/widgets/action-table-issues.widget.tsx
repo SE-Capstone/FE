@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import DropdownMenu, {
   DropdownItemCheckbox,
@@ -55,6 +55,7 @@ export function ActionTableIssuesWidget({
 }) {
   const { t } = useTranslation();
   const { currentUser } = useAuthentication();
+  const prevMembersRef = useRef<ProjectMember[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [labelChecked, setLabelChecked] = useState<string[]>(searchParams.getAll('labelIds') || []);
   const [phaseChecked, setPhaseChecked] = useState<string[]>(searchParams.getAll('phaseIds') || []);
@@ -65,6 +66,7 @@ export function ActionTableIssuesWidget({
     searchParams.getAll('statusIds') || []
   );
   const [members, setMembers] = useState<ProjectMember[]>([]);
+  const [defaultReporter, setDefaultReporter] = useState<ProjectMember | undefined>(undefined);
 
   // Update filters in query params
   const updateQueryParams = useCallback(
@@ -101,7 +103,7 @@ export function ActionTableIssuesWidget({
   });
 
   useEffect(() => {
-    if (listMember && JSON.stringify(listMember) !== JSON.stringify(members)) {
+    if (listMember && JSON.stringify(listMember) !== JSON.stringify(prevMembersRef.current)) {
       const updatedMembers = listMember.map((member) => ({
         id: member.id,
         fullName: '',
@@ -125,8 +127,21 @@ export function ActionTableIssuesWidget({
         updatedMembers.unshift(currentUserMember);
       }
       setMembers(updatedMembers);
+      prevMembersRef.current = updatedMembers;
+
+      const reporterId = searchParams.getAll('reporterId')[0];
+      if (reporterId) {
+        const reporter = updatedMembers.find((m) => m.id === reporterId);
+        setDefaultReporter({
+          id: reporterId,
+          fullName: reporter?.fullName || '',
+          avatar: reporter?.avatar || '',
+          userName: reporter?.userName || '',
+        });
+      }
     }
-  }, [listMember, currentUser, t, members]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listMember, currentUser, t]);
 
   const toggle = useCallback(
     (name: string, field: 'phase' | 'label' | 'assignee' | 'status') => {
@@ -266,7 +281,7 @@ export function ActionTableIssuesWidget({
           default: searchParams.getAll('dueDate').length > 0,
         },
       ].filter(Boolean),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [t]
   );
 
@@ -282,7 +297,6 @@ export function ActionTableIssuesWidget({
       Option: (props) => CustomOptionComponentChakraReactSelect(props, 'sm'),
       SingleValue: (props) => CustomSingleValueComponentChakraReactSelect(props, false),
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -348,6 +362,7 @@ export function ActionTableIssuesWidget({
           {selectedFilters.includes('reporterId') && (
             <GridItem colSpan={1}>
               <CustomChakraReactSelect
+                key={defaultReporter?.id}
                 isSearchable={false}
                 size="sm"
                 placeholder={`${t('common.choose')} ${t('fields.reporter').toLowerCase()}`}
@@ -357,16 +372,11 @@ export function ActionTableIssuesWidget({
                   image: member.avatar,
                 }))}
                 defaultValue={
-                  searchParams.getAll('reporterId').length > 0
-                    ? {
-                        label:
-                          members.find((m) => m.id === searchParams.getAll('reporterId')[0])
-                            ?.userName || '',
-                        value: searchParams.getAll('reporterId')[0],
-                        image: members.find((m) => m.id === searchParams.getAll('reporterId')[0])
-                          ?.avatar,
-                      }
-                    : undefined
+                  defaultReporter && {
+                    label: defaultReporter.userName,
+                    value: defaultReporter.id,
+                    image: defaultReporter.avatar,
+                  }
                 }
                 components={customComponents}
                 onChange={(opt) => {
