@@ -84,6 +84,9 @@ export function UsersAsyncSelect<TFormValues extends FieldValues, IsMulti extend
   >['chakraStyles'] = {
     menuList: (provided) => ({
       ...provided,
+      borderColor: '#EDF2F7',
+      boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+      rounded: '5px',
       maxHeight: '200px',
       py: 0,
       shadow: 'lg',

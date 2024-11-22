@@ -67,11 +67,9 @@ export function useUpsertIssueMutation({ configs, reset, id, isUpdate, isRedirec
         queryKey: allQueryKeysStore.issue['issues/kanban'].queryKey,
       });
 
-      if (isUpdate) {
-        queryClient.invalidateQueries({
-          queryKey: allQueryKeysStore.issue.detail._def,
-        });
-      }
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.issue.detail._def,
+      });
 
       notify({
         type: 'success',

@@ -139,7 +139,7 @@ const MemberSetting = ({ members, projectId }: { members: ProjectMember[]; proje
                       color: 'textColor',
                     }}
                   >
-                    {user.userName}
+                    {user.fullName} ({user.userName})
                   </Td>
                   <Td border="none" py={2} isNumeric={false}>
                     <InlineEditPositionSelect

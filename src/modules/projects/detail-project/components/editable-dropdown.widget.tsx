@@ -52,6 +52,9 @@ export const InlineEditPositionSelect = ({
 
       menuList: (provide) => ({
         ...provide,
+        borderColor: '#EDF2F7',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        rounded: '5px',
         width: 'max-content',
         maxWidth: '300px',
       }),
