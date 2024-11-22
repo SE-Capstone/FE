@@ -1,47 +1,90 @@
+import { useEffect } from 'react';
+
 import { Button, Icon, Stack } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { MdOutlineFileUpload } from 'react-icons/md';
 
-import { useCreateApplicantHook } from '../hooks/mutations';
+import { useUpsertApplicantHook } from '../hooks/mutations';
+
+import type { IApplicant } from '../types';
 
 import { CustomFormProvider, CustomInput, FileUpload, ModalBase } from '@/components/elements';
-import { phoneNumberAutoFormat } from '@/libs/helpers';
+import { formatDate, phoneNumberAutoFormat } from '@/libs/helpers';
 
-export interface AddNewApplicantWidgetProps {
-  children: React.ReactElement;
+export interface UpsertApplicantWidgetProps {
+  applicant?: IApplicant;
+  isUpdate?: boolean;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export function AddNewApplicantWidget(props: AddNewApplicantWidgetProps) {
+export function UpsertApplicantWidget(props: UpsertApplicantWidgetProps) {
   const { t } = useTranslation();
-  const { children } = props;
+  const { applicant, isUpdate, isOpen, onClose } = props;
 
-  const { data, formCreateApplicant, handleCreateApplicant, isLoading, reset } =
-    useCreateApplicantHook();
+  const { formUpsertApplicant, handleUpsertApplicant, isLoading, reset } = useUpsertApplicantHook({
+    id: applicant?.id,
+    isUpdate,
+    onClose,
+    cvLink: applicant?.cvLink,
+  });
 
   const {
     register,
     control,
-    formState: { errors },
-  } = formCreateApplicant;
+    formState: { errors, isDirty },
+    reset: resetForm,
+  } = formUpsertApplicant;
+
+  useEffect(() => {
+    if (applicant) {
+      resetForm(
+        {
+          name: applicant.name || '',
+          email: applicant.email || '',
+          phoneNumber: applicant.phoneNumber || '',
+          startDate: applicant.startDate
+            ? (formatDate({
+                date: applicant.startDate,
+                format: 'YYYY-MM-DD',
+              }) as unknown as Date)
+            : undefined,
+          cvFile: applicant.cvLink || undefined,
+        },
+        {
+          keepDirty: false,
+        }
+      );
+    }
+  }, [applicant, resetForm]);
 
   return (
     <ModalBase
       size="xl"
-      isDone={!!data}
-      title={`${t('common.create')} ${t('common.applicant').toLowerCase()}`}
-      triggerButton={() => children}
       renderFooter={() => (
-        <Button form="form-create-applicant" w={20} type="submit" isDisabled={isLoading}>
+        <Button
+          form="form-upsert-applicant"
+          w={20}
+          type="submit"
+          isDisabled={isLoading || (isUpdate && !isDirty)}
+        >
           {t('common.save')}
         </Button>
       )}
+      title={
+        isUpdate
+          ? `${t('common.update')} ${t('common.applicant').toLowerCase()}`
+          : `${t('common.create')} ${t('common.applicant').toLowerCase()}`
+      }
+      isOpen={isOpen}
+      onClose={onClose}
       onCloseComplete={reset}
     >
       <CustomFormProvider
-        id="form-create-applicant"
-        form={formCreateApplicant}
-        onSubmit={handleCreateApplicant}
+        id="form-upsert-applicant"
+        form={formUpsertApplicant}
+        onSubmit={handleUpsertApplicant}
       >
         <Stack spacing={5}>
           <CustomInput

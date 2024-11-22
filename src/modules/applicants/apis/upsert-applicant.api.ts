@@ -11,8 +11,9 @@ import { makeRequest } from '@/libs/react-query';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
 
-interface ICreateApplicantRequest {
+interface IUpsertApplicantRequest {
   body: {
+    id?: string;
     name: string;
     email: string;
     phoneNumber: string;
@@ -21,11 +22,13 @@ interface ICreateApplicantRequest {
   };
 }
 
-function mutation(req: ICreateApplicantRequest) {
+function mutation(req: IUpsertApplicantRequest, isUpdate = false) {
   const { body } = req;
   return makeRequest<typeof body, IResponseApi<IApplicant>>({
-    method: 'POST',
-    url: ALL_ENDPOINT_URL_STORE.applicants.create,
+    method: isUpdate ? 'PUT' : 'POST',
+    url: isUpdate
+      ? ALL_ENDPOINT_URL_STORE.applicants.update
+      : ALL_ENDPOINT_URL_STORE.applicants.create,
     data: body,
     isFormData: true,
   });
@@ -34,28 +37,26 @@ function mutation(req: ICreateApplicantRequest) {
 interface Props {
   configs?: MutationConfig<typeof mutation>;
   reset?: () => void;
+  onClose?: () => void;
+  isUpdate?: boolean;
 }
 
-export function useCreateApplicantMutation({ configs, reset }: Props = {}) {
+export function useUpsertApplicantMutation({ configs, reset, onClose, isUpdate }: Props = {}) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: mutation,
+    mutationFn: (req) => mutation(req, isUpdate),
 
-    onSuccess: (data) => {
-      if (data.statusCode !== 201) {
-        notify({ type: 'error', message: DEFAULT_MESSAGE(t).SOMETHING_WRONG });
-        return;
-      }
-
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.applicant.applicants.queryKey,
       });
       notify({
         type: 'success',
-        message: DEFAULT_MESSAGE(t).CREATE_SUCCESS,
+        message: isUpdate ? DEFAULT_MESSAGE(t).UPDATE_SUCCESS : DEFAULT_MESSAGE(t).CREATE_SUCCESS,
       });
       reset && reset();
+      onClose && onClose();
     },
 
     onError(error) {

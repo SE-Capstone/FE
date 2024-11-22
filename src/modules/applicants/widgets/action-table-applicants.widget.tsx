@@ -1,9 +1,9 @@
-import { Box, Button, Grid, GridItem, HStack, Spacer } from '@chakra-ui/react';
+import { Box, Button, Grid, GridItem, HStack, Spacer, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { AddNewApplicantWidget } from './add-new-applicant.widget';
 import { useApplicantsQueryFilterStateContext } from '../contexts';
+import { UpsertApplicantWidget } from './upsert-applicant.widget';
 
 import { SearchInput } from '@/components/elements';
 
@@ -12,6 +12,7 @@ export function ActionTableApplicantsWidget() {
   const { applicantsQueryState, setApplicantsQueryFilterState } =
     useApplicantsQueryFilterStateContext();
   const { pathname } = useLocation();
+  const disclosureModal = useDisclosure();
 
   const isShowFilterApplicant = pathname.includes('applicants');
 
@@ -73,9 +74,13 @@ export function ActionTableApplicantsWidget() {
         {isShowFilterApplicant && (
           <>
             <Spacer />
-            <AddNewApplicantWidget>
-              <Button leftIcon={<>+</>}>{t('common.create')}</Button>
-            </AddNewApplicantWidget>
+            <Button leftIcon={<>+</>} onClick={disclosureModal.onOpen}>
+              {t('common.create')}
+            </Button>
+            <UpsertApplicantWidget
+              isOpen={disclosureModal.isOpen}
+              onClose={disclosureModal.onClose}
+            />
           </>
         )}
       </HStack>

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { useCreateApplicantMutation } from '../../apis/create-applicant.api';
+import { useUpsertApplicantMutation } from '../../apis/upsert-applicant.api';
 import { applicantFormSchema } from '../../validations/applicants.validations';
 
 import type { ApplicantFormValues } from '../../validations/applicants.validations';
@@ -10,24 +10,43 @@ import type { ApplicantFormValues } from '../../validations/applicants.validatio
 import { formatDate } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
-export function useCreateApplicantHook() {
+export function useUpsertApplicantHook({
+  id,
+  cvLink,
+  isUpdate,
+  onClose,
+}: {
+  id?: string;
+  cvLink?: string;
+  isUpdate?: boolean;
+  onClose: () => void;
+}) {
   const { t } = useTranslation();
-  const formCreateApplicant = useFormWithSchema({
+  const formUpsertApplicant = useFormWithSchema({
     schema: applicantFormSchema(t),
   });
 
-  const { reset } = formCreateApplicant;
+  const { reset } = formUpsertApplicant;
 
-  const { mutate, isPending: isLoading, ...restData } = useCreateApplicantMutation({ reset });
+  const {
+    mutate,
+    isPending: isLoading,
+    ...restData
+  } = useUpsertApplicantMutation({ reset, isUpdate, onClose });
 
-  const handleCreateApplicant = useCallback(
+  const handleUpsertApplicant = useCallback(
     async (values: ApplicantFormValues) => {
       if (isLoading) return;
+
+      if (!values?.cvFile && isUpdate) {
+        values.cvFile = cvLink;
+      }
 
       try {
         await mutate({
           body: {
             ...values,
+            id,
             startDate: values.startDate
               ? formatDate({
                   date: values.startDate,
@@ -38,12 +57,13 @@ export function useCreateApplicantHook() {
         });
       } catch (error) {}
     },
-    [mutate, isLoading]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isLoading, mutate, id]
   );
 
   return {
-    formCreateApplicant,
-    handleCreateApplicant,
+    formUpsertApplicant,
+    handleUpsertApplicant,
     isLoading,
     ...restData,
   };

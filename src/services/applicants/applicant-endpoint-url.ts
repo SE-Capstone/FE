@@ -6,7 +6,7 @@ const ENDPOINT_QUERIES = {
 
 const ENDPOINT_MUTATIONS = {
   delete: (applicantId: StringNumeric) => `applicants/${applicantId}`,
-  update: (applicantId: StringNumeric) => `applicants/${applicantId}`,
+  update: `applicants`,
   create: 'applicants',
 } as const;
 

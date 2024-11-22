@@ -1,9 +1,10 @@
-import { Icon } from '@chakra-ui/react';
+import { Icon, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
 import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
 
 import { useRemoveApplicantHook } from '../../hooks/mutations/use-remove-applicant.hooks';
+import { UpsertApplicantWidget } from '../upsert-applicant.widget';
 
 import type { IApplicant } from '../../types';
 
@@ -16,6 +17,7 @@ interface ActionMenuTableApplicantsProps {
 export function ActionMenuTableApplicants({ applicant }: ActionMenuTableApplicantsProps) {
   const { t } = useTranslation();
   const { handleRemoveApplicant } = useRemoveApplicantHook(applicant.id);
+  const disclosureModal = useDisclosure();
 
   if (!applicant || !applicant.id) return null;
 
@@ -24,7 +26,11 @@ export function ActionMenuTableApplicants({ applicant }: ActionMenuTableApplican
     {
       label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
-      onClick: () => {},
+      onClick: () => {
+        if (!applicant.id) return;
+
+        disclosureModal.onOpen();
+      },
     },
     {
       type: 'danger',
@@ -35,8 +41,16 @@ export function ActionMenuTableApplicants({ applicant }: ActionMenuTableApplican
   ].filter(Boolean);
 
   return (
-    <ActionMenuTable actionMenuItems={menuOptions}>
-      {({ isOpen }) => <AdditionalFeature isOpen={isOpen} />}
-    </ActionMenuTable>
+    <>
+      <UpsertApplicantWidget
+        applicant={applicant}
+        isUpdate
+        isOpen={disclosureModal.isOpen}
+        onClose={disclosureModal.onClose}
+      />
+      <ActionMenuTable actionMenuItems={menuOptions}>
+        {({ isOpen }) => <AdditionalFeature isOpen={isOpen} />}
+      </ActionMenuTable>
+    </>
   );
 }

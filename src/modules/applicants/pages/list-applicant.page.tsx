@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 
 import { Container, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 
 import { useApplicantsQueryFilterStateContext } from '../contexts';
 import { useGetListApplicantQuery } from '../hooks/queries';
@@ -13,13 +12,11 @@ import type { ColumnsProps } from '@/components/elements';
 
 import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
 import { formatDate, getNumericalOrder, phoneNumberAutoFormat } from '@/libs/helpers';
-import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListApplicantPage() {
   const { t } = useTranslation();
   const { applicantsQueryState, resetApplicantsQueryState } =
     useApplicantsQueryFilterStateContext();
-  const { pathname } = useLocation();
 
   const { listApplicant, meta, isError, isLoading, handlePaginate, isRefetching } =
     useGetListApplicantQuery({
