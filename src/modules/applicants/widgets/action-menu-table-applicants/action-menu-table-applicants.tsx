@@ -1,7 +1,9 @@
 import { Icon } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { MdVisibility } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
+import { BiTrash } from 'react-icons/bi';
+import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
+
+import { useRemoveApplicantHook } from '../../hooks/mutations/use-remove-applicant.hooks';
 
 import type { IApplicant } from '../../types';
 
@@ -13,15 +15,22 @@ interface ActionMenuTableApplicantsProps {
 
 export function ActionMenuTableApplicants({ applicant }: ActionMenuTableApplicantsProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { handleRemoveApplicant } = useRemoveApplicantHook(applicant.id);
 
   if (!applicant || !applicant.id) return null;
 
+  // Todo: permissions
   const menuOptions = [
     {
-      label: t('actions.viewDetail'),
-      icon: <Icon as={MdVisibility} boxSize={5} />,
-      onClick: () => navigate(`/applicants/${applicant.id}`),
+      label: t('actions.edit'),
+      icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
+      onClick: () => {},
+    },
+    {
+      type: 'danger',
+      label: t('actions.delete'),
+      icon: <Icon as={BiTrash} boxSize={5} />,
+      onClick: () => handleRemoveApplicant(applicant),
     },
   ].filter(Boolean);
 

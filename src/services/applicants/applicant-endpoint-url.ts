@@ -2,10 +2,10 @@ import type { StringNumeric } from '@/types';
 
 const ENDPOINT_QUERIES = {
   list: 'applicants',
-  detail: (applicantId: StringNumeric) => `applicants/${applicantId}`,
 } as const;
 
 const ENDPOINT_MUTATIONS = {
+  delete: (applicantId: StringNumeric) => `applicants/${applicantId}`,
   update: (applicantId: StringNumeric) => `applicants/${applicantId}`,
   create: 'applicants',
 } as const;

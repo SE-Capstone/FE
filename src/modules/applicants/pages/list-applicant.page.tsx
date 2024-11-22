@@ -52,15 +52,8 @@ export function ListApplicantPage() {
             key: 'name',
             title: t('fields.name'),
             hasSort: false,
-            Cell({ name, id }) {
-              return (
-                <CustomLink
-                  to={pathname.includes(APP_PATHS.listApplicant) ? String(id) : '#'}
-                  noOfLines={1}
-                >
-                  {name}
-                </CustomLink>
-              );
+            Cell({ name }) {
+              return <>{name}</>;
             },
           },
           {
@@ -116,7 +109,7 @@ export function ListApplicantPage() {
         ],
       },
     ],
-    [meta.pageIndex, meta.pageSize, pathname, t]
+    [meta.pageIndex, meta.pageSize, t]
   );
 
   return (

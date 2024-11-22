@@ -58,9 +58,6 @@ export function ActionTableKanbanWidget({
   const prevMembersRef = useRef<ProjectMember[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [labelChecked, setLabelChecked] = useState<string[]>(searchParams.getAll('labelIds') || []);
-  const [defaultPriority] = useState<string | undefined>(
-    searchParams.getAll('priority')[0] || undefined
-  );
   const [phaseChecked, setPhaseChecked] = useState<string[]>(searchParams.getAll('phaseIds') || []);
   const [assigneeChecked, setAssigneeChecked] = useState<string[]>(
     searchParams.getAll('assigneeIds') || []
@@ -70,9 +67,6 @@ export function ActionTableKanbanWidget({
   );
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [defaultReporter, setDefaultReporter] = useState<ProjectMember | undefined>(undefined);
-  const [defaultReporterId, _] = useState<string | undefined>(
-    searchParams.getAll('reporterId')[0] || undefined
-  );
 
   // Update filters in query params
   const updateQueryParams = useCallback(
@@ -192,16 +186,20 @@ export function ActionTableKanbanWidget({
   );
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
     setKanbanQueryFilterState({
-      ...(defaultPriority && { priority: Number(defaultPriority) }),
-      ...(defaultReporterId && { reporterId: defaultReporterId }),
+      ...(params.get('title') && { title: params.get('title') || '' }),
+      ...(params.get('startDate') && { startDate: params.get('startDate') || '' }),
+      ...(params.get('dueDate') && { dueDate: params.get('dueDate') || '' }),
+      ...(params.get('priority') && { priority: Number(params.get('priority')) }),
+      ...(params.get('reporterId') && { reporterId: params.get('reporterId') || '' }),
       labelIds: labelChecked,
       phaseIds: phaseChecked,
       statusIds: statusChecked,
       assigneeIds: assigneeChecked,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [labelChecked, phaseChecked, statusChecked, assigneeChecked, defaultPriority]);
+  }, [labelChecked, phaseChecked, statusChecked, assigneeChecked]);
 
   const filterMapping = {
     title: 'title',

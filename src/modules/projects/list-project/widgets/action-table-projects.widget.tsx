@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   Box,
@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { FiFilter } from 'react-icons/fi';
+import { useSearchParams } from 'react-router-dom';
 
 import { UpsertProjectWidget } from './upsert-project.widget';
 import { BadgeStatus } from '../../detail-project/components';
@@ -31,7 +32,9 @@ export function ActionTableProjectsWidget() {
   const { permissions } = useAuthentication();
   const disclosureModal = useDisclosure();
   const { projectsQueryState, setProjectsQueryFilterState } = useProjectsQueryFilterStateContext();
+
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const filterMapping = {
     search: 'search',
@@ -54,6 +57,21 @@ export function ActionTableProjectsWidget() {
     });
   };
 
+  const updateQueryParams = useCallback(
+    (key: string, value?: string) => {
+      setSearchParams((prevParams) => {
+        const params = new URLSearchParams(prevParams);
+        if (value) {
+          params.set(key, value);
+        } else {
+          params.delete(key);
+        }
+        return params;
+      });
+    },
+    [setSearchParams]
+  );
+
   const listFilterOptions = useMemo(
     () =>
       [
@@ -65,29 +83,51 @@ export function ActionTableProjectsWidget() {
         {
           value: 'startDate',
           label: t('fields.startDate'),
+          default: searchParams.getAll('startDate').length > 0,
         },
         {
           value: 'endDate',
           label: t('fields.endDate'),
+          default: searchParams.getAll('endDate').length > 0,
         },
         permissions[PermissionEnum.READ_ALL_PROJECTS] && {
           value: 'isVisible',
           label: `${t('fields.status')} ${t('fields.visible').toLowerCase()}`,
+          default: searchParams.getAll('isVisible').length > 0,
         },
         {
           value: 'status',
           label: `${t('fields.status')} ${t('common.project').toLowerCase()}`,
+          default: searchParams.getAll('status').length > 0,
         },
       ].filter(Boolean),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [permissions, t]
   );
 
+  // Set default filters based on URL params and options
   useEffect(() => {
     const defaults = listFilterOptions
       .filter((option) => option.default)
       .map((option) => option.value);
+
     setSelectedFilters(defaults);
   }, [listFilterOptions]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setProjectsQueryFilterState({
+      ...(params.get('search') && { search: params.get('search') || '' }),
+      ...(params.get('status') && { status: Number(params.get('status')) }),
+      ...(params.get('isVisible') &&
+        permissions[PermissionEnum.READ_ALL_PROJECTS] && {
+          isVisible: params.get('isVisible') === 'true',
+        }),
+      ...(params.get('startDate') && { startDate: params.get('startDate') || '' }),
+      ...(params.get('endDate') && { endDate: params.get('endDate') || '' }),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [permissions]);
 
   return (
     <Box p={5} py={3} mb={6} rounded={2.5} bg="white" w="full" shadow="0 1px 4px 0 #0002">
@@ -114,6 +154,7 @@ export function ActionTableProjectsWidget() {
                 initValue={projectsQueryState.filters.search || ''}
                 onHandleSearch={(keyword) => {
                   setProjectsQueryFilterState({ search: keyword });
+                  updateQueryParams('search', keyword);
                 }}
               />
             </GridItem>
@@ -126,6 +167,7 @@ export function ActionTableProjectsWidget() {
                 type="date"
                 onHandleSearch={(keyword) => {
                   setProjectsQueryFilterState({ startDate: keyword });
+                  updateQueryParams('startDate', keyword);
                 }}
               />
             </GridItem>
@@ -138,6 +180,7 @@ export function ActionTableProjectsWidget() {
                 type="date"
                 onHandleSearch={(keyword) => {
                   setProjectsQueryFilterState({ endDate: keyword });
+                  updateQueryParams('endDate', keyword);
                 }}
               />
             </GridItem>
@@ -154,10 +197,19 @@ export function ActionTableProjectsWidget() {
                   label: <BadgeStatus status={s} />,
                   value: s,
                 }))}
+                defaultValue={
+                  searchParams.getAll('status').length > 0
+                    ? {
+                        label: <BadgeStatus status={searchParams.getAll('status')[0] as any} />,
+                        value: Number(searchParams.getAll('status')[0]) as any,
+                      }
+                    : undefined
+                }
                 onChange={(opt) => {
                   setProjectsQueryFilterState({
-                    status: opt?.value ? opt.value : undefined,
+                    status: opt?.value || undefined,
                   });
+                  updateQueryParams('status', opt?.value as any);
                 }}
               />
             </GridItem>
@@ -171,10 +223,21 @@ export function ActionTableProjectsWidget() {
                   'fields.visible'
                 ).toLowerCase()}`}
                 options={PROJECT_VISIBILITY_OPTIONS}
+                defaultValue={
+                  searchParams.getAll('isVisible').length > 0
+                    ? {
+                        label: (searchParams.getAll('isVisible')[0] === 'true'
+                          ? 'Visible'
+                          : 'Invisible') as any,
+                        value: searchParams.getAll('isVisible')[0],
+                      }
+                    : undefined
+                }
                 onChange={(opt) => {
                   setProjectsQueryFilterState({
-                    isVisible: opt?.value ? opt.value === 'true' : undefined,
+                    isVisible: opt?.value === 'true',
                   });
+                  updateQueryParams('isVisible', opt?.value);
                 }}
               />
             </GridItem>
