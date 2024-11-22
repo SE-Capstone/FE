@@ -67,7 +67,15 @@ type BoardState = {
 export default function KanbanWidget() {
   const { projectId } = useParams();
   const accessToken = getAccessToken();
+  const [shadowColumnMap, setShadowColumnMap] = useState<ColumnMap>({});
   const { columnMap, orderedColumnIds, isLoading, refetch, isRefetching } = useGetBasicData();
+
+  useEffect(() => {
+    if (JSON.stringify(columnMap) !== JSON.stringify(shadowColumnMap)) {
+      setShadowColumnMap(columnMap);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columnMap]);
 
   const [tabId, setTabId] = useState<string | null>(null);
 
@@ -110,7 +118,7 @@ export default function KanbanWidget() {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, isRefetching]);
+  }, [isLoading, isRefetching, shadowColumnMap]);
 
   const stableData = useRef(data);
   useEffect(() => {
@@ -596,8 +604,6 @@ export default function KanbanWidget() {
     [getColumns, reorderColumn, reorderCard, registry, moveCard, instanceId]
   );
 
-  if (isLoading || isLoading2 || isLoading3 || isLoading5 || isRefetching) return <BoardSkeleton />;
-
   return (
     <>
       <ActionTableKanbanWidget
@@ -606,21 +612,25 @@ export default function KanbanWidget() {
         listStatus={statuses}
         projectId={projectId || ''}
       />
-      <AppProvider>
-        <BoardContext.Provider value={contextValue}>
-          {data.orderedColumnIds.length > 0 ? (
-            <Board>
-              {data.orderedColumnIds.map((columnId) => (
-                <Column key={columnId} column={data.columnMap[columnId]} />
-              ))}
-            </Board>
-          ) : (
-            <Box w="full" bg="white" p={5} rounded={2} textAlign="center">
-              <Text fontSize="20px">No data</Text>
-            </Box>
-          )}
-        </BoardContext.Provider>
-      </AppProvider>
+      {isLoading || isLoading2 || isLoading3 || isLoading5 || isRefetching ? (
+        <BoardSkeleton />
+      ) : (
+        <AppProvider>
+          <BoardContext.Provider value={contextValue}>
+            {data.orderedColumnIds.length > 0 ? (
+              <Board>
+                {data.orderedColumnIds.map((columnId) => (
+                  <Column key={columnId} column={data.columnMap[columnId]} />
+                ))}
+              </Board>
+            ) : (
+              <Box w="full" bg="white" p={5} rounded={2} textAlign="center">
+                <Text fontSize="20px">No data</Text>
+              </Box>
+            )}
+          </BoardContext.Provider>
+        </AppProvider>
+      )}
     </>
   );
 }
