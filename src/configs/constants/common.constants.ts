@@ -65,7 +65,7 @@ export const USER_STATUS_OPTIONS = [
     value: UserStatusEnum.Active,
   },
   {
-    label: 'Inctive',
+    label: 'Inactive',
     value: UserStatusEnum.Inactive,
   },
 ] as const;

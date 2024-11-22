@@ -13,7 +13,7 @@ import type { IUser } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 import type { RolesEnum } from '@/configs';
 
-import { CustomLink, Head, TableComponent } from '@/components/elements';
+import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
 import { GENDER_VALUES } from '@/configs';
 import { getNumericalOrder } from '@/libs/helpers';
 import { BadgeIssue } from '@/modules/issues/list-issue/components';
@@ -21,7 +21,7 @@ import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListUserPage() {
   const { t } = useTranslation();
-  const { usersQueryState } = useUsersQueryFilterStateContext();
+  const { usersQueryState, resetUsersQueryState } = useUsersQueryFilterStateContext();
   const { pathname } = useLocation();
 
   const { listUser, meta, isError, isLoading, handlePaginate } = useGetListUserQuery({
@@ -151,7 +151,11 @@ export function ListUserPage() {
   return (
     <>
       <Head title="Users" />
-      <Container maxW="container.2xl" centerContent>
+      <StateHandler
+        showLoader={isLoading}
+        showError={!!isError}
+        retryHandler={resetUsersQueryState}
+      >
         <ActionTableUsersWidget />
         <TableComponent
           currentPage={meta.pageIndex}
@@ -164,7 +168,7 @@ export function ListUserPage() {
           additionalFeature={(user) => <ActionMenuTableUsers user={user} />}
           onPageChange={handlePaginate}
         />
-      </Container>
+      </StateHandler>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 
 import {
   Box,
@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { FiFilter } from 'react-icons/fi';
+import { useSearchParams } from 'react-router-dom';
 
 import { AddNewUserWidget } from './add-new-user.widget';
 import { useUsersQueryFilterStateContext } from '../contexts';
@@ -34,14 +35,21 @@ export function ActionTableUsersWidget() {
   const { t } = useTranslation();
   const { usersQueryState, setUsersQueryFilterState } = useUsersQueryFilterStateContext();
   const { permissions } = useAuthentication();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [roles, setRoles] = useState<IRole[]>([]);
+  const [defaultRole, setDefaultRole] = useState<IRole | undefined>(undefined);
 
   const { roles: listRole } = useGetRoles({});
 
   useEffect(() => {
     if (JSON.stringify(roles) !== JSON.stringify(listRole)) {
       setRoles(listRole);
+    }
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('roleId')) {
+      const role = listRole.find((r) => r.id === params.get('roleId'));
+      setDefaultRole(role);
     }
   }, [listRole, roles]);
 
@@ -53,6 +61,21 @@ export function ActionTableUsersWidget() {
     status: 'status',
     gender: 'gender',
   };
+
+  const updateQueryParams = useCallback(
+    (key: string, value?: string) => {
+      setSearchParams((prevParams) => {
+        const params = new URLSearchParams(prevParams);
+        if (value) {
+          params.set(key, value);
+        } else {
+          params.delete(key);
+        }
+        return params;
+      });
+    },
+    [setSearchParams]
+  );
 
   const handleFilterChange = (filter: string) => {
     setSelectedFilters((prev) => {
@@ -77,24 +100,30 @@ export function ActionTableUsersWidget() {
       {
         value: 'roleId',
         label: t('fields.role'),
+        default: searchParams.has('roleId'),
       },
       {
         value: 'phone',
         label: t('fields.phone'),
+        default: searchParams.has('phone'),
       },
       {
         value: 'email',
         label: t('fields.email'),
+        default: searchParams.has('email'),
       },
       {
         value: 'status',
         label: t('fields.status'),
+        default: searchParams.has('status'),
       },
       {
         value: 'gender',
         label: t('fields.gender'),
+        default: searchParams.has('gender'),
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [t]
   );
 
@@ -102,8 +131,22 @@ export function ActionTableUsersWidget() {
     const defaults = listFilterOptions
       .filter((option) => option.default)
       .map((option) => option.value);
+
     setSelectedFilters(defaults);
   }, [listFilterOptions]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setUsersQueryFilterState({
+      ...(params.get('fullName') && { fullName: params.get('fullName') || '' }),
+      ...(params.get('roleId') && { roleId: params.get('roleId') || '' }),
+      ...(params.get('phone') && { phone: params.get('phone') || '' }),
+      ...(params.get('email') && { email: params.get('email') || '' }),
+      ...(params.get('status') && { status: Number(params.get('status')) }),
+      ...(params.get('gender') && { gender: Number(params.get('gender')) }),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box p={5} py={3} mb={6} rounded={2.5} bg="white" w="full" shadow="0 1px 4px 0 #0002">
@@ -128,6 +171,7 @@ export function ActionTableUsersWidget() {
                 initValue={usersQueryState.filters.fullName || ''}
                 onHandleSearch={(keyword) => {
                   setUsersQueryFilterState({ fullName: keyword });
+                  updateQueryParams('fullName', keyword);
                 }}
               />
             </GridItem>
@@ -139,6 +183,7 @@ export function ActionTableUsersWidget() {
                 initValue={usersQueryState.filters.email || ''}
                 onHandleSearch={(keyword) => {
                   setUsersQueryFilterState({ email: keyword });
+                  updateQueryParams('email', keyword);
                 }}
               />
             </GridItem>
@@ -154,6 +199,10 @@ export function ActionTableUsersWidget() {
                   setUsersQueryFilterState({
                     phone: cleanPhoneNumber(phoneNumberAutoFormat(keyword || '')),
                   });
+                  updateQueryParams(
+                    'phone',
+                    cleanPhoneNumber(phoneNumberAutoFormat(keyword || ''))
+                  );
                 }}
               />
             </GridItem>
@@ -165,10 +214,24 @@ export function ActionTableUsersWidget() {
                 size="sm"
                 placeholder={`${t('common.filterBy')} ${t('fields.gender').toLowerCase()}`}
                 options={GENDER_OPTIONS}
+                defaultValue={
+                  searchParams.get('gender')
+                    ? {
+                        label:
+                          searchParams.get('gender') === '1'
+                            ? 'Male'
+                            : searchParams.get('gender') === '2'
+                            ? 'Female'
+                            : 'Others' || '',
+                        value: Number(searchParams.get('gender')) as any,
+                      }
+                    : undefined
+                }
                 onChange={(opt) => {
                   setUsersQueryFilterState({
                     gender: opt?.value ? opt.value : undefined,
                   });
+                  updateQueryParams('gender', opt?.value as any);
                 }}
               />
             </GridItem>
@@ -180,10 +243,19 @@ export function ActionTableUsersWidget() {
                 size="sm"
                 placeholder={`${t('common.filterBy')} ${t('fields.status').toLowerCase()}`}
                 options={USER_STATUS_OPTIONS}
+                defaultValue={
+                  searchParams.get('status')
+                    ? {
+                        label: searchParams.get('status') === '1' ? 'Active' : 'Inactive' || '',
+                        value: Number(searchParams.get('status')) as any,
+                      }
+                    : undefined
+                }
                 onChange={(opt) => {
                   setUsersQueryFilterState({
                     status: opt?.value ? opt.value : undefined,
                   });
+                  updateQueryParams('status', opt?.value as any);
                 }}
               />
             </GridItem>
@@ -191,6 +263,7 @@ export function ActionTableUsersWidget() {
           {selectedFilters.includes('roleId') && (
             <GridItem>
               <CustomChakraReactSelect
+                key={defaultRole?.id}
                 isSearchable
                 size="sm"
                 placeholder={`${t('common.filterBy')} ${t('fields.role').toLowerCase()}`}
@@ -198,10 +271,21 @@ export function ActionTableUsersWidget() {
                   label: <BadgeIssue content={role.name} colorScheme={role.color} />,
                   value: role.id,
                 }))}
+                defaultValue={
+                  searchParams.get('roleId') && defaultRole
+                    ? {
+                        label: (
+                          <BadgeIssue content={defaultRole.name} colorScheme={defaultRole.color} />
+                        ),
+                        value: searchParams.get('roleId') || '',
+                      }
+                    : undefined
+                }
                 onChange={(opt) => {
                   setUsersQueryFilterState({
                     roleId: opt?.value ? opt.value : undefined,
                   });
+                  updateQueryParams('roleId', opt?.value as any);
                 }}
               />
             </GridItem>
