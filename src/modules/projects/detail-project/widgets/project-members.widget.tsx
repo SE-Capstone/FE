@@ -18,6 +18,7 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { BsStars } from 'react-icons/bs';
 import { LuInfo } from 'react-icons/lu';
 import { PiUsersThreeFill } from 'react-icons/pi';
 import { RiEditFill } from 'react-icons/ri';
@@ -323,6 +324,20 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           <Icon boxSize={5} color="neutral.300" mr={3} as={PiUsersThreeFill} />
           {t('fields.members')}
         </Text>
+        <Button
+          type="button"
+          bg="transparent"
+          color="#85B8FF"
+          border="1px solid #8F7EE7"
+          transition="all 0.3s"
+          leftIcon={<BsStars />}
+          _hover={{
+            color: 'textColor',
+            bg: 'linear-gradient(45deg, #B8ACF6 0%, #85B8FF 100%)',
+          }}
+        >
+          Suggest Members
+        </Button>
         {hasMembers && canUpdate && (
           <UpsertMembersWidget
             defaultUserValue={Array.from(initialMembers)}

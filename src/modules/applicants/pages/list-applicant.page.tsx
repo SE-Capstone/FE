@@ -54,6 +54,14 @@ export function ListApplicantPage() {
             },
           },
           {
+            key: 'email',
+            title: t('fields.email'),
+            hasSort: false,
+            Cell({ email }) {
+              return <>{email}</>;
+            },
+          },
+          {
             key: 'phoneNumber',
             title: t('fields.phone'),
             hasSort: false,
@@ -75,14 +83,6 @@ export function ListApplicantPage() {
                   )}
                 </>
               );
-            },
-          },
-          {
-            key: 'updatedBy',
-            title: t('fields.updatedBy'),
-            hasSort: false,
-            Cell({ updatedBy }) {
-              return <>{updatedBy || ''}</>;
             },
           },
           {

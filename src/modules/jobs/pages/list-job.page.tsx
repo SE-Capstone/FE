@@ -55,22 +55,6 @@ export function ListJobPage() {
               );
             },
           },
-          {
-            key: 'createdBy',
-            title: t('fields.createdBy'),
-            hasSort: false,
-            Cell({ createdBy }) {
-              return <Text>{createdBy || ''}</Text>;
-            },
-          },
-          {
-            key: 'updatedBy',
-            title: t('fields.updatedBy'),
-            hasSort: false,
-            Cell({ updatedBy }) {
-              return <Text>{updatedBy || ''}</Text>;
-            },
-          },
         ],
       },
     ],
