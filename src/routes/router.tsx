@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 
-import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 
 import { authRoutes, dashboardRoutes, profileRoutes, publicRoutes } from './elements';
 import { applicantsRoutes } from './elements/applicants.route';
@@ -10,7 +10,6 @@ import { projectsRoutes } from './elements/projects.route';
 import { rolesRoutes } from './elements/roles.route';
 import { skillsRoutes } from './elements/skills.route';
 import { usersRoutes } from './elements/users.route';
-import { APP_PATHS } from './paths/app.paths';
 
 import { AlertDialogConfirmStore } from '@/components/elements/alert-dialog-confirm-store';
 import { LayoutApp } from '@/components/layouts';

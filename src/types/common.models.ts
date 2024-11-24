@@ -21,7 +21,7 @@ export type IErrorValidation = {
 }[];
 
 export type IBaseQueryParams<TFilter = any> = {
-  pageIndex: number;
-  pageSize: number;
+  pageIndex?: number;
+  pageSize?: number;
   filter?: TFilter;
 };

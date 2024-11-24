@@ -16,9 +16,15 @@ interface ISuggestMemberRequest {
   };
 }
 
+interface SuggestResponse {
+  userId: string;
+  name: string;
+  userName?: string;
+}
+
 export function mutation(req: ISuggestMemberRequest) {
   const { body } = req;
-  return makeRequest<typeof body, IResponseApi<string[]>>({
+  return makeRequest<typeof body, IResponseApi<SuggestResponse[]>>({
     method: 'POST',
     url: ALL_ENDPOINT_URL_STORE.projects.suggestMember,
     data: body,

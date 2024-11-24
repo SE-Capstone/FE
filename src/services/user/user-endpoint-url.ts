@@ -3,6 +3,7 @@ import type { StringNumeric } from '@/types';
 const ENDPOINT_QUERIES = {
   currentUserInfo: 'user/profile',
   listUser: 'users',
+  userForSuggest: 'users/active',
   getByPermission: 'users/get-by-permission',
   skillReport: 'users/reports/skills',
   detail: (userId: StringNumeric) => `users/${userId}`,

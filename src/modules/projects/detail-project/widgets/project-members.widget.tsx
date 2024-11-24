@@ -18,6 +18,8 @@ import {
   Tooltip,
   Image,
   useDisclosure,
+  UnorderedList,
+  ListItem,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { BsStars } from 'react-icons/bs';
@@ -26,9 +28,11 @@ import { PiUsersThreeFill } from 'react-icons/pi';
 import { RiEditFill } from 'react-icons/ri';
 
 import { UpsertMembersWidget } from './upsert-members.widget';
+import { useGetSkillsReport } from '../apis/get-user-for-suggest.api';
 import { useSuggestMemberMutation } from '../apis/suggest-member.api';
 import { ChangePermissionStatus } from '../components/change-permission-status';
 import { InlineEditPositionSelect } from '../components/editable-dropdown.widget';
+import { useUpsertMembersHook } from '../hooks/mutations';
 
 import type { IProject, ProjectMember } from '../../list-project/types';
 import type { IOptionUserSelect } from '../components/users-async-select';
@@ -269,10 +273,13 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
   // const hasMembers = (project?.members?.length || 0) > 0 || !!project?.leadId;
 
   const canUpdate = projectPermissions.includes(ProjectPermissionEnum.IsMemberConfigurator);
+  const { handleUpsertMembers, isLoading: isLoading2 } = useUpsertMembersHook(project?.id || '');
 
   const [initialMembers, setInitialMembers] = useState<Set<string>>(new Set());
   const [defaultUsersOption, setDefaultUsersOption] = useState<IOptionUserSelect[]>([]);
+  const [suggestMembers, setSuggestMembers] = useState<string[]>([]);
 
+  const { memberForSuggest, isLoading } = useGetSkillsReport();
   const { data, mutate, isPending, isError } = useSuggestMemberMutation({
     onOpen: disclosureModal.onOpen,
   });
@@ -304,11 +311,34 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
         body: {
           projectName: project?.name || '',
           projectDetail: project?.description || '',
-          userStatistics: [],
+          userStatistics: isLoading ? [] : memberForSuggest,
         },
       });
     } catch (error) {}
-  }, [disclosureModal, mutate, project]);
+  }, [disclosureModal, isLoading, memberForSuggest, mutate, project]);
+
+  useEffect(() => {
+    if (data?.data && data.data.length > 0) {
+      setSuggestMembers(data.data.map((item) => item.userId));
+    }
+  }, [data]);
+
+  const saveMembers = useCallback(async () => {
+    const oldMembers = project?.members?.map((item) => item.id) || [];
+    if (suggestMembers.length > 0) {
+      try {
+        const data = new Set([...oldMembers, ...suggestMembers]);
+        await handleUpsertMembers({
+          projectId: project?.id || '',
+          memberIds: Array.from(data),
+        });
+        if (disclosureModal.isOpen) {
+          disclosureModal.onClose();
+        }
+      } catch (error) {}
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [disclosureModal, isLoading2, project?.id, suggestMembers]);
 
   return (
     <Stack
@@ -356,7 +386,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           border="1px solid #8F7EE7"
           transition="all 0.3s"
           hidden={!canUpdate}
-          disabled={isPending}
+          disabled={isPending || isLoading}
           leftIcon={<BsStars />}
           _hover={{
             color: 'textColor',
@@ -450,7 +480,12 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
         size="xl"
         renderFooter={() =>
           !isError && data?.data && data?.data?.length > 0 ? (
-            <Button w={20} type="submit" isDisabled={isPending || !canUpdate}>
+            <Button
+              w={20}
+              type="submit"
+              isDisabled={isLoading || isPending || !canUpdate}
+              onClick={saveMembers}
+            >
               {t('common.save')}
             </Button>
           ) : (
@@ -481,11 +516,15 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
       >
         <Stack spacing={5}>
           {!isError && data?.data && data?.data?.length > 0 ? (
-            project?.members.map((member, index) => (
-              <Text key={index} wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
-                {member.userName} {member.positionName && `(${member.positionName})`}
-              </Text>
-            ))
+            <UnorderedList>
+              {data.data.map((member, index) => (
+                <ListItem key={index}>
+                  <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
+                    {member.name} {member.userName && `(${member.userName})`}
+                  </Text>
+                </ListItem>
+              ))}
+            </UnorderedList>
           ) : (
             <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
               {t('common.noMemberMatch')}
