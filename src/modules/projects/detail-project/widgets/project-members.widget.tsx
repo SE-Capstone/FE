@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   Button,
@@ -16,6 +16,8 @@ import {
   Tr,
   Table,
   Tooltip,
+  Image,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { BsStars } from 'react-icons/bs';
@@ -24,12 +26,15 @@ import { PiUsersThreeFill } from 'react-icons/pi';
 import { RiEditFill } from 'react-icons/ri';
 
 import { UpsertMembersWidget } from './upsert-members.widget';
+import { useSuggestMemberMutation } from '../apis/suggest-member.api';
 import { ChangePermissionStatus } from '../components/change-permission-status';
 import { InlineEditPositionSelect } from '../components/editable-dropdown.widget';
 
 import type { IProject, ProjectMember } from '../../list-project/types';
 import type { IOptionUserSelect } from '../components/users-async-select';
 
+import { IMAGE_URLS } from '@/assets/images';
+import { ModalBase } from '@/components/elements';
 import { ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { useGetListPositionQuery } from '@/modules/positions/hooks/queries';
@@ -52,7 +57,7 @@ const MemberSetting = ({ members, projectId }: { members: ProjectMember[]; proje
               lineHeight="21px"
               textTransform="capitalize"
             >
-              <Box>{t('fields.aliasName')}</Box>
+              <Box>{t('fields.name')}</Box>
             </Th>
             <Th
               color="#8E96AF"
@@ -258,6 +263,7 @@ const MemberSetting = ({ members, projectId }: { members: ProjectMember[]; proje
 
 export function ProjectMembersWidget({ project }: { project?: IProject }) {
   const { t } = useTranslation();
+  const disclosureModal = useDisclosure();
   const { permissions: projectPermissions } = useProjectContext();
   const hasMembers = (project?.members?.length || 0) > 0;
   // const hasMembers = (project?.members?.length || 0) > 0 || !!project?.leadId;
@@ -266,6 +272,10 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
 
   const [initialMembers, setInitialMembers] = useState<Set<string>>(new Set());
   const [defaultUsersOption, setDefaultUsersOption] = useState<IOptionUserSelect[]>([]);
+
+  const { data, mutate, isPending, isError } = useSuggestMemberMutation({
+    onOpen: disclosureModal.onOpen,
+  });
 
   useEffect(() => {
     const tempDefaultUsers: IOptionUserSelect[] = [];
@@ -284,6 +294,21 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
     setDefaultUsersOption(tempDefaultUsers);
     setInitialMembers(members);
   }, [project]);
+
+  const suggestMember = useCallback(async () => {
+    try {
+      if (disclosureModal.isOpen) {
+        disclosureModal.onClose();
+      }
+      await mutate({
+        body: {
+          projectName: project?.name || '',
+          projectDetail: project?.description || '',
+          userStatistics: [],
+        },
+      });
+    } catch (error) {}
+  }, [disclosureModal, mutate, project]);
 
   return (
     <Stack
@@ -330,13 +355,16 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           color="#85B8FF"
           border="1px solid #8F7EE7"
           transition="all 0.3s"
+          hidden={!canUpdate}
+          disabled={isPending}
           leftIcon={<BsStars />}
           _hover={{
             color: 'textColor',
             bg: 'linear-gradient(45deg, #B8ACF6 0%, #85B8FF 100%)',
           }}
+          onClick={suggestMember}
         >
-          Suggest Members
+          {t('common.suggestMember')}
         </Button>
         {hasMembers && canUpdate && (
           <UpsertMembersWidget
@@ -400,6 +428,71 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           </UpsertMembersWidget>
         )
       )}
+
+      {isPending && (
+        <Stack
+          sx={{
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(0, 0, 0, 0.35)',
+            inset: 0,
+            position: 'fixed',
+            zIndex: 9999,
+          }}
+        >
+          <Box>
+            <Image transform="scale(0.5)" src={IMAGE_URLS.AiLoading} alt="Loading" />
+          </Box>
+        </Stack>
+      )}
+      <ModalBase
+        size="xl"
+        renderFooter={() =>
+          !isError && data?.data && data?.data?.length > 0 ? (
+            <Button w={20} type="submit" isDisabled={isPending || !canUpdate}>
+              {t('common.save')}
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              bg="transparent"
+              color="#85B8FF"
+              border="1px solid #8F7EE7"
+              transition="all 0.3s"
+              hidden={!canUpdate}
+              disabled={isPending}
+              leftIcon={<BsStars />}
+              _hover={{
+                color: 'textColor',
+                bg: 'linear-gradient(45deg, #B8ACF6 0%, #85B8FF 100%)',
+              }}
+              onClick={suggestMember}
+            >
+              {t('common.suggestMember')}
+            </Button>
+          )
+        }
+        closeOnOverlayClick={false}
+        title={t('common.suggestMember')}
+        isOpen={disclosureModal.isOpen}
+        onClose={disclosureModal.onClose}
+        // onCloseComplete={reset}
+      >
+        <Stack spacing={5}>
+          {!isError && data?.data && data?.data?.length > 0 ? (
+            project?.members.map((member, index) => (
+              <Text key={index} wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
+                {member.userName} {member.positionName && `(${member.positionName})`}
+              </Text>
+            ))
+          ) : (
+            <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
+              {t('common.noMemberMatch')}
+            </Text>
+          )}
+        </Stack>
+      </ModalBase>
     </Stack>
   );
 }

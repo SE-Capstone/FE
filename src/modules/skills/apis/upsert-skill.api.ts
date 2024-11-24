@@ -46,6 +46,9 @@ export function useUpsertSkillMutation({ configs, reset, isUpdate, onClose }: Pr
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.skill.skills.queryKey,
       });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.user['users/reports/skills'].queryKey,
+      });
       notify({
         type: 'success',
         message: isUpdate ? DEFAULT_MESSAGE(t).UPDATE_SUCCESS : DEFAULT_MESSAGE(t).CREATE_SUCCESS,

@@ -29,6 +29,19 @@ export type QueryListProjectInput = {
   endDate?: string;
 };
 
+export type UserStatistics = {
+  id: string;
+  fullName: string;
+  skills: string;
+  activeProjectCount: number;
+};
+
+export type QuerySuggestMemberInput = {
+  projectName: string;
+  projectDetail: string;
+  userStatistics: UserStatistics[];
+};
+
 export type IProject = IBaseEntity & {
   name: string;
   code: string;

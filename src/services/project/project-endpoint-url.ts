@@ -10,6 +10,7 @@ const ENDPOINT_MUTATIONS = {
   update: (projectId: StringNumeric) => `projects/${projectId}`,
   create: 'projects',
   upsertMembers: 'projects/members',
+  suggestMember: 'projects/suggest',
   toggleVisible: (projectId: StringNumeric) => `projects/${projectId}/visible/toggle`,
   updateMemberPermission: (projectId: StringNumeric, memberId: StringNumeric) =>
     `projects/${projectId}/members/${memberId}`,

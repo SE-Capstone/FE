@@ -1,5 +1,7 @@
 {
   "common": {
+    "noMemberMatch": "There is no member suitable for project.",
+    "suggestMember": "Suggest members",
     "kanban": "Board",
     "IsCommentConfiguratorTooltip": "Turn this on to allow control commenting on other assignee’s issue",
     "IsIssueConfigurator": "Turn this on to allow updating other assignee’s issues",

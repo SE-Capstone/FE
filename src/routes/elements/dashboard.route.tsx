@@ -1,4 +1,4 @@
-import type { RouteObject } from 'react-router-dom';
+import { Outlet, type RouteObject } from 'react-router-dom';
 
 import { lazyImport } from '@/libs/utils';
 
@@ -7,6 +7,7 @@ const { DashboardPage } = lazyImport(() => import('@/modules/dashboard'), 'Dashb
 export function dashboardRoutes(): RouteObject {
   return {
     path: '/',
-    element: <DashboardPage />,
+    element: <Outlet />,
+    children: [{ index: true, element: <DashboardPage /> }],
   };
 }

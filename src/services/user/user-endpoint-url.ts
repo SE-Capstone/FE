@@ -4,6 +4,7 @@ const ENDPOINT_QUERIES = {
   currentUserInfo: 'user/profile',
   listUser: 'users',
   getByPermission: 'users/get-by-permission',
+  skillReport: 'users/reports/skills',
   detail: (userId: StringNumeric) => `users/${userId}`,
 } as const;
 

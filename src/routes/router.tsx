@@ -35,7 +35,6 @@ const allRoutes = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { index: true, element: <Navigate to={APP_PATHS.HOME} /> },
       { path: 'settings', element: <SettingsPage /> },
       dashboardRoutes(),
       profileRoutes(),

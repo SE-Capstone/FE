@@ -1,5 +1,7 @@
 {
   "common": {
+    "noMemberMatch": "Không có thành viên phù hợp cho dự án này.",
+    "suggestMember": "Gợi ý thành viên",
     "kanban": "Bảng",
     "IsCommentConfiguratorTooltip": "Bật tùy chọn này để cho phép kiểm soát việc bình luận của tất cả thành viên",
     "IsIssueConfigurator": "Bật tùy chọn này để cho phép cập nhật công việc của người khác",
