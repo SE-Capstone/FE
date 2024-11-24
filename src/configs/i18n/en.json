@@ -1,5 +1,6 @@
 {
   "common": {
+    "total": "Total",
     "noMemberMatch": "There is no member suitable for project.",
     "suggestMember": "Suggest members",
     "kanban": "Board",
@@ -380,5 +381,8 @@
     "403PageMessage": "Oops, You don't have permission to access this page.",
     "sameSkills": "Selected skills are the same as before",
     "resetPasswordFailed": "Reset failed, Please try again!"
+  },
+  "chart": {
+    "skillsReport": "Categories by skills"
   }
 }

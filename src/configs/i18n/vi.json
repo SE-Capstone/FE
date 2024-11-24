@@ -1,5 +1,6 @@
 {
   "common": {
+    "total": "Tổng",
     "noMemberMatch": "Không có thành viên phù hợp cho dự án này.",
     "suggestMember": "Gợi ý thành viên",
     "kanban": "Bảng",
@@ -345,5 +346,8 @@
     "403PageMessage": "Xin lỗi, bạn không có quyền truy cập trang này.",
     "sameSkills": "Các kỹ năng đã chọn không có sự thay đổi",
     "resetPasswordFailed": "Đặt lại mật khẩu thất bại, Vui lòng thử lại!"
+  },
+  "chart": {
+    "skillsReport": "Phân loại bởi kỹ năng"
   }
 }
