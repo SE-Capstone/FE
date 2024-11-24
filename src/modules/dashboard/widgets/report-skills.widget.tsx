@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { Stack, Text } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import Chart from 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
@@ -48,10 +48,20 @@ export const ReportSkillsWidget = () => {
       overflowX="auto"
       maxHeight="500px"
     >
-      <Text fontSize="lg">{t('chart.skillsReport')}</Text>
+      {/* <Text fontSize="lg">{t('chart.skillsReport')}</Text> */}
       <Bar
         data={chartData}
+        title={t('chart.skillsReport')}
         options={{
+          plugins: {
+            title: {
+              display: true,
+              text: t('chart.skillsReport'),
+              font: {
+                size: 18,
+              },
+            },
+          },
           responsive: true,
           maintainAspectRatio: false,
           scales: {

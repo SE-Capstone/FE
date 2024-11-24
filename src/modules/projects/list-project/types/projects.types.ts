@@ -62,3 +62,26 @@ export type IProject = IBaseEntity & {
   ];
   members: ProjectMember[];
 };
+
+type UserTaskStatus = {
+  statusId: string;
+  total: number;
+};
+
+type StatusReportUser = {
+  userId: string;
+  fullName: string;
+  userTaskStatuses: UserTaskStatus[];
+};
+
+type StatusReportProject = {
+  id: string;
+  statusName: string;
+};
+
+export type StatusReport = {
+  projectId: string;
+  projectName: string;
+  users: StatusReportUser[];
+  statuses: StatusReportProject[];
+};

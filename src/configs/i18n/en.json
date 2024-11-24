@@ -1,5 +1,6 @@
 {
   "common": {
+    "statistic": "Statistic",
     "total": "Total",
     "noMemberMatch": "There is no member suitable for project.",
     "suggestMember": "Suggest members",
@@ -383,6 +384,7 @@
     "resetPasswordFailed": "Reset failed, Please try again!"
   },
   "chart": {
-    "skillsReport": "Categories by skills"
+    "skillsReport": "Categories by skills",
+    "statusReport": "Categories by status"
   }
 }

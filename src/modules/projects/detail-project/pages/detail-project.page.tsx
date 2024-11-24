@@ -6,6 +6,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 
 import { useGetDetailProject } from '../apis/detail-project.api';
 import { BaseInformationProjectWidget } from '../widgets';
+import { ProjectStatisticPage } from './project-statistic.page';
 
 import { CustomTabs, Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
@@ -52,6 +53,9 @@ export function DetailProjectPage() {
         break;
       case 'issue':
         setActiveTabIndex(5);
+        break;
+      case 'statistic':
+        setActiveTabIndex(6);
         break;
       default:
         setActiveTabIndex(0);
@@ -138,6 +142,10 @@ export function DetailProjectPage() {
                     <ListIssuePage />
                   </IssuesQueryProvider>
                 ),
+              },
+              {
+                title: t('common.statistic'),
+                childrenPanel: <ProjectStatisticPage project={project} />,
               },
             ].filter(Boolean)}
             onTabChange={handleTabChange}

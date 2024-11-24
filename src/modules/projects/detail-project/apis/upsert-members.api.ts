@@ -49,6 +49,9 @@ export function useUpsertMembersMutation({ configs, reset, projectId }: IProps =
           queryKey: allQueryKeysStore.project.members(projectId).queryKey,
         });
       }
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.project['projects/reports/tasks'].queryKey,
+      });
 
       reset && reset();
 
