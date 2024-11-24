@@ -28,7 +28,7 @@ import { PiUsersThreeFill } from 'react-icons/pi';
 import { RiEditFill } from 'react-icons/ri';
 
 import { UpsertMembersWidget } from './upsert-members.widget';
-import { useGetSkillsReport } from '../apis/get-user-for-suggest.api';
+import { useGetUserForSuggest } from '../apis/get-user-for-suggest.api';
 import { useSuggestMemberMutation } from '../apis/suggest-member.api';
 import { ChangePermissionStatus } from '../components/change-permission-status';
 import { InlineEditPositionSelect } from '../components/editable-dropdown.widget';
@@ -279,7 +279,9 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
   const [defaultUsersOption, setDefaultUsersOption] = useState<IOptionUserSelect[]>([]);
   const [suggestMembers, setSuggestMembers] = useState<string[]>([]);
 
-  const { memberForSuggest, isLoading } = useGetSkillsReport();
+  const { isLoading, refetch } = useGetUserForSuggest({
+    userInProject: Array.from(initialMembers),
+  });
   const { data, mutate, isPending, isError } = useSuggestMemberMutation({
     onOpen: disclosureModal.onOpen,
   });
@@ -304,6 +306,8 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
 
   const suggestMember = useCallback(async () => {
     try {
+      const memberForSuggest = await refetch();
+
       if (disclosureModal.isOpen) {
         disclosureModal.onClose();
       }
@@ -311,11 +315,11 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
         body: {
           projectName: project?.name || '',
           projectDetail: project?.description || '',
-          userStatistics: isLoading ? [] : memberForSuggest,
+          userStatistics: isLoading ? [] : memberForSuggest.data?.data || [],
         },
       });
     } catch (error) {}
-  }, [disclosureModal, isLoading, memberForSuggest, mutate, project]);
+  }, [disclosureModal, isLoading, mutate, project?.description, project?.name, refetch]);
 
   useEffect(() => {
     if (data?.data && data.data.length > 0) {
