@@ -6,6 +6,7 @@ import { commentQueryKeys } from './comment';
 import { issueQueryKeys } from './issue';
 import { jobQueryKeys } from './job';
 import { labelQueryKeys } from './label';
+import { notificationQueryKeys } from './notification';
 import { permissionsQueryKeys } from './permissions';
 import { phaseQueryKeys } from './phase';
 import { positionQueryKeys } from './position';
@@ -23,6 +24,7 @@ export const allQueryKeysStore = mergeQueryKeys(
   projectQueryKeys,
   permissionsQueryKeys,
   jobQueryKeys,
+  notificationQueryKeys,
   applicantQueryKeys,
   positionQueryKeys,
   labelQueryKeys,

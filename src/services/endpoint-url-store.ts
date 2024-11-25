@@ -4,6 +4,7 @@ import { COMMENTS_ENDPOINT_URL } from './comment';
 import { ISSUES_ENDPOINT_URL } from './issue/issue-endpoint-url';
 import { JOBS_ENDPOINT_URL } from './job';
 import { LABELS_ENDPOINT_URL } from './label';
+import { NOTIFICATIONS_ENDPOINT_URL } from './notification';
 import { PERMISSIONS_ENDPOINT_URL } from './permissions/permissions-endpoint-url';
 import { PHASES_ENDPOINT_URL } from './phase';
 import { POSITIONS_ENDPOINT_URL } from './position';
@@ -25,6 +26,7 @@ export const ALL_ENDPOINT_URL_STORE = {
   permissions: PERMISSIONS_ENDPOINT_URL,
   positions: POSITIONS_ENDPOINT_URL,
   labels: LABELS_ENDPOINT_URL,
+  notifications: NOTIFICATIONS_ENDPOINT_URL,
   statuses: STATUSES_ENDPOINT_URL,
   phases: PHASES_ENDPOINT_URL,
   comments: COMMENTS_ENDPOINT_URL,

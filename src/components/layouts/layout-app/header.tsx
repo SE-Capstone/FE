@@ -22,7 +22,7 @@ import { FaBell } from 'react-icons/fa';
 import { MdLogout } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';
 
-import NotificationsList from './notifications';
+import NotificationsList from '../../../modules/notifications/pages/notifications.page';
 
 import { DEFAULT_MESSAGE } from '@/configs';
 import { notify } from '@/libs/helpers';
