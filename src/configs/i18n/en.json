@@ -1,5 +1,15 @@
 {
   "common": {
+    "notifications": "Notifications",
+    "markAllAsRead": "Mark all as read",
+    "justNow": "Just now",
+    "minuteAgo": "minute ago",
+    "minutesAgo": "minutes ago",
+    "hourAgo": "hour ago",
+    "hoursAgo": "hours ago",
+    "yesterday": "Yesterday",
+    "daysAgo": "days ago",
+    "weeksAgo": "weeks ago",
     "statistic": "Statistic",
     "total": "Total",
     "noMemberMatch": "There is no member suitable for project.",
@@ -386,5 +396,13 @@
   "chart": {
     "skillsReport": "Categories by skills",
     "statusReport": "Categories by status"
+  },
+  "notifications": {
+    "assignMember": "{{assignerName}} assigned you to project {{projectName}}",
+    "assignLeader": "{{assignerName}} assigned you as project leader - {{projectName}}",
+    "assignIssue": "{{assignerName}} assigned an issue to you",
+    "updateIssue": "{{updaterName}} updated an issue",
+    "createComment": "{{commenterName}} commented on issue",
+    "updateComment": "{{commenterName}} updated a comment on issue"
   }
 }

@@ -19,7 +19,7 @@ interface Props {
   configs?: MutationConfig<typeof mutation>;
 }
 
-export function useMarkReadMutation(props: Props) {
+export function useMarkReadAllMutation(props: Props) {
   const { t } = useTranslation();
   const { configs } = props;
 

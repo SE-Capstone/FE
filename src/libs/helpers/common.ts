@@ -159,7 +159,7 @@ export const formatCurrency = (number: number) => {
  * @param {string} time - The time string to convert to a time ago string.
  * @returns A string that is the time difference between the current time and the time passed in.
  */
-export const timeAgo = (time: string) => {
+export const timeAgo = (time: string, t: any) => {
   const date = new Date((time || '').replace(/-/g, '/').replace(/[TZ]/g, ' '));
   const diff = (new Date().getTime() - date.getTime()) / 1000;
   const dayDiff = Math.floor(diff / 86400);
@@ -170,14 +170,14 @@ export const timeAgo = (time: string) => {
 
   return (
     (dayDiff === 0 &&
-      ((diff < 60 && 'just now') ||
-        (diff < 120 && '1 minute ago') ||
-        (diff < 3600 && `${Math.floor(diff / 60)} minutes ago`) ||
-        (diff < 7200 && '1 hour ago') ||
-        (diff < 86400 && `${Math.floor(diff / 3600)} hours ago`))) ||
-    (dayDiff === 1 && 'YESTERDAY') ||
-    (dayDiff < 7 && `${dayDiff} days ago`) ||
-    (dayDiff < 31 && `${Math.ceil(dayDiff / 7)} weeks ago`)
+      ((diff < 60 && t('common.justNow')) ||
+        (diff < 120 && `1 ${t('common.minuteAgo')}`) ||
+        (diff < 3600 && `${Math.floor(diff / 60)} ${t('common.minutesAgo')}`) ||
+        (diff < 7200 && `1 ${t('common.hourAgo')}`) ||
+        (diff < 86400 && `${Math.floor(diff / 3600)} ${t('common.hoursAgo')}`))) ||
+    (dayDiff === 1 && t('common.yesterday')) ||
+    (dayDiff < 7 && `${dayDiff} ${t('common.daysAgo')}`) ||
+    (dayDiff < 31 && `${Math.ceil(dayDiff / 7)} ${t('common.weeksAgo')}`)
   );
 };
 

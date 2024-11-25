@@ -1,5 +1,15 @@
 {
   "common": {
+    "notifications": "Thông báo",
+    "markAllAsRead": "Đánh dấu tất cả là đã đọc",
+    "justNow": "Vừa đây",
+    "minuteAgo": "phút trước",
+    "minutesAgo": "phút trước",
+    "hourAgo": "giờ trước",
+    "hoursAgo": "giờ trước",
+    "yesterday": "Hôm qua",
+    "daysAgo": "ngày trước",
+    "weeksAgo": "tuần trước",
     "statistic": "Thống kê",
     "total": "Tổng",
     "noMemberMatch": "Không có thành viên phù hợp cho dự án này.",
@@ -351,5 +361,13 @@
   "chart": {
     "skillsReport": "Phân loại bởi kỹ năng",
     "statusReport": "Phân loại bởi trạng thái"
+  },
+  "notifications": {
+    "assignMember": "{{assignerName}} đã gán bạn vào dự án {{projectName}}",
+    "assignLeader": "{{assignerName}} đã gán bạn làm leader dự án - {{projectName}}",
+    "assignIssue": "{{assignerName}} đã gán công việc cho bạn",
+    "updateIssue": "{{updaterFullName}} đã cập nhật công việc",
+    "createComment": "{{commenterFullName}} đã bình luận về công việc",
+    "updateComment": "{{commenterFullName}} đã cập nhật bình luận về công việc"
   }
 }

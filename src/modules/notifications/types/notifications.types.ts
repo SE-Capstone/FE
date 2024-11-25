@@ -3,7 +3,8 @@ export enum NotificationTypeEnum {
   assignLeader = 'assignLeader',
   assignIssue = 'assignIssue',
   updateIssue = 'updateIssue',
-  upsertComment = 'upsertComment',
+  createComment = 'createComment',
+  updateComment = 'updateComment',
 }
 
 // Define specific types for each notification type's data object
@@ -26,7 +27,7 @@ type NotificationDataMap = {
   };
   [NotificationTypeEnum.assignIssue]: {
     type: NotificationTypeEnum.assignIssue;
-    assignerFullName: string;
+    assignerName: string;
     assignerUsername: string;
     assignerAvatar?: string;
     issueName: string;
@@ -44,8 +45,19 @@ type NotificationDataMap = {
     updaterUsername: string;
     updaterAvatar?: string;
   };
-  [NotificationTypeEnum.upsertComment]: {
-    type: NotificationTypeEnum.upsertComment;
+  [NotificationTypeEnum.createComment]: {
+    type: NotificationTypeEnum.createComment;
+    issueId: string;
+    commentId: string;
+    issueName: string;
+    issueIndex: number;
+    issueStatusName: string;
+    commenterName: string;
+    commenterUsername: string;
+    commenterAvatar?: string;
+  };
+  [NotificationTypeEnum.updateComment]: {
+    type: NotificationTypeEnum.updateComment;
     issueId: string;
     commentId: string;
     issueName: string;
@@ -57,21 +69,29 @@ type NotificationDataMap = {
   };
 };
 
-type AssignMemberData = NotificationDataMap[NotificationTypeEnum.assignMember];
+export type AssignMemberData = NotificationDataMap[NotificationTypeEnum.assignMember];
 
-type AssignLeaderData = NotificationDataMap[NotificationTypeEnum.assignLeader];
+export type AssignLeaderData = NotificationDataMap[NotificationTypeEnum.assignLeader];
 
-type AssignIssueData = NotificationDataMap[NotificationTypeEnum.assignIssue];
+export type AssignIssueData = NotificationDataMap[NotificationTypeEnum.assignIssue];
 
-type UpdateIssueData = NotificationDataMap[NotificationTypeEnum.updateIssue];
+export type UpdateIssueData = NotificationDataMap[NotificationTypeEnum.updateIssue];
 
-type UpsertCommentData = NotificationDataMap[NotificationTypeEnum.upsertComment];
+export type CreateCommentData = NotificationDataMap[NotificationTypeEnum.createComment];
+
+export type UpdateCommentData = NotificationDataMap[NotificationTypeEnum.updateComment];
 
 export type INotification = {
   id: string;
   userId: string;
   type: NotificationTypeEnum;
-  data: AssignMemberData | AssignLeaderData | AssignIssueData | UpdateIssueData | UpsertCommentData;
+  data:
+    | AssignMemberData
+    | AssignLeaderData
+    | AssignIssueData
+    | UpdateIssueData
+    | CreateCommentData
+    | UpdateCommentData;
   hasRead: boolean;
   createdAt: Date | string;
 };
