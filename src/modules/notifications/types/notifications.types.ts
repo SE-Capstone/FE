@@ -27,6 +27,7 @@ type NotificationDataMap = {
   };
   [NotificationTypeEnum.assignIssue]: {
     type: NotificationTypeEnum.assignIssue;
+    projectId: string;
     assignerName: string;
     assignerUsername: string;
     assignerAvatar?: string;
@@ -37,6 +38,7 @@ type NotificationDataMap = {
   };
   [NotificationTypeEnum.updateIssue]: {
     type: NotificationTypeEnum.updateIssue;
+    projectId: string;
     issueId: string;
     issueName: string;
     issueIndex: number;
@@ -47,6 +49,7 @@ type NotificationDataMap = {
   };
   [NotificationTypeEnum.createComment]: {
     type: NotificationTypeEnum.createComment;
+    projectId: string;
     issueId: string;
     commentId: string;
     issueName: string;
@@ -58,6 +61,7 @@ type NotificationDataMap = {
   };
   [NotificationTypeEnum.updateComment]: {
     type: NotificationTypeEnum.updateComment;
+    projectId: string;
     issueId: string;
     commentId: string;
     issueName: string;
