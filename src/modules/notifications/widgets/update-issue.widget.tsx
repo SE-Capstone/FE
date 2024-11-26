@@ -41,7 +41,7 @@ const UpdateIssueNotification = ({
             })}
           </Text>
           <Text fontSize="sm">{data.issueName}</Text>
-          <Text fontSize="sm" color="gray.300">
+          <Text fontSize="12px" color="gray.300">
             #{data.issueIndex} &#8226; {data.issueStatusName}
           </Text>
           <Text fontSize="sm" color="#949cac">

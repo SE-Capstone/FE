@@ -13,12 +13,9 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  IconButton,
-  Box,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { CgProfile } from 'react-icons/cg';
-import { FaBell } from 'react-icons/fa';
 import { MdLogout } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -92,45 +89,8 @@ export function HeaderApp() {
       </Heading>
 
       <HStack spacing={{ base: 3, md: 3 }}>
-        <Menu isLazy>
-          <MenuButton>
-            <IconButton
-              position="relative"
-              py="2"
-              bg="transparent"
-              colorScheme="gray"
-              aria-label="Notifications"
-              size="lg"
-              _hover={{
-                bg: 'transparent',
-              }}
-              icon={
-                <>
-                  <FaBell fontSize="18px" color="#ccc" />
-                  <Box
-                    as="span"
-                    color="white"
-                    position="absolute"
-                    top="6px"
-                    right="3px"
-                    fontSize="10px"
-                    fontWeight="bold"
-                    bgColor="red"
-                    borderRadius="5px"
-                    zIndex={9999}
-                    px="4px"
-                    py="2px"
-                  >
-                    10
-                  </Box>
-                </>
-              }
-            />
-          </MenuButton>
-          <MenuList borderColor="neutral.400" padding={0}>
-            <NotificationsList />
-          </MenuList>
-        </Menu>
+        <NotificationsList />
+
         <Menu isLazy>
           <MenuButton>
             <SkeletonCircle size="10" rounded="full" isLoaded={!isLoading}>

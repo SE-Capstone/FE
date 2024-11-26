@@ -6,11 +6,15 @@ import {
   useColorModeValue,
   Text,
   Flex,
-  Button,
   IconButton,
   Tooltip,
+  Menu,
+  MenuButton,
+  Box,
+  MenuList,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { FaBell } from 'react-icons/fa';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 
 import { useMarkReadAllMutation } from '../apis/mark-read-all.api';
@@ -20,10 +24,14 @@ import AssignIssueNotification from '../widgets/assign-issue.widget';
 import AssignLeaderNotification from '../widgets/assign-leader.widget';
 import AssignMemberNotification from '../widgets/assign-member.widget';
 import CreateCommentNotification from '../widgets/create-comment.widget';
+import Connector from '../widgets/signalR-connection';
 import UpdateCommentNotification from '../widgets/update-comment.widget';
 import UpdateIssueNotification from '../widgets/update-issue.widget';
 
 import type { INotification } from '../types';
+
+import { getAccessToken } from '@/libs/helpers';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 const NotificationWidget = ({ notification }: { notification: INotification }) => {
   const { type, data } = notification;
@@ -85,9 +93,31 @@ const NotificationWidget = ({ notification }: { notification: INotification }) =
 
 const NotificationsList = () => {
   const { t } = useTranslation();
+  const accessToken = getAccessToken();
+  const { currentUser } = useAuthentication();
   const containerRef = useRef<HTMLDivElement>(null);
-  const { isLoading, hasMore, listNotification, fetchMore, isFetching, isRefetching } =
-    useGetInfiniteNotificationQuery();
+  const { notificationEvents, connection } = Connector(accessToken || '', currentUser?.id || '');
+
+  const {
+    isLoading,
+    hasMore,
+    listNotification,
+    unReadCount,
+    refetch,
+    fetchMore,
+    isFetching,
+    isRefetching,
+  } = useGetInfiniteNotificationQuery();
+
+  useEffect(() => {
+    notificationEvents(() => {
+      refetch();
+    });
+
+    return () => {
+      connection.off('NotificationResponse');
+    };
+  });
 
   const { mutate } = useMarkReadAllMutation({});
 
@@ -121,47 +151,94 @@ const NotificationsList = () => {
   }, [isFetching, isRefetching, hasMore]);
 
   return (
-    <VStack
-      ref={containerRef}
-      boxShadow={useColorModeValue(
-        '2px 6px 8px rgba(160, 174, 192, 0.6)',
-        '2px 6px 8px rgba(9, 17, 28, 0.9)'
-      )}
-      bg="white"
-      rounded="md"
-      overflowY="scroll"
-      spacing={0}
-      maxW="520px"
-      maxH="700px"
-      p={0}
-    >
-      <Flex justifyContent="space-around" w="full" alignItems="center">
-        <Text fontSize="md" fontWeight="600" textAlign="start" w="full" p={4} color="textColor">
-          {t('common.notifications')}
-        </Text>
-        <Tooltip label={t('common.markAllAsRead')}>
-          <IconButton
-            aria-label="read-all"
-            icon={<RiCheckDoubleFill />}
-            bg="transparent"
-            color="textColor"
-            fontSize="22px"
-            _hover={{
-              bg: 'transparent',
-            }}
-            type="button"
-            onClick={() => mutate()}
-          />
-        </Tooltip>
-      </Flex>
-      <Divider m={0} />
-      {listNotification.map((notification, index) => (
-        <Fragment key={index}>
-          <NotificationWidget notification={notification} />
-          {listNotification.length - 1 !== index && <Divider m={0} />}
-        </Fragment>
-      ))}
-    </VStack>
+    <Menu isLazy>
+      <MenuButton>
+        <IconButton
+          position="relative"
+          py="2"
+          bg="transparent"
+          colorScheme="gray"
+          aria-label="Notifications"
+          size="lg"
+          _hover={{
+            bg: 'transparent',
+          }}
+          icon={
+            <>
+              <FaBell fontSize="18px" color="rgb(203 197 197)" />
+              {unReadCount > 0 && (
+                <Box
+                  as="span"
+                  color="white"
+                  position="absolute"
+                  top="6px"
+                  right={unReadCount < 10 ? '6px' : unReadCount > 99 ? '0px' : '3px'}
+                  fontSize="10px"
+                  fontWeight="bold"
+                  bgColor="red"
+                  borderRadius="5px"
+                  zIndex={9999}
+                  px="4px"
+                  py="2px"
+                >
+                  {unReadCount > 99 ? '+99' : unReadCount}
+                </Box>
+              )}
+            </>
+          }
+        />
+      </MenuButton>
+      <MenuList borderColor="neutral.400" padding={0}>
+        <VStack
+          ref={containerRef}
+          boxShadow={useColorModeValue(
+            '2px 6px 8px rgba(160, 174, 192, 0.6)',
+            '2px 6px 8px rgba(9, 17, 28, 0.9)'
+          )}
+          bg="white"
+          rounded="md"
+          overflowY="scroll"
+          spacing={0}
+          maxW="520px"
+          maxH="700px"
+          p={0}
+        >
+          <Flex justifyContent="space-around" w="full" alignItems="center">
+            <Text fontSize="md" fontWeight="600" textAlign="start" w="full" p={4} color="textColor">
+              {t('common.notifications')}
+            </Text>
+            {listNotification.length > 0 && (
+              <Tooltip label={t('common.markAllAsRead')}>
+                <IconButton
+                  aria-label="read-all"
+                  icon={<RiCheckDoubleFill />}
+                  bg="transparent"
+                  color="textColor"
+                  fontSize="22px"
+                  _hover={{
+                    bg: 'transparent',
+                  }}
+                  type="button"
+                  onClick={() => unReadCount > 0 && mutate()}
+                />
+              </Tooltip>
+            )}
+          </Flex>
+          <Divider m={0} />
+          {listNotification.map((notification, index) => (
+            <Fragment key={index}>
+              <NotificationWidget notification={notification} />
+              {listNotification.length - 1 !== index && <Divider m={0} />}
+            </Fragment>
+          ))}
+          {listNotification.length <= 0 && (
+            <Text fontSize="sm" textAlign="center" w="full" p={4} color="textColor">
+              {isLoading ? 'Loading...' : t('common.noData')}
+            </Text>
+          )}
+        </VStack>
+      </MenuList>
+    </Menu>
   );
 };
 

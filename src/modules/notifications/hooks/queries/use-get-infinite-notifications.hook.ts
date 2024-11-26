@@ -20,7 +20,7 @@ interface IGetInfiniteNotificationRequest {
 
 export function getInfiniteNotificationRequest(req: IGetInfiniteNotificationRequest) {
   const { params } = req;
-  return makeRequest<typeof params, IResponseApi<INotification[]>>({
+  return makeRequest<typeof params, IResponseApi<INotification[]> & { unReadCount: number }>({
     method: 'GET',
     url: ALL_ENDPOINT_URL_STORE.notifications.list,
     data: params,
@@ -82,6 +82,7 @@ export function useGetInfiniteNotificationQuery(props: UseGetInfiniteNotificatio
   return {
     ...query,
     listNotification: data?.pages?.flatMap((page) => page.data) || [],
+    unReadCount: (data?.pages as any)?.unReadCount || 0,
     hasMore: !!hasNextPage,
     fetchMore,
     handlePaginate,
