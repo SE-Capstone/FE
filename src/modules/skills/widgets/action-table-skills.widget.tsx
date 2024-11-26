@@ -6,12 +6,15 @@ import { useSkillsQueryFilterStateContext } from '../contexts';
 import { UpsertSkillWidget } from './upsert-skill.widget';
 
 import { SearchInput } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ActionTableSkillsWidget() {
   const { t } = useTranslation();
   const disclosureModal = useDisclosure();
   const { skillsQueryState, setSkillsQueryFilterState } = useSkillsQueryFilterStateContext();
   const { pathname } = useLocation();
+  const { permissions } = useAuthentication();
 
   const isShowFilterSkill = pathname.includes('skills');
 
@@ -36,7 +39,7 @@ export function ActionTableSkillsWidget() {
             />
           </GridItem>
         </Grid>
-        {isShowFilterSkill && (
+        {isShowFilterSkill && permissions[PermissionEnum.CREATE_SKILL] && (
           <>
             <Spacer />
             <Button size="md" leftIcon={<>+</>} onClick={disclosureModal.onOpen}>

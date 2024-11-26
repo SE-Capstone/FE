@@ -9,6 +9,8 @@ import { UpsertSkillWidget } from '../upsert-skill.widget';
 import type { ISkill } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTableSkillsProps {
   skill: ISkill;
@@ -17,11 +19,12 @@ export function ActionMenuTableSkills({ skill }: ActionMenuTableSkillsProps) {
   const { t } = useTranslation();
   const disclosureModal = useDisclosure();
   const { handleRemoveSkill } = useRemoveSkillHook();
+  const { permissions } = useAuthentication();
 
   if (!skill || !skill.id) return null;
 
   const menuOptions = [
-    {
+    permissions[PermissionEnum.UPDATE_SKILL] && {
       label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => {
@@ -30,7 +33,7 @@ export function ActionMenuTableSkills({ skill }: ActionMenuTableSkillsProps) {
         disclosureModal.onOpen();
       },
     },
-    {
+    permissions[PermissionEnum.DELETE_SKILL] && {
       type: 'danger',
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,

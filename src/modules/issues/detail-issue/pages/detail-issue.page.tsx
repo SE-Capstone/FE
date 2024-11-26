@@ -353,7 +353,6 @@ export function DetailIssuePage() {
             />
           ),
         },
-        // TODO: Add phase field
       ].filter(Boolean),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [issue, listStatus, members, t]

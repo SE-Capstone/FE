@@ -13,15 +13,17 @@ import type { ColumnsProps } from '@/components/elements';
 import type { RolesEnum } from '@/configs';
 
 import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
-import { GENDER_VALUES } from '@/configs';
+import { GENDER_VALUES, PermissionEnum } from '@/configs';
 import { getNumericalOrder } from '@/libs/helpers';
 import { BadgeIssue } from '@/modules/issues/list-issue/components';
+import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function ListUserPage() {
   const { t } = useTranslation();
   const { usersQueryState, resetUsersQueryState } = useUsersQueryFilterStateContext();
   const { pathname } = useLocation();
+  const { permissions } = useAuthentication();
 
   const { listUser, meta, isError, isLoading, handlePaginate } = useGetListUserQuery({
     params: usersQueryState.filters,
@@ -164,7 +166,12 @@ export function ListUserPage() {
           totalCount={meta.totalCount}
           isLoading={isLoading}
           isError={!!isError}
-          additionalFeature={(user) => <ActionMenuTableUsers user={user} />}
+          additionalFeature={(user) =>
+            permissions[PermissionEnum.TOGGLE_USER] ||
+            permissions[PermissionEnum.GET_DETAIL_USER] ? (
+              <ActionMenuTableUsers user={user} />
+            ) : undefined
+          }
           onPageChange={handlePaginate}
         />
       </StateHandler>

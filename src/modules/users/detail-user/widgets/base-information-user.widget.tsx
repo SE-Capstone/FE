@@ -118,8 +118,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
     <Box bg="white" rounded={2} w="full">
       <CustomFormProvider
         form={form}
-        // Todo: fix
-        isDisabled={!permissions[PermissionEnum.ADD_USER]}
+        isDisabled={!permissions[PermissionEnum.UPDATE_USER]}
         style={{ height: 'fit-content' }}
         onSubmit={onSubmit}
       >
@@ -166,6 +165,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                   isRequired
                   isSearchable={false}
                   label={t('fields.gender')}
+                  isDisabled={!permissions[PermissionEnum.UPDATE_USER]}
                   options={GENDER_OPTIONS}
                   control={control}
                   name="gender"
@@ -180,6 +180,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
                 <CustomChakraReactSelect
                   isRequired
                   isSearchable
+                  isDisabled={!permissions[PermissionEnum.UPDATE_USER]}
                   label={`${t('common.choose')} ${t('fields.status').toLowerCase()}`}
                   options={[
                     {
@@ -206,6 +207,7 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
               <CustomChakraReactSelect
                 isSearchable
                 label={t('fields.role')}
+                isDisabled={!permissions[PermissionEnum.UPDATE_USER]}
                 options={roles.map((role) => ({
                   label: <BadgeRole content={role.name} colorScheme={role.color} />,
                   value: role.id,

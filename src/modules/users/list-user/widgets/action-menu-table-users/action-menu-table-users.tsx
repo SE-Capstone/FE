@@ -38,13 +38,12 @@ export function ActionMenuTableUsers({ user }: ActionMenuTableUsersProps) {
   if (!user || !user.id) return null;
 
   const menuOptions = [
-    // Todo: fix
-    permissions[PermissionEnum.GET_LIST_USER] && {
+    permissions[PermissionEnum.GET_DETAIL_USER] && {
       label: t('actions.viewDetail'),
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/users/${user.id}`),
     },
-    {
+    permissions[PermissionEnum.TOGGLE_USER] && {
       type: user.status === UserStatusEnum.Active ? 'danger' : '',
       label: user.status === UserStatusEnum.Active ? t('actions.inactive') : t('actions.active'),
       icon: (

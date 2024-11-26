@@ -29,7 +29,9 @@ import { useUpsertUserSkillsHook } from '../hooks/mutations/use-upsert-user-skil
 import type { ISkill } from '../types';
 
 import { CustomInput } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
 import { notify } from '@/libs/helpers';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export default function TransferListWidget({
   skills,
@@ -41,6 +43,7 @@ export default function TransferListWidget({
   isLoading: boolean;
 }) {
   const { t } = useTranslation();
+  const { permissions } = useAuthentication();
   const [leftItems, setLeftItems] = useState<ISkill[]>(skills);
   const [rightItems, setRightItems] = useState<ISkill[]>([]);
   const [leftChecked, setLeftChecked] = useState<ISkill[]>([]);
@@ -171,7 +174,7 @@ export default function TransferListWidget({
               key={item.id}
               size="md"
               borderColor="gray.300"
-              disabled={!userId}
+              disabled={!userId || permissions[PermissionEnum.UPSERT_SKILL_USER]}
               isChecked={checked.includes(item)}
               onChange={() => handleToggle(setChecked, checked, item)}
             >
@@ -199,7 +202,12 @@ export default function TransferListWidget({
 
         <VStack>
           <Button
-            disabled={leftItems.length === 0 || !userId || isSubmitting}
+            disabled={
+              leftItems.length === 0 ||
+              !userId ||
+              isSubmitting ||
+              permissions[PermissionEnum.UPSERT_SKILL_USER]
+            }
             onClick={() =>
               moveAllItems(leftItems, setLeftItems, rightItems, setRightItems, setLeftChecked)
             }
@@ -207,7 +215,12 @@ export default function TransferListWidget({
             <MdOutlineKeyboardDoubleArrowRight />
           </Button>
           <Button
-            disabled={leftChecked.length === 0 || !userId || isSubmitting}
+            disabled={
+              leftChecked.length === 0 ||
+              !userId ||
+              isSubmitting ||
+              permissions[PermissionEnum.UPSERT_SKILL_USER]
+            }
             onClick={() =>
               moveItems(
                 leftItems,
@@ -222,7 +235,12 @@ export default function TransferListWidget({
             <MdOutlineKeyboardArrowRight />
           </Button>
           <Button
-            disabled={rightChecked.length === 0 || !userId || isSubmitting}
+            disabled={
+              rightChecked.length === 0 ||
+              !userId ||
+              isSubmitting ||
+              permissions[PermissionEnum.UPSERT_SKILL_USER]
+            }
             onClick={() =>
               moveItems(
                 rightItems,
@@ -237,7 +255,12 @@ export default function TransferListWidget({
             <MdOutlineKeyboardArrowLeft />
           </Button>
           <Button
-            disabled={rightItems.length === 0 || !userId || isSubmitting}
+            disabled={
+              rightItems.length === 0 ||
+              !userId ||
+              isSubmitting ||
+              permissions[PermissionEnum.UPSERT_SKILL_USER]
+            }
             onClick={() =>
               moveAllItems(rightItems, setRightItems, leftItems, setLeftItems, setRightChecked)
             }
@@ -258,7 +281,12 @@ export default function TransferListWidget({
           )}
         </VStack>
       </HStack>
-      <Button disabled={!userId || isSubmitting} px={6} mt={4} onClick={handleSubmit}>
+      <Button
+        disabled={!userId || isSubmitting || permissions[PermissionEnum.UPSERT_SKILL_USER]}
+        px={6}
+        mt={4}
+        onClick={handleSubmit}
+      >
         {t('common.submit')}
       </Button>
     </>

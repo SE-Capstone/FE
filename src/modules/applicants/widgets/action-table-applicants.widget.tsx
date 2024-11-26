@@ -6,12 +6,15 @@ import { useApplicantsQueryFilterStateContext } from '../contexts';
 import { UpsertApplicantWidget } from './upsert-applicant.widget';
 
 import { SearchInput } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ActionTableApplicantsWidget() {
   const { t } = useTranslation();
   const { applicantsQueryState, setApplicantsQueryFilterState } =
     useApplicantsQueryFilterStateContext();
   const { pathname } = useLocation();
+  const { permissions } = useAuthentication();
   const disclosureModal = useDisclosure();
 
   const isShowFilterApplicant = pathname.includes('applicants');
@@ -71,7 +74,7 @@ export function ActionTableApplicantsWidget() {
             /> */}
           </GridItem>
         </Grid>
-        {isShowFilterApplicant && (
+        {isShowFilterApplicant && permissions[PermissionEnum.ADD_APPLICANT] && (
           <>
             <Spacer />
             <Button leftIcon={<>+</>} onClick={disclosureModal.onOpen}>

@@ -37,7 +37,13 @@ const UpdateCommentNotification = ({
       display="block"
       onClick={() => !notification.hasRead && callback(notification.id)}
     >
-      <CustomLink display="flex" to={APP_PATHS.detailIssue(data.projectId, data.issueId)}>
+      <CustomLink
+        _hover={{
+          textDecor: 'none',
+        }}
+        display="flex"
+        to={APP_PATHS.detailIssue(data.projectId, data.issueId)}
+      >
         <Stack flex={1} spacing={0} direction="row" alignItems="center">
           <Flex pr={2}>
             <Avatar size="md" name={data.commenterUsername} src={data.commenterAvatar} />

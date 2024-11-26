@@ -9,6 +9,8 @@ import { UpsertApplicantWidget } from '../upsert-applicant.widget';
 import type { IApplicant } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTableApplicantsProps {
   applicant: IApplicant;
@@ -18,12 +20,12 @@ export function ActionMenuTableApplicants({ applicant }: ActionMenuTableApplican
   const { t } = useTranslation();
   const { handleRemoveApplicant } = useRemoveApplicantHook(applicant.id);
   const disclosureModal = useDisclosure();
+  const { permissions } = useAuthentication();
 
   if (!applicant || !applicant.id) return null;
 
-  // Todo: permissions
   const menuOptions = [
-    {
+    permissions[PermissionEnum.UPDATE_APPLICANT] && {
       label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => {
@@ -32,7 +34,7 @@ export function ActionMenuTableApplicants({ applicant }: ActionMenuTableApplican
         disclosureModal.onOpen();
       },
     },
-    {
+    permissions[PermissionEnum.DELETE_APPLICANT] && {
       type: 'danger',
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,
@@ -48,9 +50,12 @@ export function ActionMenuTableApplicants({ applicant }: ActionMenuTableApplican
         isOpen={disclosureModal.isOpen}
         onClose={disclosureModal.onClose}
       />
-      <ActionMenuTable actionMenuItems={menuOptions}>
-        {({ isOpen }) => <AdditionalFeature isOpen={isOpen} />}
-      </ActionMenuTable>
+      {(permissions[PermissionEnum.UPDATE_APPLICANT] ||
+        permissions[PermissionEnum.DELETE_APPLICANT]) && (
+        <ActionMenuTable actionMenuItems={menuOptions}>
+          {({ isOpen }) => <AdditionalFeature isOpen={isOpen} />}
+        </ActionMenuTable>
+      )}
     </>
   );
 }

@@ -11,11 +11,14 @@ import type { ISkill } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 
 import { Head, StateHandler, TableComponent } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
 import { getNumericalOrder } from '@/libs/helpers';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ListSkillPage() {
   const { t } = useTranslation();
   const { skillsQueryState, resetSkillsQueryState } = useSkillsQueryFilterStateContext();
+  const { permissions } = useAuthentication();
 
   const { listSkill, meta, isError, isLoading, handlePaginate, isRefetching } =
     useGetListSkillQuery({
@@ -79,7 +82,11 @@ export function ListSkillPage() {
           totalCount={meta.totalCount}
           isLoading={isLoading || isRefetching}
           isError={!!isError}
-          additionalFeature={(skill) => <ActionMenuTableSkills skill={skill} />}
+          additionalFeature={(skill) =>
+            permissions[PermissionEnum.UPDATE_SKILL] || permissions[PermissionEnum.DELETE_SKILL] ? (
+              <ActionMenuTableSkills skill={skill} />
+            ) : undefined
+          }
           onPageChange={handlePaginate}
         />
       </StateHandler>

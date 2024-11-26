@@ -11,12 +11,15 @@ import type { IApplicant } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 
 import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
 import { formatDate, getNumericalOrder, phoneNumberAutoFormat } from '@/libs/helpers';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ListApplicantPage() {
   const { t } = useTranslation();
   const { applicantsQueryState, resetApplicantsQueryState } =
     useApplicantsQueryFilterStateContext();
+  const { permissions } = useAuthentication();
 
   const { listApplicant, meta, isError, isLoading, handlePaginate, isRefetching } =
     useGetListApplicantQuery({
@@ -128,7 +131,12 @@ export function ListApplicantPage() {
               totalCount={meta.totalCount}
               isLoading={isLoading || isRefetching}
               isError={!!isError}
-              additionalFeature={(applicant) => <ActionMenuTableApplicants applicant={applicant} />}
+              additionalFeature={(applicant) =>
+                permissions[PermissionEnum.UPDATE_APPLICANT] ||
+                permissions[PermissionEnum.DELETE_APPLICANT] ? (
+                  <ActionMenuTableApplicants applicant={applicant} />
+                ) : undefined
+              }
               onPageChange={handlePaginate}
             />
           </Container>

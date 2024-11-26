@@ -37,7 +37,13 @@ const AssignLeaderNotification = ({
       display="block"
       onClick={() => !notification.hasRead && callback(notification.id)}
     >
-      <CustomLink display="flex" to={APP_PATHS.detailProject(data.projectId)}>
+      <CustomLink
+        _hover={{
+          textDecor: 'none',
+        }}
+        display="flex"
+        to={APP_PATHS.detailProject(data.projectId)}
+      >
         <Stack flex={1} spacing={0} direction="row" alignItems="center">
           <Flex pr={2}>
             <Avatar size="md" name={data.assignerUsername} src={data.assignerAvatar} />
