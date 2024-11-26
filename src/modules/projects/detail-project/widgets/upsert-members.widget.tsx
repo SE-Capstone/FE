@@ -10,7 +10,6 @@ import { useUpsertMembersHook } from '../hooks/mutations';
 import type { IOptionUserSelect } from '../components/users-async-select';
 
 import { CustomFormProvider, ModalBase } from '@/components/elements';
-import { notify } from '@/libs/helpers';
 
 export interface UpsertMembersWidgetProps {
   children: React.ReactElement;
@@ -69,12 +68,12 @@ export function UpsertMembersWidget(props: UpsertMembersWidgetProps) {
             type="submit"
             isDisabled={isLoading}
             onClick={() => {
-              if (!usersChecked.current.length) {
-                return notify({
-                  type: 'error',
-                  message: t('validation.memberRequired'),
-                });
-              }
+              // if (!usersChecked.current.length) {
+              //   return notify({
+              //     type: 'error',
+              //     message: t('validation.memberRequired'),
+              //   });
+              // }
               const selected = usersChecked.current.sort().join();
               if (selected === defaultUserValue.sort().join()) {
                 // return notify({

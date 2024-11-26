@@ -58,6 +58,17 @@ export const issueFormSchema = (t: any) =>
         .max(1000, { message: t('validation.issue.estimatedTimeMax') })
         .optional()
     ),
+    actualTime: z.preprocess(
+      (val) => {
+        const numberValue = Number(val);
+        return isNaN(numberValue) ? undefined : numberValue;
+      },
+      z
+        .number({ message: t('validation.issue.actualNumber') })
+        .min(0, { message: t('validation.issue.actualTimeMin') })
+        .max(1000, { message: t('validation.issue.actualTimeMax') })
+        .optional()
+    ),
   });
 
 export type IssueFormValues = z.infer<ReturnType<typeof issueFormSchema>>;

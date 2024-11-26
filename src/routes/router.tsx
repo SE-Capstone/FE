@@ -10,9 +10,11 @@ import { projectsRoutes } from './elements/projects.route';
 import { rolesRoutes } from './elements/roles.route';
 import { skillsRoutes } from './elements/skills.route';
 import { usersRoutes } from './elements/users.route';
+import { PermissionCheck } from './permisstion-check';
 
 import { AlertDialogConfirmStore } from '@/components/elements/alert-dialog-confirm-store';
 import { LayoutApp } from '@/components/layouts';
+import { PermissionEnum } from '@/configs';
 import { lazyImport } from '@/libs/utils';
 
 const { GlobalLoading } = lazyImport(() => import('@/components/elements'), 'GlobalLoading');
@@ -34,7 +36,16 @@ const allRoutes = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { path: 'settings', element: <SettingsPage /> },
+      {
+        path: 'settings',
+        element: (
+          <PermissionCheck
+            permissions={[PermissionEnum.READ_DEFAULT_LABEL, PermissionEnum.READ_DEFAULT_STATUS]}
+          >
+            <SettingsPage />
+          </PermissionCheck>
+        ),
+      },
       dashboardRoutes(),
       profileRoutes(),
       usersRoutes(),

@@ -32,8 +32,7 @@ export function usersRoutes(): RouteObject {
       {
         path: ':userId',
         element: (
-          // Todo: fix
-          <PermissionCheck permissions={[PermissionEnum.GET_LIST_USER]}>
+          <PermissionCheck permissions={[PermissionEnum.GET_DETAIL_USER]}>
             <DetailUserPage />
           </PermissionCheck>
         ),

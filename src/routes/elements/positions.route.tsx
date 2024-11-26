@@ -16,6 +16,7 @@ export function positionsRoutes(): RouteObject {
       {
         index: true,
         element: (
+          // TODO: permission
           <PositionsQueryProvider>
             <ListPositionPage />
           </PositionsQueryProvider>

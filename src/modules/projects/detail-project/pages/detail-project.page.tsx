@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 import { Container } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
@@ -23,56 +23,28 @@ import { useAuthentication } from '@/modules/profile/hooks';
 import { ListStatusPage } from '@/modules/statuses';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
+const tabMapping = {
+  overview: 0,
+  label: 1,
+  status: 2,
+  phase: 3,
+  kanban: 4,
+  issue: 5,
+  statistic: 6,
+};
+
 export function DetailProjectPage() {
   const { t, i18n } = useTranslation();
   const [searchParams, _] = useSearchParams();
   const { permissions } = useAuthentication();
   const { project: projectContext } = useProjectContext();
   const { projectId } = useParams();
-  const [activeTabIndex, setActiveTabIndex] = useState<number>(() =>
-    parseInt(localStorage.getItem('activeTabIndex') || '0', 10)
-  );
-
-  const getTab = () => {
-    const tab = searchParams.get('tab');
-    switch (tab) {
-      case 'overview':
-        setActiveTabIndex(0);
-        break;
-      case 'label':
-        setActiveTabIndex(1);
-        break;
-      case 'status':
-        setActiveTabIndex(2);
-        break;
-      case 'phase':
-        setActiveTabIndex(3);
-        break;
-      case 'kanban':
-        setActiveTabIndex(4);
-        break;
-      case 'issue':
-        setActiveTabIndex(5);
-        break;
-      case 'statistic':
-        setActiveTabIndex(6);
-        break;
-      default:
-        setActiveTabIndex(0);
-        break;
-    }
-  };
+  const activeTabIndex = useMemo(() => {
+    const tab = searchParams.get('tab') || 'overview';
+    return tabMapping[tab] ?? 0;
+  }, [searchParams]);
 
   const { project, isLoading, isError } = useGetDetailProject({ projectId: projectId || '' });
-
-  const handleTabChange = (index: number) => {
-    setActiveTabIndex(index);
-  };
-
-  useEffect(() => {
-    getTab();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   if (!permissions[PermissionEnum.READ_ALL_PROJECTS] && !projectContext?.isVisible) {
     if (!projectContext) {
@@ -148,7 +120,7 @@ export function DetailProjectPage() {
                 childrenPanel: <ProjectStatisticPage project={project} />,
               },
             ].filter(Boolean)}
-            onTabChange={handleTabChange}
+            onTabChange={() => {}}
           />
         </StateHandler>
       </Container>

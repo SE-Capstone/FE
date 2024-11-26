@@ -112,6 +112,9 @@ export function DetailIssuePage() {
         ...(fieldName === 'estimatedTime' && {
           estimatedTime: Number(value) || issue.estimatedTime,
         }),
+        ...(fieldName === 'actualTime' && {
+          actualTime: Number(value) || issue.actualTime,
+        }),
         ...(fieldName === 'percentage' && {
           percentage: Number(value) || issue.percentage,
         }),
@@ -281,6 +284,18 @@ export function DetailIssuePage() {
               fieldValue={issue?.estimatedTime?.toString() || ''}
               callback={handleSubmit}
               fieldName="estimatedTime"
+              styleProps={{ minW: '200px', minH: '20px' }}
+              isViewOnly={!canUpdate(issue?.assignee)}
+            />
+          ),
+        },
+        {
+          label: t('fields.actualTime'),
+          text: (
+            <InlineEditableField
+              fieldValue={issue?.actualTime?.toString() || ''}
+              callback={handleSubmit}
+              fieldName="actualTime"
               styleProps={{ minW: '200px', minH: '20px' }}
               isViewOnly={!canUpdate(issue?.assignee)}
             />

@@ -74,6 +74,18 @@ const InlineEditableField = ({
       }
     }
 
+    if (fieldName === 'actualTime') {
+      if (isNaN(Number(value))) {
+        return t('validation.issue.actualNumber');
+      }
+      if (Number(value) < 0) {
+        return t('validation.issue.actualTimeMin');
+      }
+      if (Number(value) > 1000) {
+        return t('validation.issue.actualTimeMax');
+      }
+    }
+
     return undefined;
   };
 

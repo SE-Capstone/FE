@@ -17,8 +17,8 @@ interface IUpsertProjectRequest {
     name: string;
     code: string;
     description: string;
-    startDate: Date | string;
-    endDate: Date | string;
+    startDate?: Date | string;
+    endDate?: Date | string;
     status?: ProjectStatusEnum;
     isVisible?: boolean;
     leadId?: string;

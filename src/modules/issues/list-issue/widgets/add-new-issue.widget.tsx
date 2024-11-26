@@ -141,7 +141,10 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
           {t('common.save')}
         </Button>
       )}
-      onCloseComplete={reset}
+      onCloseComplete={() => {
+        reset;
+        setValue(undefined);
+      }}
     >
       <CustomFormProvider
         id="form-create-issue"

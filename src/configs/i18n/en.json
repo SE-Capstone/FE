@@ -198,6 +198,7 @@
     "percentageDone": "% Done",
     "teamLead": "Project leader",
     "estimatedTime": "Estimated time",
+    "actualTime": "Actual time",
     "isDone": "Mark as done",
     "IsProjectConfigurator": "Project configurator",
     "IsIssueConfigurator": "Issue configurator",
@@ -284,7 +285,10 @@
       "invalidPriority": "Invalid priority value",
       "estimatedNumber": "Estimated time must be a number",
       "estimatedTimeMin": "Estimated time must be at least 0",
-      "estimatedTimeMax": "Estimated time must be at most 1000"
+      "estimatedTimeMax": "Estimated time must be at most 1000",
+      "actualNumber": "Actual time must be a number",
+      "actualTimeMin": "Actual time must be at least 0",
+      "actualTimeMax": "Actual time must be at most 1000"
     },
     "label": {
       "titleMax": "Title must be at most 20 characters",
@@ -386,7 +390,9 @@
     "addApplicant": "Add applicant",
     "updateApplicant": "Update applicant",
     "deleteApplicant": "Delete applicant",
-    "upsertSkillUser": "Create or update skill user"
+    "upsertSkillUser": "Create or update skill user",
+    "readDefaultStatus": "Read default status",
+    "readDefaultLabel": "Read default label"
   },
   "messages": {
     "success": "Success",

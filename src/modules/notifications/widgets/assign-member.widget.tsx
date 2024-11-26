@@ -19,6 +19,10 @@ const AssignMemberNotification = ({
 }) => {
   const { t } = useTranslation();
 
+  const adjustedCreatedAt = new Date(
+    new Date(notification.createdAt).getTime() + 14 * 60 * 60 * 1000
+  );
+
   return (
     <Flex
       w="100%"
@@ -30,10 +34,11 @@ const AssignMemberNotification = ({
       pl={4}
       py={3}
       alignItems="center"
+      display="block"
       onClick={() => !notification.hasRead && callback(notification.id)}
     >
       <CustomLink display="flex" to={APP_PATHS.detailProject(data.projectId)}>
-        <Stack spacing={0} direction="row" alignItems="center">
+        <Stack flex={1} spacing={0} direction="row" alignItems="center">
           <Flex pr={2}>
             <Avatar size="md" name={data.assignerUsername} src={data.assignerAvatar} />
           </Flex>
@@ -45,7 +50,7 @@ const AssignMemberNotification = ({
               })}
             </Text>
             <Text fontSize="sm" color="#949cac">
-              {timeAgo(notification.createdAt.toString(), t)}
+              {timeAgo(adjustedCreatedAt.toISOString(), t)}
             </Text>
           </Flex>
         </Stack>

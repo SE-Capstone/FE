@@ -1,5 +1,8 @@
 import { Outlet, type RouteObject } from 'react-router-dom';
 
+import { PermissionCheck } from '../permisstion-check';
+
+import { PermissionEnum } from '@/configs';
 import { lazyImport } from '@/libs/utils';
 import { SkillsQueryProvider } from '@/modules/skills/contexts';
 
@@ -13,9 +16,11 @@ export function skillsRoutes(): RouteObject {
       {
         index: true,
         element: (
-          <SkillsQueryProvider>
-            <SkillsPage />
-          </SkillsQueryProvider>
+          <PermissionCheck permissions={[PermissionEnum.GET_SKILL, PermissionEnum.GET_SKILL_USER]}>
+            <SkillsQueryProvider>
+              <SkillsPage />
+            </SkillsQueryProvider>
+          </PermissionCheck>
         ),
       },
     ],

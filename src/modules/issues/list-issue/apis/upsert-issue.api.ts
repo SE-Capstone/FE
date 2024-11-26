@@ -28,6 +28,7 @@ interface IUpsertIssueRequest {
     phaseId?: string;
     assigneeId?: string;
     estimatedTime?: number;
+    actualTime?: number;
   };
 }
 

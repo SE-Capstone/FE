@@ -1,5 +1,8 @@
 import { Outlet, type RouteObject } from 'react-router-dom';
 
+import { PermissionCheck } from '../permisstion-check';
+
+import { PermissionEnum } from '@/configs';
 import { lazyImport } from '@/libs/utils';
 import { ApplicantsQueryProvider } from '@/modules/applicants/contexts';
 
@@ -16,9 +19,11 @@ export function applicantsRoutes(): RouteObject {
       {
         index: true,
         element: (
-          <ApplicantsQueryProvider>
-            <ListApplicantPage />
-          </ApplicantsQueryProvider>
+          <PermissionCheck permissions={[PermissionEnum.GET_APPLICANT]}>
+            <ApplicantsQueryProvider>
+              <ListApplicantPage />
+            </ApplicantsQueryProvider>
+          </PermissionCheck>
         ),
       },
     ],

@@ -19,6 +19,10 @@ const UpdateIssueNotification = ({
 }) => {
   const { t } = useTranslation();
 
+  const adjustedCreatedAt = new Date(
+    new Date(notification.createdAt).getTime() + 14 * 60 * 60 * 1000
+  );
+
   return (
     <Flex
       w="100%"
@@ -30,10 +34,11 @@ const UpdateIssueNotification = ({
       pl={4}
       py={3}
       alignItems="center"
+      display="block"
       onClick={() => !notification.hasRead && callback(notification.id)}
     >
       <CustomLink to={APP_PATHS.detailIssue(data.projectId, data.issueId)}>
-        <Stack spacing={0} direction="row" alignItems="center">
+        <Stack flex={1} spacing={0} direction="row" alignItems="center">
           <Flex pr={2}>
             <Avatar size="md" name={data.updaterUsername} src={data.updaterAvatar} />
           </Flex>
@@ -48,7 +53,7 @@ const UpdateIssueNotification = ({
               #{data.issueIndex} &#8226; {data.issueStatusName}
             </Text>
             <Text fontSize="sm" color="#949cac">
-              {timeAgo(notification.createdAt.toString(), t)}
+              {timeAgo(adjustedCreatedAt.toISOString(), t)}
             </Text>
           </Flex>
         </Stack>

@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { ProjectStatusEnum } from '../types';
 
-import { getDateField } from '@/validations';
+import { getDateField, getOptionalDateField } from '@/validations';
 
 export const projectFormSchema = (t: any) =>
   z
@@ -21,17 +21,23 @@ export const projectFormSchema = (t: any) =>
         .string()
         .trim()
         .min(1, { message: t('validation.descriptionRequired') }),
-      startDate: getDateField(t),
-      endDate: getDateField(t),
+      startDate: getOptionalDateField(),
+      endDate: getOptionalDateField(),
       status: z
         .nativeEnum(ProjectStatusEnum, { message: t('validation.project.invalidStatus') })
         .optional(),
       leadId: z.string().trim().min(1).uuid().optional(),
     })
-    .refine((data) => data.endDate >= data.startDate, {
-      message: t('validation.project.endDateInvalid'),
-      path: ['endDate'],
-    });
+    .refine(
+      (data) => {
+        if (!data.endDate || !data.startDate) return true;
+        return data.endDate >= data.startDate;
+      },
+      {
+        message: t('validation.project.endDateInvalid'),
+        path: ['endDate'],
+      }
+    );
 
 export const projectUpdateFormSchema = (t: any) =>
   z

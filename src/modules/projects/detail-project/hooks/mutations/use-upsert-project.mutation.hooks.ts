@@ -43,14 +43,18 @@ export function useUpsertProjectHook({
           body: {
             ...values,
             id,
-            startDate: formatDate({
-              date: values.startDate,
-              format: 'YYYY-MM-DD',
-            }),
-            endDate: formatDate({
-              date: values.endDate,
-              format: 'YYYY-MM-DD',
-            }),
+            startDate: values.startDate
+              ? formatDate({
+                  date: values.startDate,
+                  format: 'YYYY-MM-DD',
+                })
+              : undefined,
+            endDate: values.endDate
+              ? formatDate({
+                  date: values.endDate,
+                  format: 'YYYY-MM-DD',
+                })
+              : undefined,
           },
         });
       } catch (error) {}

@@ -161,11 +161,13 @@ export const PERMISSIONS_VALUES = (t: any): Record<PermissionEnum, string> => ({
   [PermissionEnum.UPSERT_ROLE]: t('permissions.upsertRole'),
 
   // Project status
+  [PermissionEnum.READ_DEFAULT_STATUS]: t('permissions.readDefaultStatus'),
   [PermissionEnum.UPDATE_DEFAULT_STATUS]: t('permissions.updateDefaultStatus'),
   [PermissionEnum.ADD_DEFAULT_STATUS]: t('permissions.addDefaultStatus'),
   [PermissionEnum.DELETE_DEFAULT_STATUS]: t('permissions.deleteDefaultStatus'),
 
   // Project label
+  [PermissionEnum.READ_DEFAULT_LABEL]: t('permissions.readDefaultLabel'),
   [PermissionEnum.DELETE_DEFAULT_LABEL]: t('permissions.deleteDefaultLabel'),
   [PermissionEnum.ADD_DEFAULT_LABEL]: t('permissions.addDefaultLabel'),
   [PermissionEnum.UPDATE_DEFAULT_LABEL]: t('permissions.updateDefaultLabel'),

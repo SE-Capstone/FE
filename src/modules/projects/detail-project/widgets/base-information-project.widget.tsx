@@ -50,14 +50,18 @@ export function BaseInformationProjectWidget({
     if (project) {
       handleUpsertProject({
         ...project,
-        startDate: formatDate({
-          date: project.startDate,
-          format: 'YYYY-MM-DD',
-        }) as unknown as Date,
-        endDate: formatDate({
-          date: project.endDate,
-          format: 'YYYY-MM-DD',
-        }) as unknown as Date,
+        startDate: project.startDate
+          ? (formatDate({
+              date: project.startDate,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date)
+          : undefined,
+        endDate: project.endDate
+          ? (formatDate({
+              date: project.endDate,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date)
+          : undefined,
         leadId: project.leadId,
         ...(fieldName === 'name' && {
           name: value || project.name,
@@ -74,10 +78,12 @@ export function BaseInformationProjectWidget({
               date: value,
               format: 'YYYY-MM-DD',
             }) as unknown as Date) ||
-            (formatDate({
-              date: project.startDate,
-              format: 'YYYY-MM-DD',
-            }) as unknown as Date),
+            (project.startDate
+              ? (formatDate({
+                  date: project.startDate,
+                  format: 'YYYY-MM-DD',
+                }) as unknown as Date)
+              : undefined),
         }),
         ...(fieldName === 'endDate' && {
           endDate:
@@ -85,10 +91,12 @@ export function BaseInformationProjectWidget({
               date: value,
               format: 'YYYY-MM-DD',
             }) as unknown as Date) ||
-            (formatDate({
-              date: project.endDate,
-              format: 'YYYY-MM-DD',
-            }) as unknown as Date),
+            (project.endDate
+              ? (formatDate({
+                  date: project.endDate,
+                  format: 'YYYY-MM-DD',
+                }) as unknown as Date)
+              : undefined),
         }),
       });
     }

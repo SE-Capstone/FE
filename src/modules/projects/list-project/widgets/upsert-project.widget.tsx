@@ -53,14 +53,18 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
           name: project.name,
           code: project.code,
           description: project.description,
-          startDate: formatDate({
-            date: project.startDate,
-            format: 'YYYY-MM-DD',
-          }) as unknown as Date,
-          endDate: formatDate({
-            date: project.endDate,
-            format: 'YYYY-MM-DD',
-          }) as unknown as Date,
+          startDate: project.startDate
+            ? (formatDate({
+                date: project.startDate,
+                format: 'YYYY-MM-DD',
+              }) as unknown as Date)
+            : undefined,
+          endDate: project.endDate
+            ? (formatDate({
+                date: project.endDate,
+                format: 'YYYY-MM-DD',
+              }) as unknown as Date)
+            : undefined,
           status: project.status,
           leadId: project.leadId || '',
         },
@@ -161,14 +165,12 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
           <SimpleGrid columns={2} spacing={3}>
             <CustomInput
               label={t('fields.startDate')}
-              isRequired
               type="date"
               registration={register('startDate')}
               error={errors.startDate}
             />
             <CustomInput
               label={t('fields.endDate')}
-              isRequired
               type="date"
               registration={register('endDate')}
               error={errors.endDate}

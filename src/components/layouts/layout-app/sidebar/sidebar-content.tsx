@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineIdcard } from 'react-icons/ai';
-import { BiLayer } from 'react-icons/bi';
 import { BsWindowDock } from 'react-icons/bs';
 import {
   MdOutlineLayers,
@@ -22,7 +21,6 @@ import {
   MdOutlineHome,
   MdOutlinePeopleAlt,
   MdOutlineSettings,
-  MdOutlineNewspaper,
   MdArrowBackIosNew,
   MdArrowForwardIos,
 } from 'react-icons/md';
@@ -65,9 +63,9 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
           path: APP_PATHS.HOME,
         },
         (permissions[PermissionEnum.GET_LIST_USER] ||
-          // Todo: fix
-          permissions[PermissionEnum.GET_LIST_USER]) && {
-          name: t('common.user'),
+          permissions[PermissionEnum.GET_SKILL] ||
+          permissions[PermissionEnum.GET_SKILL_USER]) && {
+          name: t('common.hr'),
           icon: MdOutlinePeopleAlt,
           path: undefined,
           children: [
@@ -76,11 +74,22 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
               icon: MdOutlineCategory,
               path: APP_PATHS.listUser,
             },
-            // Todo: fix
-            permissions[PermissionEnum.GET_LIST_USER] && {
+            // Todo: update permission
+            permissions[PermissionEnum.READ_LIST_ROLE] && {
               name: t('common.positions'),
-              icon: BiLayer,
-              path: APP_PATHS.listUser,
+              icon: MdOutlineLayers,
+              path: APP_PATHS.listPosition,
+            },
+            (permissions[PermissionEnum.GET_SKILL] ||
+              permissions[PermissionEnum.GET_SKILL_USER]) && {
+              name: t('common.skills'),
+              icon: RiFolderUserLine,
+              path: APP_PATHS.listSkill,
+            },
+            permissions[PermissionEnum.GET_APPLICANT] && {
+              name: t('common.applicants'),
+              icon: PiUserSquareLight,
+              path: APP_PATHS.listApplicant,
             },
           ].filter(Boolean),
         },
@@ -94,43 +103,11 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
           icon: BsWindowDock,
           path: '/projects',
         },
-        // Todo: update permission
-        {
-          name: t('common.hr'),
-          icon: MdOutlinePeopleAlt,
-          path: undefined,
-          children: [
-            {
-              name: t('common.positions'),
-              icon: MdOutlineLayers,
-              path: APP_PATHS.listPosition,
-            },
-            // {
-            //   name: t('common.jobs'),
-            //   icon: PiBriefcase,
-            //   path: APP_PATHS.listJob,
-            // },
-            {
-              name: t('common.skills'),
-              icon: RiFolderUserLine,
-              path: APP_PATHS.listSkill,
-            },
-            {
-              name: t('common.applicants'),
-              icon: PiUserSquareLight,
-              path: APP_PATHS.listApplicant,
-            },
-          ].filter(Boolean),
-        },
-        {
+        (permissions[PermissionEnum.READ_DEFAULT_LABEL] ||
+          permissions[PermissionEnum.READ_DEFAULT_STATUS]) && {
           name: t('common.settings'),
           icon: MdOutlineSettings,
           path: '/settings',
-        },
-        {
-          name: t('common.news'),
-          icon: MdOutlineNewspaper,
-          path: '/news',
         },
       ].filter(Boolean),
     [permissions, t]

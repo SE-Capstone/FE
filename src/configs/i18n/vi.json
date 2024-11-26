@@ -100,7 +100,7 @@
     "roles": "Danh sách vai trò",
     "role": "Vai trò",
     "hr": "Nhân sự",
-    "users": "Danh sách người dùng",
+    "users": "Danh sách nhân sự",
     "user": "Người dùng",
     "positions": "Vị trí công việc",
     "position": "Vị trí",
@@ -162,6 +162,7 @@
     "percentageDone": "% Hoàn thành",
     "teamLead": "Project leader",
     "estimatedTime": "Thời gian dự kiến",
+    "actualTime": "Thời gian thực tế",
     "isDone": "Đánh dấu hoàn thành",
     "IsProjectConfigurator": "Quản lý dự án",
     "IsIssueConfigurator": "Quản lý công việc",
@@ -249,7 +250,10 @@
       "invalidPriority": "Dữ liệu không hợp lệ",
       "estimatedNumber": "Thời gian được dự kiến phải là một số",
       "estimatedTimeMin": "Thời gian được dự kiến phải ít nhất 0",
-      "estimatedTimeMax": "Thời gian được dự kiến tối đa là 1000"
+      "estimatedTimeMax": "Thời gian được dự kiến tối đa là 1000",
+      "actualNumber": "Thời gian thực tế phải là một số",
+      "actualTimeMin": "Thời gian thực tế phải ít nhất 0",
+      "actualTimeMax": "Thời gian thực tế tối đa là 1000"
     },
     "label": {
       "titleMax": "Tiêu đề không được quá 20 ký tự",
@@ -351,7 +355,9 @@
     "addApplicant": "Thêm ứng viên",
     "updateApplicant": "Cập nhật Ứng viên",
     "deleteApplicant": "Xóa Ứng viên",
-    "upsertSkillUser": "Thêm hoặc cập nhật kỹ năng người dùng"
+    "upsertSkillUser": "Thêm hoặc cập nhật kỹ năng người dùng",
+    "readDefaultStatus": "Xem trạng thái mặc định",
+    "readDefaultLabel": "Xem nhãn mặc định"
   },
   "messages": {
     "success": "Thành công",

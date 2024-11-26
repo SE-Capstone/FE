@@ -7,9 +7,12 @@ import { AssignSkillPage } from './assign-skill.page';
 import { ListSkillPage } from './list-skill.page';
 
 import { CustomTabs, Head } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function SkillsPage() {
   const { t } = useTranslation();
+  const { permissions } = useAuthentication();
   const [activeTabIndex, setActiveTabIndex] = useState<number>(() =>
     parseInt(localStorage.getItem('activeSkillTabIndex') || '0', 10)
   );
@@ -32,15 +35,15 @@ export function SkillsPage() {
           }}
           isSelected={activeTabIndex}
           tabsData={[
-            {
+            permissions[PermissionEnum.GET_SKILL] && {
               title: t('common.skills'),
               childrenPanel: <ListSkillPage />,
             },
-            {
+            permissions[PermissionEnum.GET_SKILL_USER] && {
               title: t('common.assignSkill'),
               childrenPanel: <AssignSkillPage />,
             },
-          ]}
+          ].filter(Boolean)}
           onTabChange={handleTabChange}
         />
       </Container>

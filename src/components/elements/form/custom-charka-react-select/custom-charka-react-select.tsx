@@ -153,6 +153,7 @@ export const CustomChakraReactSelect = <
       option: (provide, state) => ({
         ...provide,
         bg: state.isSelected ? '#c7eaff' : 'white',
+        color: 'textColor',
         _hover: { bg: '#def2fe', color: 'textColor' },
         transition: 'background 0.3s ease',
         fontSize: { base: 'sm', '2xl': 'sm' },

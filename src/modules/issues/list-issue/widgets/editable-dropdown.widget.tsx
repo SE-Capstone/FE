@@ -115,6 +115,22 @@ export const InlineEditCustomSelect = ({
       delete issue.reporter;
       delete issue.subIssues;
       delete issue.comments;
+
+      if (field === 'status' && (option?.value === statusId || option?.value === issue.status.id)) {
+        return;
+      }
+      if (field === 'label' && option?.value === issue.label?.id) {
+        return;
+      }
+      if (field === 'assignee' && option?.value === issue.assignee?.id) {
+        return;
+      }
+      if (field === 'priority' && option?.value === issue.priority) {
+        return;
+      }
+      if (field === 'phase' && option?.value === issue.phase?.id) {
+        return;
+      }
       handleUpsertIssue({
         ...issue,
         startDate: issue.startDate
@@ -141,14 +157,18 @@ export const InlineEditCustomSelect = ({
     if (project) {
       handleUpsertProject({
         ...project,
-        startDate: formatDate({
-          date: project.startDate,
-          format: 'YYYY-MM-DD',
-        }) as unknown as Date,
-        endDate: formatDate({
-          date: project.endDate,
-          format: 'YYYY-MM-DD',
-        }) as unknown as Date,
+        startDate: project.startDate
+          ? (formatDate({
+              date: project.startDate,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date)
+          : undefined,
+        endDate: project.endDate
+          ? (formatDate({
+              date: project.endDate,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date)
+          : undefined,
         leadId: field === 'lead' ? option?.value : project.leadId,
         status: field === 'status' ? option?.value : project.status,
       });

@@ -143,6 +143,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
           priority: issue.priority,
           assigneeId: issue.assignee?.id,
           estimatedTime: issue.estimatedTime,
+          actualTime: issue.actualTime,
         },
         {
           keepDirty: false,
@@ -260,7 +261,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
               />
             </SimpleGrid>
 
-            <SimpleGrid columns={isUpdate ? 3 : 2} spacing={3}>
+            <SimpleGrid columns={isUpdate ? 4 : 2} spacing={3}>
               <CustomChakraReactSelect
                 placeholder={`${t('common.choose')} ${t('fields.priority').toLowerCase()}`}
                 label={t('fields.priority')}
@@ -285,6 +286,14 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
                 registration={register('estimatedTime')}
                 error={errors.estimatedTime}
               />
+              {isUpdate && (
+                <CustomInput
+                  name="actualTime"
+                  label={t('fields.actualTime')}
+                  registration={register('actualTime')}
+                  error={errors.actualTime}
+                />
+              )}
             </SimpleGrid>
 
             <SimpleGrid columns={isUpdate ? 2 : 1} spacing={3}>
