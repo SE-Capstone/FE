@@ -414,6 +414,7 @@
     "resetPasswordFailed": "Reset failed, Please try again!"
   },
   "chart": {
+    "projectsByStatusReport": "Categories project by status",
     "skillsReport": "Categories by skills",
     "statusReport": "Categories by status"
   },

@@ -37,17 +37,7 @@ export const ReportSkillsWidget = () => {
   }, [isLoading, skillsReport, t]);
 
   return (
-    <Stack
-      bg="white"
-      p={5}
-      flex={1}
-      mt={5}
-      flexBasis="10%"
-      rounded={2.5}
-      spacing={3}
-      overflowX="auto"
-      maxHeight="500px"
-    >
+    <Stack bg="white" p={5} rounded={2.5} overflowX="auto" maxHeight="500px">
       {/* <Text fontSize="lg">{t('chart.skillsReport')}</Text> */}
       <Bar
         data={chartData}

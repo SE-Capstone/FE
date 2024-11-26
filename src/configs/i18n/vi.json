@@ -379,6 +379,7 @@
     "resetPasswordFailed": "Đặt lại mật khẩu thất bại, Vui lòng thử lại!"
   },
   "chart": {
+    "projectsByStatusReport": "Phân loại dự án theo trạng thái",
     "skillsReport": "Phân loại bởi kỹ năng",
     "statusReport": "Phân loại bởi trạng thái"
   },

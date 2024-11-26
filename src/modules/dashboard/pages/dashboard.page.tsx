@@ -1,28 +1,27 @@
-// import {
-//   Chart as ChartJS,
-//   LinearScale,
-//   CategoryScale,
-//   BarElement,
-//   PointElement,
-//   LineElement,
-//   Tooltip,
-//   Legend,
-// } from 'chart.js';
+import { Grid, GridItem } from '@chakra-ui/react';
 import Chart from 'chart.js/auto';
 
+import { ReportProjectsByStatusWidget } from '../widgets/report-project-by-status.widget';
 import { ReportSkillsWidget } from '../widgets/report-skills.widget';
 
 Chart.register();
-// ChartJS.register(
-//   LinearScale,
-//   CategoryScale,
-//   BarElement,
-//   PointElement,
-//   LineElement,
-//   Legend,
-//   Tooltip
-// );
 
 export function DashboardPage() {
-  return <ReportSkillsWidget />;
+  return (
+    <Grid
+      alignItems="center"
+      gap={2}
+      templateColumns={{
+        base: 'repeat(1, 1fr)',
+        md: 'repeat(3, 1fr)',
+      }}
+    >
+      <GridItem colSpan={1} maxHeight="500px">
+        <ReportProjectsByStatusWidget />
+      </GridItem>
+      <GridItem colSpan={2}>
+        <ReportSkillsWidget />
+      </GridItem>
+    </Grid>
+  );
 }
