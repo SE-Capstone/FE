@@ -332,7 +332,8 @@
     "task": "Issue",
     "statusProject": "Issue status",
     "phase": "Project phase",
-    "label": "Issue label"
+    "label": "Issue label",
+    "applicant": "Applicant"
   },
   "permissions": {
     "addUser": "Add user",
@@ -372,7 +373,20 @@
     "addPhase": "Add phase",
     "deleteIssue": "Delete issue",
     "addIssue": "Add issue",
-    "updateIssue": "Update issue"
+    "updateIssue": "Update issue",
+    "updateUser": "Update user",
+    "toggleUser": "Update user status",
+    "getDetailUser": "Get detail user",
+    "createSkill": "Create skill",
+    "updateSkill": "Update skill",
+    "deleteSkill": "Delete skill",
+    "getSkill": "Get skill",
+    "getSkillUser": "Get skill user",
+    "getApplicant": "Get applicant",
+    "addApplicant": "Add applicant",
+    "updateApplicant": "Update applicant",
+    "deleteApplicant": "Delete applicant",
+    "upsertSkillUser": "Create or update skill user"
   },
   "messages": {
     "success": "Success",

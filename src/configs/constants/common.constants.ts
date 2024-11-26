@@ -139,8 +139,11 @@ export const ISSUE_PRIORITY_VALUES = (t: any): Record<IssuePriorityEnum, string>
 export const PERMISSIONS_VALUES = (t: any): Record<PermissionEnum, string> => ({
   // User
   [PermissionEnum.ADD_USER]: t('permissions.addUser'),
+  [PermissionEnum.UPDATE_USER]: t('permissions.updateUser'),
+  [PermissionEnum.TOGGLE_USER]: t('permissions.toggleUser'),
   [PermissionEnum.GET_LIST_USER]: t('permissions.getListUser'),
   [PermissionEnum.CHANGE_PASSWORD_USER]: t('permissions.changePassword'),
+  [PermissionEnum.GET_DETAIL_USER]: t('permissions.getDetailUser'),
 
   // Project
   [PermissionEnum.ADD_PROJECT]: t('permissions.addProject'),
@@ -166,6 +169,20 @@ export const PERMISSIONS_VALUES = (t: any): Record<PermissionEnum, string> => ({
   [PermissionEnum.DELETE_DEFAULT_LABEL]: t('permissions.deleteDefaultLabel'),
   [PermissionEnum.ADD_DEFAULT_LABEL]: t('permissions.addDefaultLabel'),
   [PermissionEnum.UPDATE_DEFAULT_LABEL]: t('permissions.updateDefaultLabel'),
+
+  // Skill
+  [PermissionEnum.CREATE_SKILL]: t('permissions.createSkill'),
+  [PermissionEnum.GET_SKILL]: t('permissions.getSkill'),
+  [PermissionEnum.GET_SKILL_USER]: t('permissions.getSkillUser'),
+  [PermissionEnum.UPDATE_SKILL]: t('permissions.updateSkill'),
+  [PermissionEnum.UPSERT_SKILL_USER]: t('permissions.upsertSkillUser'),
+  [PermissionEnum.DELETE_SKILL]: t('permissions.deleteSkill'),
+
+  // Applicant
+  [PermissionEnum.GET_APPLICANT]: t('permissions.getApplicant'),
+  [PermissionEnum.ADD_APPLICANT]: t('permissions.addApplicant'),
+  [PermissionEnum.UPDATE_APPLICANT]: t('permissions.updateApplicant'),
+  [PermissionEnum.DELETE_APPLICANT]: t('permissions.deleteApplicant'),
 });
 
 export const GROUP_PERMISSIONS_VALUES = (t: any): Record<GroupPermissionEnum, string> => ({
@@ -176,6 +193,8 @@ export const GROUP_PERMISSIONS_VALUES = (t: any): Record<GroupPermissionEnum, st
   [GroupPermissionEnum.STATUS]: t('groupPermissions.statusProject'),
   [GroupPermissionEnum.PHASE]: t('groupPermissions.phase'),
   [GroupPermissionEnum.LABEL]: t('groupPermissions.label'),
+  [GroupPermissionEnum.SKILL]: t('groupPermissions.skill'),
+  [GroupPermissionEnum.APPLICANT]: t('groupPermissions.applicant'),
 });
 
 export const PROJECT_STATUS_VALUES = (t: any): Record<ProjectStatusEnum, string> => ({

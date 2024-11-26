@@ -297,7 +297,8 @@
     "task": "Công việc",
     "statusProject": "Trạng thái công việc",
     "phase": "Giai đoạn dự án",
-    "label": "Nhãn công việc"
+    "label": "Nhãn công việc",
+    "applicant": "Ứng viên"
   },
   "permissions": {
     "addUser": "Thêm người dùng",
@@ -337,7 +338,20 @@
     "addPhase": "Thêm giai đoạn",
     "deleteIssue": "Xóa công việc",
     "addIssue": "Thêm công việc",
-    "updateIssue": "Cập nhật công việc"
+    "updateIssue": "Cập nhật công việc",
+    "updateUser": "Cập nhật người dùng",
+    "toggleUser": "Cập nhật trạng thái người dùng",
+    "getDetailUser": "Xem chi tiết người dùng",
+    "createSkill": "Tạo mới kỹ năng",
+    "updateSkill": "Cập nhật kỹ năng",
+    "deleteSkill": "Xóa kỹ năng",
+    "getSkill": "Xem danh sách kỹ năng",
+    "getSkillUser": "Xem kỹ năng người dùng",
+    "getApplicant": "Xem danh sách ứng viên",
+    "addApplicant": "Thêm ứng viên",
+    "updateApplicant": "Cập nhật Ứng viên",
+    "deleteApplicant": "Xóa Ứng viên",
+    "upsertSkillUser": "Thêm hoặc cập nhật kỹ năng người dùng"
   },
   "messages": {
     "success": "Thành công",
