@@ -9,6 +9,8 @@ import { UpsertPositionWidget } from '../upsert-position.widget';
 import type { IPosition } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 interface ActionMenuTablePositionsProps {
   position: IPosition;
@@ -16,12 +18,13 @@ interface ActionMenuTablePositionsProps {
 export function ActionMenuTablePositions({ position }: ActionMenuTablePositionsProps) {
   const { t } = useTranslation();
   const disclosureModal = useDisclosure();
+  const { permissions } = useAuthentication();
   const { handleRemovePosition } = useRemovePositionHook();
 
   if (!position || !position.id) return null;
 
   const menuOptions = [
-    {
+    permissions[PermissionEnum.UPDATE_POSITION] && {
       label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => {
@@ -30,7 +33,7 @@ export function ActionMenuTablePositions({ position }: ActionMenuTablePositionsP
         disclosureModal.onOpen();
       },
     },
-    {
+    permissions[PermissionEnum.DELETE_POSITION] && {
       type: 'danger',
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,

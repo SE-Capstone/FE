@@ -15,6 +15,7 @@ import type { RolesEnum } from '@/configs';
 import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
 import { GENDER_VALUES, PermissionEnum } from '@/configs';
 import { getNumericalOrder } from '@/libs/helpers';
+import { Error403Page } from '@/modules/errors';
 import { BadgeIssue } from '@/modules/issues/list-issue/components';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
@@ -148,6 +149,10 @@ export function ListUserPage() {
     ],
     [meta.pageIndex, meta.pageSize, pathname, t]
   );
+
+  if (!permissions[PermissionEnum.GET_LIST_USER]) {
+    return <Error403Page />;
+  }
 
   return (
     <>

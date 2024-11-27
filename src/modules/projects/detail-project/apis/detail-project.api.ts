@@ -73,16 +73,16 @@ export function useGetDetailProject(params: UseGetDetailProjectOptionsType) {
       });
     }
 
-    if (!members.find((member) => member.id === currentUser?.id)) {
-      members.unshift({
-        id: currentUser?.id || '',
-        fullName: currentUser?.fullName || '',
-        userName: `${currentUser?.userName} (${t('common.me')})` || '',
-        roleName: currentUser?.roleName || '',
-        positionName: currentUser?.positionName || '',
-        avatar: currentUser?.avatar || '',
-      });
-    }
+    // if (!members.find((member) => member.id === currentUser?.id)) {
+    //   members.unshift({
+    //     id: currentUser?.id || '',
+    //     fullName: currentUser?.fullName || '',
+    //     userName: `${currentUser?.userName} (${t('common.me')})` || '',
+    //     roleName: currentUser?.roleName || '',
+    //     positionName: currentUser?.positionName || '',
+    //     avatar: currentUser?.avatar || '',
+    //   });
+    // }
 
     setProjectContext({
       permissions: data?.data?.myPermissions || [],

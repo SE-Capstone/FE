@@ -114,18 +114,18 @@ export function ActionTableKanbanWidget({
             : member.userName,
       }));
 
-      const currentUserMember = !updatedMembers.find((mem) => mem.id === currentUser?.id) && {
-        id: currentUser?.id || '',
-        fullName: currentUser?.fullName || '',
-        userName: `${currentUser?.userName} (${t('common.me')})` || '',
-        roleName: currentUser?.roleName || '',
-        positionName: currentUser?.positionName || '',
-        avatar: currentUser?.avatar || '',
-      };
+      // const currentUserMember = !updatedMembers.find((mem) => mem.id === currentUser?.id) && {
+      //   id: currentUser?.id || '',
+      //   fullName: currentUser?.fullName || '',
+      //   userName: `${currentUser?.userName} (${t('common.me')})` || '',
+      //   roleName: currentUser?.roleName || '',
+      //   positionName: currentUser?.positionName || '',
+      //   avatar: currentUser?.avatar || '',
+      // };
 
-      if (currentUserMember) {
-        updatedMembers.unshift(currentUserMember);
-      }
+      // if (currentUserMember) {
+      //   updatedMembers.unshift(currentUserMember);
+      // }
       setMembers(updatedMembers);
       prevMembersRef.current = updatedMembers;
 

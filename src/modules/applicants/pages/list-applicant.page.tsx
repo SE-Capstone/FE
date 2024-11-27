@@ -13,6 +13,7 @@ import type { ColumnsProps } from '@/components/elements';
 import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
 import { PermissionEnum } from '@/configs';
 import { formatDate, getNumericalOrder, phoneNumberAutoFormat } from '@/libs/helpers';
+import { Error403Page } from '@/modules/errors';
 import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ListApplicantPage() {
@@ -111,6 +112,10 @@ export function ListApplicantPage() {
     ],
     [meta.pageIndex, meta.pageSize, t]
   );
+
+  if (!permissions[PermissionEnum.GET_APPLICANT]) {
+    return <Error403Page />;
+  }
 
   return (
     <>

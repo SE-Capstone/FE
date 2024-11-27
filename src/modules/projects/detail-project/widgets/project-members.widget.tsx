@@ -24,6 +24,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { BsStars } from 'react-icons/bs';
 import { LuInfo } from 'react-icons/lu';
+import { MdClose } from 'react-icons/md';
 import { PiUsersThreeFill } from 'react-icons/pi';
 import { RiEditFill } from 'react-icons/ri';
 
@@ -46,7 +47,9 @@ import { useGetListPositionQuery } from '@/modules/positions/hooks/queries';
 const MemberSetting = ({ members, projectId }: { members: ProjectMember[]; projectId: string }) => {
   const { t } = useTranslation();
 
-  const { listPosition } = useGetListPositionQuery({ size: 100000000 });
+  const { listPosition } = useGetListPositionQuery({
+    size: 100000000,
+  });
 
   return (
     <TableContainer overflowY="auto" maxH="580px" rounded={2}>
@@ -327,6 +330,13 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
     }
   }, [data]);
 
+  const handleRemoveMember = useCallback(
+    (memberId: string) => () => {
+      setSuggestMembers(suggestMembers.filter((item) => item !== memberId));
+    },
+    [suggestMembers]
+  );
+
   const saveMembers = useCallback(async () => {
     const oldMembers = project?.members?.map((item) => item.id) || [];
     if (suggestMembers.length > 0) {
@@ -526,6 +536,11 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
                   <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
                     {member.name} {member.userName && `(${member.userName})`}
                   </Text>
+                  <IconButton
+                    aria-label="remove-member"
+                    icon={<MdClose />}
+                    onClick={handleRemoveMember(member.userId)}
+                  />
                 </ListItem>
               ))}
             </UnorderedList>

@@ -74,8 +74,7 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
               icon: MdOutlineCategory,
               path: APP_PATHS.listUser,
             },
-            // Todo: update permission
-            permissions[PermissionEnum.READ_LIST_ROLE] && {
+            permissions[PermissionEnum.GET_POSITION] && {
               name: t('common.positions'),
               icon: MdOutlineLayers,
               path: APP_PATHS.listPosition,

@@ -6,10 +6,13 @@ import { usePositionsQueryFilterStateContext } from '../contexts';
 import { UpsertPositionWidget } from './upsert-position.widget';
 
 import { SearchInput } from '@/components/elements';
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ActionTablePositionsWidget() {
   const { t } = useTranslation();
   const disclosureModal = useDisclosure();
+  const { permissions } = useAuthentication();
   const { positionsQueryState, setPositionsQueryFilterState } =
     usePositionsQueryFilterStateContext();
   const { pathname } = useLocation();
@@ -37,7 +40,7 @@ export function ActionTablePositionsWidget() {
             />
           </GridItem>
         </Grid>
-        {isShowFilterPosition && (
+        {isShowFilterPosition && permissions[PermissionEnum.CREATE_POSITION] && (
           <>
             <Spacer />
             <Button size="md" leftIcon={<>+</>} onClick={disclosureModal.onOpen}>

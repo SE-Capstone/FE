@@ -337,7 +337,8 @@
     "statusProject": "Issue status",
     "phase": "Project phase",
     "label": "Issue label",
-    "applicant": "Applicant"
+    "applicant": "Applicant",
+    "position": "Job position"
   },
   "permissions": {
     "addUser": "Add user",
@@ -392,7 +393,11 @@
     "deleteApplicant": "Delete applicant",
     "upsertSkillUser": "Create or update skill user",
     "readDefaultStatus": "Read default status",
-    "readDefaultLabel": "Read default label"
+    "readDefaultLabel": "Read default label",
+    "createPosition": "Create job position",
+    "updatePosition": "Update job position",
+    "deletePosition": "Delete job position",
+    "getPosition": "Get job position"
   },
   "messages": {
     "success": "Success",

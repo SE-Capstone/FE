@@ -100,6 +100,10 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
   };
 
   const assignToMe = () => {
+    if (currentUser?.id && !members.find((mem) => mem.id === currentUser?.id)) {
+      return;
+    }
+
     const selectedOption = {
       label: currentUser?.userName || '',
       value: currentUser?.id || '',
@@ -183,16 +187,16 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
           avatar: project.leadAvatar || '',
         });
       }
-      if (!members.find((member) => member.id === currentUser?.id)) {
-        members.unshift({
-          id: currentUser?.id || '',
-          fullName: currentUser?.fullName || '',
-          userName: `${currentUser?.userName} (${t('common.me')})` || '',
-          roleName: currentUser?.roleName || '',
-          positionName: currentUser?.positionName || '',
-          avatar: currentUser?.avatar || '',
-        });
-      }
+      // if (!members.find((member) => member.id === currentUser?.id)) {
+      //   members.unshift({
+      //     id: currentUser?.id || '',
+      //     fullName: currentUser?.fullName || '',
+      //     userName: `${currentUser?.userName} (${t('common.me')})` || '',
+      //     roleName: currentUser?.roleName || '',
+      //     positionName: currentUser?.positionName || '',
+      //     avatar: currentUser?.avatar || '',
+      //   });
+      // }
       setMembers(members);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

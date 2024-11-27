@@ -302,7 +302,8 @@
     "statusProject": "Trạng thái công việc",
     "phase": "Giai đoạn dự án",
     "label": "Nhãn công việc",
-    "applicant": "Ứng viên"
+    "applicant": "Ứng viên",
+    "position": "Vị trí công việc"
   },
   "permissions": {
     "addUser": "Thêm người dùng",
@@ -357,7 +358,11 @@
     "deleteApplicant": "Xóa Ứng viên",
     "upsertSkillUser": "Thêm hoặc cập nhật kỹ năng người dùng",
     "readDefaultStatus": "Xem trạng thái mặc định",
-    "readDefaultLabel": "Xem nhãn mặc định"
+    "readDefaultLabel": "Xem nhãn mặc định",
+    "createPosition": "Tạo vị trí công việc",
+    "updatePosition": "Cập nhật vị trí công việc",
+    "deletePosition": "Xóa vị trí công việc",
+    "getPosition": "Xem vị trí công việc"
   },
   "messages": {
     "success": "Thành công",

@@ -1,5 +1,8 @@
 import { Outlet, type RouteObject } from 'react-router-dom';
 
+import { PermissionCheck } from '../permisstion-check';
+
+import { PermissionEnum } from '@/configs';
 import { lazyImport } from '@/libs/utils';
 import { PositionsQueryProvider } from '@/modules/positions/contexts';
 
@@ -16,10 +19,11 @@ export function positionsRoutes(): RouteObject {
       {
         index: true,
         element: (
-          // TODO: permission
-          <PositionsQueryProvider>
-            <ListPositionPage />
-          </PositionsQueryProvider>
+          <PermissionCheck permissions={[PermissionEnum.GET_POSITION]}>
+            <PositionsQueryProvider>
+              <ListPositionPage />
+            </PositionsQueryProvider>
+          </PermissionCheck>
         ),
       },
     ],
