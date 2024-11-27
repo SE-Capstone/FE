@@ -216,11 +216,11 @@ const NotificationsList = () => {
                   </Tooltip>
                 )}
               </Flex>
-              <Divider m={0} />
+              <Divider m={0} color="#eef1f6" />
               {listNotification.map((notification, index) => (
                 <Box key={index} w="full" onClick={onClose}>
                   <NotificationWidget notification={notification} />
-                  {listNotification.length - 1 !== index && <Divider m={0} />}
+                  {listNotification.length - 1 !== index && <Divider m={0} color="#eef1f6" />}
                 </Box>
               ))}
               {listNotification.length <= 0 && (

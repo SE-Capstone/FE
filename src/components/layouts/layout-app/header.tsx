@@ -157,7 +157,7 @@ export function HeaderApp() {
                   {t('common.logout')}
                 </Text>
               </MenuItem>
-              <MenuDivider />
+              <MenuDivider color="#eef1f6" />
               <Text fontWeight="bold" color="neutral.300" px={1}>
                 {t('common.language')}
               </Text>

@@ -121,6 +121,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
   const { currentUser } = useAuthentication();
   const canUpdate =
     currentUser?.id === issue.assignee?.id ||
+    currentUser?.id === issue.reporter?.id ||
     permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
 
   return (
