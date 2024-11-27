@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Stack, Text } from '@chakra-ui/react';
 
 import PaginationItem from './pagination-item';
@@ -30,6 +32,13 @@ const Pagination: React.FC<PaginationProps> = ({
     currentPage < lastPage
       ? generatePagesArray(currentPage, Math.min(currentPage + siblingsCount, lastPage))
       : [];
+
+  useEffect(() => {
+    if (currentPage > lastPage) {
+      onPageChange(lastPage);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, lastPage]);
 
   return (
     <Stack direction="row" spacing="2">
