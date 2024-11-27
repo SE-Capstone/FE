@@ -46,6 +46,11 @@ export function useUpsertSkillMutation({ configs, reset, isUpdate, onClose }: Pr
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.skill.skills.queryKey,
       });
+      if (isUpdate) {
+        queryClient.invalidateQueries({
+          queryKey: allQueryKeysStore.skill.listUserSkill._def,
+        });
+      }
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.user['users/reports/skills'].queryKey,
       });

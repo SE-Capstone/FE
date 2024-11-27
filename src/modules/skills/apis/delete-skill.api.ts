@@ -45,6 +45,9 @@ export function useRemoveSkillMutation(props: Props) {
         queryKey: allQueryKeysStore.skill.skills.queryKey,
       });
       queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.skill.listUserSkill._def,
+      });
+      queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.user['users/reports/skills'].queryKey,
       });
       notify({

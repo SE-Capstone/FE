@@ -174,7 +174,7 @@ export default function TransferListWidget({
               key={item.id}
               size="md"
               borderColor="gray.300"
-              disabled={!userId || permissions[PermissionEnum.UPSERT_SKILL_USER]}
+              disabled={!userId || !permissions[PermissionEnum.UPSERT_SKILL_USER]}
               isChecked={checked.includes(item)}
               onChange={() => handleToggle(setChecked, checked, item)}
             >
@@ -206,7 +206,7 @@ export default function TransferListWidget({
               leftItems.length === 0 ||
               !userId ||
               isSubmitting ||
-              permissions[PermissionEnum.UPSERT_SKILL_USER]
+              !permissions[PermissionEnum.UPSERT_SKILL_USER]
             }
             onClick={() =>
               moveAllItems(leftItems, setLeftItems, rightItems, setRightItems, setLeftChecked)
@@ -219,7 +219,7 @@ export default function TransferListWidget({
               leftChecked.length === 0 ||
               !userId ||
               isSubmitting ||
-              permissions[PermissionEnum.UPSERT_SKILL_USER]
+              !permissions[PermissionEnum.UPSERT_SKILL_USER]
             }
             onClick={() =>
               moveItems(
@@ -239,7 +239,7 @@ export default function TransferListWidget({
               rightChecked.length === 0 ||
               !userId ||
               isSubmitting ||
-              permissions[PermissionEnum.UPSERT_SKILL_USER]
+              !permissions[PermissionEnum.UPSERT_SKILL_USER]
             }
             onClick={() =>
               moveItems(
@@ -259,7 +259,7 @@ export default function TransferListWidget({
               rightItems.length === 0 ||
               !userId ||
               isSubmitting ||
-              permissions[PermissionEnum.UPSERT_SKILL_USER]
+              !permissions[PermissionEnum.UPSERT_SKILL_USER]
             }
             onClick={() =>
               moveAllItems(rightItems, setRightItems, leftItems, setLeftItems, setRightChecked)
@@ -282,7 +282,7 @@ export default function TransferListWidget({
         </VStack>
       </HStack>
       <Button
-        disabled={!userId || isSubmitting || permissions[PermissionEnum.UPSERT_SKILL_USER]}
+        disabled={!userId || isSubmitting || !permissions[PermissionEnum.UPSERT_SKILL_USER]}
         px={6}
         mt={4}
         onClick={handleSubmit}
