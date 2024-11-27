@@ -16,7 +16,7 @@ interface ISuggestMemberRequest {
   };
 }
 
-interface SuggestResponse {
+export interface SuggestResponse {
   userId: string;
   name: string;
   userName?: string;

@@ -36,6 +36,7 @@ import { InlineEditPositionSelect } from '../components/editable-dropdown.widget
 import { useUpsertMembersHook } from '../hooks/mutations';
 
 import type { IProject, ProjectMember } from '../../list-project/types';
+import type { SuggestResponse } from '../apis/suggest-member.api';
 import type { IOptionUserSelect } from '../components/users-async-select';
 
 import { IMAGE_URLS } from '@/assets/images';
@@ -281,6 +282,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
   const [initialMembers, setInitialMembers] = useState<Set<string>>(new Set());
   const [defaultUsersOption, setDefaultUsersOption] = useState<IOptionUserSelect[]>([]);
   const [suggestMembers, setSuggestMembers] = useState<string[]>([]);
+  const [suggestedMembers, setSuggestedMembers] = useState<SuggestResponse[]>([]);
 
   const { isLoading, refetch } = useGetUserForSuggest({
     userInProject: Array.from(initialMembers),
@@ -327,14 +329,17 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
   useEffect(() => {
     if (data?.data && data.data.length > 0) {
       setSuggestMembers(data.data.map((item) => item.userId));
+      setSuggestedMembers(data.data);
     }
   }, [data]);
 
   const handleRemoveMember = useCallback(
     (memberId: string) => () => {
-      setSuggestMembers(suggestMembers.filter((item) => item !== memberId));
+      setSuggestMembers(suggestMembers.filter((userId) => userId !== memberId));
+      setSuggestedMembers(suggestedMembers.filter((mem) => mem.userId !== memberId));
     },
-    [suggestMembers]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [suggestedMembers]
   );
 
   const saveMembers = useCallback(async () => {
@@ -531,16 +536,29 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
         <Stack spacing={5}>
           {!isError && data?.data && data?.data?.length > 0 ? (
             <UnorderedList>
-              {data.data.map((member, index) => (
+              {suggestedMembers.map((member, index) => (
                 <ListItem key={index}>
-                  <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
-                    {member.name} {member.userName && `(${member.userName})`}
-                  </Text>
-                  <IconButton
-                    aria-label="remove-member"
-                    icon={<MdClose />}
-                    onClick={handleRemoveMember(member.userId)}
-                  />
+                  <Flex alignItems="center" justifyContent="start">
+                    <Text
+                      wordBreak="break-all"
+                      display="contents"
+                      whiteSpace="normal"
+                      flex={1}
+                      fontWeight={500}
+                    >
+                      {member.name} {member.userName && `(${member.userName})`}
+                    </Text>
+                    <IconButton
+                      aria-label="remove-member"
+                      bg="transparent"
+                      color="textColor"
+                      _hover={{
+                        bg: 'transparent',
+                      }}
+                      icon={<MdClose />}
+                      onClick={handleRemoveMember(member.userId)}
+                    />
+                  </Flex>
                 </ListItem>
               ))}
             </UnorderedList>
