@@ -384,6 +384,12 @@
     "resetPasswordFailed": "Đặt lại mật khẩu thất bại, Vui lòng thử lại!"
   },
   "chart": {
+    "totalUser": "Tổng số nhân sự",
+    "ongoingProjects": "Dự án đang tiến hành",
+    "completedProjects": "Dự án đã hoàn thành",
+    "totalSkill": "Tổng số kỹ năng",
+    "ongoingTasks": "Công việc đang tiến hành",
+    "totalTask": "Tổng số công việc",
     "projectsByStatusReport": "Phân loại dự án theo trạng thái",
     "skillsReport": "Phân loại bởi kỹ năng",
     "statusReport": "Phân loại bởi trạng thái"

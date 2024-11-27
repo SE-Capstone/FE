@@ -14,6 +14,7 @@ export type ReportOverview = {
   totalProjects: number;
   totalProjectsDone: number;
   totalSkillsEmployee: number;
+  totalEmployee: number;
 };
 
 function queryRequest() {
@@ -46,6 +47,6 @@ export function useGetReportOverview(props: UseReportOverviewQueryProps) {
 
   return {
     ...query,
-    data: query.data,
+    data: query.data?.data,
   };
 }

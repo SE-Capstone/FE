@@ -419,6 +419,12 @@
     "resetPasswordFailed": "Reset failed, Please try again!"
   },
   "chart": {
+    "totalUser": "Total user",
+    "ongoingProjects": "Ongoing projects",
+    "completedProjects": "Completed projects",
+    "totalSkill": "Total skill",
+    "ongoingTasks": "Ongoing tasks",
+    "totalTask": "Total task",
     "projectsByStatusReport": "Categories project by status",
     "skillsReport": "Categories by skills",
     "statusReport": "Categories by status"
