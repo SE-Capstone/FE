@@ -126,118 +126,113 @@ const NotificationsList = () => {
     fetchMore();
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current || isFetching || isRefetching) return;
+  const handleScroll = () => {
+    if (!containerRef.current || isFetching || isRefetching) return;
 
-      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-      // Check if the user has scrolled to the bottom
-      if (scrollTop + clientHeight >= scrollHeight - 10) {
-        loadMore();
-      }
-    };
-
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleScroll);
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+    // Check if the user has scrolled to the bottom
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
+      loadMore();
     }
-
-    return () => {
-      if (container) {
-        container.removeEventListener('scroll', handleScroll);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFetching, isRefetching, hasMore]);
+  };
 
   return (
     <Menu isLazy>
-      <MenuButton>
-        <IconButton
-          position="relative"
-          py="2"
-          bg="transparent"
-          colorScheme="gray"
-          aria-label="Notifications"
-          size="lg"
-          _hover={{
-            bg: 'transparent',
-          }}
-          icon={
-            <>
-              <FaBell fontSize="18px" color="rgb(203 197 197)" />
-              {unReadCount > 0 && (
-                <Box
-                  as="span"
-                  color="white"
-                  position="absolute"
-                  top="6px"
-                  right={unReadCount < 10 ? '6px' : unReadCount > 99 ? '0px' : '3px'}
-                  fontSize="10px"
-                  fontWeight="bold"
-                  bgColor="red"
-                  borderRadius="5px"
-                  zIndex={9999}
-                  px="4px"
-                  py="2px"
-                >
-                  {unReadCount > 99 ? '+99' : unReadCount}
-                </Box>
-              )}
-            </>
-          }
-        />
-      </MenuButton>
-      <MenuList borderColor="neutral.400" padding={0}>
-        <VStack
-          ref={containerRef}
-          boxShadow={useColorModeValue(
-            '2px 6px 8px rgba(160, 174, 192, 0.6)',
-            '2px 6px 8px rgba(9, 17, 28, 0.9)'
-          )}
-          bg="white"
-          rounded="md"
-          overflowY="scroll"
-          spacing={0}
-          maxW="520px"
-          maxH="700px"
-          p={0}
-        >
-          <Flex justifyContent="space-around" w="full" alignItems="center">
-            <Text fontSize="md" fontWeight="600" textAlign="start" w="full" p={4} color="textColor">
-              {t('common.notifications')}
-            </Text>
-            {listNotification.length > 0 && (
-              <Tooltip label={t('common.markAllAsRead')}>
-                <IconButton
-                  aria-label="read-all"
-                  icon={<RiCheckDoubleFill />}
-                  bg="transparent"
+      {({ onClose }) => (
+        <>
+          <MenuButton>
+            <IconButton
+              position="relative"
+              py="2"
+              bg="transparent"
+              colorScheme="gray"
+              aria-label="Notifications"
+              size="lg"
+              _hover={{
+                bg: 'transparent',
+              }}
+              icon={
+                <>
+                  <FaBell fontSize="18px" color="rgb(203 197 197)" />
+                  {unReadCount > 0 && (
+                    <Box
+                      as="span"
+                      color="white"
+                      position="absolute"
+                      top="6px"
+                      right={unReadCount < 10 ? '6px' : unReadCount > 99 ? '0px' : '3px'}
+                      fontSize="10px"
+                      fontWeight="bold"
+                      bgColor="red"
+                      borderRadius="5px"
+                      zIndex={9999}
+                      px="4px"
+                      py="2px"
+                    >
+                      {unReadCount > 99 ? '+99' : unReadCount}
+                    </Box>
+                  )}
+                </>
+              }
+            />
+          </MenuButton>
+          <MenuList borderColor="neutral.400" padding={0}>
+            <VStack
+              ref={containerRef}
+              boxShadow="2px 6px 8px rgba(160, 174, 192, 0.6)"
+              bg="white"
+              rounded="md"
+              overflowY="scroll"
+              spacing={0}
+              maxW="520px"
+              maxH="700px"
+              p={0}
+              onScroll={handleScroll}
+            >
+              <Flex justifyContent="space-around" w="full" alignItems="center">
+                <Text
+                  fontSize="md"
+                  fontWeight="600"
+                  textAlign="start"
+                  w="full"
+                  p={4}
                   color="textColor"
-                  fontSize="22px"
-                  _hover={{
-                    bg: 'transparent',
-                  }}
-                  type="button"
-                  onClick={() => unReadCount > 0 && mutate()}
-                />
-              </Tooltip>
-            )}
-          </Flex>
-          <Divider m={0} />
-          {listNotification.map((notification, index) => (
-            <Fragment key={index}>
-              <NotificationWidget notification={notification} />
-              {listNotification.length - 1 !== index && <Divider m={0} />}
-            </Fragment>
-          ))}
-          {listNotification.length <= 0 && (
-            <Text fontSize="sm" textAlign="center" w="full" p={4} color="textColor">
-              {isLoading ? 'Loading...' : t('common.noData')}
-            </Text>
-          )}
-        </VStack>
-      </MenuList>
+                >
+                  {t('common.notifications')}
+                </Text>
+                {listNotification.length > 0 && (
+                  <Tooltip label={t('common.markAllAsRead')}>
+                    <IconButton
+                      aria-label="read-all"
+                      icon={<RiCheckDoubleFill />}
+                      bg="transparent"
+                      color="textColor"
+                      fontSize="22px"
+                      _hover={{
+                        bg: 'transparent',
+                      }}
+                      type="button"
+                      onClick={() => unReadCount > 0 && mutate()}
+                    />
+                  </Tooltip>
+                )}
+              </Flex>
+              <Divider m={0} />
+              {listNotification.map((notification, index) => (
+                <Box key={index} w="full" onClick={onClose}>
+                  <NotificationWidget notification={notification} />
+                  {listNotification.length - 1 !== index && <Divider m={0} />}
+                </Box>
+              ))}
+              {listNotification.length <= 0 && (
+                <Text fontSize="sm" textAlign="center" w="full" p={4} color="textColor">
+                  {isLoading ? 'Loading...' : t('common.noData')}
+                </Text>
+              )}
+            </VStack>
+          </MenuList>
+        </>
+      )}
     </Menu>
   );
 };
