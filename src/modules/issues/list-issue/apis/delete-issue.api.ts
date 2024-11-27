@@ -38,6 +38,17 @@ export function useRemoveIssueMutation(props: Props) {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.issue['issues/kanban'].queryKey,
       });
+
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.project['projects/reports/tasks'].queryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.project['projects/reports/tasks/overview'].queryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.project['projects/reports/tasks/completion-chart'].queryKey,
+      });
+
       notify({
         type: 'success',
         message: DEFAULT_MESSAGE(t).DELETE_SUCCESS,

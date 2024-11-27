@@ -59,6 +59,16 @@ export function useRemoveStatusMutation(props: Props) {
         queryClient.invalidateQueries({
           queryKey: allQueryKeysStore.issue.issues.queryKey,
         });
+
+        queryClient.invalidateQueries({
+          queryKey: allQueryKeysStore.project['projects/reports/tasks'].queryKey,
+        });
+        queryClient.invalidateQueries({
+          queryKey: allQueryKeysStore.project['projects/reports/tasks/overview'].queryKey,
+        });
+        queryClient.invalidateQueries({
+          queryKey: allQueryKeysStore.project['projects/reports/tasks/completion-chart'].queryKey,
+        });
       }
       notify({
         type: 'success',

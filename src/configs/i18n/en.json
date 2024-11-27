@@ -1,5 +1,7 @@
 {
   "common": {
+    "time": "Time",
+    "percentage": "Percentage",
     "accessProjectDenied": "You don't have permission to access this project",
     "notifications": "Notifications",
     "markAllAsRead": "Mark all as read",
@@ -426,6 +428,8 @@
     "totalSkill": "Total skill",
     "ongoingTasks": "Ongoing tasks",
     "totalTask": "Total task",
+    "doneTasks": "Completed tasks",
+    "overallCompletionRate": "Overall task completion rate",
     "projectsByStatusReport": "Categories project by status",
     "skillsReport": "Categories by skills",
     "statusReport": "Categories by status"

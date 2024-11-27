@@ -12,6 +12,7 @@ import { allQueryKeysStore } from '@/services/query-keys-store';
 interface IStatusReportRequest {
   body: {
     projectId: string;
+    phaseId?: string;
     startDate?: Date | string;
     endDate?: Date | string;
   };
@@ -35,7 +36,12 @@ export type UseGetStatusReportOptionsType = {
 
 export function useGetStatusReport(params: UseGetStatusReportOptionsType) {
   const { configs, req } = params;
-  const queryKey = useMemo(() => allQueryKeysStore.project['projects/reports/tasks'].queryKey, []);
+  const currentParams = useMemo(() => req, [req]);
+
+  const queryKey = useMemo(
+    () => [...allQueryKeysStore.project['projects/reports/tasks'].queryKey, currentParams],
+    [currentParams]
+  );
 
   const { data, ...queryInfo } = useQuery({
     placeholderData: (previousData) => previousData,

@@ -1,5 +1,7 @@
 {
   "common": {
+    "time": "Thời gian",
+    "percentage": "Phần trăm",
     "accessProjectDenied": "Bạn không có quyền truy cập vào dự án này",
     "notifications": "Thông báo",
     "markAllAsRead": "Đánh dấu tất cả là đã đọc",
@@ -391,6 +393,8 @@
     "totalSkill": "Tổng số kỹ năng",
     "ongoingTasks": "Công việc đang tiến hành",
     "totalTask": "Tổng số công việc",
+    "doneTasks": "Công việc đã hoàn thành",
+    "overallCompletionRate": "Tỉ lệ công việc hoàn thành",
     "projectsByStatusReport": "Phân loại dự án theo trạng thái",
     "skillsReport": "Phân loại bởi kỹ năng",
     "statusReport": "Phân loại bởi trạng thái"

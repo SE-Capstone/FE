@@ -26,7 +26,7 @@ interface StatData {
   bg?: string;
 }
 
-const Card = ({ data }: { data: StatData }) => (
+export const Card = ({ data }: { data: StatData }) => (
   <Stack
     direction="column"
     rounded="md"
