@@ -38,8 +38,8 @@ export function ListIssuePage() {
   const [phases, setPhases] = useState<IPhase[]>([]);
   const { issuesQueryState, resetIssuesQueryState } = useIssuesQueryFilterStateContext();
 
-  const canUpdate = (assignee?: IUpdatedBy) => {
-    if (currentUser?.id === assignee?.id) {
+  const canUpdate = (assignee?: IUpdatedBy, reporter?: IUpdatedBy) => {
+    if (currentUser?.id === assignee?.id || currentUser?.id === reporter?.id) {
       return true;
     }
     return permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
@@ -120,8 +120,8 @@ export function ListIssuePage() {
             title: t('common.status'),
             hasSort: false,
             Cell(issue) {
-              const { status, assignee } = issue;
-              return canUpdate(assignee) ? (
+              const { status, assignee, reporter } = issue;
+              return canUpdate(assignee, reporter) ? (
                 <InlineEditCustomSelect
                   options={statuses.map((s) => ({
                     label: <BadgeIssue content={s.name} colorScheme={s.color} />,
@@ -144,8 +144,8 @@ export function ListIssuePage() {
             title: t('fields.priority'),
             hasSort: false,
             Cell(issue) {
-              const { priority, assignee } = issue;
-              return canUpdate(assignee) ? (
+              const { priority, assignee, reporter } = issue;
+              return canUpdate(assignee, reporter) ? (
                 <InlineEditCustomSelect
                   options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
                     label: <PriorityIssue priority={value} />,
@@ -168,8 +168,10 @@ export function ListIssuePage() {
             title: t('fields.title'),
             hasSort: false,
             Cell(issue) {
-              const { assignee } = issue;
-              return <InlineEditWithIcon issue={issue} isViewOnly={!canUpdate(assignee)} />;
+              const { assignee, reporter } = issue;
+              return (
+                <InlineEditWithIcon issue={issue} isViewOnly={!canUpdate(assignee, reporter)} />
+              );
             },
           },
           {
@@ -177,8 +179,8 @@ export function ListIssuePage() {
             title: t('fields.assignee'),
             hasSort: false,
             Cell(issue) {
-              const { assignee } = issue;
-              return canUpdate(assignee) ? (
+              const { assignee, reporter } = issue;
+              return canUpdate(assignee, reporter) ? (
                 <InlineEditCustomSelect
                   options={members.map((member) => ({
                     label: member.userName,
@@ -238,8 +240,8 @@ export function ListIssuePage() {
             title: t('common.phase'),
             hasSort: false,
             Cell(issue) {
-              const { phase, assignee } = issue;
-              return canUpdate(assignee) ? (
+              const { phase, assignee, reporter } = issue;
+              return canUpdate(assignee, reporter) ? (
                 <InlineEditCustomSelect
                   options={phases.map((s) => ({ label: s.title, value: s.id }))}
                   defaultValue={
@@ -261,8 +263,8 @@ export function ListIssuePage() {
             title: t('common.label'),
             hasSort: false,
             Cell(issue) {
-              const { label, assignee } = issue;
-              return canUpdate(assignee) ? (
+              const { label, assignee, reporter } = issue;
+              return canUpdate(assignee, reporter) ? (
                 <InlineEditCustomSelect
                   options={labels.map((s) => ({ label: s.title, value: s.id }))}
                   defaultValue={

@@ -243,7 +243,7 @@ const InlineEditableField = ({
           {editValue}
         </BoxAtlas>
       ) : type === 'progress' ? (
-        <Progress minW="200px" rounded={1.5} colorScheme="green" value={Number(editValue) || 0} />
+        <Progress maxW="200px" rounded={1.5} colorScheme="green" value={Number(editValue) || 0} />
       ) : (
         <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500} {...styleProps}>
           {type === 'date' ? editValue || 'None' : editValue}

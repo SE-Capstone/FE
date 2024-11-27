@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { MdOutlineChevronRight } from 'react-icons/md';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useGetDetailIssue } from '../../list-issue/apis/detail-issue.api';
 import { BadgeIssue, PriorityIssue } from '../../list-issue/components';
@@ -34,9 +34,9 @@ import { CommentWidget } from '../widgets/comments.widget';
 
 import { CustomLink, Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
-import { ISSUE_PRIORITY_OPTIONS, ProjectPermissionEnum } from '@/configs';
+import { ISSUE_PRIORITY_OPTIONS, PermissionEnum, ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
-import { formatDate } from '@/libs/helpers';
+import { formatDate, notify } from '@/libs/helpers';
 import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
 import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
 import { InfoCard } from '@/modules/profile/components';
@@ -46,7 +46,7 @@ import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailIssuePage() {
   const { t } = useTranslation();
-  const { members, permissions } = useProjectContext();
+  const { members, project, permissions } = useProjectContext();
   const { currentUser } = useAuthentication();
   const { projectId, issueId } = useParams();
 
@@ -54,8 +54,8 @@ export function DetailIssuePage() {
 
   const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issue?.id || '');
 
-  const canUpdate = (assignee?: IUpdatedBy) => {
-    if (currentUser?.id === assignee?.id) {
+  const canUpdate = (assignee?: IUpdatedBy, reporter?: IUpdatedBy) => {
+    if (currentUser?.id === assignee?.id || currentUser?.id === reporter?.id) {
       return true;
     }
     return permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
@@ -154,7 +154,7 @@ export function DetailIssuePage() {
       [
         {
           label: t('fields.assignee'),
-          text: canUpdate(issue?.assignee) ? (
+          text: canUpdate(issue?.assignee, issue?.reporter) ? (
             <InlineEditCustomSelect
               options={members.map((member) => ({
                 label: member.userName,
@@ -181,7 +181,7 @@ export function DetailIssuePage() {
         },
         {
           label: t('fields.status'),
-          text: canUpdate(issue?.assignee) ? (
+          text: canUpdate(issue?.assignee, issue?.reporter) ? (
             <InlineEditCustomSelect
               options={listStatus.map((s) => ({
                 label: <BadgeIssue content={s.name} colorScheme={s.color} />,
@@ -204,7 +204,7 @@ export function DetailIssuePage() {
         },
         {
           label: t('fields.priority'),
-          text: canUpdate(issue?.assignee) ? (
+          text: canUpdate(issue?.assignee, issue?.reporter) ? (
             <InlineEditCustomSelect
               options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
                 label: <PriorityIssue priority={value} />,
@@ -225,7 +225,7 @@ export function DetailIssuePage() {
         },
         {
           label: t('common.phase'),
-          text: canUpdate(issue?.assignee) ? (
+          text: canUpdate(issue?.assignee, issue?.reporter) ? (
             <InlineEditCustomSelect
               options={listPhase.map((p) => ({
                 label: p.title,
@@ -246,7 +246,7 @@ export function DetailIssuePage() {
         },
         {
           label: t('common.label'),
-          text: canUpdate(issue?.assignee) ? (
+          text: canUpdate(issue?.assignee, issue?.reporter) ? (
             <InlineEditCustomSelect
               options={listLabel.map((s) => ({
                 label: s.title,
@@ -273,7 +273,7 @@ export function DetailIssuePage() {
               callback={handleSubmit}
               fieldName="percentage"
               type="progress"
-              isViewOnly={!canUpdate(issue?.assignee)}
+              isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
             />
           ),
         },
@@ -285,7 +285,7 @@ export function DetailIssuePage() {
               callback={handleSubmit}
               fieldName="estimatedTime"
               styleProps={{ minW: '200px', minH: '20px' }}
-              isViewOnly={!canUpdate(issue?.assignee)}
+              isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
             />
           ),
         },
@@ -297,7 +297,7 @@ export function DetailIssuePage() {
               callback={handleSubmit}
               fieldName="actualTime"
               styleProps={{ minW: '200px', minH: '20px' }}
-              isViewOnly={!canUpdate(issue?.assignee)}
+              isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
             />
           ),
         },
@@ -314,7 +314,7 @@ export function DetailIssuePage() {
               fieldName="startDate"
               type="date"
               styleProps={{ transform: 'translate(0, -4px)' }}
-              isViewOnly={!canUpdate(issue?.assignee)}
+              isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
             />
           ),
         },
@@ -331,7 +331,7 @@ export function DetailIssuePage() {
               fieldName="dueDate"
               type="date"
               styleProps={{ transform: 'translate(0, -4px)' }}
-              isViewOnly={!canUpdate(issue?.assignee)}
+              isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
             />
           ),
         },
@@ -357,6 +357,18 @@ export function DetailIssuePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [issue, listStatus, members, t]
   );
+
+  const { permissions: sysPermissions } = useAuthentication();
+  const navigate = useNavigate();
+  if (!sysPermissions[PermissionEnum.READ_ALL_PROJECTS] && !project?.isVisible) {
+    notify({
+      type: 'error',
+      message: t('common.accessProjectDenied'),
+    });
+    navigate(APP_PATHS.HOME);
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <></>;
+  }
 
   return (
     <>
@@ -442,7 +454,7 @@ export function DetailIssuePage() {
                     fieldValue={issue?.title || ''}
                     callback={handleSubmit}
                     type="title"
-                    isViewOnly={!canUpdate(issue?.assignee)}
+                    isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
                   />
                 </Text>
                 <Menu>
@@ -472,7 +484,10 @@ export function DetailIssuePage() {
                     </MenuItem>
                   </MenuList>
                 </Menu>
-                <InlineEditRichtext issue={issue!} isEditable={canUpdate(issue?.assignee)} />
+                <InlineEditRichtext
+                  issue={issue!}
+                  isEditable={canUpdate(issue?.assignee, issue?.reporter)}
+                />
 
                 {!issue?.parentIssueId && issue?.subIssues && issue?.subIssues.length > 0 && (
                   <Stack gap={0}>
@@ -530,7 +545,7 @@ export function DetailIssuePage() {
                               />
                             </Flex>
                             <Flex alignItems="center" gap={2}>
-                              {canUpdate(issue?.assignee) ? (
+                              {canUpdate(issue?.assignee, issue?.reporter) ? (
                                 <InlineEditCustomSelect
                                   options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
                                     label: <PriorityIssue priority={value} />,
@@ -549,7 +564,7 @@ export function DetailIssuePage() {
                               ) : (
                                 <PriorityIssue priority={i.priority} hideText />
                               )}
-                              {canUpdate(issue?.assignee) ? (
+                              {canUpdate(issue?.assignee, issue?.reporter) ? (
                                 <InlineEditCustomSelect
                                   size="sm"
                                   options={members.map((member) => ({
@@ -581,7 +596,7 @@ export function DetailIssuePage() {
                                   hideText
                                 />
                               )}
-                              {canUpdate(issue?.assignee) ? (
+                              {canUpdate(issue?.assignee, issue?.reporter) ? (
                                 <InlineEditCustomSelect
                                   options={listStatus.map((s) => ({
                                     label: <BadgeIssue content={s.name} colorScheme={s.color} />,

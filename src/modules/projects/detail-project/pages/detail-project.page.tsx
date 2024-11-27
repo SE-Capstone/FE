@@ -56,7 +56,9 @@ export function DetailProjectPage() {
       type: 'error',
       message: t('common.accessProjectDenied'),
     });
-    return navigate(APP_PATHS.HOME);
+    navigate(APP_PATHS.HOME);
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <></>;
   }
 
   return (

@@ -400,7 +400,7 @@
     "assignLeader": "{{assignerName}} đã gán bạn làm leader dự án - {{projectName}}",
     "assignIssue": "{{assignerName}} đã gán công việc cho bạn",
     "updateIssue": "{{updaterFullName}} đã cập nhật công việc",
-    "createComment": "{{commenterFullName}} đã bình luận về công việc",
-    "updateComment": "{{commenterFullName}} đã cập nhật bình luận về công việc"
+    "createComment": "{{commenterName}} đã bình luận về công việc",
+    "updateComment": "{{commenterName}} đã cập nhật bình luận về công việc"
   }
 }

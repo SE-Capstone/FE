@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { Button, Container, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import RichTextEditor from 'reactjs-tiptap-editor';
 
 import { useGetDetailIssue } from '../apis/detail-issue.api';
@@ -21,14 +21,15 @@ import {
   CustomSingleValueComponentChakraReactSelect,
 } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
-import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
-import { formatDate } from '@/libs/helpers';
+import { ISSUE_PRIORITY_OPTIONS, PermissionEnum } from '@/configs';
+import { formatDate, notify } from '@/libs/helpers';
 import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
 import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetDetailProject } from '@/modules/projects/detail-project/apis/detail-project.api';
 import { extensions } from '@/modules/public/pages/rich-text-ex.pages';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
+import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
   const { t } = useTranslation();
@@ -201,6 +202,18 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project]);
+
+  const { permissions } = useAuthentication();
+  const navigate = useNavigate();
+  if (!permissions[PermissionEnum.READ_ALL_PROJECTS] && !project?.isVisible) {
+    notify({
+      type: 'error',
+      message: t('common.accessProjectDenied'),
+    });
+    navigate(APP_PATHS.HOME);
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <></>;
+  }
 
   return (
     <Container p={6} rounded={3} maxW="container.2xl" bg="white" centerContent>
