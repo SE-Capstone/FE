@@ -1,5 +1,6 @@
 {
   "common": {
+    "accessProjectDenied": "You don't have permission to access this project",
     "notifications": "Notifications",
     "markAllAsRead": "Mark all as read",
     "justNow": "Just now",

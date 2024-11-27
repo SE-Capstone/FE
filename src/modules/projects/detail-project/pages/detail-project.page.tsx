@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { Container } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { useGetDetailProject } from '../apis/detail-project.api';
 import { BaseInformationProjectWidget } from '../widgets';
@@ -12,7 +12,7 @@ import { CustomTabs, Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
 import { PermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
-import { Error403Page } from '@/modules/errors';
+import { notify } from '@/libs/helpers';
 import { ListIssuePage } from '@/modules/issues/list-issue';
 import { IssuesQueryProvider } from '@/modules/issues/list-issue/contexts';
 import { KanbanQueryProvider } from '@/modules/issues/list-issue/contexts/kanban-query-filters.contexts';
@@ -37,6 +37,7 @@ export function DetailProjectPage() {
   const { t, i18n } = useTranslation();
   const [searchParams, _] = useSearchParams();
   const { permissions } = useAuthentication();
+  const navigate = useNavigate();
   const { project: projectContext } = useProjectContext();
   const { projectId } = useParams();
   const activeTabIndex = useMemo(() => {
@@ -51,7 +52,11 @@ export function DetailProjectPage() {
       // eslint-disable-next-line react/jsx-no-useless-fragment
       return <></>;
     }
-    return <Error403Page />;
+    notify({
+      type: 'error',
+      message: t('common.accessProjectDenied'),
+    });
+    return navigate(APP_PATHS.HOME);
   }
 
   return (

@@ -1,9 +1,8 @@
-import { Fragment, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import {
   VStack,
   Divider,
-  useColorModeValue,
   Text,
   Flex,
   IconButton,

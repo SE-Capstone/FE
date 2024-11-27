@@ -1,5 +1,6 @@
 {
   "common": {
+    "accessProjectDenied": "Bạn không có quyền truy cập vào dự án này",
     "notifications": "Thông báo",
     "markAllAsRead": "Đánh dấu tất cả là đã đọc",
     "justNow": "Vừa đây",
