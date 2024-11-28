@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { SimpleGrid, Stack } from '@chakra-ui/react';
+import { Grid, GridItem, SimpleGrid, Stack } from '@chakra-ui/react';
 import Chart from 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
@@ -12,20 +12,51 @@ import { useSearchParams } from 'react-router-dom';
 import { useGetTaskCompleteByDateReport } from '../apis/get-complete-task-by-date-report.api';
 import { useGetOverviewProjectReport } from '../apis/get-overview-report.api';
 import { useGetStatusReport } from '../apis/get-status-report.api';
+import { useProjectStatisticQueryFilterStateContext } from '../context/project-statistic-query-filters.contexts';
 import { CompleteTaskByDateChartWidget } from '../widgets/complete-task-by-date-chart.widget';
 import { OverviewPieChartWidget } from '../widgets/overview-pie-chart.widget';
 
 import type { IProject } from '../../list-project/types';
+import type { IPhase } from '@/modules/phases/types';
 
-import { StateHandler } from '@/components/elements';
+import { CustomChakraReactSelect, SearchInput, StateHandler } from '@/components/elements';
 import { Card } from '@/modules/dashboard/widgets/card-stat.widget';
+import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
 
 Chart.register();
 
 export function ProjectStatisticPage({ project }: { project?: IProject }) {
+  const now = useMemo(() => new Date(), []);
   const { t } = useTranslation();
-
+  const { projectStatisticQueryState, setProjectStatisticQueryFilterState } =
+    useProjectStatisticQueryFilterStateContext();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [defaultPhase, setDefaultPhase] = useState<IPhase | undefined>(undefined);
+
+  const updateQueryParams = useCallback(
+    (key: string, value?: string) => {
+      setSearchParams((prevParams) => {
+        const params = new URLSearchParams(prevParams);
+        if (value) {
+          params.set(key, value);
+        } else {
+          params.delete(key);
+        }
+        return params;
+      });
+    },
+    [setSearchParams]
+  );
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setProjectStatisticQueryFilterState({
+      ...(params.get('phaseId') && { phaseId: params.get('phaseId') || '' }),
+      ...(params.get('startDate') && { startDate: params.get('startDate') || '' }),
+      ...(params.get('endDate') && { endDate: params.get('endDate') || '' }),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const setTab = () => {
     const params = new URLSearchParams();
@@ -40,10 +71,50 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
+  const {
+    listPhase,
+    isLoading: isLoading5,
+    isError: isError5,
+  } = useGetListPhaseQuery({
+    params: {
+      projectId: project?.id || '',
+    },
+  });
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('phaseId')) {
+      const phase = listPhase.find((r) => r.id === params.get('phaseId'));
+      setDefaultPhase(phase);
+    }
+  }, [listPhase]);
+
+  const getStartDate = useMemo(
+    () =>
+      projectStatisticQueryState.filters.startDate ||
+      (projectStatisticQueryState.filters.endDate
+        ? new Date(
+            new Date(projectStatisticQueryState.filters.endDate).setFullYear(
+              new Date(projectStatisticQueryState.filters.endDate).getFullYear() - 1
+            )
+          )
+        : new Date(new Date().setFullYear(new Date().getFullYear() - 1))),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [projectStatisticQueryState.filters.endDate, projectStatisticQueryState.filters.startDate]
+  );
+
   const { statusReport, isLoading, isError, refetch } = useGetStatusReport({
     req: {
       body: {
         projectId: project?.id || '',
+        phaseId: projectStatisticQueryState.filters.phaseId,
+        startDate:
+          projectStatisticQueryState.filters.startDate || projectStatisticQueryState.filters.endDate
+            ? getStartDate
+            : undefined,
+        endDate: projectStatisticQueryState.filters.endDate
+          ? projectStatisticQueryState.filters.endDate
+          : undefined,
       },
     },
   });
@@ -56,6 +127,14 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
     req: {
       body: {
         projectId: project?.id || '',
+        phaseId: projectStatisticQueryState.filters.phaseId,
+        startDate:
+          projectStatisticQueryState.filters.startDate || projectStatisticQueryState.filters.endDate
+            ? getStartDate
+            : undefined,
+        endDate: projectStatisticQueryState.filters.endDate
+          ? projectStatisticQueryState.filters.endDate
+          : undefined,
       },
     },
   });
@@ -68,8 +147,9 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
     req: {
       body: {
         projectId: project?.id || '',
-        startDate: new Date('2024-01-01'),
-        endDate: new Date('2024-12-31'),
+        phaseId: projectStatisticQueryState.filters.phaseId,
+        startDate: getStartDate,
+        endDate: projectStatisticQueryState.filters.endDate || now,
       },
     },
   });
@@ -147,6 +227,7 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
 
     return [];
   }, [isLoading3, taskCompleteByDateData]);
+
   useEffect(() => {
     if (project) {
       refetch();
@@ -179,9 +260,84 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
 
   return (
     <StateHandler
-      showLoader={isLoading || isLoading2 || isLoading3}
-      showError={!!isError || !!isError2 || !!isError3}
+      showLoader={isLoading || isLoading2 || isLoading3 || isLoading5}
+      showError={!!isError || !!isError2 || !!isError3 || !!isError5}
     >
+      <Grid
+        alignItems="center"
+        gap={2}
+        templateColumns={{
+          base: 'repeat(1, 1fr)',
+          md: 'repeat(3, 1fr)',
+        }}
+      >
+        <GridItem colSpan={1}>
+          <CustomChakraReactSelect
+            key={defaultPhase?.id}
+            isSearchable={false}
+            size="md"
+            placeholder={`${t('common.choose')} ${t('common.phase').toLowerCase()}...`}
+            options={listPhase.map((s) => ({ label: s.title, value: s.id }))}
+            defaultValue={
+              searchParams.get('phaseId') && defaultPhase
+                ? {
+                    label: defaultPhase.title,
+                    value: searchParams.get('phaseId') || '',
+                  }
+                : undefined
+            }
+            onChange={(opt) => {
+              setProjectStatisticQueryFilterState({
+                phaseId: opt?.value || undefined,
+              });
+              updateQueryParams('phaseId', opt?.value);
+            }}
+          />
+        </GridItem>
+        <GridItem colSpan={1}>
+          <SearchInput
+            placeholder={`${t('common.choose')} ${t('fields.startDate').toLowerCase()}...`}
+            type="date"
+            isSetMax={!!projectStatisticQueryState.filters.endDate}
+            maxDate={
+              projectStatisticQueryState.filters.endDate
+                ? new Date(projectStatisticQueryState.filters.endDate)
+                : undefined
+            }
+            initValue={projectStatisticQueryState.filters.startDate || ''}
+            inputGroupProps={{
+              size: 'lg',
+            }}
+            bg="white"
+            onHandleSearch={(keyword) => {
+              setProjectStatisticQueryFilterState({ startDate: keyword });
+              updateQueryParams('startDate', keyword);
+            }}
+          />
+        </GridItem>
+        <GridItem colSpan={1}>
+          <SearchInput
+            placeholder={`${t('common.choose')} ${t('fields.endDate').toLowerCase()}...`}
+            type="date"
+            isSetMax
+            maxDate={new Date()}
+            minDate={
+              projectStatisticQueryState.filters.startDate
+                ? new Date(projectStatisticQueryState.filters.startDate)
+                : undefined
+            }
+            initValue={projectStatisticQueryState.filters.endDate || ''}
+            inputGroupProps={{
+              size: 'lg',
+            }}
+            bg="white"
+            onHandleSearch={(keyword) => {
+              setProjectStatisticQueryFilterState({ endDate: keyword });
+              updateQueryParams('endDate', keyword);
+            }}
+          />
+        </GridItem>
+      </Grid>
       <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={5} mt={6} mb={6}>
         {overViewData().cardData.map((data, index) => (
           <Card key={index} data={data} />

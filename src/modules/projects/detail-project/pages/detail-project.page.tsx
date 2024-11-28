@@ -7,6 +7,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useGetDetailProject } from '../apis/detail-project.api';
 import { BaseInformationProjectWidget } from '../widgets';
 import { ProjectStatisticPage } from './project-statistic.page';
+import { ProjectStatisticQueryProvider } from '../context/project-statistic-query-filters.contexts';
 
 import { CustomTabs, Head, StateHandler } from '@/components/elements';
 import { LayoutBack } from '@/components/layouts';
@@ -124,7 +125,11 @@ export function DetailProjectPage() {
               },
               {
                 title: t('common.statistic'),
-                childrenPanel: <ProjectStatisticPage project={project} />,
+                childrenPanel: (
+                  <ProjectStatisticQueryProvider>
+                    <ProjectStatisticPage project={project} />
+                  </ProjectStatisticQueryProvider>
+                ),
               },
             ].filter(Boolean)}
             onTabChange={() => {}}

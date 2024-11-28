@@ -26,6 +26,9 @@ export interface CustomInputProps extends InputProps, FieldWrapperProps {
   registration?: Partial<UseFormRegisterReturn>;
   leftIcon?: React.ReactElement;
   rightIcon?: React.ReactElement;
+  isSetMax?: boolean;
+  maxDate?: Date;
+  minDate?: Date;
   inputLeftAddon?: string;
   inputRightAddon?: string;
 
@@ -48,6 +51,9 @@ export const CustomInput = forwardRef<CustomInputProps, 'input'>((props, ref) =>
     inputGroupProps,
     size: _size,
     helperText,
+    isSetMax,
+    maxDate,
+    minDate,
     ...inputProps
   } = props;
 
@@ -88,9 +94,17 @@ export const CustomInput = forwardRef<CustomInputProps, 'input'>((props, ref) =>
           maxLength={255}
           borderColor="#E2E8F0"
           max={
-            type === 'date' && registration?.name === 'dob'
+            type === 'date' && (registration?.name === 'dob' || isSetMax)
               ? formatDate({
-                  date: YESTERDAY,
+                  date: maxDate || YESTERDAY,
+                  format: 'YYYY-MM-DD',
+                })
+              : undefined
+          }
+          min={
+            type === 'date' && isSetMax && minDate
+              ? formatDate({
+                  date: minDate,
                   format: 'YYYY-MM-DD',
                 })
               : undefined

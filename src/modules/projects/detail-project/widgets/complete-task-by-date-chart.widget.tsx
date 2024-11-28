@@ -42,6 +42,11 @@ export const CompleteTaskByDateChartWidget = ({ data }: { data: TaskCompletionBy
           },
           responsive: true,
           maintainAspectRatio: false,
+          scales: {
+            y: {
+              min: 0,
+            },
+          },
         }}
       />
     </Stack>
