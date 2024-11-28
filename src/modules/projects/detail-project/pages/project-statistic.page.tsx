@@ -344,43 +344,44 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
         ))}
       </SimpleGrid>
       <CompleteTaskByDateChartWidget data={taskCompleteByDate()} />
-      <OverviewPieChartWidget data={overViewData().pieChartData} />
-      <Stack
-        bg="white"
-        p={5}
-        flex={1}
-        mt={5}
-        flexBasis="10%"
-        rounded={2.5}
-        spacing={3}
-        overflowX="auto"
-        maxHeight="500px"
-      >
-        <Bar
-          data={chartData}
-          options={{
-            plugins: {
-              title: {
-                display: true,
-                text: t('chart.statusReport'),
-                font: {
-                  size: 18,
+      <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={5}>
+        <OverviewPieChartWidget data={overViewData().pieChartData} />
+        <Stack
+          bg="white"
+          p={5}
+          flex={1}
+          flexBasis="10%"
+          rounded={2.5}
+          spacing={3}
+          overflowX="auto"
+          maxHeight="500px"
+        >
+          <Bar
+            data={chartData}
+            options={{
+              plugins: {
+                title: {
+                  display: true,
+                  text: t('chart.statusReport'),
+                  font: {
+                    size: 18,
+                  },
                 },
               },
-            },
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              x: {
-                stacked: true,
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: {
+                  stacked: true,
+                },
+                y: {
+                  stacked: true,
+                },
               },
-              y: {
-                stacked: true,
-              },
-            },
-          }}
-        />
-      </Stack>
+            }}
+          />
+        </Stack>
+      </SimpleGrid>
     </StateHandler>
   );
 }

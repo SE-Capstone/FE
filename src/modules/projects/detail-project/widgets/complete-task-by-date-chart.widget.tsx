@@ -26,7 +26,7 @@ export const CompleteTaskByDateChartWidget = ({ data }: { data: TaskCompletionBy
   );
 
   return (
-    <Stack bg="white" p={5} rounded={2.5} mb={5} overflowX="auto">
+    <Stack bg="white" p={5} rounded={2.5} mb={5} maxHeight="500px" overflowX="auto">
       <Line
         data={chartData}
         title={t('chart.statusReport')}
