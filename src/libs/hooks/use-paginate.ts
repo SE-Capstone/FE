@@ -25,8 +25,8 @@ export function usePaginateReq() {
 
   return {
     paginate,
-    pageIndex: paginate.pageIndex,
-    pageSize: paginate.pageSize,
+    pageIndex: paginate.pageIndex || 1,
+    pageSize: paginate.pageSize || 10,
     nextPage,
     prevPage,
     setPerPage,
