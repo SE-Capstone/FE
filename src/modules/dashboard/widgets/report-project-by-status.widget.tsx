@@ -41,7 +41,7 @@ export const ReportProjectsByStatusWidget = () => {
   }, [isLoading, projectsByStatusReport, t]);
 
   return (
-    <Stack bg="white" p={5} rounded={2.5} overflowX="auto">
+    <Stack bg="white" p={5} rounded={2.5} overflowX="auto" height="100%">
       <Pie
         data={chartData}
         title={t('chart.projectsByStatusReport')}

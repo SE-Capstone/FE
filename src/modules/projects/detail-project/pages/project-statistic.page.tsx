@@ -320,7 +320,7 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
             placeholder={`${t('common.choose')} ${t('fields.endDate').toLowerCase()}...`}
             type="date"
             isSetMax
-            maxDate={new Date()}
+            // maxDate={new Date()}
             minDate={
               projectStatisticQueryState.filters.startDate
                 ? new Date(projectStatisticQueryState.filters.startDate)

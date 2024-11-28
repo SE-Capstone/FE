@@ -1,4 +1,4 @@
-import { Grid, GridItem } from '@chakra-ui/react';
+import { GridItem, SimpleGrid } from '@chakra-ui/react';
 import Chart from 'chart.js/auto';
 
 import StatsWithIcons from '../widgets/card-stat.widget';
@@ -11,7 +11,7 @@ export function DashboardPage() {
   return (
     <>
       <StatsWithIcons />
-      <Grid
+      {/* <Grid
         alignItems="center"
         gap={2}
         templateColumns={{
@@ -25,7 +25,15 @@ export function DashboardPage() {
         <GridItem colSpan={2}>
           <ReportSkillsWidget />
         </GridItem>
-      </Grid>
+      </Grid> */}
+      <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={5}>
+        <GridItem colSpan={1} maxHeight="500px">
+          <ReportProjectsByStatusWidget />
+        </GridItem>
+        <GridItem colSpan={{ base: 1, sm: 2 }}>
+          <ReportSkillsWidget />
+        </GridItem>
+      </SimpleGrid>
     </>
   );
 }
