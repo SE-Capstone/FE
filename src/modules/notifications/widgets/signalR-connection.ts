@@ -50,6 +50,19 @@ class Connector {
     }
   }
 
+  public disconnect() {
+    if (this.connection) {
+      this.connection
+        .stop()
+        .then(() => {
+          console.log('Disconnected from SignalR Hub');
+        })
+        .catch((err) => {
+          console.error('Error disconnecting from SignalR Hub', err);
+        });
+    }
+  }
+
   public static getInstance(accessToken: string, userId: string): Connector {
     if (!Connector.instance) Connector.instance = new Connector(accessToken, userId);
     return Connector.instance;

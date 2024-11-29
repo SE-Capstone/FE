@@ -65,6 +65,9 @@ export function useGetInfiniteNotificationQuery(props: UseGetInfiniteNotificatio
       ...data,
       pages: data.pages,
     }),
+    throwOnError: false,
+    retry: 3,
+    retryDelay: 1000,
     placeholderData: keepPreviousData,
     ...configs,
   });

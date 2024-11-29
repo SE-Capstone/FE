@@ -2,13 +2,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import Connector from '../../notifications/widgets/signalR-connection';
+// import Connector as ConntectorKanban from '../../issues/list-issue/widgets/signalR-connection';
+
 import type { IAuthLogoutResponse } from '../types/auth.types';
 import type { IResponseApi } from '@/configs/axios';
 import type { MutationConfig } from '@/libs/react-query';
 
 import { CustomHttpStatusCode, DEFAULT_MESSAGE } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
-import { notify } from '@/libs/helpers';
+import { getAccessToken, notify } from '@/libs/helpers';
 import { makeRequest } from '@/libs/react-query';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
@@ -28,13 +31,15 @@ interface IAuthLogoutMutationProps {
 export function useLogoutMutation({ configs }: IAuthLogoutMutationProps = {}) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const accessToken = getAccessToken();
   const queryClient = useQueryClient();
-  const { resetAuthContext } = useAuthentication();
-
+  const { currentUser, resetAuthContext } = useAuthentication();
+  const connector = Connector(accessToken || '', currentUser?.id || '');
   const mutation = useMutation({
     mutationFn: logoutMutation,
 
     onMutate: () => {
+      connector.disconnect();
       queryClient.clear();
     },
     onError: async (error) => {
