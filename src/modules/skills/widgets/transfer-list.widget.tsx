@@ -60,8 +60,15 @@ export default function TransferListWidget({
   });
 
   useEffect(() => {
-    setOldSkills(userSkill);
-    setRightItems(userSkill);
+    // setOldSkills(userSkill);
+    // setRightItems(userSkill);
+    if (JSON.stringify(oldSkills) !== JSON.stringify(userSkill)) {
+      setOldSkills(userSkill);
+    }
+    if (JSON.stringify(rightItems) !== JSON.stringify(userSkill)) {
+      setRightItems(userSkill);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userSkill]);
 
   useEffect(() => {

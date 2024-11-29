@@ -47,8 +47,8 @@ export function LoginWidget() {
     }
   }
   async function handleSubmitGoogleLogin(idToken?: string) {
-    if (!isValid) return;
-
+    // eslint-disable-next-line no-console
+    console.log(idToken);
     if (!idToken) {
       notify({
         type: 'error',
