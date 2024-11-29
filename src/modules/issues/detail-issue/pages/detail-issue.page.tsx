@@ -101,6 +101,12 @@ export function DetailIssuePage() {
               format: 'YYYY-MM-DD',
             }) as unknown as Date)
           : undefined,
+        actualEndDate: issue.actualEndDate
+          ? (formatDate({
+              date: issue.actualEndDate,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date)
+          : undefined,
         statusId: issue.status.id,
         labelId: issue.label?.id,
         assigneeId: issue.assignee?.id,
@@ -140,6 +146,19 @@ export function DetailIssuePage() {
             (issue.dueDate
               ? (formatDate({
                   date: issue.dueDate,
+                  format: 'YYYY-MM-DD',
+                }) as unknown as Date)
+              : undefined),
+        }),
+        ...(fieldName === 'actualEndDate' && {
+          actualEndDate:
+            (formatDate({
+              date: value,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date) ||
+            (issue.actualEndDate
+              ? (formatDate({
+                  date: issue.actualEndDate,
                   format: 'YYYY-MM-DD',
                 }) as unknown as Date)
               : undefined),
@@ -329,6 +348,23 @@ export function DetailIssuePage() {
               }
               callback={handleSubmit}
               fieldName="dueDate"
+              type="date"
+              styleProps={{ transform: 'translate(0, -4px)' }}
+              isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
+            />
+          ),
+        },
+        {
+          label: t('fields.actualEndDate'),
+          text: (
+            <InlineEditableField
+              fieldValue={
+                issue?.actualEndDate
+                  ? formatDate({ date: issue?.actualEndDate, format: 'YYYY-MM-DD' }) || ''
+                  : ''
+              }
+              callback={handleSubmit}
+              fieldName="actualEndDate"
               type="date"
               styleProps={{ transform: 'translate(0, -4px)' }}
               isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}

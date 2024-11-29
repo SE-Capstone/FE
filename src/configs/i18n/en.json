@@ -191,6 +191,7 @@
     "startDate": "Start date",
     "endDate": "End date",
     "dueDate": "Due date",
+    "actualEndDate": "Actual end date",
     "assignee": "Assignee",
     "reporter": "Reporter",
     "details": "Details",

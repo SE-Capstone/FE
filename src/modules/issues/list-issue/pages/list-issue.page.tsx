@@ -321,6 +321,18 @@ export function ListIssuePage() {
               return <>{dueDate ? formatDate({ date: dueDate, format: 'DD-MM-YYYY' }) : ''}</>;
             },
           },
+          {
+            key: 'actualEndDate',
+            title: t('fields.actualEndDate'),
+            hasSort: false,
+            Cell({ actualEndDate }) {
+              return (
+                <>
+                  {actualEndDate ? formatDate({ date: actualEndDate, format: 'DD-MM-YYYY' }) : ''}
+                </>
+              );
+            },
+          },
         ],
       },
     ],

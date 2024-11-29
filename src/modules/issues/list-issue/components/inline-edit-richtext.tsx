@@ -53,6 +53,12 @@ const InlineEditRichtext = ({
             format: 'YYYY-MM-DD',
           }) as unknown as Date)
         : undefined,
+      actualEndDate: issue.actualEndDate
+        ? (formatDate({
+            date: issue.actualEndDate,
+            format: 'YYYY-MM-DD',
+          }) as unknown as Date)
+        : undefined,
       statusId: issue.status.id,
       labelId: issue.label?.id,
       assigneeId: issue.assignee?.id,

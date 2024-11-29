@@ -22,6 +22,7 @@ interface IUpsertIssueRequest {
     description?: string;
     startDate?: string;
     dueDate?: string;
+    actualEndDate?: string;
     parentIssueId?: string;
     percentage?: number;
     priority?: number;

@@ -142,6 +142,12 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
                 format: 'YYYY-MM-DD',
               }) as unknown as Date)
             : undefined,
+          actualEndDate: issue.actualEndDate
+            ? (formatDate({
+                date: issue.actualEndDate,
+                format: 'YYYY-MM-DD',
+              }) as unknown as Date)
+            : undefined,
           parentIssueId: issue.parentIssue?.id,
           phaseId: issue.phase?.id,
           percentage: issue.percentage,
@@ -237,20 +243,6 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
               registration={register('title')}
               error={errors.title}
             />
-            <SimpleGrid columns={2} spacing={3}>
-              <CustomInput
-                label={t('fields.startDate')}
-                type="date"
-                registration={register('startDate')}
-                error={errors.startDate}
-              />
-              <CustomInput
-                label={t('fields.dueDate')}
-                type="date"
-                registration={register('dueDate')}
-                error={errors.dueDate}
-              />
-            </SimpleGrid>
 
             <SimpleGrid columns={2} spacing={3}>
               <CustomChakraReactSelect
@@ -276,41 +268,6 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
                 control={control}
                 name="labelId"
               />
-            </SimpleGrid>
-
-            <SimpleGrid columns={isUpdate ? 4 : 2} spacing={3}>
-              <CustomChakraReactSelect
-                placeholder={`${t('common.choose')} ${t('fields.priority').toLowerCase()}`}
-                label={t('fields.priority')}
-                options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
-                  label: <PriorityIssue priority={value} />,
-                  value,
-                }))}
-                control={control}
-                name="priority"
-              />
-              {isUpdate && (
-                <CustomInput
-                  name="percentage"
-                  label={t('fields.percentageDone')}
-                  registration={register('percentage')}
-                  error={errors.percentage}
-                />
-              )}
-              <CustomInput
-                name="estimatedTime"
-                label={t('fields.estimatedTime')}
-                registration={register('estimatedTime')}
-                error={errors.estimatedTime}
-              />
-              {isUpdate && (
-                <CustomInput
-                  name="actualTime"
-                  label={t('fields.actualTime')}
-                  registration={register('actualTime')}
-                  error={errors.actualTime}
-                />
-              )}
             </SimpleGrid>
 
             <SimpleGrid columns={isUpdate ? 2 : 1} spacing={3}>
@@ -356,6 +313,62 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
                   }))}
                   control={control}
                   name="phaseId"
+                />
+              )}
+            </SimpleGrid>
+
+            <SimpleGrid columns={3} spacing={3}>
+              <CustomInput
+                label={t('fields.startDate')}
+                type="date"
+                registration={register('startDate')}
+                error={errors.startDate}
+              />
+              <CustomInput
+                label={t('fields.dueDate')}
+                type="date"
+                registration={register('dueDate')}
+                error={errors.dueDate}
+              />
+              <CustomInput
+                label={t('fields.actualEndDate')}
+                type="date"
+                registration={register('actualEndDate')}
+                error={errors.actualEndDate}
+              />
+            </SimpleGrid>
+
+            <SimpleGrid columns={isUpdate ? 4 : 2} spacing={3}>
+              <CustomChakraReactSelect
+                placeholder={`${t('common.choose')} ${t('fields.priority').toLowerCase()}`}
+                label={t('fields.priority')}
+                options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
+                  label: <PriorityIssue priority={value} />,
+                  value,
+                }))}
+                control={control}
+                name="priority"
+              />
+              {isUpdate && (
+                <CustomInput
+                  name="percentage"
+                  label={t('fields.percentageDone')}
+                  registration={register('percentage')}
+                  error={errors.percentage}
+                />
+              )}
+              <CustomInput
+                name="estimatedTime"
+                label={t('fields.estimatedTime')}
+                registration={register('estimatedTime')}
+                error={errors.estimatedTime}
+              />
+              {isUpdate && (
+                <CustomInput
+                  name="actualTime"
+                  label={t('fields.actualTime')}
+                  registration={register('actualTime')}
+                  error={errors.actualTime}
                 />
               )}
             </SimpleGrid>

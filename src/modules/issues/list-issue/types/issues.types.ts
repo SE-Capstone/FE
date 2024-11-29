@@ -57,6 +57,7 @@ export type IIssue = IBaseEntity & {
   description?: string;
   startDate?: string;
   dueDate?: string;
+  actualEndDate?: string;
   status: IStatus;
   priority: IssuePriorityEnum;
   lastUpdateBy?: IUpdatedBy;

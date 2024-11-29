@@ -155,6 +155,7 @@
     "startDate": "Ngày bắt đầu",
     "endDate": "Ngày kết thúc",
     "dueDate": "Ngày hết hạn",
+    "actualEndDate": "Ngày hết hạn thực tế",
     "assignee": "Người phụ trách",
     "reporter": "Người báo cáo",
     "details": "Chi tiết",
