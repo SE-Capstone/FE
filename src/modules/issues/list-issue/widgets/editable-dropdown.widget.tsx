@@ -145,9 +145,9 @@ export const InlineEditCustomSelect = ({
               format: 'YYYY-MM-DD',
             }) as unknown as Date)
           : undefined,
-        actualEndDate: issue.actualEndDate
+        actualDate: issue.actualDate
           ? (formatDate({
-              date: issue.actualEndDate,
+              date: issue.actualDate,
               format: 'YYYY-MM-DD',
             }) as unknown as Date)
           : undefined,

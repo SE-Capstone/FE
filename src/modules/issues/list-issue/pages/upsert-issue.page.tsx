@@ -142,9 +142,9 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
                 format: 'YYYY-MM-DD',
               }) as unknown as Date)
             : undefined,
-          actualEndDate: issue.actualEndDate
+          actualDate: issue.actualDate
             ? (formatDate({
-                date: issue.actualEndDate,
+                date: issue.actualDate,
                 format: 'YYYY-MM-DD',
               }) as unknown as Date)
             : undefined,
@@ -331,10 +331,10 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
                 error={errors.dueDate}
               />
               <CustomInput
-                label={t('fields.actualEndDate')}
+                label={t('fields.actualDate')}
                 type="date"
-                registration={register('actualEndDate')}
-                error={errors.actualEndDate}
+                registration={register('actualDate')}
+                error={errors.actualDate}
               />
             </SimpleGrid>
 

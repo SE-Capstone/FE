@@ -35,13 +35,13 @@ const LineWithDot = ({ phase }: { phase?: IPhase }) => {
   const [isLate, setIsLate] = useState<boolean>(false);
 
   useEffect(() => {
-    if (phase && phase?.actualEndDate) {
-      setIsLate(isDateLessThan({ date1: phase.expectedEndDate, date2: phase.actualEndDate }));
+    if (phase && phase?.actualDate) {
+      setIsLate(isDateLessThan({ date1: phase.expectedEndDate, date2: phase.actualDate }));
     }
   }, [phase]);
 
-  const isDone = !!phase?.actualEndDate;
-  const isRunning = !!phase?.actualStartDate && !phase?.actualEndDate;
+  const isDone = !!phase?.actualDate;
+  const isRunning = !!phase?.actualStartDate && !phase?.actualDate;
 
   return (
     <Flex
@@ -66,7 +66,7 @@ const LineWithDot = ({ phase }: { phase?: IPhase }) => {
                 <Text color="white">{isLate ? t('common.late') : t('common.onTime')}</Text>
                 <Text color="white">
                   {formatDate({
-                    date: phase.actualEndDate!,
+                    date: phase.actualDate!,
                     format: 'MMM DD, YYYY',
                   })}
                 </Text>

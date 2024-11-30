@@ -322,14 +322,12 @@ export function ListIssuePage() {
             },
           },
           {
-            key: 'actualEndDate',
-            title: t('fields.actualEndDate'),
+            key: 'actualDate',
+            title: t('fields.actualDate'),
             hasSort: false,
-            Cell({ actualEndDate }) {
+            Cell({ actualDate }) {
               return (
-                <>
-                  {actualEndDate ? formatDate({ date: actualEndDate, format: 'DD-MM-YYYY' }) : ''}
-                </>
+                <>{actualDate ? formatDate({ date: actualDate, format: 'DD-MM-YYYY' }) : ''}</>
               );
             },
           },

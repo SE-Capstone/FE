@@ -20,8 +20,8 @@ export function ActionMenuTablePhases({ phase, permissions }: ActionMenuTablePha
   const { t } = useTranslation();
   const disclosureModal = useDisclosure();
   const { handleRemovePhase } = useRemovePhaseHook();
-  const isDone = !!phase?.actualEndDate;
-  const isRunning = !!phase?.actualStartDate && !phase?.actualEndDate;
+  const isDone = !!phase?.actualDate;
+  const isRunning = !!phase?.actualStartDate && !phase?.actualDate;
 
   if (!phase || !phase.id) return null;
 

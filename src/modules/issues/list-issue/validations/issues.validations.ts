@@ -23,7 +23,7 @@ export const issueFormSchema = (t: any) =>
     description: z.string().trim().optional(),
     startDate: getOptionalDateField(),
     dueDate: getOptionalDateField(),
-    actualEndDate: getOptionalDateField(),
+    actualDate: getOptionalDateField(),
     parentIssueId: z.string().trim().uuid().optional(),
     percentage: z
       .preprocess(

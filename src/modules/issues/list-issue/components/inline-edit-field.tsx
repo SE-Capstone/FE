@@ -198,7 +198,7 @@ const InlineEditableField = ({
                 type === 'date' &&
                 (fieldName === 'endDate' ||
                   fieldName === 'dueDate' ||
-                  fieldName === 'actualEndDate') &&
+                  fieldName === 'actualDate') &&
                 startDate &&
                 isDateLessThan({ date1: value, date2: startDate })
               ) {

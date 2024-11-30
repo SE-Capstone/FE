@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 
-import IssuesIcon from '@atlaskit/icon/glyph/issues';
 import SubtaskIcon from '@atlaskit/icon/glyph/subtask';
 import {
   Box,
@@ -45,7 +44,7 @@ import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailIssuePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { members, project, permissions } = useProjectContext();
   const { currentUser } = useAuthentication();
   const { projectId, issueId } = useParams();
@@ -101,9 +100,9 @@ export function DetailIssuePage() {
               format: 'YYYY-MM-DD',
             }) as unknown as Date)
           : undefined,
-        actualEndDate: issue.actualEndDate
+        actualDate: issue.actualDate
           ? (formatDate({
-              date: issue.actualEndDate,
+              date: issue.actualDate,
               format: 'YYYY-MM-DD',
             }) as unknown as Date)
           : undefined,
@@ -150,15 +149,15 @@ export function DetailIssuePage() {
                 }) as unknown as Date)
               : undefined),
         }),
-        ...(fieldName === 'actualEndDate' && {
-          actualEndDate:
+        ...(fieldName === 'actualDate' && {
+          actualDate:
             (formatDate({
               date: value,
               format: 'YYYY-MM-DD',
             }) as unknown as Date) ||
-            (issue.actualEndDate
+            (issue.actualDate
               ? (formatDate({
-                  date: issue.actualEndDate,
+                  date: issue.actualDate,
                   format: 'YYYY-MM-DD',
                 }) as unknown as Date)
               : undefined),
@@ -355,16 +354,16 @@ export function DetailIssuePage() {
           ),
         },
         {
-          label: t('fields.actualEndDate'),
+          label: t('fields.actualDate'),
           text: (
             <InlineEditableField
               fieldValue={
-                issue?.actualEndDate
-                  ? formatDate({ date: issue?.actualEndDate, format: 'YYYY-MM-DD' }) || ''
+                issue?.actualDate
+                  ? formatDate({ date: issue?.actualDate, format: 'YYYY-MM-DD' }) || ''
                   : ''
               }
               callback={handleSubmit}
-              fieldName="actualEndDate"
+              fieldName="actualDate"
               type="date"
               styleProps={{ transform: 'translate(0, -4px)' }}
               isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
@@ -493,33 +492,35 @@ export function DetailIssuePage() {
                     isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
                   />
                 </Text>
-                <Menu>
-                  <MenuButton
-                    as={Button}
-                    w="fit-content"
-                    aria-label="Options"
-                    leftIcon={<>+</>}
-                    variant="solid"
-                    bg="primary"
-                  >
-                    {t('common.add')}
-                  </MenuButton>
+                {!issue?.parentIssueId && (
+                  <Menu>
+                    <MenuButton
+                      as={Button}
+                      w="fit-content"
+                      aria-label="Options"
+                      leftIcon={<>+</>}
+                      variant="solid"
+                      bg="primary"
+                    >
+                      {t('common.add')}
+                    </MenuButton>
 
-                  <MenuList borderColor="#E2E8F0">
-                    {!issue?.parentIssueId && (
-                      <AddNewIssueWidget parentIssueId={issue?.id || ''}>
-                        <MenuItem>
-                          <SubtaskIcon label="Subtask" />
-                          <Text ml={2}>{t('common.subTask')}</Text>
-                        </MenuItem>
-                      </AddNewIssueWidget>
-                    )}
-                    <MenuItem>
+                    <MenuList borderColor="#E2E8F0">
+                      {!issue?.parentIssueId && (
+                        <AddNewIssueWidget parentIssueId={issue?.id || ''}>
+                          <MenuItem>
+                            <SubtaskIcon label="Subtask" />
+                            <Text ml={2}>{t('common.subTask')}</Text>
+                          </MenuItem>
+                        </AddNewIssueWidget>
+                      )}
+                      {/* <MenuItem>
                       <IssuesIcon label="LinkedIssue" />
                       <Text ml={2}>{t('common.linkedIssue')}</Text>
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
+                    </MenuItem> */}
+                    </MenuList>
+                  </Menu>
+                )}
                 <InlineEditRichtext
                   issue={issue!}
                   isEditable={canUpdate(issue?.assignee, issue?.reporter)}
@@ -738,7 +739,7 @@ export function DetailIssuePage() {
                 data={infoData}
                 labelProps={{
                   sx: {
-                    w: '150px',
+                    w: i18n.language === 'vi' ? '160px' : '130px',
                   },
                 }}
                 stackProps={{ alignItems: 'center' }}

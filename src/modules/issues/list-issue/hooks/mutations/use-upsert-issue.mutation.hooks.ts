@@ -60,9 +60,9 @@ export function useUpsertIssueHook(
                   format: 'YYYY-MM-DD',
                 })
               : undefined,
-            actualEndDate: values.actualEndDate
+            actualDate: values.actualDate
               ? formatDate({
-                  date: values.actualEndDate,
+                  date: values.actualDate,
                   format: 'YYYY-MM-DD',
                 })
               : undefined,

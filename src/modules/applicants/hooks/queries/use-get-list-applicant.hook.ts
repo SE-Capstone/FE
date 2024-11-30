@@ -44,7 +44,7 @@ export function useGetListApplicantQuery(props: UseGetListApplicantQueryProps = 
         {
           pageIndex,
           pageSize,
-          orderBy: 'createdAt',
+          orderByDesc: 'CreatedAt',
         },
         params
       ),
