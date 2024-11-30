@@ -1,3 +1,4 @@
+import { isNaN } from 'lodash-es';
 import { z } from 'zod';
 
 import { ProjectStatusEnum } from '../types';
@@ -27,6 +28,11 @@ export const projectFormSchema = (t: any) =>
         .nativeEnum(ProjectStatusEnum, { message: t('validation.project.invalidStatus') })
         .optional(),
       leadId: z.string().trim().min(1).uuid().optional(),
+      totalEffort: z
+        .number({ message: t('validation.project.totalEffortNumber') })
+        .min(0, { message: t('validation.project.totalEffortTimeMin') })
+        .max(10000000, { message: t('validation.project.totalEffortTimeMax') })
+        .optional(),
     })
     .refine(
       (data) => {
@@ -60,6 +66,11 @@ export const projectUpdateFormSchema = (t: any) =>
       endDate: getDateField(t),
       status: z.nativeEnum(ProjectStatusEnum, { message: t('validation.project.invalidStatus') }),
       leadId: z.string().trim().min(1).uuid().optional(),
+      totalEffort: z
+        .number({ message: t('validation.project.totalEffortNumber') })
+        .min(0, { message: t('validation.project.totalEffortTimeMin') })
+        .max(10000000, { message: t('validation.project.totalEffortTimeMax') })
+        .optional(),
     })
     .refine((data) => data.endDate >= data.startDate, {
       message: t('validation.project.endDateInvalid'),

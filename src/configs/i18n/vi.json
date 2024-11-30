@@ -125,6 +125,7 @@
     "comment": "Bình luận"
   },
   "fields": {
+    "totalEffort": "Tổng thời gian hoàn thành",
     "title": "Tiêu đề",
     "code": "Mã dự án",
     "visible": "Hiển thị",
@@ -269,7 +270,10 @@
       "codeRequired": "Mã dự án là bắt buộc",
       "codeMax": "Mã dự án phải có ít nhất 100 ký tự",
       "invalidStatus": "Trạng thái không hợp lệ",
-      "endDateInvalid": "Ngày kết thúc phải nằm sau ngày bắt đầu"
+      "endDateInvalid": "Ngày kết thúc phải nằm sau ngày bắt đầu",
+      "totalEffortNumber": "Trường này phải là một số",
+      "totalEffortTimeMin": "Giá trị tối thiểu là 0",
+      "totalEffortTimeMax": "Giá trị tối đa là 10000000"
     },
     "status": {
       "nameRequired": "Tên trạng thái là bắt buộc",

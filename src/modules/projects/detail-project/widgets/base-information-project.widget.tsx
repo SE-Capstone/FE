@@ -72,6 +72,9 @@ export function BaseInformationProjectWidget({
         ...(fieldName === 'code' && {
           code: value || project.code,
         }),
+        ...(fieldName === 'totalEffort' && {
+          totalEffort: Number(value || project.totalEffort),
+        }),
         ...(fieldName === 'startDate' && {
           startDate:
             (formatDate({
@@ -197,6 +200,18 @@ export function BaseInformationProjectWidget({
               description={
                 project?.isVisible ? t('actions.archiveProject') : t('actions.unarchiveProject')
               }
+            />
+          ),
+        },
+        {
+          label: t('fields.totalEffort'),
+          text: (
+            <InlineEditableField
+              fieldValue={project?.totalEffort?.toString() || ''}
+              callback={handleSubmit}
+              fieldName="totalEffort"
+              styleProps={{ minW: '200px', minH: '20px' }}
+              isViewOnly={!canUpdate}
             />
           ),
         },

@@ -52,6 +52,7 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
         {
           name: project.name,
           code: project.code,
+          totalEffort: project.totalEffort,
           description: project.description,
           startDate: project.startDate
             ? (formatDate({
@@ -176,22 +177,30 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
               error={errors.endDate}
             />
           </SimpleGrid>
-          <CustomChakraReactSelect
-            isSearchable
-            placeholder={`${t('common.choose')} ${t('fields.teamLead').toLowerCase()}`}
-            label={t('fields.teamLead')}
-            size="lg"
-            options={listUser.map((user) => ({
-              label: user.userName,
-              value: user.id,
-              image: user.avatar || '',
-            }))}
-            control={control}
-            name="leadId"
-            components={customComponents}
-            onInputChange={handleInputChange}
-            onMenuScrollToBottom={handleMenuScrollToBottom}
-          />
+          <SimpleGrid columns={2} spacing={3}>
+            <CustomInput
+              label={t('fields.totalEffort')}
+              type="number"
+              registration={register('totalEffort')}
+              error={errors.totalEffort}
+            />
+            <CustomChakraReactSelect
+              isSearchable
+              placeholder={`${t('common.choose')} ${t('fields.teamLead').toLowerCase()}`}
+              label={t('fields.teamLead')}
+              size="lg"
+              options={listUser.map((user) => ({
+                label: user.userName,
+                value: user.id,
+                image: user.avatar || '',
+              }))}
+              control={control}
+              name="leadId"
+              components={customComponents}
+              onInputChange={handleInputChange}
+              onMenuScrollToBottom={handleMenuScrollToBottom}
+            />
+          </SimpleGrid>
           {isUpdate && (
             <CustomChakraReactSelect
               isSearchable

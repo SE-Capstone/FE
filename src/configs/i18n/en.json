@@ -161,6 +161,7 @@
     "comment": "Comment"
   },
   "fields": {
+    "totalEffort": "Total effort",
     "title": "Title",
     "code": "Code",
     "visible": "Visible",
@@ -304,7 +305,10 @@
       "codeRequired": "Project code is required",
       "codeMax": "Project code must be at most 100 characters",
       "invalidStatus": "Invalid status",
-      "endDateInvalid": "End date must be on or after start date"
+      "endDateInvalid": "End date must be on or after start date",
+      "totalEffortNumber": "Total effort must be a number",
+      "totalEffortTimeMin": "Total effort must be at least 0",
+      "totalEffortTimeMax": "Total effort must be at most 10000000"
     },
     "status": {
       "nameRequired": "Status name is required",

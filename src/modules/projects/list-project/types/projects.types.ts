@@ -45,6 +45,7 @@ export type QuerySuggestMemberInput = {
 export type IProject = IBaseEntity & {
   name: string;
   code: string;
+  totalEffort?: number;
   description: string;
   startDate?: Date;
   endDate?: Date;

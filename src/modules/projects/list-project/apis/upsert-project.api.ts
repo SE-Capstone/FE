@@ -16,6 +16,7 @@ interface IUpsertProjectRequest {
     id?: string;
     name: string;
     code: string;
+    totalEffort?: number;
     description: string;
     startDate?: Date | string;
     endDate?: Date | string;

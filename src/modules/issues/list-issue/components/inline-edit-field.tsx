@@ -74,6 +74,18 @@ const InlineEditableField = ({
       }
     }
 
+    if (fieldName === 'totalEffort') {
+      if (isNaN(Number(value))) {
+        return t('validation.project.totalEffortNumber');
+      }
+      if (Number(value) < 0) {
+        return t('validation.project.totalEffortMin');
+      }
+      if (Number(value) > 1000) {
+        return t('validation.project.totalEffortMax');
+      }
+    }
+
     if (fieldName === 'actualTime') {
       if (isNaN(Number(value))) {
         return t('validation.issue.actualNumber');
