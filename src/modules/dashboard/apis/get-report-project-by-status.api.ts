@@ -6,7 +6,9 @@ import type { IResponseApi } from '@/configs/axios';
 import type { ProjectStatusEnum } from '@/modules/projects/list-project/types';
 import type { DeepPartial } from '@/types';
 
+import { PermissionEnum } from '@/configs';
 import { makeRequest, type QueryConfig } from '@/libs/react-query';
+import { useAuthentication } from '@/modules/profile/hooks';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
 
@@ -41,6 +43,7 @@ export type UseReportProjectsByStatusQueryProps = {
 
 export function useGetReportProjectsByStatus(props: UseReportProjectsByStatusQueryProps) {
   const { configs, params } = props;
+  const { permissions } = useAuthentication();
 
   const currentParams = useMemo(() => params, [params]);
 
@@ -50,6 +53,7 @@ export function useGetReportProjectsByStatus(props: UseReportProjectsByStatusQue
   );
 
   const query = useQuery({
+    enabled: !!permissions[PermissionEnum.VIEW_DASHBOARD],
     placeholderData: (previousData) => previousData,
     queryKey,
     queryFn: () =>

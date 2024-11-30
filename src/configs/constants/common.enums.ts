@@ -82,6 +82,9 @@ export enum PermissionEnum {
   CREATE_POSITION = 'CREATE_POSITION',
   UPDATE_POSITION = 'UPDATE_POSITION',
   DELETE_POSITION = 'DELETE_POSITION',
+
+  // Dashboard
+  VIEW_DASHBOARD = 'VIEW_DASHBOARD',
 }
 
 export enum ProjectPermissionEnum {
@@ -102,4 +105,5 @@ export enum GroupPermissionEnum {
   SKILL = 'SKILL',
   APPLICANT = 'APPLICANT',
   POSITION = 'POSITION',
+  DASHBOARD = 'DASHBOARD',
 }

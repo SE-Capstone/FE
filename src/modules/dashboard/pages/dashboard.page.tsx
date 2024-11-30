@@ -5,9 +5,13 @@ import StatsWithIcons from '../widgets/card-stat.widget';
 import { ReportProjectsByStatusWidget } from '../widgets/report-project-by-status.widget';
 import { ReportSkillsWidget } from '../widgets/report-skills.widget';
 
+import { PermissionEnum } from '@/configs';
+import { useAuthentication } from '@/modules/profile/hooks';
+
 Chart.register();
 
 export function DashboardPage() {
+  const { permissions } = useAuthentication();
   return (
     <>
       <StatsWithIcons />
@@ -26,14 +30,16 @@ export function DashboardPage() {
           <ReportSkillsWidget />
         </GridItem>
       </Grid> */}
-      <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={5}>
-        <GridItem colSpan={1} maxHeight="500px">
-          <ReportProjectsByStatusWidget />
-        </GridItem>
-        <GridItem colSpan={{ base: 1, sm: 2 }}>
-          <ReportSkillsWidget />
-        </GridItem>
-      </SimpleGrid>
+      {permissions[PermissionEnum.VIEW_DASHBOARD] && (
+        <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={5}>
+          <GridItem colSpan={1} maxHeight="500px">
+            <ReportProjectsByStatusWidget />
+          </GridItem>
+          <GridItem colSpan={{ base: 1, sm: 2 }}>
+            <ReportSkillsWidget />
+          </GridItem>
+        </SimpleGrid>
+      )}
     </>
   );
 }

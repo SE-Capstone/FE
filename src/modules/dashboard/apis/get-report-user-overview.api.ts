@@ -10,42 +10,43 @@ import { useAuthentication } from '@/modules/profile/hooks';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
 
-export type ReportOverview = {
-  ongoingTasks: number;
+export type ReportUserOverview = {
+  totalSkills: number;
   totalTasks: number;
+  totalCurrentTasks: number;
+  totalTasksDone: number;
   totalProjects: number;
-  totalProjectsDone: number;
-  totalSkillsEmployee: number;
-  totalEmployee: number;
+  totalProjectsLead: number;
+  totalCurrentProjects: number;
 };
 
-function queryRequest() {
-  return makeRequest<never, IResponseApi<ReportOverview>>({
+function queryRequest(id: string) {
+  return makeRequest<never, IResponseApi<ReportUserOverview>>({
     method: 'GET',
-    url: ALL_ENDPOINT_URL_STORE.dashboard.overview,
+    url: ALL_ENDPOINT_URL_STORE.dashboard.userOverview(id),
   });
 }
 
-export type QueryReportOverviewFnType = typeof queryRequest;
+export type QueryReportUserOverviewFnType = typeof queryRequest;
 
-export type UseReportOverviewQueryProps = {
+export type UseReportUserOverviewQueryProps = {
   configs?: QueryConfig<typeof queryRequest>;
 };
 
-export function useGetReportOverview(props: UseReportOverviewQueryProps) {
+export function useGetReportUserOverview(props: UseReportUserOverviewQueryProps) {
   const { configs } = props;
-  const { permissions } = useAuthentication();
+  const { currentUser, permissions } = useAuthentication();
 
   const queryKey = useMemo(
-    () => [...allQueryKeysStore.dashboard['dashboard/overview'].queryKey],
-    []
+    () => [...allQueryKeysStore.dashboard.userOverview(currentUser?.id || '').queryKey],
+    [currentUser?.id]
   );
 
   const query = useQuery({
-    enabled: !!permissions[PermissionEnum.VIEW_DASHBOARD],
+    enabled: !permissions[PermissionEnum.VIEW_DASHBOARD],
     placeholderData: (previousData) => previousData,
     queryKey,
-    queryFn: queryRequest,
+    queryFn: () => queryRequest(currentUser?.id || ''),
     ...configs,
   });
 

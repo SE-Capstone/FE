@@ -307,6 +307,7 @@
     "phase": "Giai đoạn dự án",
     "label": "Nhãn công việc",
     "applicant": "Ứng viên",
+    "dashboard": "Dashboard",
     "position": "Vị trí công việc"
   },
   "permissions": {
@@ -366,6 +367,7 @@
     "createPosition": "Tạo vị trí công việc",
     "updatePosition": "Cập nhật vị trí công việc",
     "deletePosition": "Xóa vị trí công việc",
+    "viewDashboard": "Xem các báo cáo tổng quan",
     "getPosition": "Xem vị trí công việc"
   },
   "messages": {
@@ -390,6 +392,7 @@
   "chart": {
     "totalUser": "Tổng số nhân sự",
     "ongoingProjects": "Dự án đang tiến hành",
+    "totalProject": "Tổng số dự án",
     "completedProjects": "Dự án đã hoàn thành",
     "totalSkill": "Tổng số kỹ năng",
     "ongoingTasks": "Công việc đang tiến hành",
@@ -398,6 +401,7 @@
     "overallCompletionRate": "Tỉ lệ công việc hoàn thành",
     "projectsByStatusReport": "Phân loại dự án theo trạng thái",
     "skillsReport": "Phân loại bởi kỹ năng",
+    "totalProjectsLead": "Tổng dự án làm leader",
     "statusReport": "Phân loại bởi trạng thái"
   },
   "notifications": {

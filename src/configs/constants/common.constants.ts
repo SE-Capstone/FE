@@ -191,6 +191,9 @@ export const PERMISSIONS_VALUES = (t: any): Record<PermissionEnum, string> => ({
   [PermissionEnum.CREATE_POSITION]: t('permissions.createPosition'),
   [PermissionEnum.UPDATE_POSITION]: t('permissions.updatePosition'),
   [PermissionEnum.DELETE_POSITION]: t('permissions.deletePosition'),
+
+  // Dashboard
+  [PermissionEnum.VIEW_DASHBOARD]: t('permissions.viewDashboard'),
 });
 
 export const GROUP_PERMISSIONS_VALUES = (t: any): Record<GroupPermissionEnum, string> => ({
@@ -204,6 +207,7 @@ export const GROUP_PERMISSIONS_VALUES = (t: any): Record<GroupPermissionEnum, st
   [GroupPermissionEnum.SKILL]: t('groupPermissions.skill'),
   [GroupPermissionEnum.APPLICANT]: t('groupPermissions.applicant'),
   [GroupPermissionEnum.POSITION]: t('groupPermissions.position'),
+  [GroupPermissionEnum.DASHBOARD]: t('groupPermissions.dashboard'),
 });
 
 export const PROJECT_STATUS_VALUES = (t: any): Record<ProjectStatusEnum, string> => ({

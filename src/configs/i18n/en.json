@@ -342,6 +342,7 @@
     "phase": "Project phase",
     "label": "Issue label",
     "applicant": "Applicant",
+    "dashboard": "Dashboard",
     "position": "Job position"
   },
   "permissions": {
@@ -401,6 +402,7 @@
     "createPosition": "Create job position",
     "updatePosition": "Update job position",
     "deletePosition": "Delete job position",
+    "viewDashboard": "View dashboard report",
     "getPosition": "Get job position"
   },
   "messages": {
@@ -425,6 +427,7 @@
   "chart": {
     "totalUser": "Total user",
     "ongoingProjects": "Ongoing projects",
+    "totalProject": "Total project",
     "completedProjects": "Completed projects",
     "totalSkill": "Total skill",
     "ongoingTasks": "Ongoing tasks",
@@ -433,6 +436,7 @@
     "overallCompletionRate": "Overall task completion rate",
     "projectsByStatusReport": "Categories project by status",
     "skillsReport": "Categories by skills",
+    "totalProjectsLead": "Lead projects",
     "statusReport": "Categories by status"
   },
   "notifications": {

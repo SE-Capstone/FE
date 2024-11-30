@@ -12,14 +12,15 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { BsStack } from 'react-icons/bs';
+import { FaUserTie } from 'react-icons/fa';
 import { GoProjectRoadmap } from 'react-icons/go';
 import { HiUsers } from 'react-icons/hi';
 import { IoIosListBox } from 'react-icons/io';
 
 import { useGetReportOverview } from '../apis/get-report-overview.api';
+import { useGetReportUserOverview } from '../apis/get-report-user-overview.api';
 
 interface StatData {
-  id: number;
   label: string;
   score: number;
   icon: any;
@@ -74,52 +75,88 @@ export const Card = ({ data }: { data: StatData }) => (
 const StatsWithIcons = () => {
   const { t } = useTranslation();
   const { data } = useGetReportOverview({});
+  const { data: dataUser } = useGetReportUserOverview({});
 
   const statData = useCallback(() => {
     if (data) {
       return [
         {
-          id: 1,
           label: t('chart.totalUser'),
           score: data.totalEmployee,
           icon: HiUsers,
         },
         {
-          id: 2,
           label: t('chart.ongoingProjects'),
           score: data.totalProjects,
           icon: GoProjectRoadmap,
           bg: 'primary',
         },
         {
-          id: 3,
           label: t('chart.completedProjects'),
           score: data.totalProjectsDone,
           icon: GoProjectRoadmap,
         },
         {
-          id: 4,
           label: t('chart.totalSkill'),
           score: data.totalSkillsEmployee,
           icon: BsStack,
         },
         {
-          id: 5,
           label: t('chart.ongoingTasks'),
           score: data.ongoingTasks,
           icon: IoIosListBox,
           bg: 'primary',
         },
         {
-          id: 6,
           label: t('chart.totalTask'),
           score: data.totalTasks,
           icon: IoIosListBox,
         },
       ];
     }
+    if (dataUser) {
+      return [
+        {
+          label: t('chart.totalTask'),
+          score: dataUser.totalTasks,
+          icon: GoProjectRoadmap,
+        },
+        {
+          label: t('chart.ongoingTasks'),
+          score: dataUser.totalCurrentTasks,
+          icon: GoProjectRoadmap,
+          bg: 'primary',
+        },
+        {
+          label: t('chart.doneTasks'),
+          score: dataUser.totalTasksDone,
+          icon: GoProjectRoadmap,
+        },
+        {
+          label: t('chart.totalSkill'),
+          score: dataUser.totalSkills,
+          icon: BsStack,
+        },
+        {
+          label: t('chart.ongoingProjects'),
+          score: dataUser.totalCurrentProjects,
+          icon: IoIosListBox,
+          bg: 'primary',
+        },
+        {
+          label: t('chart.totalProject'),
+          score: dataUser.totalProjects,
+          icon: IoIosListBox,
+        },
+        {
+          label: t('chart.totalProjectsLead'),
+          score: dataUser.totalProjectsLead,
+          icon: FaUserTie,
+        },
+      ];
+    }
     return [];
-  }, [data, t]);
+  }, [data, dataUser, t]);
 
   return (
     <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={5} mt={6} mb={6}>
