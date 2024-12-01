@@ -40,7 +40,7 @@ import type { SuggestResponse } from '../apis/suggest-member.api';
 import type { IOptionUserSelect } from '../components/users-async-select';
 
 import { IMAGE_URLS } from '@/assets/images';
-import { ModalBase } from '@/components/elements';
+import { CustomTextArea, ModalBase } from '@/components/elements';
 import { ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { useGetListPositionQuery } from '@/modules/positions/hooks/queries';
@@ -271,7 +271,9 @@ const MemberSetting = ({ members, projectId }: { members: ProjectMember[]; proje
 
 export function ProjectMembersWidget({ project }: { project?: IProject }) {
   const { t } = useTranslation();
+  const [inputValue, setInputValue] = useState('');
   const disclosureModal = useDisclosure();
+  const disclosureModalInput = useDisclosure();
   const { permissions: projectPermissions } = useProjectContext();
   const hasMembers = (project?.members?.length || 0) > 0;
   // const hasMembers = (project?.members?.length || 0) > 0 || !!project?.leadId;
@@ -313,18 +315,31 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
     try {
       const memberForSuggest = await refetch();
 
+      if (disclosureModalInput.isOpen) {
+        disclosureModalInput.onClose();
+      }
       if (disclosureModal.isOpen) {
         disclosureModal.onClose();
       }
       await mutate({
         body: {
           projectName: project?.name || '',
-          projectDetail: project?.description || '',
+          projectDetail: inputValue || project?.description || '',
           userStatistics: isLoading ? [] : memberForSuggest.data?.data || [],
         },
       });
+      setInputValue('');
     } catch (error) {}
-  }, [disclosureModal, isLoading, mutate, project?.description, project?.name, refetch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    disclosureModal,
+    disclosureModalInput,
+    isLoading,
+    mutate,
+    project?.description,
+    project?.name,
+    refetch,
+  ]);
 
   useEffect(() => {
     if (data?.data && data.data.length > 0) {
@@ -398,23 +413,26 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           <Icon boxSize={5} color="neutral.300" mr={3} as={PiUsersThreeFill} />
           {t('fields.members')}
         </Text>
-        <Button
-          type="button"
-          bg="transparent"
-          color="#85B8FF"
-          border="1px solid #8F7EE7"
-          transition="all 0.3s"
-          hidden={!canUpdate}
-          disabled={isPending || isLoading}
-          leftIcon={<BsStars />}
-          _hover={{
-            color: 'textColor',
-            bg: 'linear-gradient(45deg, #B8ACF6 0%, #85B8FF 100%)',
-          }}
-          onClick={suggestMember}
-        >
-          {t('common.suggestMember')}
-        </Button>
+        {canUpdate && (
+          <Button
+            type="button"
+            bg="transparent"
+            color="#85B8FF"
+            border="1px solid #8F7EE7"
+            transition="all 0.3s"
+            hidden={!canUpdate}
+            disabled={isPending || isLoading}
+            leftIcon={<BsStars />}
+            _hover={{
+              color: 'textColor',
+              bg: 'linear-gradient(45deg, #B8ACF6 0%, #85B8FF 100%)',
+            }}
+            // onClick={suggestMember}
+            onClick={disclosureModalInput.onOpen}
+          >
+            {t('common.suggestMember')}
+          </Button>
+        )}
         {hasMembers && canUpdate && (
           <UpsertMembersWidget
             defaultUserValue={Array.from(initialMembers)}
@@ -567,6 +585,42 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
               {t('common.noMemberMatch')}
             </Text>
           )}
+        </Stack>
+      </ModalBase>
+      <ModalBase
+        size="xl"
+        renderFooter={() => (
+          <Button
+            type="button"
+            bg="transparent"
+            color="#85B8FF"
+            border="1px solid #8F7EE7"
+            transition="all 0.3s"
+            hidden={!canUpdate}
+            disabled={isPending}
+            leftIcon={<BsStars />}
+            _hover={{
+              color: 'textColor',
+              bg: 'linear-gradient(45deg, #B8ACF6 0%, #85B8FF 100%)',
+            }}
+            onClick={suggestMember}
+          >
+            {t('common.suggestMember')}
+          </Button>
+        )}
+        closeOnOverlayClick
+        title={t('common.suggestMember')}
+        isOpen={disclosureModalInput.isOpen}
+        onClose={disclosureModalInput.onClose}
+        // onCloseComplete={reset}
+      >
+        <Stack spacing={5}>
+          <CustomTextArea
+            label={t('fields.name')}
+            isRequired
+            required
+            onChange={(e) => setInputValue(e.target.value)}
+          />
         </Stack>
       </ModalBase>
     </Stack>
