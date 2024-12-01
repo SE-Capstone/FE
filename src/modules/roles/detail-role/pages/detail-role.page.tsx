@@ -102,13 +102,15 @@ export function DetailRolePage() {
         title={role?.name}
         path={APP_PATHS.listRole}
       >
-        <IconButton
+        {/* <IconButton
           hidden={!permissions[PermissionEnum.UPSERT_ROLE]}
           aria-label="UpsertRole"
           variant="ghost"
           size="md"
           icon={<Icon as={BiTrash} boxSize={4} color="red.400" />}
-        />
+        /> */}
+        {/* eslint-disable-next-line react/jsx-no-useless-fragment */}
+        <></>
       </LayoutBack>
       <Stack bg="white" p={5} flex={1} flexBasis="10%" rounded={2.5} justify="center" spacing={2}>
         <CustomFormProvider form={form} style={{ height: 'fit-content' }} onSubmit={onSubmit}>

@@ -1,5 +1,6 @@
 {
   "common": {
+    "prompt": "Prompt",
     "show": "Show",
     "entries": "entries",
     "time": "Time",

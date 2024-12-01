@@ -43,6 +43,7 @@ import { IMAGE_URLS } from '@/assets/images';
 import { CustomTextArea, ModalBase } from '@/components/elements';
 import { ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
+import { notify } from '@/libs/helpers';
 import { useGetListPositionQuery } from '@/modules/positions/hooks/queries';
 
 const MemberSetting = ({ members, projectId }: { members: ProjectMember[]; projectId: string }) => {
@@ -587,42 +588,53 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
           )}
         </Stack>
       </ModalBase>
-      <ModalBase
-        size="xl"
-        renderFooter={() => (
-          <Button
-            type="button"
-            bg="transparent"
-            color="#85B8FF"
-            border="1px solid #8F7EE7"
-            transition="all 0.3s"
-            hidden={!canUpdate}
-            disabled={isPending}
-            leftIcon={<BsStars />}
-            _hover={{
-              color: 'textColor',
-              bg: 'linear-gradient(45deg, #B8ACF6 0%, #85B8FF 100%)',
-            }}
-            onClick={suggestMember}
-          >
-            {t('common.suggestMember')}
-          </Button>
-        )}
-        closeOnOverlayClick
-        title={t('common.suggestMember')}
-        isOpen={disclosureModalInput.isOpen}
-        onClose={disclosureModalInput.onClose}
-        // onCloseComplete={reset}
-      >
-        <Stack spacing={5}>
-          <CustomTextArea
-            label={t('fields.name')}
-            isRequired
-            required
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-        </Stack>
-      </ModalBase>
+      {canUpdate && (
+        <ModalBase
+          size="xl"
+          renderFooter={() => (
+            <Button
+              type="button"
+              bg="transparent"
+              color="#85B8FF"
+              border="1px solid #8F7EE7"
+              transition="all 0.3s"
+              hidden={!canUpdate}
+              disabled={isPending}
+              leftIcon={<BsStars />}
+              _hover={{
+                color: 'textColor',
+                bg: 'linear-gradient(45deg, #B8ACF6 0%, #85B8FF 100%)',
+              }}
+              onClick={() => {
+                if (inputValue) {
+                  suggestMember();
+                } else {
+                  notify({
+                    type: 'error',
+                    message: t('validation.descriptionRequired'),
+                  });
+                }
+              }}
+            >
+              {t('common.suggestMember')}
+            </Button>
+          )}
+          closeOnOverlayClick
+          title={t('common.suggestMember')}
+          isOpen={disclosureModalInput.isOpen}
+          onClose={disclosureModalInput.onClose}
+          // onCloseComplete={reset}
+        >
+          <Stack spacing={5}>
+            <CustomTextArea
+              label={t('common.prompt')}
+              isRequired
+              required
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+          </Stack>
+        </ModalBase>
+      )}
     </Stack>
   );
 }
