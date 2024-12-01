@@ -89,6 +89,7 @@ export function ListPositionPage() {
               totalCount={meta.totalCount}
               isLoading={isLoading || isRefetching}
               isError={!!isError}
+              showChangeEntries
               additionalFeature={(position) =>
                 permissions[PermissionEnum.UPDATE_POSITION] ||
                 permissions[PermissionEnum.DELETE_POSITION] ? (

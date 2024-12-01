@@ -360,6 +360,7 @@ export function ListIssuePage() {
           totalCount={meta.totalCount}
           isLoading={isLoading || isRefetching}
           isError={!!isError}
+          showChangeEntries
           additionalFeature={(issue) => <ActionMenuTableIssues issue={issue} />}
           onPageChange={handlePaginate}
         />

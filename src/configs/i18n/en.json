@@ -1,5 +1,7 @@
 {
   "common": {
+    "show": "Show",
+    "entries": "entries",
     "time": "Time",
     "percentage": "Percentage",
     "accessProjectDenied": "You don't have permission to access this project",

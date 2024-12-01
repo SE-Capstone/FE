@@ -1,5 +1,7 @@
 {
   "common": {
+    "show": "Hiển thị",
+    "entries": "bản ghi",
     "time": "Thời gian",
     "percentage": "Phần trăm",
     "accessProjectDenied": "Bạn không có quyền truy cập vào dự án này",

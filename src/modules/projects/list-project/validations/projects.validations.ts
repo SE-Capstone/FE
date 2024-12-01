@@ -1,4 +1,3 @@
-import { isNaN } from 'lodash-es';
 import { z } from 'zod';
 
 import { ProjectStatusEnum } from '../types';

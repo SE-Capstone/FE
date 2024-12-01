@@ -82,6 +82,7 @@ export function ListSkillPage() {
           totalCount={meta.totalCount}
           isLoading={isLoading || isRefetching}
           isError={!!isError}
+          showChangeEntries
           additionalFeature={(skill) =>
             permissions[PermissionEnum.UPDATE_SKILL] || permissions[PermissionEnum.DELETE_SKILL] ? (
               <ActionMenuTableSkills skill={skill} />

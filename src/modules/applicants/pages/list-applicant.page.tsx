@@ -136,6 +136,7 @@ export function ListApplicantPage() {
               totalCount={meta.totalCount}
               isLoading={isLoading || isRefetching}
               isError={!!isError}
+              showChangeEntries
               additionalFeature={(applicant) =>
                 permissions[PermissionEnum.UPDATE_APPLICANT] ||
                 permissions[PermissionEnum.DELETE_APPLICANT] ? (

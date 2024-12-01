@@ -171,6 +171,7 @@ export function ListUserPage() {
           totalCount={meta.totalCount}
           isLoading={isLoading}
           isError={!!isError}
+          showChangeEntries
           additionalFeature={(user) =>
             permissions[PermissionEnum.TOGGLE_USER] ||
             permissions[PermissionEnum.GET_DETAIL_USER] ? (
