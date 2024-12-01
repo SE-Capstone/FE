@@ -25,6 +25,7 @@ interface TableHeadProps<T> {
   groupColumns: GroupColumnProps;
   additionalFeature?: boolean;
   hasCheckbox: boolean;
+  isOverlaid: boolean;
   onHandleCheckbox?: (checked: boolean) => void;
   handleSortBy: (sortBy: 'asc' | 'desc' | 'all', accessor: keyof T) => void;
   isCheckAll?: boolean;
@@ -111,6 +112,7 @@ const TableHeader = <T extends object>({
   hasCheckbox,
   handleSortBy,
   onHandleCheckbox,
+  isOverlaid,
   isCheckAll,
   isIndeterminate,
   hasDraggable,
@@ -223,6 +225,12 @@ const TableHeader = <T extends object>({
               fontSize: '12px',
               lineHeight: '120%',
             }}
+            pos="sticky"
+            right="0"
+            zIndex="1"
+            transition="all 0.5s ease"
+            boxShadow={isOverlaid ? 'inset 12px 0 8px -8px #f2f2f2' : undefined}
+            bg="white"
           >
             {t('fields.actions')}
           </Th>

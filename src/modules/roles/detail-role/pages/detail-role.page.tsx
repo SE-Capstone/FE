@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { Icon, IconButton, Stack } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { BiTrash } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
 
 import { useGetGroupPermissions } from '../apis/get-permissions.api';

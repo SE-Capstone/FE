@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import {
   Box,
@@ -200,6 +200,32 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
     ({ id }) => listSelected.some((selected) => selected.id === id) && !isCheckAll
   );
 
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const [isOverlaid, setIsOverlaid] = useState(false);
+  const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const container = tableContainerRef.current;
+      if (!container) return;
+
+      // Check if the container is scrolled horizontally
+      const isScrolled = container.scrollLeft + container.clientWidth < container.scrollWidth;
+
+      setIsOverlaid(isScrolled);
+    };
+
+    const container = tableContainerRef.current;
+    container?.addEventListener('scroll', handleScroll);
+
+    // Initial check
+    handleScroll();
+
+    return () => {
+      container?.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <Stack ref={wrapperTableRef} spacing={4} w="full">
       {renderFilterTable &&
@@ -227,13 +253,14 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
             </Tbody>
           </Table>
         ) : (
-          <TableContainer {...TableProps} maxW="full" shadow="md">
+          <TableContainer {...TableProps} ref={tableContainerRef} maxW="full" shadow="md">
             <Table
               // sx={{ borderCollapse: 'collapse', tableLayout: 'fixed' }}
               size="sm"
               overflow="hidden"
               borderRadius={2}
               variant="simple"
+              overflowX="auto"
             >
               {!withoutHeader && (
                 <TableHeader<ObjectType>
@@ -242,6 +269,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                   additionalFeature={!!additionalFeature}
                   handleSortBy={handleSortBy}
                   isCheckAll={isCheckAll}
+                  isOverlaid={isOverlaid}
                   isIndeterminate={isIndeterminate}
                   hasDraggable={hasDraggable}
                   onHandleCheckbox={(checked) => {
@@ -253,6 +281,8 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
               <Tbody rounded="12px" bg="white">
                 {sortedData &&
                   sortedData.map((object, index) => {
+                    const isHovered = hoveredRow === object.id;
+
                     const tdContent = (
                       <>
                         {hasCheckbox && (
@@ -298,7 +328,17 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                         ))}
 
                         {additionalFeature && (
-                          <Td py={1.5} border="none" textAlign="right" pos="relative">
+                          <Td
+                            py={1.5}
+                            border="none"
+                            textAlign="right"
+                            pos="sticky"
+                            right="0"
+                            transition="all 0.5s ease"
+                            boxShadow={isOverlaid ? 'inset 12px 0 8px -8px #f2f2f2' : undefined}
+                            zIndex="1"
+                            bg={isHovered ? 'gray.50' : 'white'}
+                          >
                             {additionalFeature(object)}
                           </Td>
                         )}
@@ -317,9 +357,12 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                     ) : (
                       <Tr
                         key={object.id}
+                        transition="all 0.5s ease"
                         _hover={{
                           bgColor: 'gray.50',
                         }}
+                        onMouseEnter={() => setHoveredRow(object.id ?? null)}
+                        onMouseLeave={() => setHoveredRow(null)}
                       >
                         {tdContent}
                       </Tr>
