@@ -344,17 +344,18 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
             spacing="6"
           >
             {showChangeEntries && (
-              <HStack spacing={2} align="center" py={3}>
-                <Text>Show</Text>
-                <Box w="120px">
+              <HStack align="center" py={1}>
+                <Text>{t('common.show')}</Text>
+                <Box w="140px">
                   <CustomChakraReactSelect
-                    defaultValue={{ value: 20, label: '20' }}
-                    size="md"
+                    defaultValue={{ value: 10, label: '10' }}
+                    size="sm"
                     isMulti={false}
                     isSearchable={false}
                     options={[
                       { value: 10, label: '10' },
                       { value: 20, label: '20' },
+                      { value: 50, label: '30' },
                       { value: 50, label: '50' },
                       { value: 100, label: '100' },
                     ]}
@@ -367,7 +368,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                   />
                 </Box>
 
-                <Text>entries</Text>
+                <Text>{t('common.entries')}</Text>
               </HStack>
             )}
 
