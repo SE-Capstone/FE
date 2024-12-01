@@ -127,8 +127,9 @@
     "comment": "Bình luận"
   },
   "fields": {
-    "totalEffort": "Lượng công sức(giờ)",
-    "totalEffortActual": "Lượng công sức thực tế(giờ)",
+    "totalEffort": "Lượng công sức (giờ)",
+    "totalEffortActual": "Lượng công sức thực tế (giờ)",
+    "estimateEffort": "Lượng công sức ước tính (giờ)",
     "title": "Tiêu đề",
     "code": "Mã dự án",
     "visible": "Hiển thị",

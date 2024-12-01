@@ -31,7 +31,10 @@ export function DashboardPage() {
         </GridItem>
       </Grid> */}
       {permissions[PermissionEnum.VIEW_DASHBOARD] && (
-        <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={5}>
+        <SimpleGrid
+          columns={{ base: 1, sm: permissions[PermissionEnum.VIEW_DASHBOARD] ? 3 : 4 }}
+          spacing={5}
+        >
           <GridItem colSpan={1} maxHeight="500px">
             <ReportProjectsByStatusWidget />
           </GridItem>

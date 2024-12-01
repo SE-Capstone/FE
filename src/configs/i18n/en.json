@@ -163,8 +163,9 @@
     "comment": "Comment"
   },
   "fields": {
-    "totalEffort": "Total effort",
-    "totalEffortActual": "Actual total effort",
+    "totalEffort": "Total effort (hours)",
+    "totalEffortActual": "Actual total effort (hours)",
+    "estimateEffort": "Estimated effort (hours)",
     "title": "Title",
     "code": "Code",
     "visible": "Visible",

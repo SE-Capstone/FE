@@ -185,15 +185,21 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
             icon: ImStatsBars2,
           },
           {
-            id: 4,
+            id: 5,
             label: t('fields.totalEffort'),
             score: overviewReport?.totalEffort || 0,
             icon: BsStack,
           },
           {
-            id: 4,
+            id: 6,
             label: t('fields.totalEffortActual'),
             score: overviewReport?.actualEffot || 0,
+            icon: BsStack,
+          },
+          {
+            id: 7,
+            label: t('fields.estimateEffort'),
+            score: overviewReport?.estimateEffort || 0,
             icon: BsStack,
           },
         ],
@@ -351,7 +357,7 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
           />
         </GridItem>
       </Grid>
-      <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={5} mt={6} mb={6}>
+      <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={5} mt={6} mb={6}>
         {overViewData().cardData.map((data, index) => (
           <Card key={index} data={data} />
         ))}
