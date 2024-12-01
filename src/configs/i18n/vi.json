@@ -127,7 +127,8 @@
     "comment": "Bình luận"
   },
   "fields": {
-    "totalEffort": "Tổng thời gian hoàn thành",
+    "totalEffort": "Lượng công sức(giờ)",
+    "totalEffortActual": "Lượng công sức thực tế(giờ)",
     "title": "Tiêu đề",
     "code": "Mã dự án",
     "visible": "Hiển thị",

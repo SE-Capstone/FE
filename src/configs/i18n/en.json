@@ -164,6 +164,7 @@
   },
   "fields": {
     "totalEffort": "Total effort",
+    "totalEffortActual": "Actual total effort",
     "title": "Title",
     "code": "Code",
     "visible": "Visible",

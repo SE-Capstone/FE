@@ -17,6 +17,8 @@ type OverviewProjectReport = {
   ongoingTasks: number;
   totalTasks: number;
   doneTasks: number;
+  totalEffort: number;
+  actualEffot: number;
   overallCompletionRate: number;
   taskCompletionRate: TaskCompletionByStatus[];
 };

@@ -4,6 +4,7 @@ import { Grid, GridItem, SimpleGrid, Stack } from '@chakra-ui/react';
 import Chart from 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
+import { BsStack } from 'react-icons/bs';
 import { FaCircleCheck } from 'react-icons/fa6';
 import { ImStatsBars2 } from 'react-icons/im';
 import { IoIosListBox } from 'react-icons/io';
@@ -183,6 +184,18 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
             score: overviewReport?.overallCompletionRate || 0,
             icon: ImStatsBars2,
           },
+          {
+            id: 4,
+            label: t('fields.totalEffort'),
+            score: overviewReport?.totalEffort || 0,
+            icon: BsStack,
+          },
+          {
+            id: 4,
+            label: t('fields.totalEffortActual'),
+            score: overviewReport?.actualEffot || 0,
+            icon: BsStack,
+          },
         ],
         pieChartData: overviewReport?.taskCompletionRate || [],
       };
@@ -338,7 +351,7 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
           />
         </GridItem>
       </Grid>
-      <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={5} mt={6} mb={6}>
+      <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={5} mt={6} mb={6}>
         {overViewData().cardData.map((data, index) => (
           <Card key={index} data={data} />
         ))}
