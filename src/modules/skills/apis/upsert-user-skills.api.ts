@@ -51,6 +51,9 @@ export function useUpsertUserSkillsMutation({ configs, userId }: Props) {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.user['users/reports/skills'].queryKey,
       });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.dashboard.userOverview._def,
+      });
       notify({
         type: 'success',
         message: DEFAULT_MESSAGE(t).UPDATE_SUCCESS,

@@ -50,6 +50,9 @@ export function useCreateUserMutation({ configs, reset }: Props = {}) {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.user.users.queryKey,
       });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.dashboard['dashboard/overview'].queryKey,
+      });
       notify({
         type: 'success',
         message: DEFAULT_MESSAGE(t).CREATE_SUCCESS,

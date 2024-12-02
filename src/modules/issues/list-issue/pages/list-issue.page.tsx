@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { Progress } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 

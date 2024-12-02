@@ -83,6 +83,13 @@ export function useUpsertIssueMutation({ configs, reset, id, isUpdate, isRedirec
         queryKey: allQueryKeysStore.project['projects/reports/tasks/completion-chart'].queryKey,
       });
 
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.dashboard['dashboard/overview'].queryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.dashboard.userOverview._def,
+      });
+
       notify({
         type: 'success',
         message: isUpdate ? DEFAULT_MESSAGE(t).UPDATE_SUCCESS : DEFAULT_MESSAGE(t).CREATE_SUCCESS,

@@ -50,6 +50,9 @@ export function useRemoveSkillMutation(props: Props) {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.user['users/reports/skills'].queryKey,
       });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.dashboard['dashboard/overview'].queryKey,
+      });
       notify({
         type: 'success',
         message: DEFAULT_MESSAGE(t).DELETE_SUCCESS,

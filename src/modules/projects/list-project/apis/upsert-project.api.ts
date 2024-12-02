@@ -69,6 +69,9 @@ export function useUpsertProjectMutation({ configs, reset, id, isUpdate, onClose
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.dashboard['dashboard/overview'].queryKey,
       });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.dashboard.userOverview._def,
+      });
       notify({
         type: 'success',
         message: isUpdate ? DEFAULT_MESSAGE(t).UPDATE_SUCCESS : DEFAULT_MESSAGE(t).CREATE_SUCCESS,
