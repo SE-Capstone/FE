@@ -48,6 +48,17 @@ export function formatDate({
   return dayjs(new Date(maybeDate as Date)).format(FormatDateTimeEnum[format]);
 }
 
+export function formatDateVN({
+  date,
+  format = FormatDateTimeEnum['YYYY-MM-DD'],
+}: FormatDateTimeType) {
+  const maybeDate = isValidTimestamp(Number(date)) ? Number(date) : date;
+
+  return dayjs(new Date(maybeDate as Date))
+    .add(7, 'h')
+    .format(FormatDateTimeEnum[format]);
+}
+
 export function getCurrentDate() {
   return dayjs().format(FormatDateTimeEnum['YYYY-MM-DD']);
 }

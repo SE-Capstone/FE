@@ -111,6 +111,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
   const [page, setPage] = useState(currentPage);
   const [sortedData, setSortedData] = useState<ObjectType[]>([]);
   const [persistData, setPersistData] = useState<ObjectType[]>([]);
+  const [clickedRow, setClickedRow] = useState<string | null>(null);
 
   const filters = useRef<FiltersProps<ObjectType>>([]);
   const [rowsCount, setRowsCount] = useState(10);
@@ -338,8 +339,21 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                             right="0"
                             transition="all 0.5s ease"
                             boxShadow={isOverlaid ? 'inset 12px 0 8px -8px #f2f2f2' : undefined}
-                            zIndex={isHovered ? 2 : 1}
+                            // zIndex={clickedRow === object.id ? 101 : 100 - index}
+                            zIndex={
+                              isHovered && clickedRow === object.id
+                                ? 5
+                                : clickedRow === object.id
+                                ? 3
+                                : isHovered
+                                ? 2
+                                : 1
+                            }
                             bg={isHovered ? 'gray.50' : 'white'}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setClickedRow(object.id ?? null);
+                            }}
                           >
                             {additionalFeature(object)}
                           </Td>

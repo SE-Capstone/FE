@@ -15,7 +15,7 @@ import { useRemoveCommentHook } from '../hooks/mutations/use-remove-comment.hook
 
 import type { IComment } from '../../list-issue/types';
 
-import { formatDate } from '@/libs/helpers';
+import { formatDateVN } from '@/libs/helpers';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { extensions } from '@/modules/public/pages/rich-text-ex.pages';
 
@@ -66,7 +66,7 @@ export const CommentWidget = ({
         size={10}
         date={
           comment?.createdAt &&
-          formatDate({
+          formatDateVN({
             date: comment?.updatedAt || comment?.createdAt,
             format: 'DD-MM-YYYY - HH:mm',
           })

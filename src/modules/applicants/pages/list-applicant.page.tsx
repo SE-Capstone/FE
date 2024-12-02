@@ -12,7 +12,7 @@ import type { ColumnsProps } from '@/components/elements';
 
 import { CustomLink, Head, StateHandler, TableComponent } from '@/components/elements';
 import { PermissionEnum } from '@/configs';
-import { formatDate, getNumericalOrder, phoneNumberAutoFormat } from '@/libs/helpers';
+import { formatDate, formatDateVN, getNumericalOrder, phoneNumberAutoFormat } from '@/libs/helpers';
 import { Error403Page } from '@/modules/errors';
 import { useAuthentication } from '@/modules/profile/hooks';
 
@@ -103,7 +103,7 @@ export function ListApplicantPage() {
             hasSort: false,
             Cell({ updatedAt, createdAt }) {
               return (
-                <>{formatDate({ date: updatedAt || createdAt, format: 'DD-MM-YYYY: HH:mm' })}</>
+                <>{formatDateVN({ date: updatedAt || createdAt, format: 'DD-MM-YYYY: HH:mm' })}</>
               );
             },
           },
