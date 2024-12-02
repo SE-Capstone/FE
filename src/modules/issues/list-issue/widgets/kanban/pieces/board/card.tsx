@@ -123,6 +123,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
     currentUser?.id === issue.assignee?.id ||
     currentUser?.id === issue.reporter?.id ||
     permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+  const canMove = permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
 
   return (
     <Stack ref={ref} testId={`item-${id}`} xcss={[baseStyles, stateStyles[state.type]]}>
@@ -148,6 +149,8 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
                     mergeRefs([triggerRef])
               }
               icon={MoreIcon}
+              // eslint-disable-next-line no-unneeded-ternary
+              hidden={!canMove}
               label={`Move ${title}`}
               appearance="default"
               spacing="compact"
@@ -237,6 +240,9 @@ export const Card = memo(function Card({ item }: { item: Issue }) {
   const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
   const [state, setState] = useState<State>(idleState);
 
+  const { permissions } = useProjectContext();
+  const canUpdate = permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+
   const actionMenuTriggerRef = useRef<HTMLButtonElement>(null);
   const { instanceId, registerCard } = useBoardContext();
   useEffect(() => {
@@ -252,6 +258,9 @@ export const Card = memo(function Card({ item }: { item: Issue }) {
   }, [registerCard, id]);
 
   useEffect(() => {
+    if (!canUpdate) {
+      return undefined;
+    }
     const element = ref.current;
     invariant(element);
     return combine(
@@ -312,7 +321,7 @@ export const Card = memo(function Card({ item }: { item: Issue }) {
         },
       })
     );
-  }, [instanceId, item, id]);
+  }, [instanceId, item, id, canUpdate]);
 
   return (
     <>

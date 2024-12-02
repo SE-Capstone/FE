@@ -287,7 +287,7 @@ export function BaseInformationProjectWidget({
               data={infoData}
               labelProps={{
                 sx: {
-                  w: '150px',
+                  w: '160px',
                 },
               }}
               stackProps={{ alignItems: 'center' }}

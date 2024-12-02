@@ -8,8 +8,6 @@ import DropdownMenu, {
 } from '@atlaskit/dropdown-menu';
 import mergeRefs from '@atlaskit/ds-lib/merge-refs';
 import Heading from '@atlaskit/heading';
-// This is the smaller MoreIcon soon to be more easily accessible with the
-// ongoing icon project
 import MoreIcon from '@atlaskit/icon/glyph/editor/more';
 import { easeInOut } from '@atlaskit/motion/curves';
 import { mediumDurationMs } from '@atlaskit/motion/durations';
@@ -37,6 +35,9 @@ import { Card } from './card';
 import { ColumnContext, type ColumnContextProps, useColumnContext } from './column-context';
 import { type ColumnType } from '../../data';
 
+import { ProjectPermissionEnum } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
+
 const columnStyles = xcss({
   backgroundColor: 'elevation.surface.raised',
   borderRadius: 'border.radius.300',
@@ -46,12 +47,7 @@ const columnStyles = xcss({
 
 const stackStyles = xcss({
   width: '270px',
-  // allow the container to be shrunk by a parent height
-  // https://www.joshwcomeau.com/css/interactive-guide-to-flexbox/#the-minimum-size-gotcha-11
   minHeight: '0',
-
-  // ensure our card list grows to be all the available space
-  // so that users can easily drop on en empty list
   flexGrow: 1,
 });
 
@@ -214,7 +210,13 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
 
   const { instanceId, registerColumn } = useBoardContext();
 
+  const { permissions } = useProjectContext();
+  const canUpdate = permissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
+
   useEffect(() => {
+    if (!canUpdate) {
+      return undefined;
+    }
     invariant(columnRef.current);
     invariant(columnInnerRef.current);
     invariant(headerRef.current);
@@ -316,7 +318,7 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
           source.data.instanceId === instanceId && source.data.type === 'card',
       })
     );
-  }, [columnId, registerColumn, instanceId]);
+  }, [columnId, registerColumn, instanceId, canUpdate]);
 
   const stableItems = useRef(column.items);
   useEffect(() => {
@@ -358,7 +360,7 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
                 </Heading>
                 {column.isDone && <MdCheck size="15px" color="green" />}
               </Flex>
-              <ActionMenu />
+              {canUpdate && <ActionMenu />}
             </Inline>
             <Box ref={scrollableRef} xcss={scrollContainerStyles}>
               <Stack xcss={cardListStyles} space="space.100">
