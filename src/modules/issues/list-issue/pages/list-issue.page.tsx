@@ -5,10 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { BadgeIssue } from '../components/badge-issue';
+import InlineEditableField from '../components/inline-edit-field';
 import InlineEditWithIcon from '../components/inline-edit-field-with-icon';
 import { PriorityIssue } from '../components/priority-issue';
 import { UserWithAvatar } from '../components/user-with-avatar';
 import { useIssuesQueryFilterStateContext } from '../contexts';
+import { useUpsertIssueHook } from '../hooks/mutations';
 import { useGetListIssueQuery } from '../hooks/queries';
 import { ActionMenuTableIssues, ActionTableIssuesWidget } from '../widgets';
 import { InlineEditCustomSelect } from '../widgets/editable-dropdown.widget';
@@ -36,6 +38,7 @@ export function ListIssuePage() {
   const [labels, setLabels] = useState<ILabel[]>([]);
   const [statuses, setStatuses] = useState<IStatus[]>([]);
   const [phases, setPhases] = useState<IPhase[]>([]);
+  const [issueId, setIssueId] = useState('');
   const { issuesQueryState, resetIssuesQueryState } = useIssuesQueryFilterStateContext();
 
   const canUpdate = (assignee?: IUpdatedBy, reporter?: IUpdatedBy) => {
@@ -44,6 +47,8 @@ export function ListIssuePage() {
     }
     return permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
   };
+
+  const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issueId);
 
   const { listIssue, meta, isError, isLoading, handlePaginate, isRefetching } =
     useGetListIssueQuery({
@@ -98,6 +103,91 @@ export function ListIssuePage() {
       setPhases(listPhase);
     }
   }, [listPhase, phases]);
+
+  const handleSubmit = (issue: IIssue, value: string, fieldName?: string) => {
+    setIssueId(issue.id);
+
+    if (issue) {
+      handleUpsertIssue({
+        ...issue,
+        startDate: issue.startDate
+          ? (formatDate({
+              date: issue.startDate,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date)
+          : undefined,
+        dueDate: issue.dueDate
+          ? (formatDate({
+              date: issue.dueDate,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date)
+          : undefined,
+        actualDate: issue.actualDate
+          ? (formatDate({
+              date: issue.actualDate,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date)
+          : undefined,
+        statusId: issue.status.id,
+        labelId: issue.label?.id,
+        assigneeId: issue.assignee?.id,
+        phaseId: issue.phase?.id,
+        priority: issue.priority,
+        ...(fieldName === 'title' && {
+          title: value || issue.title,
+        }),
+        ...(fieldName === 'estimatedTime' && {
+          estimatedTime: Number(value) || issue.estimatedTime,
+        }),
+        ...(fieldName === 'actualTime' && {
+          actualTime: Number(value) || issue.actualTime,
+        }),
+        ...(fieldName === 'percentage' && {
+          percentage: Number(value) || issue.percentage,
+        }),
+        ...(fieldName === 'startDate' && {
+          startDate:
+            (formatDate({
+              date: value,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date) ||
+            (issue.startDate
+              ? (formatDate({
+                  date: issue.startDate,
+                  format: 'YYYY-MM-DD',
+                }) as unknown as Date)
+              : undefined),
+        }),
+        ...(fieldName === 'dueDate' && {
+          dueDate:
+            (formatDate({
+              date: value,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date) ||
+            (issue.dueDate
+              ? (formatDate({
+                  date: issue.dueDate,
+                  format: 'YYYY-MM-DD',
+                }) as unknown as Date)
+              : undefined),
+        }),
+        ...(fieldName === 'actualDate' && {
+          actualDate:
+            (formatDate({
+              date: value,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date) ||
+            (issue.actualDate
+              ? (formatDate({
+                  date: issue.actualDate,
+                  format: 'YYYY-MM-DD',
+                }) as unknown as Date)
+              : undefined),
+        }),
+        parentIssueId: issue.parentIssue?.id,
+      });
+    }
+  };
 
   const columns = useMemo<ColumnsProps<IIssue>>(
     () => [
@@ -285,8 +375,19 @@ export function ListIssuePage() {
             key: 'percentage',
             title: t('fields.percentageDone'),
             hasSort: false,
-            Cell({ percentage }) {
-              return <Progress rounded={1.5} colorScheme="green" value={percentage || 0} />;
+            Cell(issue) {
+              const { id, percentage } = issue;
+              return (
+                <InlineEditableField
+                  fieldValue={percentage?.toString() || '0'}
+                  fieldName="percentage"
+                  callback={(val) => handleSubmit(issue, val, 'percentage')}
+                  issueId={id}
+                  type="progress"
+                  minW="136px"
+                  isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
+                />
+              );
             },
           },
           {
@@ -309,25 +410,63 @@ export function ListIssuePage() {
             key: 'startDate',
             title: t('fields.startDate'),
             hasSort: false,
-            Cell({ startDate }) {
-              return <>{startDate ? formatDate({ date: startDate, format: 'DD-MM-YYYY' }) : ''}</>;
+            Cell(issue) {
+              const { id, startDate } = issue;
+              // return <>{startDate ? formatDate({ date: startDate, format: 'DD-MM-YYYY' }) : ''}</>;
+              return (
+                <InlineEditableField
+                  fieldValue={
+                    startDate ? formatDate({ date: startDate, format: 'YYYY-MM-DD' }) || '' : ''
+                  }
+                  callback={(val) => handleSubmit(issue, val, 'startDate')}
+                  fieldName="startDate"
+                  issueId={id}
+                  type="date"
+                  styleProps={{ transform: 'translate(0, -4px)' }}
+                  isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
+                />
+              );
             },
           },
           {
             key: 'dueDate',
             title: t('fields.dueDate'),
             hasSort: false,
-            Cell({ dueDate }) {
-              return <>{dueDate ? formatDate({ date: dueDate, format: 'DD-MM-YYYY' }) : ''}</>;
+            Cell(issue) {
+              const { id, dueDate } = issue;
+              return (
+                <InlineEditableField
+                  fieldValue={
+                    dueDate ? formatDate({ date: dueDate, format: 'YYYY-MM-DD' }) || '' : ''
+                  }
+                  callback={(val) => handleSubmit(issue, val, 'dueDate')}
+                  fieldName="dueDate"
+                  issueId={id}
+                  type="date"
+                  styleProps={{ transform: 'translate(0, -4px)' }}
+                  isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
+                />
+              );
             },
           },
           {
             key: 'actualDate',
             title: t('fields.actualDate'),
             hasSort: false,
-            Cell({ actualDate }) {
+            Cell(issue) {
+              const { id, actualDate } = issue;
               return (
-                <>{actualDate ? formatDate({ date: actualDate, format: 'DD-MM-YYYY' }) : ''}</>
+                <InlineEditableField
+                  fieldValue={
+                    actualDate ? formatDate({ date: actualDate, format: 'YYYY-MM-DD' }) || '' : ''
+                  }
+                  callback={(val) => handleSubmit(issue, val, 'actualDate')}
+                  fieldName="actualDate"
+                  issueId={id}
+                  type="date"
+                  styleProps={{ transform: 'translate(0, -4px)' }}
+                  isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
+                />
               );
             },
           },

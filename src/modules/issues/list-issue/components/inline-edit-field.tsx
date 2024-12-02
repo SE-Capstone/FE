@@ -28,18 +28,22 @@ const InlineEditableField = ({
   callback,
   isTextArea,
   fieldName,
+  issueId,
   type = 'normal',
   styleProps,
   startDate,
+  minW,
   isViewOnly = false,
 }: {
   fieldValue: string;
-  callback: (value: string, fieldName?: string) => void;
+  callback: (value: string, fieldName?: string, issueId?: string) => void;
   isTextArea?: boolean;
   fieldName?: string;
+  issueId?: string;
   type?: 'normal' | 'title' | 'date' | 'progress';
   styleProps?: any;
   startDate?: string;
+  minW?: string;
   isViewOnly?: boolean;
 }) => {
   const { t } = useTranslation();
@@ -106,7 +110,7 @@ const InlineEditableField = ({
   }, [fieldValue]);
 
   const handleSubmit = (value: string) => {
-    callback(value, fieldName);
+    callback(value, fieldName, issueId);
   };
 
   return (
@@ -186,7 +190,7 @@ const InlineEditableField = ({
               </BoxAtlas>
             ) : type === 'progress' ? (
               <Progress
-                minW="200px"
+                minW={minW || '200px'}
                 rounded={1.5}
                 colorScheme="green"
                 value={Number(editValue) || 0}

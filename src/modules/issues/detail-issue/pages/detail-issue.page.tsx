@@ -489,6 +489,7 @@ export function DetailIssuePage() {
                     fieldValue={issue?.title || ''}
                     callback={handleSubmit}
                     type="title"
+                    fieldName="title"
                     isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
                   />
                 </Text>
