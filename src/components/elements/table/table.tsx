@@ -204,26 +204,22 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
   const [isOverlaid, setIsOverlaid] = useState(false);
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const container = tableContainerRef.current;
-      if (!container) return;
-
-      // Check if the container is scrolled horizontally
-      const isScrolled = container.scrollLeft + container.clientWidth < container.scrollWidth;
-
-      setIsOverlaid(isScrolled);
-    };
-
+  const handleScroll = () => {
     const container = tableContainerRef.current;
-    container?.addEventListener('scroll', handleScroll);
+    if (!container) return;
+    // Check if the container is scrolled horizontally
+    const isScrolled = container.scrollLeft + container.clientWidth < container.scrollWidth;
 
-    // Initial check
-    handleScroll();
+    setIsOverlaid(isScrolled);
+  };
 
-    return () => {
-      container?.removeEventListener('scroll', handleScroll);
-    };
+  useEffect(() => {
+    const container = tableContainerRef.current;
+    if (!container) return;
+    // Check if the container is scrolled horizontally
+    const isScrolled = container.scrollLeft + container.clientWidth < container.scrollWidth;
+
+    setIsOverlaid(isScrolled);
   }, []);
 
   return (
@@ -253,7 +249,13 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
             </Tbody>
           </Table>
         ) : (
-          <TableContainer {...TableProps} ref={tableContainerRef} maxW="full" shadow="md">
+          <TableContainer
+            {...TableProps}
+            ref={tableContainerRef}
+            maxW="full"
+            shadow="md"
+            onScroll={handleScroll}
+          >
             <Table
               // sx={{ borderCollapse: 'collapse', tableLayout: 'fixed' }}
               size="sm"
@@ -336,7 +338,7 @@ function TableComponent<ObjectType extends { id?: string | null } = {}>({
                             right="0"
                             transition="all 0.5s ease"
                             boxShadow={isOverlaid ? 'inset 12px 0 8px -8px #f2f2f2' : undefined}
-                            zIndex="1"
+                            zIndex={isHovered ? 2 : 1}
                             bg={isHovered ? 'gray.50' : 'white'}
                           >
                             {additionalFeature(object)}
