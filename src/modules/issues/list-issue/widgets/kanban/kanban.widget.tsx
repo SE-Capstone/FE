@@ -83,14 +83,13 @@ export default function KanbanWidget() {
     Connector(accessToken || '', projectId || '');
 
   useEffect(() => {
+    const storedTabId = sessionStorage.getItem('tabId');
     orderStatusEvents(() => {
-      const storedTabId = sessionStorage.getItem('tabId');
       if (!storedTabId || storedTabId !== tabId) {
         refetch();
       }
     });
     orderCardEvents(() => {
-      const storedTabId = sessionStorage.getItem('tabId');
       if (!storedTabId || storedTabId !== tabId) {
         refetch();
       }
@@ -228,7 +227,7 @@ export default function KanbanWidget() {
     }) => {
       setData((data) => {
         const storedTabId = sessionStorage.getItem('tabId');
-        if (!storedTabId) {
+        if (!storedTabId || !tabId) {
           const tabId = Date.now().toString(); // Generate a unique ID (could use a library for unique IDs)
           setTabId(tabId);
           sessionStorage.setItem('tabId', tabId);
@@ -281,7 +280,7 @@ export default function KanbanWidget() {
     }) => {
       setData((data) => {
         const storedTabId = sessionStorage.getItem('tabId');
-        if (!storedTabId) {
+        if (!storedTabId || !tabId) {
           const tabId = Date.now().toString(); // Generate a unique ID (could use a library for unique IDs)
           setTabId(tabId);
           sessionStorage.setItem('tabId', tabId);
@@ -356,7 +355,7 @@ export default function KanbanWidget() {
       }
       setData((data) => {
         const storedTabId = sessionStorage.getItem('tabId');
-        if (!storedTabId) {
+        if (!storedTabId || !tabId) {
           const tabId = Date.now().toString(); // Generate a unique ID (could use a library for unique IDs)
           setTabId(tabId);
           sessionStorage.setItem('tabId', tabId);
