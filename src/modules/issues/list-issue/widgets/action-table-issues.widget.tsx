@@ -545,10 +545,12 @@ export function ActionTableIssuesWidget({
               ))}
             </MenuList>
           </Menu>
+          <Button as={Link} to="issues/create">
+            {t('common.create')}
+          </Button>
           <AddNewIssueWidget>
-            <Button leftIcon={<>+</>}>{t('common.create')}</Button>
+            <Button>+</Button>
           </AddNewIssueWidget>
-          <Link to="issues/create">{t('common.create')}</Link>
         </Box>
       </HStack>
     </Box>

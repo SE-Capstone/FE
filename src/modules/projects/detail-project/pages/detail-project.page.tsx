@@ -116,7 +116,7 @@ export function DetailProjectPage() {
                 ),
               },
               {
-                title: i18n.language === 'vi' ? t('common.issue') : t('common.issues'),
+                title: t('common.list'),
                 childrenPanel: (
                   <IssuesQueryProvider>
                     <ListIssuePage />

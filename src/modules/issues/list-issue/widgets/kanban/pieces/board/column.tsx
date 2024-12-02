@@ -353,7 +353,7 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
               alignBlock="center"
             >
               <Flex>
-                <Heading size="xxsmall" as="span" testId={`column-header-title-${columnId}`}>
+                <Heading size="xsmall" as="span" testId={`column-header-title-${columnId}`}>
                   {column.title}
                 </Heading>
                 {column.isDone && <MdCheck size="15px" color="green" />}
