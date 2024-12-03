@@ -36,6 +36,9 @@ export function useRemoveIssueMutation(props: Props) {
         queryKey: allQueryKeysStore.issue.issues.queryKey,
       });
       queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.issue.detail._def,
+      });
+      queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.issue['issues/kanban'].queryKey,
       });
 

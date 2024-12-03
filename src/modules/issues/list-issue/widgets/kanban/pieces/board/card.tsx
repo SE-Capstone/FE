@@ -23,9 +23,8 @@ import {
 import { DropIndicator } from '@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/box';
 import { Box, Stack, xcss } from '@atlaskit/primitives';
 import { token } from '@atlaskit/tokens';
-import { Badge, Stack as StackCharkra, Text, Tooltip } from '@chakra-ui/react';
+import { Badge, Stack as StackCharkra, Text } from '@chakra-ui/react';
 import ReactDOM from 'react-dom';
-import { useTranslation } from 'react-i18next';
 import { IoCalendarOutline } from 'react-icons/io5';
 import invariant from 'tiny-invariant';
 
@@ -34,7 +33,7 @@ import { useColumnContext } from './column-context';
 import { InlineEditCustomSelect } from '../../../editable-dropdown.widget';
 import { type Issue } from '../../data';
 
-import { ISSUE_PRIORITY_OPTIONS, ISSUE_PRIORITY_VALUES, ProjectPermissionEnum } from '@/configs';
+import { ISSUE_PRIORITY_OPTIONS, ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { BadgeIssue, PriorityIssue } from '@/modules/issues/list-issue/components';
 import InlineEditWithIcon from '@/modules/issues/list-issue/components/inline-edit-field-with-icon';
@@ -116,7 +115,6 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
   ref
 ) {
   const { issue, title, index, dueDate, isLate, statusId, statusColor, id, isDone } = item;
-  const { t } = useTranslation();
   const { members, permissions } = useProjectContext();
   const { currentUser } = useAuthentication();
   const canUpdate =
@@ -189,27 +187,26 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
       <StackCharkra mt={2} flexDir="row" justifyContent="space-between" alignItems="center" gap={2}>
         <BadgeIssue content={`#${index}`} variant="outline" colorScheme={statusColor} />
         <StackCharkra flexDir="row" alignItems="center">
-          <Tooltip label={ISSUE_PRIORITY_VALUES(t)[issue.priority]}>
-            {canUpdate ? (
-              <InlineEditCustomSelect
-                options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
-                  label: <PriorityIssue priority={value} />,
-                  value,
-                }))}
-                defaultValue={
-                  issue?.priority && {
-                    label: <PriorityIssue priority={issue.priority} hideText />,
-                    value: issue.priority,
-                  }
+          {canUpdate ? (
+            <InlineEditCustomSelect
+              options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
+                label: <PriorityIssue priority={value} />,
+                value,
+              }))}
+              defaultValue={
+                issue?.priority && {
+                  label: <PriorityIssue priority={issue.priority} hideText />,
+                  value: issue.priority,
                 }
-                field="priority"
-                issue={issue}
-                statusId={statusId}
-              />
-            ) : (
-              <PriorityIssue priority={issue.priority} hideText />
-            )}
-          </Tooltip>
+              }
+              size="sm"
+              field="priority"
+              issue={issue}
+              statusId={statusId}
+            />
+          ) : (
+            <PriorityIssue priority={issue.priority} hideText />
+          )}
           {!canUpdate ? (
             <UserWithAvatar
               image={issue.assignee?.avatar || ''}
