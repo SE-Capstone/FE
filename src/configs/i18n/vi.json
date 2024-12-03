@@ -381,6 +381,8 @@
     "getPosition": "Xem vị trí công việc"
   },
   "messages": {
+    "issueNotFound": "Công việc không tồn tại hoặc đã bị xoá",
+    "projectNotFound": "Dự án không tồn tại hoặc bạn không có quyền truy cập vào dự án",
     "success": "Thành công",
     "somethingWrong": "Có lỗi xảy ra, vui lòng thử lại",
     "somethingWrong2": "Có lỗi xảy ra",

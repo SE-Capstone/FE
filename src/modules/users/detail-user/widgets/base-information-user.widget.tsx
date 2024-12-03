@@ -52,7 +52,9 @@ export function BaseInformationUserWidget({ user }: { user?: IUser }) {
 
   const [roles, setRoles] = useState<IRole[]>([]);
   const [positions, setPositions] = useState<IPosition[]>([]);
-  const { roles: listRole } = useGetRoles({});
+  const { roles: listRole } = useGetRoles({
+    enabled: !!permissions[PermissionEnum.READ_LIST_ROLE],
+  });
   const { listPosition, isLoading: isLoadingPosition } = useGetListPositionQuery();
 
   useEffect(() => {

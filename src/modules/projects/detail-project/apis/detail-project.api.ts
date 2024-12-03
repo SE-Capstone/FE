@@ -2,11 +2,13 @@ import { useEffect, useMemo } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import type { IProject, ProjectMember } from '../../list-project/types';
 import type { IResponseApi } from '@/configs/axios';
 
 import { useProjectContext } from '@/contexts/project/project-context';
+import { notify } from '@/libs/helpers';
 import { makeRequest, type QueryConfig, type TErrorResponse } from '@/libs/react-query';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
@@ -31,13 +33,15 @@ export function useGetDetailProject(params: UseGetDetailProjectOptionsType) {
   const { t } = useTranslation();
   const { setProjectContext } = useProjectContext();
   const { currentUser } = useAuthentication();
+  const navigate = useNavigate();
   const enabled = useMemo(() => !!projectId, [projectId]);
   const queryKey = useMemo(() => allQueryKeysStore.project.detail(projectId).queryKey, [projectId]);
 
-  const { data, ...queryInfo } = useQuery({
+  const { data, isError, ...queryInfo } = useQuery({
     enabled,
     placeholderData: (previousData) => previousData,
     queryKey,
+    throwOnError: false,
     queryFn: () => query(projectId),
     ...configs,
   });
@@ -92,5 +96,13 @@ export function useGetDetailProject(params: UseGetDetailProjectOptionsType) {
     });
   }, [data?.data, setProjectContext, currentUser, t]);
 
-  return { project: data?.data, ...queryInfo };
+  if (isError) {
+    notify({
+      type: 'error',
+      message: t('messages.projectNotFound'),
+    });
+    navigate(-1);
+  }
+
+  return { project: data?.data, isError, ...queryInfo };
 }

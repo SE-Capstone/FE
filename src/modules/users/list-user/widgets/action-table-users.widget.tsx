@@ -40,7 +40,9 @@ export function ActionTableUsersWidget() {
   const [roles, setRoles] = useState<IRole[]>([]);
   const [defaultRole, setDefaultRole] = useState<IRole | undefined>(undefined);
 
-  const { roles: listRole } = useGetRoles({});
+  const { roles: listRole } = useGetRoles({
+    enabled: !!permissions[PermissionEnum.READ_LIST_ROLE],
+  });
 
   useEffect(() => {
     if (JSON.stringify(roles) !== JSON.stringify(listRole)) {

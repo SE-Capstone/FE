@@ -18,10 +18,12 @@ export type QueryRolesFnType = typeof query;
 
 export type UseGetRolesOptionsType = {
   configs?: QueryConfig<QueryRolesFnType, TErrorResponse>;
+  enabled?: boolean;
 };
 
-export function useGetRoles({ configs }: UseGetRolesOptionsType = {}) {
+export function useGetRoles({ configs, enabled = true }: UseGetRolesOptionsType = {}) {
   const { data, ...queryInfo } = useQuery({
+    enabled,
     queryKey: allQueryKeysStore.role.roles.queryKey,
     queryFn: query,
     ...configs,
