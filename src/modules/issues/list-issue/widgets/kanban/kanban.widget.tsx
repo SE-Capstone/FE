@@ -8,7 +8,7 @@ import { triggerPostMoveFlash } from '@atlaskit/pragmatic-drag-and-drop-flourish
 import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
 import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index';
 import * as liveRegion from '@atlaskit/pragmatic-drag-and-drop-live-region';
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Button, Text, useDisclosure } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import invariant from 'tiny-invariant';
 
@@ -26,10 +26,13 @@ import type { IPhase } from '@/modules/phases/types';
 import type { IStatus } from '@/modules/statuses/types';
 import type { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/types';
 
+import { ProjectPermissionEnum } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { getAccessToken } from '@/libs/helpers';
 import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
 import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
+import { UpsertStatusWidget } from '@/modules/statuses/widgets';
 
 type Outcome =
   | {
@@ -603,6 +606,10 @@ export default function KanbanWidget() {
     [getColumns, reorderColumn, reorderCard, registry, moveCard, instanceId]
   );
 
+  const { permissions } = useProjectContext();
+  const disclosureModal = useDisclosure();
+  const canCreate = permissions.includes(ProjectPermissionEnum.IsProjectConfigurator);
+
   return (
     <>
       <ActionTableKanbanWidget
@@ -621,6 +628,18 @@ export default function KanbanWidget() {
                 {data.orderedColumnIds.map((columnId) => (
                   <Column key={columnId} column={data.columnMap[columnId]} />
                 ))}
+                {canCreate && (
+                  <>
+                    <Button fontSize="28px" onClick={disclosureModal.onOpen}>
+                      +
+                    </Button>
+                    <UpsertStatusWidget
+                      isOpen={disclosureModal.isOpen}
+                      isDefault={false}
+                      onClose={disclosureModal.onClose}
+                    />
+                  </>
+                )}
               </Board>
             ) : (
               <Box w="full" bg="white" p={5} rounded={2} textAlign="center">
