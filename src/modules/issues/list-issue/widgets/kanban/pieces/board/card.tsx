@@ -34,7 +34,7 @@ import { useColumnContext } from './column-context';
 import { InlineEditCustomSelect } from '../../../editable-dropdown.widget';
 import { type Issue } from '../../data';
 
-import { ISSUE_PRIORITY_VALUES, ProjectPermissionEnum } from '@/configs';
+import { ISSUE_PRIORITY_OPTIONS, ISSUE_PRIORITY_VALUES, ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { BadgeIssue, PriorityIssue } from '@/modules/issues/list-issue/components';
 import InlineEditWithIcon from '@/modules/issues/list-issue/components/inline-edit-field-with-icon';
@@ -190,7 +190,25 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
         <BadgeIssue content={`#${index}`} variant="outline" colorScheme={statusColor} />
         <StackCharkra flexDir="row" alignItems="center">
           <Tooltip label={ISSUE_PRIORITY_VALUES(t)[issue.priority]}>
-            <PriorityIssue priority={issue.priority} hideText />
+            {canUpdate ? (
+              <InlineEditCustomSelect
+                options={ISSUE_PRIORITY_OPTIONS.map((value) => ({
+                  label: <PriorityIssue priority={value} />,
+                  value,
+                }))}
+                defaultValue={
+                  issue?.priority && {
+                    label: <PriorityIssue priority={issue.priority} hideText />,
+                    value: issue.priority,
+                  }
+                }
+                field="priority"
+                issue={issue}
+                statusId={statusId}
+              />
+            ) : (
+              <PriorityIssue priority={issue.priority} hideText />
+            )}
           </Tooltip>
           {!canUpdate ? (
             <UserWithAvatar

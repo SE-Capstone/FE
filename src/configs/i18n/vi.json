@@ -181,7 +181,7 @@
     "noImage": "Không có hình ảnh"
   },
   "actions": {
-    "memberConfigurator": "Không thể cập nhật quyền của thành viên với cài đặt quyền thành viên",
+    "memberConfigurator": "Không thể cập nhật quyền của thành viên với quyền cài đặt thành viên",
     "startPhase": "Bắt đầu",
     "startPhaseDesc": "Hành động này không thể hoàn tác. Bạn có muốn bắt đầu chạy giai đoạn đầu tiên không?",
     "completePhase": "Hoàn thành",
