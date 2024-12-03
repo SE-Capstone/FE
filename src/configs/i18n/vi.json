@@ -337,7 +337,7 @@
     "deleteRole": "Xóa vai trò",
     "getRole": "Lấy vai trò",
     "addRoleForUser": "Thêm vai trò cho người dùng",
-    "upsertRole": "Tạo mới vai trò hoặc cập nhật vai trò",
+    "upsertRole": "Cập nhật vai trò",
     "readListRole": "Đọc danh sách vai trò",
     "changePassword": "Đổi mật khẩu người dùng",
     "getRoleDetail": "Xem chi tiết vai trò",

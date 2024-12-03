@@ -372,7 +372,7 @@
     "deleteRole": "Delete role",
     "getRole": "Get role",
     "addRoleForUser": "Add role for user",
-    "upsertRole": "Insert or update role",
+    "upsertRole": "Update role",
     "readListRole": "Read list role",
     "changePassword": "Change user password",
     "getRoleDetail": "Get role detail",

@@ -26,7 +26,7 @@ import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailRolePage() {
   const { t } = useTranslation();
-  const { permissions } = useAuthentication();
+  const { permissions, currentUser } = useAuthentication();
   const { roleId } = useParams();
   const [triggerClose, setTriggerClose] = useState(false);
 
@@ -119,7 +119,11 @@ export function DetailRolePage() {
             isDisabled={isUpdating}
             isDirty={!dirtyFields.name}
             initialValue={role?.name || ''}
-            isEditable={!permissions[PermissionEnum.UPSERT_ROLE]}
+            isEditable={
+              !permissions[PermissionEnum.UPSERT_ROLE] ||
+              role?.name === 'ADMIN' ||
+              role?.name === currentUser?.roleName
+            }
             triggerClose={triggerClose}
             inputChildren={
               <CustomInput
@@ -142,7 +146,11 @@ export function DetailRolePage() {
             title={t('fields.description')}
             isLoading={isRoleDetailLoading}
             isDisabled={isUpdating}
-            isEditable={!permissions[PermissionEnum.UPSERT_ROLE]}
+            isEditable={
+              !permissions[PermissionEnum.UPSERT_ROLE] ||
+              role?.name === 'ADMIN' ||
+              role?.name === currentUser?.roleName
+            }
             isDirty={!dirtyFields.description}
             initialValue={role?.description || ''}
             triggerClose={triggerClose}
@@ -189,6 +197,11 @@ export function DetailRolePage() {
                   }
                 }
                 role={role}
+                isDisabled={
+                  !permissions[PermissionEnum.UPSERT_ROLE] ||
+                  role?.name === 'ADMIN' ||
+                  role?.name === currentUser?.roleName
+                }
               />
             </Stack>
           </EditRow>
@@ -205,7 +218,11 @@ export function DetailRolePage() {
               groupPermissions={groupPermissions}
               isLoading={isLoading || isRoleDetailLoading}
               isError={!!isError || !!isRoleDetailError}
-              isEditable={!permissions[PermissionEnum.UPSERT_ROLE]}
+              isEditable={
+                !permissions[PermissionEnum.UPSERT_ROLE] ||
+                role?.name === 'ADMIN' ||
+                role?.name === currentUser?.roleName
+              }
               isDisabled={isUpdating}
               mutation={updatePermissions}
               triggerClose={triggerClose}

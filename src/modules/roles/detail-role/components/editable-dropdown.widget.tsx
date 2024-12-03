@@ -14,10 +14,12 @@ export const InlineEditRoleSelect = ({
   options,
   defaultValue,
   role,
+  isDisabled = false,
 }: {
   options: IOptionSelectWithImage[];
   defaultValue?: IOptionSelectWithImage;
   role?: IRole;
+  isDisabled?: boolean;
 }) => {
   const [selectedOption, setSelectedOption] = useState(defaultValue);
 
@@ -93,6 +95,7 @@ export const InlineEditRoleSelect = ({
     <CustomChakraReactSelect
       value={selectedOption}
       variant="subtle"
+      isDisabled={isDisabled}
       isClearable={false}
       isSearchable={false}
       options={options}
