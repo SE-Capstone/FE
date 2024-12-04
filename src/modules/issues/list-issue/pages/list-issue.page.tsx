@@ -40,6 +40,7 @@ export function ListIssuePage() {
   const [issueId, setIssueId] = useState('');
   const { issuesQueryState, resetIssuesQueryState } = useIssuesQueryFilterStateContext();
 
+  const canUpdateReporter = () => permissions.includes(ProjectPermissionEnum.IsMemberConfigurator);
   const canUpdate = (assignee?: IUpdatedBy, reporter?: IUpdatedBy) => {
     if (currentUser?.id === assignee?.id || currentUser?.id === reporter?.id) {
       return true;
@@ -301,8 +302,8 @@ export function ListIssuePage() {
             title: t('fields.reporter'),
             hasSort: false,
             Cell(issue) {
-              const { assignee, reporter } = issue;
-              return canUpdate(assignee, reporter) ? (
+              const { reporter } = issue;
+              return canUpdateReporter() ? (
                 <InlineEditCustomSelect
                   options={members.map((member) => ({
                     label: member.userName,

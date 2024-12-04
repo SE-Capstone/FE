@@ -64,6 +64,8 @@ export function DetailIssuePage() {
     }
     return permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
   };
+  const canUpdateReporter = () => permissions.includes(ProjectPermissionEnum.IsMemberConfigurator);
+
   const canDelete = (reporter?: IUpdatedBy) => {
     if (currentUser?.id === reporter?.id) {
       return true;
@@ -393,7 +395,7 @@ export function DetailIssuePage() {
         },
         {
           label: t('fields.reporter'),
-          text: canUpdate(issue?.assignee, issue?.reporter) ? (
+          text: canUpdateReporter() ? (
             <InlineEditCustomSelect
               options={members.map((member) => ({
                 label: member.userName,
