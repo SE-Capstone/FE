@@ -37,7 +37,9 @@ export function ListPositionPage() {
             title: '#',
             tableCellProps: { w: 4, pr: 2 },
             Cell(_, index) {
-              return <>{getNumericalOrder({ index })}</>;
+              return (
+                <>{getNumericalOrder({ page: meta.pageIndex, perPage: meta.pageSize, index })}</>
+              );
             },
           },
           {
@@ -63,7 +65,7 @@ export function ListPositionPage() {
         ],
       },
     ],
-    [t]
+    [meta.pageIndex, meta.pageSize, t]
   );
 
   if (!permissions[PermissionEnum.GET_POSITION]) {

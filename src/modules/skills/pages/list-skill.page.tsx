@@ -36,7 +36,9 @@ export function ListSkillPage() {
             title: '#',
             tableCellProps: { w: 4, pr: 2 },
             Cell(_, index) {
-              return <>{getNumericalOrder({ index })}</>;
+              return (
+                <>{getNumericalOrder({ page: meta.pageIndex, perPage: meta.pageSize, index })}</>
+              );
             },
           },
           {
@@ -62,7 +64,7 @@ export function ListSkillPage() {
         ],
       },
     ],
-    [t]
+    [meta.pageIndex, meta.pageSize, t]
   );
 
   return (
