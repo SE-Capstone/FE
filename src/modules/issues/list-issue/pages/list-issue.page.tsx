@@ -130,6 +130,7 @@ export function ListIssuePage() {
         statusId: issue.status.id,
         labelId: issue.label?.id,
         assigneeId: issue.assignee?.id,
+        reporterId: issue.reporter?.id,
         phaseId: issue.phase?.id,
         priority: issue.priority,
         ...(fieldName === 'title' && {
@@ -299,9 +300,31 @@ export function ListIssuePage() {
             key: 'reporterId',
             title: t('fields.reporter'),
             hasSort: false,
-            Cell({ reporter }) {
-              return (
-                <UserWithAvatar image={reporter?.avatar || ''} label={reporter?.userName || ''} />
+            Cell(issue) {
+              const { assignee, reporter } = issue;
+              return canUpdate(assignee, reporter) ? (
+                <InlineEditCustomSelect
+                  options={members.map((member) => ({
+                    label: member.userName,
+                    value: member.id,
+                    image: member.avatar,
+                  }))}
+                  defaultValue={
+                    reporter && {
+                      label: reporter.userName,
+                      value: reporter.id,
+                      image: reporter.avatar,
+                    }
+                  }
+                  field="reporter"
+                  issue={issue}
+                />
+              ) : (
+                <UserWithAvatar
+                  image={reporter?.avatar || ''}
+                  size2="sm"
+                  label={reporter?.userName || ''}
+                />
               );
             },
           },

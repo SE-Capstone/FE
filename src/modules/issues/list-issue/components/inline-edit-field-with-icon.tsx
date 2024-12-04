@@ -80,6 +80,7 @@ const InlineEditWithIcon = ({
       statusId: statusId || issue.status.id,
       labelId: issue.label?.id,
       assigneeId: issue.assignee?.id,
+      reporterId: issue.reporter?.id,
       phaseId: issue.phase?.id,
       priority: issue.priority,
       title: value || issue.title,

@@ -64,6 +64,12 @@ export function DetailIssuePage() {
     }
     return permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
   };
+  const canDelete = (reporter?: IUpdatedBy) => {
+    if (currentUser?.id === reporter?.id) {
+      return true;
+    }
+    return permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+  };
   const canUpdateComment = (assignee?: IUpdatedBy) => {
     if (currentUser?.id === assignee?.id) {
       return true;
@@ -114,6 +120,7 @@ export function DetailIssuePage() {
         statusId: issue.status.id,
         labelId: issue.label?.id,
         assigneeId: issue.assignee?.id,
+        reporterId: issue.reporter?.id,
         phaseId: issue.phase?.id,
         priority: issue.priority,
         ...(fieldName === 'title' && {
@@ -386,9 +393,27 @@ export function DetailIssuePage() {
         },
         {
           label: t('fields.reporter'),
-          text: (
+          text: canUpdate(issue?.assignee, issue?.reporter) ? (
+            <InlineEditCustomSelect
+              options={members.map((member) => ({
+                label: member.userName,
+                value: member.id,
+                image: member.avatar,
+              }))}
+              defaultValue={
+                issue?.reporter && {
+                  label: issue?.reporter.userName,
+                  value: issue?.reporter.id,
+                  image: issue?.reporter.avatar,
+                }
+              }
+              field="reporter"
+              issue={issue!}
+            />
+          ) : (
             <UserWithAvatar
               image={issue?.reporter?.avatar || ''}
+              size2="sm"
               label={issue?.reporter?.userName || ''}
             />
           ),
@@ -762,9 +787,11 @@ export function DetailIssuePage() {
                       >
                         {t('actions.edit')}
                       </DropdownItem>
-                      <DropdownItem onClick={() => handleRemoveIssue(issue!)}>
-                        {t('actions.delete')}
-                      </DropdownItem>
+                      {canDelete(issue?.reporter) && (
+                        <DropdownItem onClick={() => handleRemoveIssue(issue!)}>
+                          {t('actions.delete')}
+                        </DropdownItem>
+                      )}
                     </DropdownItemGroup>
                   </DropdownMenu>
                 )}

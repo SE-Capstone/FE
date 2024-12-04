@@ -45,6 +45,7 @@ export function useUpsertIssueHook(
             labelId: values.labelId,
             statusId: values.statusId || '',
             assigneeId: values.assigneeId,
+            reporterId: values.reporterId,
             phaseId: values.phaseId,
             estimatedTime: values.estimatedTime || undefined,
             actualTime: values.actualTime || undefined,

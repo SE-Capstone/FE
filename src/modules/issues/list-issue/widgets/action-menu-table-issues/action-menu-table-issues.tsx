@@ -24,6 +24,10 @@ export function ActionMenuTableIssues({ issue }: ActionMenuTableIssuesProps) {
   const { permissions } = useProjectContext();
   const { handleRemoveIssue } = useRemoveIssueHook(issue.id);
   const canUpdate =
+    currentUser?.id === issue.assignee?.id ||
+    currentUser?.id === issue.reporter?.id ||
+    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+  const canDelete =
     currentUser?.id === issue.reporter?.id ||
     permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
   if (!issue || !issue.id) return null;
@@ -39,7 +43,7 @@ export function ActionMenuTableIssues({ issue }: ActionMenuTableIssuesProps) {
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
       onClick: () => navigate(`issues/${issue.id}/edit`),
     },
-    canUpdate && {
+    canDelete && {
       type: 'danger',
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,

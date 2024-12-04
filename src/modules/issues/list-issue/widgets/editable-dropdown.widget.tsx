@@ -34,7 +34,7 @@ export const InlineEditCustomSelect = ({
   defaultValue?: IOptionSelectWithImage;
   issue?: IIssue;
   project?: IProject;
-  field: 'status' | 'priority' | 'assignee' | 'label' | 'lead' | 'phase';
+  field: 'status' | 'priority' | 'assignee' | 'reporter' | 'label' | 'lead' | 'phase';
   size?: SizeProp;
   statusId?: string;
 }) => {
@@ -51,6 +51,10 @@ export const InlineEditCustomSelect = ({
     () => ({
       DropdownIndicator: () => <Box />,
       ...(field === 'assignee' && {
+        Option: (props) => CustomOptionComponentChakraReactSelect(props, size),
+        SingleValue: (props) => CustomSingleValueComponentChakraReactSelect(props, size === 'sm'),
+      }),
+      ...(field === 'reporter' && {
         Option: (props) => CustomOptionComponentChakraReactSelect(props, size),
         SingleValue: (props) => CustomSingleValueComponentChakraReactSelect(props, size === 'sm'),
       }),
@@ -112,7 +116,6 @@ export const InlineEditCustomSelect = ({
   const handleSubmit = (option) => {
     if (issue) {
       delete issue.lastUpdateBy;
-      delete issue.reporter;
       delete issue.subIssues;
       delete issue.comments;
 
@@ -123,6 +126,9 @@ export const InlineEditCustomSelect = ({
         return;
       }
       if (field === 'assignee' && option?.value === issue.assignee?.id) {
+        return;
+      }
+      if (field === 'reporter' && option?.value === issue.reporter?.id) {
         return;
       }
       if (field === 'priority' && option?.value === issue.priority) {
@@ -154,6 +160,7 @@ export const InlineEditCustomSelect = ({
         statusId: field === 'status' ? option?.value : statusId || issue.status.id,
         labelId: field === 'label' ? option?.value : issue.label?.id,
         assigneeId: field === 'assignee' ? option?.value : issue.assignee?.id,
+        reporterId: field === 'reporter' ? option?.value : issue.reporter?.id,
         priority: field === 'priority' ? option?.value : issue.priority,
         phaseId: field === 'phase' ? option?.value : issue.phase?.id,
         parentIssueId: issue.parentIssue?.id || issue.parentIssueId,

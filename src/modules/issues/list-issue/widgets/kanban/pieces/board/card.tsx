@@ -89,10 +89,12 @@ function LazyDropdownItems({
   id,
   issue,
   canUpdate,
+  canDelete,
 }: {
   id: string;
   issue: IIssue;
   canUpdate: boolean;
+  canDelete: boolean;
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -138,7 +140,7 @@ function LazyDropdownItems({
             {t('actions.edit')}
           </DropdownItem>
         )}
-        {canUpdate && (
+        {canDelete && (
           <DropdownItem onClick={() => handleRemoveIssue(issue)}>
             {t('actions.delete')}
           </DropdownItem>
@@ -156,6 +158,10 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
   const { members, permissions } = useProjectContext();
   const { currentUser } = useAuthentication();
   const canUpdate =
+    currentUser?.id === issue.assignee?.id ||
+    currentUser?.id === issue.reporter?.id ||
+    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+  const canDelete =
     currentUser?.id === issue.reporter?.id ||
     permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
 
@@ -190,7 +196,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
             />
           )}
         >
-          <LazyDropdownItems id={id} issue={issue} canUpdate={canUpdate} />
+          <LazyDropdownItems id={id} issue={issue} canUpdate={canUpdate} canDelete={canDelete} />
         </DropdownMenu>
       </StackCharkra>
       {(issue.label?.title || dueDate) && (

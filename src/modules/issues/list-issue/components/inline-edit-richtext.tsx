@@ -62,6 +62,7 @@ const InlineEditRichtext = ({
       statusId: issue.status.id,
       labelId: issue.label?.id,
       assigneeId: issue.assignee?.id,
+      reporterId: issue.reporter?.id,
       phaseId: issue.phase?.id,
       priority: issue.priority,
       description: value || issue.description,

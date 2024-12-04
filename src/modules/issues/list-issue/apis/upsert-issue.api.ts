@@ -28,6 +28,7 @@ interface IUpsertIssueRequest {
     priority?: number;
     phaseId?: string;
     assigneeId?: string;
+    reporterId?: string;
     estimatedTime?: number;
     actualTime?: number;
   };

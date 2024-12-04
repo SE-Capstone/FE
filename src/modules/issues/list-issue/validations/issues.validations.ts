@@ -48,6 +48,11 @@ export const issueFormSchema = (t: any) =>
       .trim()
       .uuid({ message: t('validation.fieldRequired') })
       .optional(),
+    reporterId: z
+      .string()
+      .trim()
+      .uuid({ message: t('validation.fieldRequired') })
+      .optional(),
     estimatedTime: z.preprocess(
       (val) => {
         const numberValue = Number(val);

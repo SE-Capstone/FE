@@ -90,7 +90,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
     }),
     []
   );
-
+  // Todo: should add reporter?
   const handleAssigneeChange = (option) => {
     setValue({
       label: option?.label || '',
@@ -153,6 +153,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
           percentage: issue.percentage,
           priority: issue.priority,
           assigneeId: issue.assignee?.id,
+          reporterId: issue.reporter?.id,
           estimatedTime: issue.estimatedTime,
           actualTime: issue.actualTime,
         },
