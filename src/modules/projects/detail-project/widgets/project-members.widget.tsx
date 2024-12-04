@@ -162,6 +162,7 @@ const MemberSetting = ({ members, projectId }: { members: ProjectMember[]; proje
                         label: p.title,
                         value: p.id,
                       }))}
+                      isSearchable
                       defaultValue={
                         user?.positionName && user?.positionId
                           ? {

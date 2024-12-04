@@ -15,11 +15,13 @@ export const InlineEditPositionSelect = ({
   defaultValue,
   member,
   projectId,
+  isSearchable = false,
 }: {
   options: IOptionSelectWithImage[];
   defaultValue?: IOptionSelectWithImage;
   member: ProjectMember;
   projectId: string;
+  isSearchable?: boolean;
 }) => {
   const [selectedOption, setSelectedOption] = useState(defaultValue);
 
@@ -98,7 +100,7 @@ export const InlineEditPositionSelect = ({
       value={selectedOption}
       variant="subtle"
       isClearable={false}
-      isSearchable={false}
+      isSearchable={isSearchable}
       options={options}
       placeholder=""
       chakraStyles={stylesComponents}
