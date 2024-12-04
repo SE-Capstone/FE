@@ -64,7 +64,7 @@ export function DetailIssuePage() {
     }
     return permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
   };
-  const canUpdateReporter = () => permissions.includes(ProjectPermissionEnum.IsMemberConfigurator);
+  const canUpdateReporter = () => permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
 
   const canDelete = (reporter?: IUpdatedBy) => {
     if (currentUser?.id === reporter?.id) {

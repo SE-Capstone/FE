@@ -40,7 +40,7 @@ export function ListIssuePage() {
   const [issueId, setIssueId] = useState('');
   const { issuesQueryState, resetIssuesQueryState } = useIssuesQueryFilterStateContext();
 
-  const canUpdateReporter = () => permissions.includes(ProjectPermissionEnum.IsMemberConfigurator);
+  const canUpdateReporter = () => permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
   const canUpdate = (assignee?: IUpdatedBy, reporter?: IUpdatedBy) => {
     if (currentUser?.id === assignee?.id || currentUser?.id === reporter?.id) {
       return true;
