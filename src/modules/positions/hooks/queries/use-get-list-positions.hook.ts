@@ -43,7 +43,7 @@ export function useGetListPositionQuery(props: UseGetListPositionQueryProps = {}
         {
           pageIndex,
           pageSize: size || pageSize,
-          orderBy: 'createdAt',
+          orderByDesc: 'createdAt',
         },
         params
       ),

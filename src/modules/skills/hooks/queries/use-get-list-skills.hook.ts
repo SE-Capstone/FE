@@ -43,7 +43,7 @@ export function useGetListSkillQuery(props: UseGetListSkillQueryProps = {}) {
         {
           pageIndex,
           pageSize: size || pageSize,
-          orderBy: 'createdAt',
+          orderByDesc: 'createdAt',
         },
         params
       ),
