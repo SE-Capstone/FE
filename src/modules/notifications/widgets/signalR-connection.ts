@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import * as signalR from '@microsoft/signalr';
 
-const URL = 'https://headnshoulder.hanhtester.xyz/statusHub';
+const URL = 'https://headnshoulder.hanhtester.xyz/notificationHub';
 class Connector {
   public connection: signalR.HubConnection;
 
@@ -10,10 +10,11 @@ class Connector {
   // eslint-disable-next-line no-use-before-define
   static instance: Connector;
 
-  constructor(accessToken: string, userId: string) {
+  constructor(userId: string) {
     this.connection = new signalR.HubConnectionBuilder()
       .withUrl(URL, {
-        accessTokenFactory: () => accessToken,
+        // eslint-disable-next-line no-bitwise
+        transport: signalR.HttpTransportType.WebSockets | signalR.HttpTransportType.LongPolling,
       })
       .withAutomaticReconnect()
       .configureLogging(signalR.LogLevel.Information)
@@ -63,8 +64,8 @@ class Connector {
     }
   }
 
-  public static getInstance(accessToken: string, userId: string): Connector {
-    if (!Connector.instance) Connector.instance = new Connector(accessToken, userId);
+  public static getInstance(userId: string): Connector {
+    if (!Connector.instance) Connector.instance = new Connector(userId);
     return Connector.instance;
   }
 }

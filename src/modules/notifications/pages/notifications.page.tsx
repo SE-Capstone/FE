@@ -29,7 +29,6 @@ import UpdateIssueNotification from '../widgets/update-issue.widget';
 
 import type { INotification } from '../types';
 
-import { getAccessToken } from '@/libs/helpers';
 import { useAuthentication } from '@/modules/profile/hooks';
 
 const NotificationWidget = ({ notification }: { notification: INotification }) => {
@@ -92,10 +91,9 @@ const NotificationWidget = ({ notification }: { notification: INotification }) =
 
 const NotificationsList = () => {
   const { t } = useTranslation();
-  const accessToken = getAccessToken();
   const { currentUser } = useAuthentication();
   const containerRef = useRef<HTMLDivElement>(null);
-  const { notificationEvents, connection } = Connector(accessToken || '', currentUser?.id || '');
+  const { notificationEvents, connection } = Connector(currentUser?.id || '');
 
   const {
     isLoading,
