@@ -25,7 +25,9 @@ import { Box, Stack, xcss } from '@atlaskit/primitives';
 import { token } from '@atlaskit/tokens';
 import { Badge, Stack as StackCharkra, Text } from '@chakra-ui/react';
 import ReactDOM from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { IoCalendarOutline } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 import invariant from 'tiny-invariant';
 
 import { useBoardContext } from './board-context';
@@ -33,11 +35,14 @@ import { useColumnContext } from './column-context';
 import { InlineEditCustomSelect } from '../../../editable-dropdown.widget';
 import { type Issue } from '../../data';
 
+import type { IIssue } from '@/modules/issues/list-issue/types';
+
 import { ISSUE_PRIORITY_OPTIONS, ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { BadgeIssue, PriorityIssue } from '@/modules/issues/list-issue/components';
 import InlineEditWithIcon from '@/modules/issues/list-issue/components/inline-edit-field-with-icon';
 import { UserWithAvatar } from '@/modules/issues/list-issue/components/user-with-avatar';
+import { useRemoveIssueHook } from '@/modules/issues/list-issue/hooks/mutations/use-remove-issue.hooks';
 import { useAuthentication } from '@/modules/profile/hooks';
 
 type State =
@@ -80,12 +85,26 @@ type CardPrimitiveProps = {
   actionMenuTriggerRef?: Ref<HTMLButtonElement>;
 };
 
-function LazyDropdownItems({ id }: { id: string }) {
+function LazyDropdownItems({
+  id,
+  issue,
+  canUpdate,
+}: {
+  id: string;
+  issue: IIssue;
+  canUpdate: boolean;
+}) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const { reorderCard } = useBoardContext();
+  const { permissions } = useProjectContext();
   const { columnId, getCardIndex, getNumCards } = useColumnContext();
+  const { handleRemoveIssue } = useRemoveIssueHook(issue.id);
 
   const numCards = getNumCards();
   const startIndex = getCardIndex(id);
+
+  const canMove = permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
 
   const moveToTop = useCallback(() => {
     reorderCard({ columnId, startIndex, finishIndex: 0 });
@@ -99,14 +118,33 @@ function LazyDropdownItems({ id }: { id: string }) {
   const isMoveDownDisabled = startIndex === numCards - 1;
 
   return (
-    <DropdownItemGroup title="Reorder">
-      <DropdownItem isDisabled={isMoveUpDisabled} onClick={moveToTop}>
-        Move to top
-      </DropdownItem>
-      <DropdownItem isDisabled={isMoveDownDisabled} onClick={moveToBottom}>
-        Move to bottom
-      </DropdownItem>
-    </DropdownItemGroup>
+    <>
+      {canMove && (
+        <DropdownItemGroup title={t('common.reorder')}>
+          <DropdownItem isDisabled={isMoveUpDisabled} onClick={moveToTop}>
+            {t('common.moveToTop')}
+          </DropdownItem>
+          <DropdownItem isDisabled={isMoveDownDisabled} onClick={moveToBottom}>
+            {t('common.moveToBottom')}
+          </DropdownItem>
+        </DropdownItemGroup>
+      )}
+      <DropdownItemGroup title={t('fields.actions')} hasSeparator={canMove}>
+        <DropdownItem onClick={() => navigate(`issues/${issue.id}`)}>
+          {t('actions.viewDetail')}
+        </DropdownItem>
+        {canUpdate && (
+          <DropdownItem onClick={() => navigate(`issues/${issue.id}/edit`)}>
+            {t('actions.edit')}
+          </DropdownItem>
+        )}
+        {canUpdate && (
+          <DropdownItem onClick={() => handleRemoveIssue(issue)}>
+            {t('actions.delete')}
+          </DropdownItem>
+        )}
+      </DropdownItemGroup>
+    </>
   );
 }
 
@@ -118,10 +156,8 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
   const { members, permissions } = useProjectContext();
   const { currentUser } = useAuthentication();
   const canUpdate =
-    currentUser?.id === issue.assignee?.id ||
     currentUser?.id === issue.reporter?.id ||
     permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
-  const canMove = permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
 
   return (
     <Stack ref={ref} testId={`item-${id}`} xcss={[baseStyles, stateStyles[state.type]]}>
@@ -147,16 +183,14 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
                     mergeRefs([triggerRef])
               }
               icon={MoreIcon}
-              // eslint-disable-next-line no-unneeded-ternary
-              hidden={!canMove}
               label={`Move ${title}`}
-              appearance="default"
-              spacing="compact"
+              // appearance="default"
+              // spacing="compact"
               {...triggerProps}
             />
           )}
         >
-          <LazyDropdownItems id={id} />
+          <LazyDropdownItems id={id} issue={issue} canUpdate={canUpdate} />
         </DropdownMenu>
       </StackCharkra>
       {(issue.label?.title || dueDate) && (

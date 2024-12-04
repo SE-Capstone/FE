@@ -1,5 +1,8 @@
 {
   "common": {
+    "moveToTop": "Move to top",
+    "moveToBottom": "Move to bottom",
+    "reorder": "Reorder",
     "list": "List",
     "prompt": "Prompt",
     "show": "Show",

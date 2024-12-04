@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import type { IIssue } from '../types';
 import type { IResponseApi } from '@/configs/axios';
@@ -26,8 +27,10 @@ interface Props {
 export function useRemoveIssueMutation(props: Props) {
   const { t } = useTranslation();
   const { configs, closeAlert } = props;
-
+  const { issueId } = useParams();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: mutation,
 
@@ -35,6 +38,9 @@ export function useRemoveIssueMutation(props: Props) {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.issue.issues.queryKey,
       });
+      if (issueId) {
+        navigate(-1);
+      }
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.issue.detail._def,
       });

@@ -1,5 +1,8 @@
 {
   "common": {
+    "moveToTop": "Chuyển lên đầu tiên",
+    "moveToBottom": "Chuyển xuống dưới cùng",
+    "reorder": "Sắp xếp",
     "list": "Danh sách",
     "prompt": "Yêu cầu",
     "show": "Hiển thị",

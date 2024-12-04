@@ -1,5 +1,9 @@
 import { useMemo } from 'react';
 
+import { IconButton } from '@atlaskit/button/new';
+import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdown-menu';
+import mergeRefs from '@atlaskit/ds-lib/merge-refs';
+import MoreIcon from '@atlaskit/icon/glyph/editor/more';
 import SubtaskIcon from '@atlaskit/icon/glyph/subtask';
 import {
   Box,
@@ -26,6 +30,7 @@ import InlineEditWithIcon from '../../list-issue/components/inline-edit-field-wi
 import InlineEditRichtext from '../../list-issue/components/inline-edit-richtext';
 import { UserWithAvatar } from '../../list-issue/components/user-with-avatar';
 import { useUpsertIssueHook } from '../../list-issue/hooks/mutations';
+import { useRemoveIssueHook } from '../../list-issue/hooks/mutations/use-remove-issue.hooks';
 import { IssuePriorityEnum, type IUpdatedBy } from '../../list-issue/types';
 import { AddNewIssueWidget } from '../../list-issue/widgets';
 import { InlineEditCustomSelect } from '../../list-issue/widgets/editable-dropdown.widget';
@@ -393,6 +398,8 @@ export function DetailIssuePage() {
     [issue, listStatus, members, t]
   );
 
+  const { handleRemoveIssue } = useRemoveIssueHook(issue?.id || '');
+
   const { permissions: sysPermissions } = useAuthentication();
   const navigate = useNavigate();
   if (!sysPermissions[PermissionEnum.READ_ALL_PROJECTS] && !project?.isVisible) {
@@ -734,7 +741,33 @@ export function DetailIssuePage() {
                 >
                   {t('fields.details')}
                 </Text>
-                <Stack />
+                {canUpdate(issue?.assignee, issue?.reporter) && (
+                  <DropdownMenu
+                    trigger={({ triggerRef, ...triggerProps }) => (
+                      <IconButton
+                        ref={mergeRefs([triggerRef])}
+                        icon={MoreIcon}
+                        label=""
+                        appearance="default"
+                        spacing="compact"
+                        {...triggerProps}
+                      />
+                    )}
+                  >
+                    <DropdownItemGroup title={t('fields.actions')}>
+                      <DropdownItem
+                        onClick={() =>
+                          navigate(`/projects/${project?.id}/issues/${issue?.id}/edit`)
+                        }
+                      >
+                        {t('actions.edit')}
+                      </DropdownItem>
+                      <DropdownItem onClick={() => handleRemoveIssue(issue!)}>
+                        {t('actions.delete')}
+                      </DropdownItem>
+                    </DropdownItemGroup>
+                  </DropdownMenu>
+                )}
               </Stack>
               <InfoCard
                 data={infoData}
