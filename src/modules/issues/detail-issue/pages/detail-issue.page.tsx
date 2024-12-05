@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { IconButton } from '@atlaskit/button/new';
 import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdown-menu';
@@ -429,15 +429,27 @@ export function DetailIssuePage() {
 
   const { permissions: sysPermissions } = useAuthentication();
   const navigate = useNavigate();
-  if (!sysPermissions[PermissionEnum.READ_ALL_PROJECTS] && !project?.isVisible) {
-    notify({
-      type: 'error',
-      message: t('common.accessProjectDenied'),
-    });
-    navigate(APP_PATHS.HOME);
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <></>;
-  }
+  // if (!sysPermissions[PermissionEnum.READ_ALL_PROJECTS] && !project?.isVisible) {
+  //   notify({
+  //     type: 'error',
+  //     message: t('common.accessProjectDenied'),
+  //   });
+  //   navigate(APP_PATHS.HOME);
+  //   // eslint-disable-next-line react/jsx-no-useless-fragment
+  //   return <></>;
+  // }
+  useEffect(() => {
+    if (project && !sysPermissions[PermissionEnum.READ_ALL_PROJECTS] && !project?.isVisible) {
+      notify({
+        type: 'error',
+        message: t('common.accessProjectDenied'),
+      });
+      navigate(APP_PATHS.HOME);
+      return undefined;
+    }
+    return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project, sysPermissions, t]);
 
   return (
     <>

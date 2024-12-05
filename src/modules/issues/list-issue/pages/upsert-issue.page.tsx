@@ -212,15 +212,27 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
 
   const { permissions } = useAuthentication();
   const navigate = useNavigate();
-  if (!permissions[PermissionEnum.READ_ALL_PROJECTS] && !project?.isVisible) {
-    notify({
-      type: 'error',
-      message: t('common.accessProjectDenied'),
-    });
-    navigate(APP_PATHS.HOME);
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <></>;
-  }
+  // if (!permissions[PermissionEnum.READ_ALL_PROJECTS] && !project?.isVisible) {
+  //   notify({
+  //     type: 'error',
+  //     message: t('common.accessProjectDenied'),
+  //   });
+  //   navigate(APP_PATHS.HOME);
+  //   // eslint-disable-next-line react/jsx-no-useless-fragment
+  //   return <></>;
+  // }
+  useEffect(() => {
+    if (project && !permissions[PermissionEnum.READ_ALL_PROJECTS] && !project?.isVisible) {
+      notify({
+        type: 'error',
+        message: t('common.accessProjectDenied'),
+      });
+      navigate(APP_PATHS.HOME);
+      return undefined;
+    }
+    return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project, permissions, t]);
 
   return (
     <Container p={6} rounded={3} maxW="container.2xl" bg="white" centerContent>
