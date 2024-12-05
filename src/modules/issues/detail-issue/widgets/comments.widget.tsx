@@ -62,7 +62,7 @@ export const CommentWidget = ({
     <Stack key={index} gap={0}>
       <UserWithAvatar
         image={comment ? comment.user.avatar || '' : currentUser?.avatar || ''}
-        label={comment ? comment.user.fullName || '' : currentUser?.fullName || ''}
+        label={comment ? comment.user.userName || '' : currentUser?.userName || ''}
         size={10}
         date={
           comment?.createdAt &&

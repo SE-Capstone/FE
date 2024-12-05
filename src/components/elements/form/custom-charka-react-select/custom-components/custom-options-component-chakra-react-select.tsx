@@ -19,7 +19,7 @@ export function CustomOptionComponentChakraReactSelect<
           size="sm"
           src={data.image}
           // boxSize={size === 'sm' ? 8 : 9}
-          name={(data.label as string).replace(/[^a-zA-Z ]/g, '')}
+          name={(data.label as string).replace(/\((Me|Tôi)\)/g, '').trim()}
         />
 
         <Text color="inherit" fontSize={size === 'sm' ? '13px' : ''}>

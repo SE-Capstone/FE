@@ -38,7 +38,7 @@ export const InlineEditCustomSelectInfinity = ({
 
   const variables = {
     filter: {
-      fullName: inputValue ? inputValue.toLocaleLowerCase() : undefined,
+      userName: inputValue ? inputValue.toLocaleLowerCase() : undefined,
       status: UserStatusEnum.Active,
     },
   };

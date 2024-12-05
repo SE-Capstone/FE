@@ -80,7 +80,7 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
 
   const variables = {
     filter: {
-      fullName: inputValue ? inputValue.toLocaleLowerCase() : undefined,
+      userName: inputValue ? inputValue.toLocaleLowerCase() : undefined,
       status: UserStatusEnum.Active,
     },
   };

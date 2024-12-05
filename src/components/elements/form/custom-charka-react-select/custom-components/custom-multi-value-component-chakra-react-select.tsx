@@ -17,7 +17,7 @@ export function CustomMultiValueComponentChakraReactSelect<
         <Avatar
           src={data.image}
           size="xs"
-          name={(data.label as string).replace(/[^a-zA-Z ]/g, '')}
+          name={(data.label as string).replace(/\((Me|Tôi)\)/g, '').trim()}
         />
         {children}
         <Text color="inherit">{data.label}</Text>

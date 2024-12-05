@@ -14,7 +14,11 @@ export function CustomSingleValueComponentChakraReactSelect<
   return (
     <chakraComponents.SingleValue {...props}>
       <HStack w="full" role="group">
-        <Avatar src={data.image} boxSize={8} name={data.label as string} />
+        <Avatar
+          src={data.image}
+          boxSize={8}
+          name={(data.label as string).replace(/\((Me|Tôi)\)/g, '').trim()}
+        />
 
         {!noDisplayLabel && <Text color="inherit">{data.label}</Text>}
       </HStack>

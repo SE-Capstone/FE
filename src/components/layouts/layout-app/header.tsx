@@ -32,7 +32,7 @@ export function HeaderApp() {
   const [currentLanguage, setCurrentLanguage] = useState<string>(
     localStorage.getItem('i18nextLng') || 'en'
   );
-  const { fullName, isLoading, currentUser, isLogged } = useAuthentication();
+  const { isLoading, currentUser, isLogged } = useAuthentication();
 
   const location = useLocation();
 
@@ -96,7 +96,7 @@ export function HeaderApp() {
             <SkeletonCircle size="10" rounded="full" isLoaded={!isLoading}>
               <Tooltip label="Go to profile">
                 <Avatar
-                  name={fullName}
+                  name={currentUser?.userName || ''}
                   src={currentUser?.avatar}
                   boxSize="10"
                   objectFit="cover"

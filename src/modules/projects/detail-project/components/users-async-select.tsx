@@ -40,7 +40,7 @@ export function UsersAsyncSelect<TFormValues extends FieldValues, IsMulti extend
   const variables = {
     paginateInput: DEFAULT_PAGINATION,
     filter: {
-      fullName: inputValue ? inputValue.toLocaleLowerCase() : undefined,
+      userName: inputValue ? inputValue.toLocaleLowerCase() : undefined,
       status: UserStatusEnum.Active,
     },
   };
