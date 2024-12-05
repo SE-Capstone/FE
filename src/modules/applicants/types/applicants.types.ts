@@ -1,10 +1,8 @@
 import type { IBaseEntity } from '@/types';
 
 export type QueryListApplicantInput = {
-  search?: string;
-  startDateFrom?: string;
-  startDateTo?: string;
-  jobIds?: string[];
+  email?: string;
+  name?: string;
 };
 
 export type IApplicant = IBaseEntity & {

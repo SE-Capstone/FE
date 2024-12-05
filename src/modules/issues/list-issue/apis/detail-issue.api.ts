@@ -9,6 +9,7 @@ import type { IResponseApi } from '@/configs/axios';
 
 import { notify } from '@/libs/helpers';
 import { makeRequest, type QueryConfig, type TErrorResponse } from '@/libs/react-query';
+import { APP_PATHS } from '@/routes/paths/app.paths';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
 
@@ -47,7 +48,7 @@ export function useGetDetailIssue(params: UseGetDetailIssueOptionsType) {
       type: 'error',
       message: t('messages.issueNotFound'),
     });
-    navigate(-1);
+    navigate(APP_PATHS.HOME);
   }
 
   return { issue: data?.data, isError, ...queryInfo };

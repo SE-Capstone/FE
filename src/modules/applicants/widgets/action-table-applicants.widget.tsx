@@ -28,14 +28,27 @@ export function ActionTableApplicantsWidget() {
             lg: '70%',
             xl: '60%',
           }}
+          templateColumns={{
+            base: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+          }}
           gap={2}
         >
-          <GridItem colSpan={2}>
+          <GridItem colSpan={1}>
+            <SearchInput
+              placeholder={`${t('common.enter')} ${t('fields.email').toLowerCase()}`}
+              initValue={applicantsQueryState.filters.email || ''}
+              onHandleSearch={(keyword) => {
+                setApplicantsQueryFilterState({ email: keyword });
+              }}
+            />
+          </GridItem>
+          <GridItem colSpan={1}>
             <SearchInput
               placeholder={`${t('common.enter')} ${t('fields.name').toLowerCase()}`}
-              initValue={applicantsQueryState.filters.search || ''}
+              initValue={applicantsQueryState.filters.name || ''}
               onHandleSearch={(keyword) => {
-                setApplicantsQueryFilterState({ search: keyword });
+                setApplicantsQueryFilterState({ name: keyword });
               }}
             />
           </GridItem>
