@@ -365,7 +365,7 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
             <Box ref={scrollableRef} xcss={scrollContainerStyles}>
               <Stack xcss={cardListStyles} space="space.100">
                 {column.items.map((item) => (
-                  <Card key={item.id} item={item} />
+                  <Card key={item.id} item={item} columnId={columnId} />
                 ))}
               </Stack>
             </Box>

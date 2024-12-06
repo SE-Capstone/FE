@@ -81,6 +81,7 @@ const stateStyles: {
 type CardPrimitiveProps = {
   closestEdge: Edge | null;
   item: Issue;
+  columnId: string;
   state: State;
   actionMenuTriggerRef?: Ref<HTMLButtonElement>;
 };
@@ -151,10 +152,10 @@ function LazyDropdownItems({
 }
 
 const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function CardPrimitive(
-  { closestEdge, item, state, actionMenuTriggerRef },
+  { closestEdge, item, state, columnId, actionMenuTriggerRef },
   ref
 ) {
-  const { issue, title, index, dueDate, isLate, statusId, statusColor, id, isDone } = item;
+  const { issue, title, index, dueDate, isLate, statusColor, id, isDone } = item;
   const { members, permissions } = useProjectContext();
   const { currentUser } = useAuthentication();
   const canUpdate =
@@ -175,7 +176,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
               height: 'auto',
             }}
             textStyle={{ flex: 1 }}
-            statusId={statusId}
+            statusId={columnId}
             isViewOnly={!canUpdate}
           />
         </Heading>
@@ -242,7 +243,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
               size="sm"
               field="priority"
               issue={issue}
-              statusId={statusId}
+              statusId={columnId}
             />
           ) : (
             <PriorityIssue priority={issue.priority} hideText />
@@ -262,7 +263,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
                 value: member.id,
                 image: member.avatar,
               }))}
-              statusId={statusId}
+              statusId={columnId}
               defaultValue={
                 issue.assignee
                   ? {
@@ -289,7 +290,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
   );
 });
 
-export const Card = memo(function Card({ item }: { item: Issue }) {
+export const Card = memo(function Card({ item, columnId }: { item: Issue; columnId: string }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const { id } = item;
   const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
@@ -384,6 +385,7 @@ export const Card = memo(function Card({ item }: { item: Issue }) {
         ref={ref}
         item={item}
         state={state}
+        columnId={columnId}
         closestEdge={closestEdge}
         actionMenuTriggerRef={actionMenuTriggerRef}
       />
@@ -402,7 +404,7 @@ export const Card = memo(function Card({ item }: { item: Issue }) {
               height: state.rect.height,
             }}
           >
-            <CardPrimitive item={item} state={state} closestEdge={null} />
+            <CardPrimitive item={item} state={state} columnId={columnId} closestEdge={null} />
           </Box>,
           state.container
         )}
