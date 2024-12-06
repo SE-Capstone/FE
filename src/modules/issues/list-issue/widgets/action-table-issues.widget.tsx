@@ -82,16 +82,12 @@ export function ActionTableIssuesWidget({
 
         if (values) {
           if (values.length > 0) {
-            console.log('Hereeeee');
-            console.log(params);
-            console.log(values);
             params.delete(key);
             values.forEach((val, i) => (i === 0 ? params.set(key, val) : params.append(key, val)));
           } else {
             params.delete(key);
           }
         } else if (value) {
-          console.log('Hereeeee2');
           params.set(key, value);
         } else {
           params.delete(key);
