@@ -3,6 +3,7 @@ import type { ICurrentUserResponse } from '@/modules/auth/types';
 
 export type QueryListUserInput = {
   fullName?: string;
+  userName?: string;
   email?: string;
   phone?: string;
   status?: UserStatusEnum;

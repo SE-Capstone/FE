@@ -49,14 +49,15 @@ export function ActionTableUsersWidget() {
       setRoles(listRole);
     }
     const params = new URLSearchParams(window.location.search);
-    if (params.get('roleId')) {
+    if (params.get('roleId') && permissions[PermissionEnum.READ_LIST_ROLE]) {
       const role = listRole.find((r) => r.id === params.get('roleId'));
       setDefaultRole(role);
     }
-  }, [listRole, roles]);
+  }, [listRole, permissions, roles]);
 
   const filterMapping = {
     fullName: 'fullName',
+    userName: 'userName',
     roleId: 'roleId',
     phone: 'phone',
     email: 'email',
@@ -79,7 +80,7 @@ export function ActionTableUsersWidget() {
     [setSearchParams]
   );
 
-  const handleFilterChange = (filter: string) => {
+  const handleFilterChange = (filter: string, e: any) => {
     setSelectedFilters((prev) => {
       const isSelected = prev.includes(filter);
       const updatedFilters = isSelected ? prev.filter((f) => f !== filter) : [...prev, filter];
@@ -88,43 +89,54 @@ export function ActionTableUsersWidget() {
         setUsersQueryFilterState({ [filterMapping[filter]]: undefined });
       }
 
+      if (e.target.checked === false) {
+        setUsersQueryFilterState({ [filterMapping[filter]]: '' });
+        updateQueryParams(filter, '');
+      }
+
       return updatedFilters;
     });
   };
 
   const listFilterOptions = useMemo(
-    () => [
-      {
-        value: 'fullName',
-        label: t('fields.fullName'),
-        default: true,
-      },
-      {
-        value: 'roleId',
-        label: t('fields.role'),
-        default: searchParams.has('roleId'),
-      },
-      {
-        value: 'phone',
-        label: t('fields.phone'),
-        default: searchParams.has('phone'),
-      },
-      {
-        value: 'email',
-        label: t('fields.email'),
-        default: searchParams.has('email'),
-      },
-      {
-        value: 'status',
-        label: t('fields.status'),
-        default: searchParams.has('status'),
-      },
-      {
-        value: 'gender',
-        label: t('fields.gender'),
-        default: searchParams.has('gender'),
-      },
-    ],
+    () =>
+      [
+        {
+          value: 'fullName',
+          label: t('fields.fullName'),
+          default: true,
+        },
+        {
+          value: 'userName',
+          label: t('fields.aliasName'),
+          default: searchParams.has('userName'),
+        },
+        permissions[PermissionEnum.READ_LIST_ROLE] && {
+          value: 'roleId',
+          label: t('fields.role'),
+          default: searchParams.has('roleId'),
+        },
+        {
+          value: 'phone',
+          label: t('fields.phone'),
+          default: searchParams.has('phone'),
+        },
+        {
+          value: 'email',
+          label: t('fields.email'),
+          default: searchParams.has('email'),
+        },
+        {
+          value: 'status',
+          label: t('fields.status'),
+          default: searchParams.has('status'),
+        },
+        {
+          value: 'gender',
+          label: t('fields.gender'),
+          default: searchParams.has('gender'),
+        },
+      ].filter(Boolean),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [t]
   );
@@ -141,7 +153,9 @@ export function ActionTableUsersWidget() {
     const params = new URLSearchParams(window.location.search);
     setUsersQueryFilterState({
       ...(params.get('fullName') && { fullName: params.get('fullName') || '' }),
-      ...(params.get('roleId') && { roleId: params.get('roleId') || '' }),
+      ...(params.get('userName') && { userName: params.get('userName') || '' }),
+      ...(params.get('roleId') &&
+        permissions[PermissionEnum.READ_LIST_ROLE] && { roleId: params.get('roleId') || '' }),
       ...(params.get('phone') && { phone: params.get('phone') || '' }),
       ...(params.get('email') && { email: params.get('email') || '' }),
       ...(params.get('status') && { status: Number(params.get('status')) }),
@@ -174,6 +188,18 @@ export function ActionTableUsersWidget() {
                 onHandleSearch={(keyword) => {
                   setUsersQueryFilterState({ fullName: keyword });
                   updateQueryParams('fullName', keyword);
+                }}
+              />
+            </GridItem>
+          )}
+          {selectedFilters.includes('userName') && (
+            <GridItem colSpan={1}>
+              <SearchInput
+                placeholder={`${t('common.enter')} ${t('fields.aliasName').toLowerCase()}...`}
+                initValue={usersQueryState.filters.userName || ''}
+                onHandleSearch={(keyword) => {
+                  setUsersQueryFilterState({ userName: keyword });
+                  updateQueryParams('userName', keyword);
                 }}
               />
             </GridItem>
@@ -262,7 +288,7 @@ export function ActionTableUsersWidget() {
               />
             </GridItem>
           )}
-          {selectedFilters.includes('roleId') && (
+          {selectedFilters.includes('roleId') && permissions[PermissionEnum.READ_LIST_ROLE] && (
             <GridItem>
               <CustomChakraReactSelect
                 key={defaultRole?.id}
@@ -304,7 +330,7 @@ export function ActionTableUsersWidget() {
                   w="full"
                   borderColor="gray.300"
                   isChecked={selectedFilters.includes(option.value)}
-                  onChange={() => handleFilterChange(option.value)}
+                  onChange={(e) => handleFilterChange(option.value, e)}
                 >
                   <Text>{option.label}</Text>
                 </Checkbox>

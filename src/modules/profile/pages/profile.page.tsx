@@ -22,6 +22,10 @@ export function ProfilePage() {
       text: currentUser?.fullName || '',
     },
     {
+      label: t('fields.aliasName'),
+      text: currentUser?.userName || '',
+    },
+    {
       label: 'Email',
       text: currentUser?.email || '',
     },

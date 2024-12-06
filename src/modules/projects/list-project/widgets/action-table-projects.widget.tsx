@@ -44,19 +44,6 @@ export function ActionTableProjectsWidget() {
     endDate: 'endDate',
   };
 
-  const handleFilterChange = (filter: string) => {
-    setSelectedFilters((prev) => {
-      const isSelected = prev.includes(filter);
-      const updatedFilters = isSelected ? prev.filter((f) => f !== filter) : [...prev, filter];
-
-      if (isSelected) {
-        setProjectsQueryFilterState({ [filterMapping[filter]]: undefined });
-      }
-
-      return updatedFilters;
-    });
-  };
-
   const updateQueryParams = useCallback(
     (key: string, value?: string) => {
       setSearchParams((prevParams) => {
@@ -71,6 +58,24 @@ export function ActionTableProjectsWidget() {
     },
     [setSearchParams]
   );
+
+  const handleFilterChange = (filter: string, e: any) => {
+    setSelectedFilters((prev) => {
+      const isSelected = prev.includes(filter);
+      const updatedFilters = isSelected ? prev.filter((f) => f !== filter) : [...prev, filter];
+
+      if (isSelected) {
+        setProjectsQueryFilterState({ [filterMapping[filter]]: undefined });
+      }
+
+      if (e.target.checked === false) {
+        setProjectsQueryFilterState({ [filterMapping[filter]]: '' });
+        updateQueryParams(filter, ''); // Add empty value in URL
+      }
+
+      return updatedFilters;
+    });
+  };
 
   const listFilterOptions = useMemo(
     () =>
@@ -259,7 +264,7 @@ export function ActionTableProjectsWidget() {
                     w="full"
                     borderColor="gray.300"
                     isChecked={selectedFilters.includes(option.value)}
-                    onChange={() => handleFilterChange(option.value)}
+                    onChange={(e) => handleFilterChange(option.value, e)}
                   >
                     <Text>{option.label}</Text>
                   </Checkbox>

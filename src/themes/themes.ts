@@ -131,10 +131,10 @@ const customTheme: ThemeOverride = {
       sizes: {
         lg: {
           field: {
-            h: '42px',
+            h: '40px',
           },
           addon: {
-            h: '42px',
+            h: '40px',
             fontsize: { base: 'xs', lg: 'sm' },
           },
         },

@@ -213,7 +213,7 @@ export function ActionTableIssuesWidget({
     dueDate: 'dueDate',
   };
 
-  const handleFilterChange = (filter: string) => {
+  const handleFilterChange = (filter: string, e: any) => {
     setSelectedFilters((prev) => {
       const isSelected = prev.includes(filter);
       const updatedFilters = isSelected ? prev.filter((f) => f !== filter) : [...prev, filter];
@@ -232,6 +232,11 @@ export function ActionTableIssuesWidget({
         if (filter === 'statusIds') {
           setStatusChecked([]);
         }
+      }
+
+      if (e.target.checked === false) {
+        setIssuesQueryFilterState({ [filterMapping[filter]]: '' });
+        updateQueryParams(filter, [], '');
       }
 
       return updatedFilters;
@@ -537,7 +542,7 @@ export function ActionTableIssuesWidget({
                     w="full"
                     borderColor="gray.300"
                     isChecked={selectedFilters.includes(option.value)}
-                    onChange={() => handleFilterChange(option.value)}
+                    onChange={(e) => handleFilterChange(option.value, e)}
                   >
                     <Text>{option.label}</Text>
                   </Checkbox>
