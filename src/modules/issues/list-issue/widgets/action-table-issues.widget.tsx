@@ -186,6 +186,12 @@ export function ActionTableIssuesWidget({
   );
 
   useEffect(() => {
+    if (searchParams.get('tab') === 'kanban') {
+      const params = new URLSearchParams();
+      params.set('tab', 'issue');
+      setSearchParams(params);
+      return undefined;
+    }
     const params = new URLSearchParams(window.location.search);
     setIssuesQueryFilterState({
       ...(params.get('title') && { title: params.get('title') || '' }),
@@ -198,6 +204,7 @@ export function ActionTableIssuesWidget({
       statusIds: statusChecked,
       assigneeIds: assigneeChecked,
     });
+    return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [labelChecked, phaseChecked, statusChecked, assigneeChecked]);
 
@@ -297,6 +304,10 @@ export function ActionTableIssuesWidget({
   );
 
   useEffect(() => {
+    if (searchParams.get('tab') === 'kanban') {
+      setSelectedFilters(['title']);
+      return undefined;
+    }
     const defaults = listFilterOptions
       .filter((option) => option.default)
       .map((option) => option.value);
