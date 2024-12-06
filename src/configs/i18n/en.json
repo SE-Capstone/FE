@@ -1,5 +1,6 @@
 {
   "common": {
+    "numberOfMembers": "Number of members",
     "moveToTop": "Move to top",
     "moveToBottom": "Move to bottom",
     "reorder": "Reorder",
@@ -255,6 +256,8 @@
   },
   "validation": {
     "memberRequired": "Please choose at least one member",
+    "numberOfMembers": "Number of members must be between 0 and 20",
+    "numberOfMembersInt": "Number of members must be an integer",
     "permissionRequired": "Please choose at least one permission",
     "fieldRequired": "This field is required",
     "phoneMin": "Phone number must be at least 8 characters",

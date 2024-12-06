@@ -1,5 +1,6 @@
 {
   "common": {
+    "numberOfMembers": "Số lượng thành viên",
     "moveToTop": "Chuyển lên đầu tiên",
     "moveToBottom": "Chuyển xuống dưới cùng",
     "reorder": "Sắp xếp",
@@ -219,6 +220,8 @@
   },
   "validation": {
     "memberRequired": "Vui lòng chọn ít nhất một thành viên",
+    "numberOfMembers": "Số thành viên phải nằm từ 0 và 20",
+    "numberOfMembersInt": "Số thành viên phải là số nguyên",
     "permissionRequired": "Vui lòng chọn ít nhất một quyền",
     "fieldRequired": "Trường này là bắt buộc",
     "phoneMin": "Số điện thoại phải có ít nhất 8 ký tự",

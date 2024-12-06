@@ -12,6 +12,7 @@ interface ISuggestMemberRequest {
   body: {
     projectName: string;
     projectDetail: string;
+    totalUsersNeed: number;
     userStatistics: UserStatistics[];
   };
 }

@@ -181,6 +181,7 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
             <CustomInput
               label={t('fields.totalEffort')}
               type="number"
+              maxH="40px"
               registration={register('totalEffort')}
               error={errors.totalEffort}
             />
@@ -188,7 +189,7 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
               isSearchable
               placeholder={`${t('common.choose')} ${t('fields.teamLead').toLowerCase()}`}
               label={t('fields.teamLead')}
-              size="lg"
+              size="md"
               options={listUser.map((user) => ({
                 label: user.userName,
                 value: user.id,

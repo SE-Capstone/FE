@@ -21,6 +21,7 @@ import {
   UnorderedList,
   ListItem,
 } from '@chakra-ui/react';
+import { isInteger } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
 import { BsStars } from 'react-icons/bs';
 import { LuInfo } from 'react-icons/lu';
@@ -40,7 +41,7 @@ import type { SuggestResponse } from '../apis/suggest-member.api';
 import type { IOptionUserSelect } from '../components/users-async-select';
 
 import { IMAGE_URLS } from '@/assets/images';
-import { CustomTextArea, ModalBase } from '@/components/elements';
+import { CustomInput, CustomTextArea, ModalBase } from '@/components/elements';
 import { ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { notify } from '@/libs/helpers';
@@ -274,6 +275,7 @@ const MemberSetting = ({ members, projectId }: { members: ProjectMember[]; proje
 export function ProjectMembersWidget({ project }: { project?: IProject }) {
   const { t } = useTranslation();
   const [inputValue, setInputValue] = useState('');
+  const [inputMemValue, setInputMemValue] = useState(3);
   const disclosureModal = useDisclosure();
   const disclosureModalInput = useDisclosure();
   const { permissions: projectPermissions } = useProjectContext();
@@ -314,6 +316,10 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
   }, [project]);
 
   const suggestMember = useCallback(async () => {
+    if (inputMemValue && (!isInteger(inputMemValue) || inputMemValue < 1 || inputMemValue > 20)) {
+      return;
+    }
+
     try {
       const memberForSuggest = await refetch();
 
@@ -327,6 +333,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
         body: {
           projectName: project?.name || '',
           projectDetail: inputValue || project?.description || '',
+          totalUsersNeed: inputMemValue || 3,
           userStatistics: isLoading ? [] : memberForSuggest.data?.data || [],
         },
       });
@@ -523,6 +530,14 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
               w={20}
               type="submit"
               isDisabled={isLoading || isPending || !canUpdate}
+              bg="transparent"
+              color="#85B8FF"
+              border="1px solid #8F7EE7"
+              transition="all 0.3s"
+              _hover={{
+                color: 'textColor',
+                bg: 'linear-gradient(45deg, #B8ACF6 0%, #85B8FF 100%)',
+              }}
               onClick={saveMembers}
             >
               {t('common.save')}
@@ -632,6 +647,25 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
               isRequired
               required
               onChange={(e) => setInputValue(e.target.value)}
+            />
+            <CustomInput
+              label={t('common.numberOfMembers')}
+              required
+              type="number"
+              min={0}
+              max={20}
+              error={
+                !isInteger(inputMemValue)
+                  ? { message: t('validation.numberOfMembersInt'), type: 'value' }
+                  : inputMemValue < 1 || inputMemValue > 20
+                  ? { message: t('validation.numberOfMembers'), type: 'min' }
+                  : undefined
+              }
+              onChange={(e) =>
+                e.target.value === ''
+                  ? setInputMemValue(3)
+                  : setInputMemValue(Number(e.target.value))
+              }
             />
           </Stack>
         </ModalBase>
