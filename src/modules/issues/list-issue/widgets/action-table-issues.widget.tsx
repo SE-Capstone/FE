@@ -57,13 +57,17 @@ export function ActionTableIssuesWidget({
   const { currentUser } = useAuthentication();
   const prevMembersRef = useRef<ProjectMember[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [labelChecked, setLabelChecked] = useState<string[]>(searchParams.getAll('labelIds') || []);
-  const [phaseChecked, setPhaseChecked] = useState<string[]>(searchParams.getAll('phaseIds') || []);
+  const [labelChecked, setLabelChecked] = useState<string[]>(
+    searchParams.get('tab') === 'kanban' ? [] : searchParams.getAll('labelIds') || []
+  );
+  const [phaseChecked, setPhaseChecked] = useState<string[]>(
+    searchParams.get('tab') === 'kanban' ? [] : searchParams.getAll('phaseIds') || []
+  );
   const [assigneeChecked, setAssigneeChecked] = useState<string[]>(
-    searchParams.getAll('assigneeIds') || []
+    searchParams.get('tab') === 'kanban' ? [] : searchParams.getAll('assigneeIds') || []
   );
   const [statusChecked, setStatusChecked] = useState<string[]>(
-    searchParams.getAll('statusIds') || []
+    searchParams.get('tab') === 'kanban' ? [] : searchParams.getAll('statusIds') || []
   );
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [defaultReporter, setDefaultReporter] = useState<ProjectMember | undefined>(undefined);
@@ -78,12 +82,16 @@ export function ActionTableIssuesWidget({
 
         if (values) {
           if (values.length > 0) {
+            console.log('Hereeeee');
+            console.log(params);
+            console.log(values);
             params.delete(key);
             values.forEach((val, i) => (i === 0 ? params.set(key, val) : params.append(key, val)));
           } else {
             params.delete(key);
           }
         } else if (value) {
+          console.log('Hereeeee2');
           params.set(key, value);
         } else {
           params.delete(key);
@@ -313,6 +321,7 @@ export function ActionTableIssuesWidget({
       .map((option) => option.value);
 
     setSelectedFilters(defaults);
+    return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listFilterOptions]);
 

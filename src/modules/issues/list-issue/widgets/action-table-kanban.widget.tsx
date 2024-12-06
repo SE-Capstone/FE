@@ -57,13 +57,17 @@ export function ActionTableKanbanWidget({
   const { currentUser } = useAuthentication();
   const prevMembersRef = useRef<ProjectMember[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [labelChecked, setLabelChecked] = useState<string[]>(searchParams.getAll('labelIds') || []);
-  const [phaseChecked, setPhaseChecked] = useState<string[]>(searchParams.getAll('phaseIds') || []);
+  const [labelChecked, setLabelChecked] = useState<string[]>(
+    searchParams.get('tab') === 'issue' ? [] : searchParams.getAll('labelIds') || []
+  );
+  const [phaseChecked, setPhaseChecked] = useState<string[]>(
+    searchParams.get('tab') === 'issue' ? [] : searchParams.getAll('phaseIds') || []
+  );
   const [assigneeChecked, setAssigneeChecked] = useState<string[]>(
-    searchParams.getAll('assigneeIds') || []
+    searchParams.get('tab') === 'issue' ? [] : searchParams.getAll('assigneeIds') || []
   );
   const [statusChecked, setStatusChecked] = useState<string[]>(
-    searchParams.getAll('statusIds') || []
+    searchParams.get('tab') === 'issue' ? [] : searchParams.getAll('statusIds') || []
   );
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [defaultReporter, setDefaultReporter] = useState<ProjectMember | undefined>(undefined);
@@ -313,6 +317,7 @@ export function ActionTableKanbanWidget({
       .map((option) => option.value);
 
     setSelectedFilters(defaults);
+    return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listFilterOptions]);
 

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { merge } from 'lodash-es';
+import qs from 'qs';
 
 import type { QueryKanbanInput } from '../../types/issues.types';
 import type { IResponseApi } from '@/configs/axios';
@@ -24,6 +25,7 @@ export function getKanbanRequest(req: IGetKanbanRequest) {
     method: 'GET',
     url: ALL_ENDPOINT_URL_STORE.issues.kanban,
     params,
+    paramsSerializer: (params) => qs.stringify(params),
   });
 }
 
