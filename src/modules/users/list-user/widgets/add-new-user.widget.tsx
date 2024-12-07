@@ -122,7 +122,6 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
               isSearchable
               placeholder={`${t('common.choose')} ${t('fields.role').toLowerCase()}`}
               label={t('fields.role')}
-              size="lg"
               options={roles.map((role) => ({
                 label: <BadgeIssue content={role.name} colorScheme={role.color} />,
                 value: role.id,

@@ -17,7 +17,7 @@ export type IPhase = {
   expectedStartDate: Date;
   expectedEndDate: Date;
   actualStartDate?: Date;
-  actualDate?: Date;
+  actualEndDate?: Date;
   projectId: string;
 };
 
