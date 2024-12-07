@@ -11,7 +11,7 @@ import type { MutationConfig } from '@/libs/react-query';
 
 import { CustomHttpStatusCode, DEFAULT_MESSAGE } from '@/configs';
 import { useAlertDialogStore } from '@/contexts';
-import { getAccessToken, notify } from '@/libs/helpers';
+import { notify } from '@/libs/helpers';
 import { makeRequest } from '@/libs/react-query';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { APP_PATHS } from '@/routes/paths/app.paths';
@@ -31,10 +31,9 @@ interface IAuthLogoutMutationProps {
 export function useLogoutMutation({ configs }: IAuthLogoutMutationProps = {}) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const accessToken = getAccessToken();
   const queryClient = useQueryClient();
   const { currentUser, resetAuthContext } = useAuthentication();
-  const connector = Connector(accessToken || '', currentUser?.id || '');
+  const connector = Connector(currentUser?.id || '');
   const mutation = useMutation({
     mutationFn: logoutMutation,
 
