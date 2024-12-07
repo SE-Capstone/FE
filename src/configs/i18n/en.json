@@ -245,6 +245,7 @@
     "updatePassword": "Are you sure to update password for user",
     "updateUser": "Are you sure to update user",
     "confirmDelete": "Are you sure to delete",
+    "confirmDeleteIssue": "You're about to permanently delete this work item, its comments and attachments, and all of its data. If you're not sure, you can resolve or close this work item instead.",
     "deleteRole": "Are you sure to delete role \"{{roleName}}\"? All user with this role will be lose their role.",
     "enableMemberPermission": "Are you sure to enable permission \"{{permissionName}}\" for user \"{{userName}}\"?",
     "disableMemberPermission": "Are you sure to disable permission \"{{permissionName}}\" for user \"{{userName}}\"?"

@@ -504,6 +504,7 @@ export function DetailIssuePage() {
             px={0}
             pb={0}
             title={issue?.title}
+            path={APP_PATHS.detailProjectIssueTab(projectId || '')}
           >
             {/* <Button as={Link} to="edit">
               {t('actions.edit')}

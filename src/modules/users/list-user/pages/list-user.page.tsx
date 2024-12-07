@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { Avatar } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
@@ -56,19 +57,18 @@ export function ListUserPage() {
           //   key: 'avatar',
           //   title: 'Avatar',
           //   hasSort: false,
-          //   Cell({ avatar, fullName }) {
-          //     return avatar ? (
+          //   Cell({ avatar, userName }) {
+          //     return (
           //       <Avatar
           //         src={avatar}
-          //         name={fullName || ''}
-          //         boxSize={16}
+          //         name={userName || ''}
+          //         // boxSize={16}
+          //         size="sm"
           //         rounded="full"
           //         showBorder
           //         borderColor="gray.200"
           //         borderWidth="1px"
           //       />
-          //     ) : (
-          //       <>No image</>
           //     );
           //   },
           // },
@@ -76,12 +76,25 @@ export function ListUserPage() {
             key: 'fullName',
             title: t('fields.fullName'),
             hasSort: false,
-            Cell({ fullName, id }) {
+            Cell({ fullName, avatar, userName, id }) {
               return (
                 <CustomLink
                   to={pathname.includes(APP_PATHS.listUser) ? String(id) : '#'}
                   noOfLines={1}
+                  display="flex"
+                  alignItems="center"
+                  gap={2}
                 >
+                  <Avatar
+                    src={avatar}
+                    name={userName || ''}
+                    // boxSize={16}
+                    size="sm"
+                    rounded="full"
+                    showBorder
+                    borderColor="gray.200"
+                    borderWidth="1px"
+                  />
                   {fullName || ''}
                 </CustomLink>
               );

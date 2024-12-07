@@ -20,7 +20,7 @@ export const issueFormSchema = (t: any) =>
       .trim()
       .min(1, { message: t('validation.issue.subjectRequired') })
       .max(500, { message: t('validation.issue.subjectMax') }),
-    description: z.string().trim().optional(),
+    description: z.any().optional(),
     startDate: getOptionalDateField(),
     dueDate: getOptionalDateField(),
     actualDate: getOptionalDateField(),

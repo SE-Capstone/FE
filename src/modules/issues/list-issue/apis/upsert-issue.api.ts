@@ -53,7 +53,7 @@ interface Props {
   isRedirect?: boolean;
 }
 
-export function useUpsertIssueMutation({ configs, reset, id, isUpdate, isRedirect }: Props = {}) {
+export function useUpsertIssueMutation({ configs, reset, id, isUpdate }: Props = {}) {
   const queryClient = useQueryClient();
   const { projectId } = useParams();
   const navigate = useNavigate();
@@ -96,11 +96,12 @@ export function useUpsertIssueMutation({ configs, reset, id, isUpdate, isRedirec
         message: isUpdate ? DEFAULT_MESSAGE(t).UPDATE_SUCCESS : DEFAULT_MESSAGE(t).CREATE_SUCCESS,
       });
 
-      if (isRedirect) {
-        isUpdate
-          ? navigate(APP_PATHS.detailIssue(projectId || '', data.data.id))
-          : navigate(APP_PATHS.listIssue(projectId || ''));
-      }
+      data.data.id ? navigate(APP_PATHS.detailIssue(projectId || '', data.data.id)) : navigate(-1);
+      // if (isRedirect) {
+      //   isUpdate
+      //     ? navigate(APP_PATHS.detailIssue(projectId || '', data.data.id))
+      //     : navigate(APP_PATHS.listIssue(projectId || ''));
+      // }
       reset && reset();
     },
 

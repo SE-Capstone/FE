@@ -24,10 +24,8 @@ export function useRemoveIssueHook(id: string) {
     if (isPending) return;
 
     openAlert({
-      title: `${t('common.delete')} ${t('common.issue').toLowerCase()}`,
-      description: `${t('actions.confirmDelete')} ${t('common.issue').toLowerCase()} ${
-        issue.title
-      }?`,
+      title: `${t('common.delete')} ${t('common.issue').toLowerCase()} "${issue.title}"`,
+      description: `${t('actions.confirmDeleteIssue')}`,
       textConfirm: t('actions.delete'),
       onHandleConfirm() {
         mutate(id);
