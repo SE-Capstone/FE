@@ -53,7 +53,7 @@ interface Props {
   isRedirect?: boolean;
 }
 
-export function useUpsertIssueMutation({ configs, reset, id, isUpdate }: Props = {}) {
+export function useUpsertIssueMutation({ configs, reset, id, isUpdate, isRedirect }: Props = {}) {
   const queryClient = useQueryClient();
   const { projectId } = useParams();
   const navigate = useNavigate();
@@ -72,6 +72,9 @@ export function useUpsertIssueMutation({ configs, reset, id, isUpdate }: Props =
 
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.issue.detail._def,
+      });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.status.statuses.queryKey,
       });
 
       queryClient.invalidateQueries({
@@ -96,12 +99,14 @@ export function useUpsertIssueMutation({ configs, reset, id, isUpdate }: Props =
         message: isUpdate ? DEFAULT_MESSAGE(t).UPDATE_SUCCESS : DEFAULT_MESSAGE(t).CREATE_SUCCESS,
       });
 
-      data.data.id ? navigate(APP_PATHS.detailIssue(projectId || '', data.data.id)) : navigate(-1);
-      // if (isRedirect) {
-      //   isUpdate
-      //     ? navigate(APP_PATHS.detailIssue(projectId || '', data.data.id))
-      //     : navigate(APP_PATHS.listIssue(projectId || ''));
-      // }
+      if (isRedirect) {
+        data.data.id
+          ? navigate(APP_PATHS.detailIssue(projectId || '', data.data.id))
+          : navigate(-1);
+        //   isUpdate
+        //     ? navigate(APP_PATHS.detailIssue(projectId || '', data.data.id))
+        //     : navigate(APP_PATHS.listIssue(projectId || ''));
+      }
       reset && reset();
     },
 

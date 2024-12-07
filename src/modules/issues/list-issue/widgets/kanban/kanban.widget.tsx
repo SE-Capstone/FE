@@ -72,6 +72,16 @@ export default function KanbanWidget() {
   const accessToken = getAccessToken();
   const [shadowColumnMap, setShadowColumnMap] = useState<ColumnMap>({});
   const { columnMap, orderedColumnIds, isLoading, refetch, isRefetching } = useGetBasicData();
+  const {
+    listStatus,
+    isLoading: isLoading3,
+    refetch: refetchStatus,
+    isRefetching: isRefetchingStatus,
+  } = useGetListStatusQuery({
+    params: {
+      projectId: projectId || '',
+    },
+  });
 
   useEffect(() => {
     if (JSON.stringify(columnMap) !== JSON.stringify(shadowColumnMap)) {
@@ -93,6 +103,7 @@ export default function KanbanWidget() {
       }
     });
     orderCardEvents(() => {
+      refetchStatus();
       if (!storedTabId || storedTabId !== tabId) {
         refetch();
       }
@@ -563,12 +574,6 @@ export default function KanbanWidget() {
     },
   });
 
-  const { listStatus, isLoading: isLoading3 } = useGetListStatusQuery({
-    params: {
-      projectId: projectId || '',
-    },
-  });
-
   const { listPhase, isLoading: isLoading5 } = useGetListPhaseQuery({
     params: {
       projectId: projectId || '',
@@ -626,7 +631,12 @@ export default function KanbanWidget() {
             {data.orderedColumnIds.length > 0 ? (
               <Board>
                 {data.orderedColumnIds.map((columnId) => (
-                  <Column key={columnId} column={data.columnMap[columnId]} />
+                  <Column
+                    key={columnId}
+                    column={data.columnMap[columnId]}
+                    isRefetching={isRefetchingStatus}
+                    listStatus={statuses}
+                  />
                 ))}
                 {canCreate && (
                   <>

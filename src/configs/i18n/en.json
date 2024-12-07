@@ -424,7 +424,7 @@
   },
   "messages": {
     "issueNotFound": "Issue does not exist or deleted",
-    "projectNotFound": "Project does not exist or you does not have permission to access project",
+    "projectNotFound": "Project does not exist or you do not have permission to access project",
     "success": "Success",
     "somethingWrong": "Something went wrong, please try again",
     "somethingWrong2": "Something went wrong",

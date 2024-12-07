@@ -26,7 +26,9 @@ import {
 import { DropIndicator } from '@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/box';
 import { Box, Flex, Inline, Stack, xcss } from '@atlaskit/primitives';
 import { token } from '@atlaskit/tokens';
+import { useDisclosure } from '@chakra-ui/react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { MdCheck } from 'react-icons/md';
 import invariant from 'tiny-invariant';
 
@@ -35,8 +37,12 @@ import { Card } from './card';
 import { ColumnContext, type ColumnContextProps, useColumnContext } from './column-context';
 import { type ColumnType } from '../../data';
 
+import type { IStatus } from '@/modules/statuses/types';
+
 import { ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
+import { useRemoveStatusHook } from '@/modules/statuses/hooks/mutations/use-remove-status.hooks';
+import { RemoveStatusWidget } from '@/modules/statuses/widgets';
 
 const columnStyles = xcss({
   backgroundColor: 'elevation.surface.raised',
@@ -71,12 +77,6 @@ const columnHeaderStyles = xcss({
   userSelect: 'none',
 });
 
-/**
- * Note: not making `'is-dragging'` a `State` as it is
- * a _parallel_ state to `'is-column-over'`.
- *
- * Our board allows you to be over the column that is currently dragging
- */
 type State =
   | { type: 'idle' }
   | { type: 'is-card-over' }
@@ -98,23 +98,6 @@ const stateStyles: {
     backgroundColor: 'color.background.selected.hovered',
   }),
   'is-column-over': undefined,
-  /**
-   * **Browser bug workaround**
-   *
-   * _Problem_
-   * When generating a drag preview for an element
-   * that has an inner scroll container, the preview can include content
-   * vertically before or after the element
-   *
-   * _Fix_
-   * We make the column a new stacking context when the preview is being generated.
-   * We are not making a new stacking context at all times, as this _can_ mess up
-   * other layering components inside of your card
-   *
-   * _Fix: Safari_
-   * We have not found a great workaround yet. So for now we are just rendering
-   * a custom drag preview
-   */
   'generate-column-preview': xcss({
     isolation: 'isolate',
   }),
@@ -155,9 +138,19 @@ function SafariColumnPreview({ column }: { column: ColumnType }) {
   );
 }
 
-function ActionMenuItems() {
+function ActionMenuItems({
+  status,
+  isRefetching,
+  onOpen,
+}: {
+  status?: IStatus;
+  isRefetching: boolean;
+  onOpen: () => void;
+}) {
+  const { t } = useTranslation();
   const { columnId } = useColumnContext();
   const { getColumns, reorderColumn } = useBoardContext();
+  const { handleRemoveStatus } = useRemoveStatusHook(false);
 
   const columns = getColumns();
   const startIndex = columns.findIndex((column) => column.columnId === columnId);
@@ -187,19 +180,70 @@ function ActionMenuItems() {
       <DropdownItem isDisabled={isMoveRightDisabled} onClick={moveRight}>
         Move right
       </DropdownItem>
+      {status && (
+        <DropdownItemGroup title={t('fields.actions')}>
+          <DropdownItem
+            isDisabled={isRefetching}
+            onClick={() => {
+              if (status.issueCount === 0) {
+                return handleRemoveStatus(status);
+              }
+
+              onOpen();
+              return undefined;
+            }}
+          >
+            {t('actions.delete')}
+          </DropdownItem>
+        </DropdownItemGroup>
+      )}
     </DropdownItemGroup>
   );
 }
 
-function ActionMenu() {
+function ActionMenu({
+  id,
+  listStatus,
+  isRefetching,
+}: {
+  id: string;
+  listStatus: IStatus[];
+  isRefetching: boolean;
+}) {
+  const disclosureModalRemoveStatus = useDisclosure();
+  const status = listStatus.find((s) => s.id === id);
+
   return (
-    <DropdownMenu trigger={DropdownMenuTrigger}>
-      <ActionMenuItems />
-    </DropdownMenu>
+    <>
+      <DropdownMenu trigger={DropdownMenuTrigger}>
+        <ActionMenuItems
+          status={status}
+          isRefetching={isRefetching}
+          onOpen={disclosureModalRemoveStatus.onOpen}
+        />
+      </DropdownMenu>
+      {status && (
+        <RemoveStatusWidget
+          listStatus={listStatus}
+          status={status}
+          isDefault={false}
+          isOpen={disclosureModalRemoveStatus.isOpen}
+          onClose={disclosureModalRemoveStatus.onClose}
+        />
+      )}
+    </>
   );
 }
 
-export const Column = memo(function Column({ column }: { column: ColumnType }) {
+export const Column = memo(function Column({
+  column,
+  listStatus,
+  isRefetching,
+}: {
+  column: ColumnType;
+  listStatus: IStatus[];
+  isRefetching: boolean;
+}) {
   const { columnId } = column;
   const columnRef = useRef<HTMLDivElement | null>(null);
   const columnInnerRef = useRef<HTMLDivElement | null>(null);
@@ -360,7 +404,13 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
                 </Heading>
                 {column.isDone && <MdCheck size="15px" color="green" />}
               </Flex>
-              {canUpdate && <ActionMenu />}
+              {canUpdate && (
+                <ActionMenu
+                  id={column.columnId}
+                  listStatus={listStatus}
+                  isRefetching={isRefetching}
+                />
+              )}
             </Inline>
             <Box ref={scrollableRef} xcss={scrollContainerStyles}>
               <Stack xcss={cardListStyles} space="space.100">
