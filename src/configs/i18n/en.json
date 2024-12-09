@@ -368,7 +368,7 @@
     "addProject": "Add project",
     "isProjectLead": "Assign as project lead",
     "getListProject": "Get list project",
-    "settingAllProject": "Setting all project",
+    "settingAllProject": "Setting all detail project",
     "getDetailProject": "Get project detail",
     "deleteProject": "Update project status",
     "updateProject": "Update project information",
@@ -456,7 +456,9 @@
     "projectsByStatusReport": "Categories project by status",
     "skillsReport": "Categories by skills",
     "totalProjectsLead": "Lead projects",
-    "statusReport": "Categories by status"
+    "statusReport": "Categories by status",
+    "dateReport": "Categories by date",
+    "memberReport": "Categories by member"
   },
   "notifications": {
     "assignMember": "{{assignerName}} assigned you to project {{projectName}}",

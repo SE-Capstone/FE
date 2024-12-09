@@ -333,7 +333,7 @@
     "addProject": "Thêm dự án",
     "isProjectLead": "Gán cho người đứng trưởng dự án",
     "getListProject": "Xem danh sách dự án",
-    "settingAllProject": "Quản lý tất cả dự án",
+    "settingAllProject": "Cấu hình tất cả dự án",
     "getDetailProject": "Xem chi tiết dự án",
     "deleteProject": "Cập nhật trạng thái dự án",
     "updateProject": "Cập nhật thông tin dự án",
@@ -421,7 +421,9 @@
     "projectsByStatusReport": "Phân loại dự án theo trạng thái",
     "skillsReport": "Phân loại bởi kỹ năng",
     "totalProjectsLead": "Tổng dự án làm leader",
-    "statusReport": "Phân loại bởi trạng thái"
+    "statusReport": "Phân loại bởi trạng thái",
+    "dateReport": "Phân loại theo thời gian",
+    "memberReport": "Phân loại theo thành viên"
   },
   "notifications": {
     "assignMember": "{{assignerName}} đã gán bạn vào dự án {{projectName}}",

@@ -17,10 +17,14 @@ interface ActionMenuTableRolesProps {
 }
 export function ActionMenuTableRoles({ role }: ActionMenuTableRolesProps) {
   const { t } = useTranslation();
-  const { permissions } = useAuthentication();
+  const { permissions, currentUser } = useAuthentication();
   const navigate = useNavigate();
 
   const { handleRemoveRole } = useRemoveRoleHook();
+  const canDelete =
+    permissions[PermissionEnum.DELETE_ROLE] &&
+    role?.name !== 'ADMIN' &&
+    role?.name !== currentUser?.roleName;
 
   if (!role || !role.id) return null;
 
@@ -30,7 +34,7 @@ export function ActionMenuTableRoles({ role }: ActionMenuTableRolesProps) {
       icon: <Icon as={MdVisibility} boxSize={5} />,
       onClick: () => navigate(`/roles/${role.id}`),
     },
-    permissions[PermissionEnum.DELETE_ROLE] && {
+    canDelete && {
       type: 'danger',
       label: t('actions.delete'),
       icon: <Icon as={BiTrash} boxSize={5} />,

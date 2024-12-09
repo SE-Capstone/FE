@@ -381,7 +381,7 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
               plugins: {
                 title: {
                   display: true,
-                  text: t('chart.statusReport'),
+                  text: t('chart.memberReport'),
                   font: {
                     size: 18,
                   },

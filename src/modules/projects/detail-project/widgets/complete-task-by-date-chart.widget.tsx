@@ -29,12 +29,12 @@ export const CompleteTaskByDateChartWidget = ({ data }: { data: TaskCompletionBy
     <Stack bg="white" p={5} rounded={2.5} mb={5} maxHeight="500px" overflowX="auto">
       <Line
         data={chartData}
-        title={t('chart.statusReport')}
+        title={t('chart.dateReport')}
         options={{
           plugins: {
             title: {
               display: true,
-              text: t('chart.statusReport'),
+              text: t('chart.dateReport'),
               font: {
                 size: 18,
               },
