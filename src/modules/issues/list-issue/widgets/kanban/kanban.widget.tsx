@@ -96,6 +96,13 @@ export default function KanbanWidget() {
     Connector(accessToken || '', projectId || '');
 
   useEffect(() => {
+    if (sessionStorage.getItem('refreshKanban') === 'true') {
+      refetch().then(() => sessionStorage.setItem('refreshKanban', 'false'));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     const storedTabId = sessionStorage.getItem('tabId');
     orderStatusEvents(() => {
       if (!storedTabId || storedTabId !== tabId) {
@@ -369,6 +376,8 @@ export default function KanbanWidget() {
       }
       setData((data) => {
         const storedTabId = sessionStorage.getItem('tabId');
+        sessionStorage.setItem('refreshKanban', 'true');
+        sessionStorage.setItem('refreshIssue', 'true');
         if (!storedTabId || !tabId) {
           const tabId = Date.now().toString(); // Generate a unique ID (could use a library for unique IDs)
           setTabId(tabId);

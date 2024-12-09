@@ -50,7 +50,7 @@ export function ListIssuePage() {
 
   const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issueId);
 
-  const { listIssue, meta, isError, isLoading, handlePaginate, isRefetching } =
+  const { listIssue, meta, isError, isLoading, handlePaginate, refetch, isRefetching } =
     useGetListIssueQuery({
       params: issuesQueryState.filters,
       projectId: projectId || '',
@@ -85,6 +85,13 @@ export function ListIssuePage() {
       projectId: projectId || '',
     },
   });
+
+  useEffect(() => {
+    if (sessionStorage.getItem('refreshIssue') === 'true') {
+      refetch().then(() => sessionStorage.setItem('refreshIssue', 'false'));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (listLabel && JSON.stringify(listLabel) !== JSON.stringify(labels)) {
