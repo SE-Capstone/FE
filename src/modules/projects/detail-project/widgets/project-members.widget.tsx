@@ -18,8 +18,6 @@ import {
   Tooltip,
   Image,
   useDisclosure,
-  UnorderedList,
-  ListItem,
 } from '@chakra-ui/react';
 import { isInteger } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
