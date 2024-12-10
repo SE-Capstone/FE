@@ -538,7 +538,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
       <ModalBase
         size="xl"
         renderFooter={() =>
-          !(!isError && data?.data && data?.data?.length > 0) ? (
+          !isError && data?.data && data?.data?.length > 0 && suggestedMembers.length > 0 ? (
             <Button
               w={20}
               type="submit"
@@ -577,18 +577,15 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
         }
         closeOnOverlayClick={false}
         title={t('common.suggestMember')}
-        // isOpen={disclosureModal.isOpen}
-        isOpen
+        isOpen={disclosureModal.isOpen}
         onClose={disclosureModal.onClose}
         // onCloseComplete={reset}
       >
         <Stack spacing={5}>
-          {!(!isError && data?.data && data?.data?.length > 0) ? (
+          {!isError && data?.data && data?.data?.length > 0 && suggestedMembers.length > 0 ? (
             <TableContainer maxW="full" overflowY="auto" maxH="580px" rounded={2}>
               <Table size="sm" position="relative" borderRadius={2}>
-                <Text color="textColor">
-                  *Based on your suggestions here is the response from AI
-                </Text>
+                <Text color="textColor">{t('common.aiContent')}</Text>
                 <Tbody rounded="12px">
                   {suggestedMembers.map((member, index) => {
                     const tdContent = (
