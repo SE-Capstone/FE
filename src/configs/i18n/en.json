@@ -1,5 +1,6 @@
 {
   "common": {
+    "aiContent": "*Based on your suggestions here is the response from AI",
     "numberOfMembers": "Number of members",
     "moveToTop": "Move to top",
     "moveToBottom": "Move to bottom",
