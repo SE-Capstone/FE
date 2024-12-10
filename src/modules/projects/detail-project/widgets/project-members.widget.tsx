@@ -288,7 +288,20 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
   const [initialMembers, setInitialMembers] = useState<Set<string>>(new Set());
   const [defaultUsersOption, setDefaultUsersOption] = useState<IOptionUserSelect[]>([]);
   const [suggestMembers, setSuggestMembers] = useState<string[]>([]);
-  const [suggestedMembers, setSuggestedMembers] = useState<SuggestResponse[]>([]);
+  const [suggestedMembers, setSuggestedMembers] = useState<SuggestResponse[]>([
+    {
+      name: 'Phong Nguyễn',
+      userId: '1',
+    },
+    {
+      name: 'Nguyễn Duy Anh',
+      userId: '2',
+    },
+    {
+      name: 'Phan Thanh An',
+      userId: '3',
+    },
+  ]);
 
   const { isLoading, refetch } = useGetUserForSuggest({
     userInProject: Array.from(initialMembers),
@@ -525,7 +538,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
       <ModalBase
         size="xl"
         renderFooter={() =>
-          !isError && data?.data && data?.data?.length > 0 ? (
+          !(!isError && data?.data && data?.data?.length > 0) ? (
             <Button
               w={20}
               type="submit"
@@ -564,40 +577,104 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
         }
         closeOnOverlayClick={false}
         title={t('common.suggestMember')}
-        isOpen={disclosureModal.isOpen}
+        // isOpen={disclosureModal.isOpen}
+        isOpen
         onClose={disclosureModal.onClose}
         // onCloseComplete={reset}
       >
         <Stack spacing={5}>
-          {!isError && data?.data && data?.data?.length > 0 ? (
-            <UnorderedList>
-              {suggestedMembers.map((member, index) => (
-                <ListItem key={index}>
-                  <Flex alignItems="center" justifyContent="start">
-                    <Text
-                      wordBreak="break-all"
-                      display="contents"
-                      whiteSpace="normal"
-                      flex={1}
-                      fontWeight={500}
-                    >
-                      {member.name} {member.userName && `(${member.userName})`}
-                    </Text>
-                    <IconButton
-                      aria-label="remove-member"
-                      bg="transparent"
-                      color="textColor"
-                      _hover={{
-                        bg: 'transparent',
-                      }}
-                      icon={<MdClose />}
-                      onClick={handleRemoveMember(member.userId)}
-                    />
-                  </Flex>
-                </ListItem>
-              ))}
-            </UnorderedList>
+          {!(!isError && data?.data && data?.data?.length > 0) ? (
+            <TableContainer maxW="full" overflowY="auto" maxH="580px" rounded={2}>
+              <Table size="sm" position="relative" borderRadius={2}>
+                <Text color="textColor">
+                  *Based on your suggestions here is the response from AI
+                </Text>
+                <Tbody rounded="12px">
+                  {suggestedMembers.map((member, index) => {
+                    const tdContent = (
+                      <>
+                        <Td
+                          py={2}
+                          border={index + 1 === suggestedMembers.length ? 'none' : ''}
+                          isNumeric={false}
+                          sx={{
+                            fontWeight: 500,
+                            fontSize: '14px',
+                            lineHeight: '21px',
+                            color: 'textColor',
+                          }}
+                        >
+                          {member.name} {member.userName && `(${member.userName})`}
+                        </Td>
+                        <Td
+                          py={2}
+                          border={index + 1 === suggestedMembers.length ? 'none' : ''}
+                          isNumeric={false}
+                          sx={{
+                            fontWeight: 500,
+                            fontSize: '14px',
+                            lineHeight: '21px',
+                            color: 'textColor',
+                          }}
+                          w="50px"
+                        >
+                          <IconButton
+                            aria-label="remove-member"
+                            bg="transparent"
+                            color="textColor"
+                            _hover={{
+                              bg: 'transparent',
+                            }}
+                            icon={<MdClose />}
+                            onClick={handleRemoveMember(member.userId)}
+                          />
+                        </Td>
+                      </>
+                    );
+
+                    return (
+                      <Tr
+                        key={index}
+                        _hover={{
+                          bgColor: 'gray.50',
+                        }}
+                        cursor="pointer"
+                      >
+                        {tdContent}
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+              </Table>
+            </TableContainer>
           ) : (
+            // <UnorderedList>
+            //   {suggestedMembers.map((member, index) => (
+            //     <ListItem key={index}>
+            //       <Flex alignItems="center" justifyContent="start">
+            //         <Text
+            //           wordBreak="break-all"
+            //           display="contents"
+            //           whiteSpace="normal"
+            //           flex={1}
+            //           fontWeight={500}
+            //         >
+            //           {member.name} {member.userName && `(${member.userName})`}
+            //         </Text>
+            //         <IconButton
+            //           aria-label="remove-member"
+            //           bg="transparent"
+            //           color="textColor"
+            //           _hover={{
+            //             bg: 'transparent',
+            //           }}
+            //           icon={<MdClose />}
+            //           onClick={handleRemoveMember(member.userId)}
+            //         />
+            //       </Flex>
+            //     </ListItem>
+            //   ))}
+            // </UnorderedList>
             <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
               {t('common.noMemberMatch')}
             </Text>
