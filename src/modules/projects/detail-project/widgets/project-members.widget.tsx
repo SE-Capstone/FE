@@ -288,20 +288,7 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
   const [initialMembers, setInitialMembers] = useState<Set<string>>(new Set());
   const [defaultUsersOption, setDefaultUsersOption] = useState<IOptionUserSelect[]>([]);
   const [suggestMembers, setSuggestMembers] = useState<string[]>([]);
-  const [suggestedMembers, setSuggestedMembers] = useState<SuggestResponse[]>([
-    {
-      name: 'Phong Nguyễn',
-      userId: '1',
-    },
-    {
-      name: 'Nguyễn Duy Anh',
-      userId: '2',
-    },
-    {
-      name: 'Phan Thanh An',
-      userId: '3',
-    },
-  ]);
+  const [suggestedMembers, setSuggestedMembers] = useState<SuggestResponse[]>([]);
 
   const { isLoading, refetch } = useGetUserForSuggest({
     userInProject: Array.from(initialMembers),
@@ -645,33 +632,6 @@ export function ProjectMembersWidget({ project }: { project?: IProject }) {
               </Table>
             </TableContainer>
           ) : (
-            // <UnorderedList>
-            //   {suggestedMembers.map((member, index) => (
-            //     <ListItem key={index}>
-            //       <Flex alignItems="center" justifyContent="start">
-            //         <Text
-            //           wordBreak="break-all"
-            //           display="contents"
-            //           whiteSpace="normal"
-            //           flex={1}
-            //           fontWeight={500}
-            //         >
-            //           {member.name} {member.userName && `(${member.userName})`}
-            //         </Text>
-            //         <IconButton
-            //           aria-label="remove-member"
-            //           bg="transparent"
-            //           color="textColor"
-            //           _hover={{
-            //             bg: 'transparent',
-            //           }}
-            //           icon={<MdClose />}
-            //           onClick={handleRemoveMember(member.userId)}
-            //         />
-            //       </Flex>
-            //     </ListItem>
-            //   ))}
-            // </UnorderedList>
             <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
               {t('common.noMemberMatch')}
             </Text>
