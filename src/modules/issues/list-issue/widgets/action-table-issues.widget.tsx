@@ -246,7 +246,7 @@ export function ActionTableIssuesWidget({
       }
 
       if (e.target.checked === false) {
-        setIssuesQueryFilterState({ [filterMapping[filter]]: '' });
+        setIssuesQueryFilterState({ [filterMapping[filter]]: undefined });
         updateQueryParams(filter, [], '');
       }
 

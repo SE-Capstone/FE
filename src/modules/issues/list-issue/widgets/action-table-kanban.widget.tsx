@@ -246,8 +246,8 @@ export function ActionTableKanbanWidget({
       }
 
       if (e.target.checked === false) {
-        setKanbanQueryFilterState({ [filterMapping[filter]]: '' });
-        updateQueryParams(filter, [], ''); // Add empty value in URL
+        setKanbanQueryFilterState({ [filterMapping[filter]]: undefined });
+        updateQueryParams(filter, [], '');
       }
 
       return updatedFilters;

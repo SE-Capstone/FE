@@ -69,7 +69,7 @@ export function ActionTableProjectsWidget() {
       }
 
       if (e.target.checked === false) {
-        setProjectsQueryFilterState({ [filterMapping[filter]]: '' });
+        setProjectsQueryFilterState({ [filterMapping[filter]]: undefined });
         updateQueryParams(filter, ''); // Add empty value in URL
       }
 

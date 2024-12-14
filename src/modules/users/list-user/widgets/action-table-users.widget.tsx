@@ -90,7 +90,7 @@ export function ActionTableUsersWidget() {
       }
 
       if (e.target.checked === false) {
-        setUsersQueryFilterState({ [filterMapping[filter]]: '' });
+        setUsersQueryFilterState({ [filterMapping[filter]]: undefined });
         updateQueryParams(filter, '');
       }
 
