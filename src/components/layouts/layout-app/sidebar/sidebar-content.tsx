@@ -64,6 +64,8 @@ export const SidebarContent = ({ onClose, isOpen }: SidebarContentProps) => {
         },
         (permissions[PermissionEnum.GET_LIST_USER] ||
           permissions[PermissionEnum.GET_SKILL] ||
+          permissions[PermissionEnum.GET_POSITION] ||
+          permissions[PermissionEnum.GET_APPLICANT] ||
           permissions[PermissionEnum.GET_SKILL_USER]) && {
           name: t('common.hr'),
           icon: MdOutlinePeopleAlt,

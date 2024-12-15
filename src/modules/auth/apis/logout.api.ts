@@ -58,7 +58,7 @@ export function useLogoutMutation({ configs }: IAuthLogoutMutationProps = {}) {
     ...configs,
   });
 
-  const { openAlert, closeAlert } = useAlertDialogStore();
+  const { openAlert, closeAlert } = useAlertDialogStore(false);
 
   const handleLogout = () => {
     openAlert({
