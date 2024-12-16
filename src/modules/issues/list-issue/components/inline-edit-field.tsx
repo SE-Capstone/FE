@@ -83,10 +83,10 @@ const InlineEditableField = ({
         return t('validation.project.totalEffortNumber');
       }
       if (Number(value) < 0) {
-        return t('validation.project.totalEffortMin');
+        return t('validation.project.totalEffortTimeMin');
       }
-      if (Number(value) > 1000) {
-        return t('validation.project.totalEffortMax');
+      if (Number(value) > 10000) {
+        return t('validation.project.totalEffortTimeMax');
       }
     }
 

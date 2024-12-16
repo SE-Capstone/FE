@@ -287,7 +287,7 @@
       "endDateInvalid": "Ngày kết thúc phải nằm sau ngày bắt đầu",
       "totalEffortNumber": "Trường này phải là một số",
       "totalEffortTimeMin": "Giá trị tối thiểu là 0",
-      "totalEffortTimeMax": "Giá trị tối đa là 10000000"
+      "totalEffortTimeMax": "Giá trị tối đa là 10000"
     },
     "status": {
       "nameRequired": "Tên trạng thái là bắt buộc",

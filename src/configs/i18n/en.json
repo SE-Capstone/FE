@@ -322,7 +322,7 @@
       "endDateInvalid": "End date must be on or after start date",
       "totalEffortNumber": "Total effort must be a number",
       "totalEffortTimeMin": "Total effort must be at least 0",
-      "totalEffortTimeMax": "Total effort must be at most 10000000"
+      "totalEffortTimeMax": "Total effort must be at most 10000"
     },
     "status": {
       "nameRequired": "Status name is required",

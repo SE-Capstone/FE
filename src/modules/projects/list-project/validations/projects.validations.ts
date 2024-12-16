@@ -36,7 +36,7 @@ export const projectFormSchema = (t: any) =>
         z
           .number({ message: t('validation.project.totalEffortNumber') })
           .min(0, { message: t('validation.project.totalEffortTimeMin') })
-          .max(10000000, { message: t('validation.project.totalEffortTimeMax') })
+          .max(10000, { message: t('validation.project.totalEffortTimeMax') })
           .optional()
       ),
     })
@@ -85,7 +85,7 @@ export const projectUpdateFormSchema = (t: any) =>
         z
           .number({ message: t('validation.project.totalEffortNumber') })
           .min(0, { message: t('validation.project.totalEffortTimeMin') })
-          .max(10000000, { message: t('validation.project.totalEffortTimeMax') })
+          .max(10000, { message: t('validation.project.totalEffortTimeMax') })
           .optional()
       ),
     })
