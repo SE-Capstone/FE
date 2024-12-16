@@ -1,4 +1,5 @@
 export enum CustomHttpStatusCode {
+  INACTIVE_USER = 789,
   ROLE_CHANGED = 888,
   TOKEN_EXPIRED = 999,
 }

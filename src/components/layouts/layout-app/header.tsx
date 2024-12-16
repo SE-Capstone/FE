@@ -21,7 +21,6 @@ import { Link, useLocation } from 'react-router-dom';
 
 import NotificationsList from '../../../modules/notifications/pages/notifications.page';
 
-import { DEFAULT_MESSAGE } from '@/configs';
 import { notify } from '@/libs/helpers';
 import { useLogoutMutation } from '@/modules/auth/apis/logout.api';
 import { useAuthentication } from '@/modules/profile/hooks';
@@ -54,10 +53,11 @@ export function HeaderApp() {
     try {
       handleLogoutMutation();
     } catch (error) {
-      notify({
-        type: 'error',
-        message: DEFAULT_MESSAGE(t).SOMETHING_WRONG,
-      });
+      // notify({
+      //   type: 'error',
+      //   message: DEFAULT_MESSAGE(t).SOMETHING_WRONG,
+      // });
+      notify({ type: 'success', message: t('messages.logoutSuccess') });
     }
   }
 

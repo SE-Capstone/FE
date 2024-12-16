@@ -67,6 +67,15 @@ const RequestInterceptor = () => {
         }
 
         if (
+          error.response?.status === CustomHttpStatusCode.INACTIVE_USER ||
+          error.response?.statusCode === CustomHttpStatusCode.INACTIVE_USER
+        ) {
+          clearStoredAuth();
+          window.location.href = '/auth/login';
+          return undefined;
+        }
+
+        if (
           (error.response?.status === 401 && !originalRequest._retry) ||
           error.response?.status === CustomHttpStatusCode.TOKEN_EXPIRED ||
           error.response?.status === CustomHttpStatusCode.ROLE_CHANGED
