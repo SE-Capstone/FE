@@ -7,6 +7,7 @@ export const projectQueryKeys = createQueryKeys('project', {
   [PROJECTS_ENDPOINT_URL.suggestMember]: null,
   [PROJECTS_ENDPOINT_URL.statusReport]: null,
   [PROJECTS_ENDPOINT_URL.projectOverview]: null,
+  [PROJECTS_ENDPOINT_URL.projectAnalysis]: null,
   [PROJECTS_ENDPOINT_URL.completeTaskReportByDate]: null,
   detail: (id: string) => ({ queryKey: [id] }),
   members: (id: string) => ({ queryKey: [`${id}/members`] }),

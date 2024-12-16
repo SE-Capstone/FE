@@ -1,5 +1,6 @@
 {
   "common": {
+    "projectAnalysis": "Phân tích dự án",
     "aiContent": "*Dựa trên những gợi ý của bạn đây là phản hồi từ AI",
     "numberOfMembers": "Số lượng thành viên",
     "moveToTop": "Chuyển lên đầu tiên",

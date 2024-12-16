@@ -4,6 +4,7 @@ const ENDPOINT_QUERIES = {
   list: 'projects',
   statusReport: 'projects/reports/tasks',
   projectOverview: 'projects/reports/tasks/overview',
+  projectAnalysis: 'projects/reports/tasks/get-suggest',
   completeTaskReportByDate: 'projects/reports/tasks/completion-chart',
   detail: (projectId: StringNumeric) => `projects/${projectId}`,
   members: (projectId: StringNumeric) => `projects/${projectId}/members`,

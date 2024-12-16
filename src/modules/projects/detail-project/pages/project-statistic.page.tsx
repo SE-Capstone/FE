@@ -1,10 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, GridItem, SimpleGrid, Stack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Image,
+  SimpleGrid,
+  Stack,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import Chart from 'chart.js/auto';
 import { Bar } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
-import { BsStack } from 'react-icons/bs';
+import { BsStack, BsStars } from 'react-icons/bs';
 import { FaCircleCheck } from 'react-icons/fa6';
 import { ImStatsBars2 } from 'react-icons/im';
 import { IoIosListBox } from 'react-icons/io';
@@ -12,6 +22,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { useGetTaskCompleteByDateReport } from '../apis/get-complete-task-by-date-report.api';
 import { useGetOverviewProjectReport } from '../apis/get-overview-report.api';
+import { useProjectAnalysisMutation } from '../apis/get-project-analysis.api';
 import { useGetStatusReport } from '../apis/get-status-report.api';
 import { useProjectStatisticQueryFilterStateContext } from '../context/project-statistic-query-filters.contexts';
 import { CompleteTaskByDateChartWidget } from '../widgets/complete-task-by-date-chart.widget';
@@ -20,7 +31,13 @@ import { OverviewPieChartWidget } from '../widgets/overview-pie-chart.widget';
 import type { IProject } from '../../list-project/types';
 import type { IPhase } from '@/modules/phases/types';
 
-import { CustomChakraReactSelect, SearchInput, StateHandler } from '@/components/elements';
+import { IMAGE_URLS } from '@/assets/images';
+import {
+  CustomChakraReactSelect,
+  ModalBase,
+  SearchInput,
+  StateHandler,
+} from '@/components/elements';
 import { Card } from '@/modules/dashboard/widgets/card-stat.widget';
 import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
 
@@ -277,86 +294,131 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, statusReport, project]);
 
+  const disclosureModal = useDisclosure();
+
+  const {
+    data,
+    mutate,
+    isPending,
+    isError: isError9,
+  } = useProjectAnalysisMutation({
+    onOpen: disclosureModal.onOpen,
+  });
+
+  const projectAnalysis = useCallback(async () => {
+    if (isPending || isError9) {
+      return;
+    }
+
+    try {
+      await mutate({
+        body: {
+          searchTerm: JSON.stringify(overviewReport),
+        },
+      });
+    } catch (error) {}
+  }, [isError9, isPending, mutate, overviewReport]);
+
   return (
     <StateHandler
       showLoader={isLoading || isLoading2 || isLoading3 || isLoading5}
       showError={!!isError || !!isError2 || !!isError3 || !!isError5}
     >
-      <Grid
-        alignItems="center"
-        gap={2}
-        templateColumns={{
-          base: 'repeat(1, 1fr)',
-          md: 'repeat(3, 1fr)',
-        }}
-      >
-        <GridItem colSpan={1}>
-          <CustomChakraReactSelect
-            key={defaultPhase?.id}
-            isSearchable={false}
-            size="md"
-            placeholder={`${t('common.choose')} ${t('common.phase').toLowerCase()}...`}
-            options={listPhase.map((s) => ({ label: s.title, value: s.id }))}
-            defaultValue={
-              searchParams.get('phaseId') && defaultPhase
-                ? {
-                    label: defaultPhase.title,
-                    value: searchParams.get('phaseId') || '',
-                  }
-                : undefined
-            }
-            onChange={(opt) => {
-              setProjectStatisticQueryFilterState({
-                phaseId: opt?.value || undefined,
-              });
-              updateQueryParams('phaseId', opt?.value);
-            }}
-          />
-        </GridItem>
-        <GridItem colSpan={1}>
-          <SearchInput
-            placeholder={`${t('common.choose')} ${t('fields.startDate').toLowerCase()}...`}
-            type="date"
-            isSetMax={!!projectStatisticQueryState.filters.endDate}
-            maxDate={
-              projectStatisticQueryState.filters.endDate
-                ? new Date(projectStatisticQueryState.filters.endDate)
-                : undefined
-            }
-            initValue={projectStatisticQueryState.filters.startDate || ''}
-            inputGroupProps={{
-              size: 'lg',
-            }}
-            bg="white"
-            onHandleSearch={(keyword) => {
-              setProjectStatisticQueryFilterState({ startDate: keyword });
-              updateQueryParams('startDate', keyword);
-            }}
-          />
-        </GridItem>
-        <GridItem colSpan={1}>
-          <SearchInput
-            placeholder={`${t('common.choose')} ${t('fields.endDate').toLowerCase()}...`}
-            type="date"
-            isSetMax
-            // maxDate={new Date()}
-            minDate={
-              projectStatisticQueryState.filters.startDate
-                ? new Date(projectStatisticQueryState.filters.startDate)
-                : undefined
-            }
-            initValue={projectStatisticQueryState.filters.endDate || ''}
-            inputGroupProps={{
-              size: 'lg',
-            }}
-            bg="white"
-            onHandleSearch={(keyword) => {
-              setProjectStatisticQueryFilterState({ endDate: keyword });
-              updateQueryParams('endDate', keyword);
-            }}
-          />
-        </GridItem>
-      </Grid>
+      <Box display="flex" w="full" alignItems="center" gap={2}>
+        <Grid
+          alignItems="center"
+          flex={1}
+          gap={2}
+          templateColumns={{
+            base: 'repeat(1, 1fr)',
+            md: 'repeat(3, 1fr)',
+          }}
+        >
+          <GridItem colSpan={1}>
+            <CustomChakraReactSelect
+              key={defaultPhase?.id}
+              isSearchable={false}
+              size="md"
+              placeholder={`${t('common.choose')} ${t('common.phase').toLowerCase()}...`}
+              options={listPhase.map((s) => ({ label: s.title, value: s.id }))}
+              defaultValue={
+                searchParams.get('phaseId') && defaultPhase
+                  ? {
+                      label: defaultPhase.title,
+                      value: searchParams.get('phaseId') || '',
+                    }
+                  : undefined
+              }
+              onChange={(opt) => {
+                setProjectStatisticQueryFilterState({
+                  phaseId: opt?.value || undefined,
+                });
+                updateQueryParams('phaseId', opt?.value);
+              }}
+            />
+          </GridItem>
+          <GridItem colSpan={1}>
+            <SearchInput
+              placeholder={`${t('common.choose')} ${t('fields.startDate').toLowerCase()}...`}
+              type="date"
+              isSetMax={!!projectStatisticQueryState.filters.endDate}
+              maxDate={
+                projectStatisticQueryState.filters.endDate
+                  ? new Date(projectStatisticQueryState.filters.endDate)
+                  : undefined
+              }
+              initValue={projectStatisticQueryState.filters.startDate || ''}
+              inputGroupProps={{
+                size: 'lg',
+              }}
+              bg="white"
+              onHandleSearch={(keyword) => {
+                setProjectStatisticQueryFilterState({ startDate: keyword });
+                updateQueryParams('startDate', keyword);
+              }}
+            />
+          </GridItem>
+          <GridItem colSpan={1}>
+            <SearchInput
+              placeholder={`${t('common.choose')} ${t('fields.endDate').toLowerCase()}...`}
+              type="date"
+              isSetMax
+              // maxDate={new Date()}
+              minDate={
+                projectStatisticQueryState.filters.startDate
+                  ? new Date(projectStatisticQueryState.filters.startDate)
+                  : undefined
+              }
+              initValue={projectStatisticQueryState.filters.endDate || ''}
+              inputGroupProps={{
+                size: 'lg',
+              }}
+              bg="white"
+              onHandleSearch={(keyword) => {
+                setProjectStatisticQueryFilterState({ endDate: keyword });
+                updateQueryParams('endDate', keyword);
+              }}
+            />
+          </GridItem>
+        </Grid>
+        <Button
+          type="button"
+          bg="transparent"
+          color="#85B8FF"
+          border="1px solid #8F7EE7"
+          transition="all 0.3s"
+          disabled={isPending || isLoading}
+          leftIcon={<BsStars />}
+          _hover={{
+            color: 'textColor',
+            bg: 'linear-gradient(45deg, #B8ACF6 0%, #85B8FF 100%)',
+          }}
+          onClick={projectAnalysis}
+        >
+          {t('common.projectAnalysis')}
+        </Button>
+      </Box>
+
       <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={5} mt={6} mb={6}>
         {overViewData().cardData.map((data, index) => (
           <Card key={index} data={data} />
@@ -401,6 +463,40 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
           />
         </Stack>
       </SimpleGrid>
+      {isPending && (
+        <Stack
+          sx={{
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(0, 0, 0, 0.35)',
+            inset: 0,
+            position: 'fixed',
+            zIndex: 9999,
+          }}
+        >
+          <Box>
+            <Image transform="scale(0.5)" src={IMAGE_URLS.AiLoading} alt="Loading" />
+          </Box>
+        </Stack>
+      )}
+      <ModalBase
+        size="xl"
+        closeOnOverlayClick={false}
+        title={t('common.projectAnalysis')}
+        isOpen={disclosureModal.isOpen}
+        onClose={disclosureModal.onClose}
+      >
+        <Stack spacing={5}>
+          {!isError9 && data?.data ? (
+            <Box dangerouslySetInnerHTML={{ __html: data.data?.description }} />
+          ) : (
+            <Text wordBreak="break-all" whiteSpace="normal" flex={1} fontWeight={500}>
+              {t('common.noData')}
+            </Text>
+          )}
+        </Stack>
+      </ModalBase>
     </StateHandler>
   );
 }
