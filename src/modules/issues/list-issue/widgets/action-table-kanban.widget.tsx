@@ -58,16 +58,16 @@ export function ActionTableKanbanWidget({
   const prevMembersRef = useRef<ProjectMember[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [labelChecked, setLabelChecked] = useState<string[]>(
-    searchParams.get('tab') === 'issue' ? [] : searchParams.getAll('labelIds') || []
+    searchParams.get('tab') === 'task' ? [] : searchParams.getAll('labelIds') || []
   );
   const [phaseChecked, setPhaseChecked] = useState<string[]>(
-    searchParams.get('tab') === 'issue' ? [] : searchParams.getAll('phaseIds') || []
+    searchParams.get('tab') === 'task' ? [] : searchParams.getAll('phaseIds') || []
   );
   const [assigneeChecked, setAssigneeChecked] = useState<string[]>(
-    searchParams.get('tab') === 'issue' ? [] : searchParams.getAll('assigneeIds') || []
+    searchParams.get('tab') === 'task' ? [] : searchParams.getAll('assigneeIds') || []
   );
   const [statusChecked, setStatusChecked] = useState<string[]>(
-    searchParams.get('tab') === 'issue' ? [] : searchParams.getAll('statusIds') || []
+    searchParams.get('tab') === 'task' ? [] : searchParams.getAll('statusIds') || []
   );
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [defaultReporter, setDefaultReporter] = useState<ProjectMember | undefined>(undefined);
@@ -190,7 +190,7 @@ export function ActionTableKanbanWidget({
   );
 
   useEffect(() => {
-    if (searchParams.get('tab') === 'issue') {
+    if (searchParams.get('tab') === 'task') {
       const params = new URLSearchParams();
       params.set('tab', 'kanban');
       setSearchParams(params);
@@ -308,7 +308,7 @@ export function ActionTableKanbanWidget({
   );
 
   useEffect(() => {
-    if (searchParams.get('tab') === 'issue') {
+    if (searchParams.get('tab') === 'task') {
       setSelectedFilters(['title']);
       return undefined;
     }

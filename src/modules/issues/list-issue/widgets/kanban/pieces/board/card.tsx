@@ -133,11 +133,11 @@ function LazyDropdownItems({
         </DropdownItemGroup>
       )}
       <DropdownItemGroup title={t('fields.actions')} hasSeparator={canMove}>
-        <DropdownItem onClick={() => navigate(`issues/${issue.id}`)}>
+        <DropdownItem onClick={() => navigate(`tasks/${issue.id}`)}>
           {t('actions.viewDetail')}
         </DropdownItem>
         {canUpdate && (
-          <DropdownItem onClick={() => navigate(`issues/${issue.id}/edit`)}>
+          <DropdownItem onClick={() => navigate(`tasks/${issue.id}/edit`)}>
             {t('actions.edit')}
           </DropdownItem>
         )}

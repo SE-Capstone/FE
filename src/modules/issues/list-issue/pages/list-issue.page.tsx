@@ -342,7 +342,7 @@ export function ListIssuePage() {
             hasSort: false,
             Cell({ parentIssue }) {
               return parentIssue ? (
-                <CustomLink to={`issues/${String(parentIssue.id)}`} noOfLines={2}>
+                <CustomLink to={`tasks/${String(parentIssue.id)}`} noOfLines={2}>
                   <BadgeIssue
                     content={`#${parentIssue.index}`}
                     variant="solid"

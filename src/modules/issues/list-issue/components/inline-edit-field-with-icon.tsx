@@ -113,7 +113,7 @@ const InlineEditWithIcon = ({
             <BoxAtlas xcss={readViewContainerStyles} testId="read-view">
               <Box display="flex" alignItems="center" {...boxStyle}>
                 <CustomLink
-                  to={link || `issues/${String(issue.id)}`}
+                  to={link || `tasks/${String(issue.id)}`}
                   noOfLines={textStyle ? 5 : link ? 1 : 2}
                   {...textStyle}
                 >
@@ -154,7 +154,7 @@ const InlineEditWithIcon = ({
       ) : (
         <Box display="flex" alignItems="center" {...boxStyle}>
           <CustomLink
-            to={link || `issues/${String(issue.id)}`}
+            to={link || `tasks/${String(issue.id)}`}
             noOfLines={textStyle ? 5 : link ? 1 : 2}
             fontSize="14px"
             {...textStyle}

@@ -36,12 +36,12 @@ export function ActionMenuTableIssues({ issue }: ActionMenuTableIssuesProps) {
     {
       label: t('actions.viewDetail'),
       icon: <Icon as={MdVisibility} boxSize={5} />,
-      onClick: () => navigate(`issues/${issue.id}`),
+      onClick: () => navigate(`tasks/${issue.id}`),
     },
     canUpdate && {
       label: t('actions.edit'),
       icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
-      onClick: () => navigate(`issues/${issue.id}/edit`),
+      onClick: () => navigate(`tasks/${issue.id}/edit`),
     },
     canDelete && {
       type: 'danger',

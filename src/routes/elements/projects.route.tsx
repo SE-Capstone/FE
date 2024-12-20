@@ -32,7 +32,7 @@ export function projectsRoutes(): RouteObject {
         element: <DetailProjectPage />,
       },
       {
-        path: ':projectId/issues',
+        path: ':projectId/tasks',
         element: <Outlet />,
         children: [issuesRoutes()],
       },

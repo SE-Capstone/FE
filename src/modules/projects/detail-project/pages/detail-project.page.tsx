@@ -30,7 +30,7 @@ const tabMapping = {
   status: 2,
   phase: 3,
   kanban: 4,
-  issue: 5,
+  task: 5,
   statistic: 6,
 };
 

@@ -78,7 +78,7 @@ export function ActionTableIssuesWidget({
       setSearchParams((prevParams) => {
         const params = new URLSearchParams(prevParams);
 
-        params.set('tab', 'issue');
+        params.set('tab', 'task');
 
         if (values) {
           if (values.length > 0) {
@@ -192,7 +192,7 @@ export function ActionTableIssuesWidget({
   useEffect(() => {
     if (searchParams.get('tab') === 'kanban') {
       const params = new URLSearchParams();
-      params.set('tab', 'issue');
+      params.set('tab', 'task');
       setSearchParams(params);
       return undefined;
     }
@@ -566,7 +566,7 @@ export function ActionTableIssuesWidget({
               ))}
             </MenuList>
           </Menu>
-          <Button as={Link} to="issues/create">
+          <Button as={Link} to="tasks/create">
             {t('common.create')}
           </Button>
           <AddNewIssueWidget>

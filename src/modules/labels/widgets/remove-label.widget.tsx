@@ -77,12 +77,12 @@ export function RemoveLabelWidget(props: RemoveLabelWidgetProps) {
         <Stack spacing={5}>
           <Text>
             {/* Your project has {label.issueCount} {`"${label.title}"`} issues. Before you can delete */}
-            this issue type, change {`"${label.title}"`} issues to another type.
+            this task type, change {`"${label.title}"`} tasks to another type.
           </Text>
           <CustomChakraReactSelect
             isSearchable
             placeholder={`${t('common.choose')} ${t('common.label').toLowerCase()}`}
-            label={`Change all existing "${label.title}" issues to`}
+            label={`Change all existing "${label.title}" tasks to`}
             size="lg"
             options={listLabel
               .filter((l) => l.id !== label.id)
