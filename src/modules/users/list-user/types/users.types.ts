@@ -9,6 +9,7 @@ export type QueryListUserInput = {
   status?: UserStatusEnum;
   roleId?: string;
   gender?: GenderEnum;
+  skill?: string;
 };
 
 export type IUser = ICurrentUserResponse & {

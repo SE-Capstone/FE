@@ -32,6 +32,7 @@ interface UsersAsyncTableProps {
 export function UsersAsyncTable({ onUserSelect }: UsersAsyncTableProps) {
   const { t } = useTranslation();
   const [inputValue, setInputValue] = useDebounce<string | undefined>('');
+  const [inputValue2, setInputValue2] = useDebounce<string | undefined>('');
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
@@ -39,6 +40,7 @@ export function UsersAsyncTable({ onUserSelect }: UsersAsyncTableProps) {
     paginateInput: DEFAULT_PAGINATION,
     filter: {
       userName: inputValue ? inputValue.toLocaleLowerCase() : undefined,
+      skill: inputValue2 ? inputValue2.toLocaleLowerCase() : undefined,
       status: UserStatusEnum.Active,
     },
   };
@@ -83,15 +85,26 @@ export function UsersAsyncTable({ onUserSelect }: UsersAsyncTableProps) {
   return (
     <VStack w="full">
       <Heading size="md">{t('common.users')}</Heading>
-      <SearchInput
-        bg="white"
-        borderColor="gray.300"
-        placeholder={`${t('common.enter')} ${t('fields.fullName').toLowerCase()}...`}
-        initValue=""
-        onHandleSearch={(keyword) => {
-          setInputValue(keyword);
-        }}
-      />
+      <Flex justifyContent="space-between" w="full" gap={2}>
+        <SearchInput
+          bg="white"
+          borderColor="gray.300"
+          placeholder={`${t('common.enter')} ${t('fields.aliasName').toLowerCase()}...`}
+          initValue=""
+          onHandleSearch={(keyword) => {
+            setInputValue(keyword);
+          }}
+        />
+        <SearchInput
+          bg="white"
+          borderColor="gray.300"
+          placeholder={`${t('common.enter')} ${t('common.skill').toLowerCase()}...`}
+          initValue=""
+          onHandleSearch={(keyword) => {
+            setInputValue2(keyword);
+          }}
+        />
+      </Flex>
       <Stack spacing={4} w="full">
         <Box w="full">
           {!isLoading && isError ? (
