@@ -1,5 +1,6 @@
 {
   "common": {
+    "noPhase": "Không có giai đoạn",
     "projectAnalysis": "Phân tích dự án",
     "aiContent": "*Dựa trên những gợi ý của bạn đây là phản hồi từ AI",
     "numberOfMembers": "Số lượng thành viên",
@@ -177,7 +178,7 @@
     "overview": "Tổng quan",
     "priority": "Độ ưu tiên",
     "percentageDone": "% Hoàn thành",
-    "teamLead": "Project leader",
+    "teamLead": "Người quản lý dự án",
     "estimatedTime": "Thời gian dự kiến",
     "actualTime": "Thời gian thực tế",
     "isDone": "Đánh dấu hoàn thành",
@@ -422,14 +423,14 @@
     "overallCompletionRate": "Tỉ lệ công việc hoàn thành",
     "projectsByStatusReport": "Phân loại dự án theo trạng thái",
     "skillsReport": "Phân loại bởi kỹ năng",
-    "totalProjectsLead": "Tổng dự án làm leader",
+    "totalProjectsLead": "Tổng dự án làm quản lý",
     "statusReport": "Phân loại bởi trạng thái",
     "dateReport": "Phân loại theo thời gian",
     "memberReport": "Phân loại theo thành viên"
   },
   "notifications": {
     "assignMember": "{{assignerName}} đã gán bạn vào dự án {{projectName}}",
-    "assignLeader": "{{assignerName}} đã gán bạn làm leader dự án - {{projectName}}",
+    "assignLeader": "{{assignerName}} đã gán bạn làm quản lý dự án - {{projectName}}",
     "assignIssue": "{{assignerName}} đã gán công việc cho bạn",
     "updateIssue": "{{updaterName}} đã cập nhật công việc",
     "createComment": "{{commenterName}} đã bình luận về công việc",

@@ -1,8 +1,11 @@
 import { Icon, useDisclosure } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { BiTrash } from 'react-icons/bi';
+import { FaRegCircleCheck } from 'react-icons/fa6';
+import { IoPlayOutline } from 'react-icons/io5';
 import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
 
+import { useNewCompletePhaseHook } from '../../hooks/mutations/use-new-complete-phase.hooks';
 import { useRemovePhaseHook } from '../../hooks/mutations/use-remove-phase.hooks';
 import { UpsertPhaseWidget } from '../upsert-phase.widget';
 
@@ -20,21 +23,34 @@ export function ActionMenuTablePhases({ phase, permissions }: ActionMenuTablePha
   const { t } = useTranslation();
   const disclosureModal = useDisclosure();
   const { handleRemovePhase } = useRemovePhaseHook();
+  const { handleCompletePhase } = useNewCompletePhaseHook({ phaseId: phase.id });
   const isDone = !!phase?.actualEndDate;
   const isRunning = !!phase?.actualStartDate && !phase?.actualEndDate;
 
   if (!phase || !phase.id) return null;
 
   const menuOptions = [
-    permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) && {
-      label: t('actions.edit'),
-      icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
-      onClick: () => {
-        if (!phase.id) return;
-
-        disclosureModal.onOpen();
+    permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
+      !phase.actualEndDate && {
+        label: !phase.actualStartDate ? t('common.startPhase') : t('common.completePhase'),
+        type: 'warning',
+        icon: !phase.actualStartDate ? (
+          <Icon as={IoPlayOutline} boxSize={5} />
+        ) : (
+          <Icon as={FaRegCircleCheck} boxSize={5} />
+        ),
+        onClick: () => handleCompletePhase(!!phase.actualStartDate),
       },
-    },
+    permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
+      !phase.actualEndDate && {
+        label: t('actions.edit'),
+        icon: <Icon as={MdOutlineSystemUpdateAlt} boxSize={5} />,
+        onClick: () => {
+          if (!phase.id) return;
+
+          disclosureModal.onOpen();
+        },
+      },
     !isDone &&
       !isRunning &&
       permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) && {

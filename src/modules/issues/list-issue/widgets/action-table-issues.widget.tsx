@@ -70,7 +70,27 @@ export function ActionTableIssuesWidget({
     searchParams.get('tab') === 'kanban' ? [] : searchParams.getAll('statusIds') || []
   );
   const [members, setMembers] = useState<ProjectMember[]>([]);
+  const [phases, setPhases] = useState<IPhase[]>([]);
   const [defaultReporter, setDefaultReporter] = useState<ProjectMember | undefined>(undefined);
+
+  useEffect(() => {
+    if (
+      listPhase?.length > 0 &&
+      !listPhase?.find((item) => item.id === '827fc009-a7b3-48df-86e0-0a0c49b0bd47')
+    ) {
+      setPhases([
+        ...listPhase,
+        {
+          id: '827fc009-a7b3-48df-86e0-0a0c49b0bd47',
+          title: t('common.noPhase'),
+          description: 'desc',
+          expectedStartDate: new Date('20-10-2020'),
+          expectedEndDate: new Date('20-10-2020'),
+          projectId,
+        },
+      ]);
+    }
+  }, [listPhase, projectId, t]);
 
   // Update filters in query params
   const updateQueryParams = useCallback(
@@ -480,7 +500,7 @@ export function ActionTableIssuesWidget({
                   shouldRenderToParent
                 >
                   <DropdownItemCheckboxGroup id="actions2">
-                    {listPhase.map((phase, index) => (
+                    {phases.map((phase, index) => (
                       <DropdownItemCheckbox
                         key={index}
                         id="phaseIds"

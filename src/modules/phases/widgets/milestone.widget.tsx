@@ -161,9 +161,10 @@ const Card = ({ phase, index }: { phase: IPhase; index: number }) => {
             {formatDate({ date: expectedEndDate, format: 'MMM DD, YYYY' })}
           </Text>
 
-          {permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) && (
-            <ActionMenuTablePhases phase={phase} permissions={permissions} />
-          )}
+          {permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
+            !phase.actualEndDate && (
+              <ActionMenuTablePhases phase={phase} permissions={permissions} />
+            )}
         </Flex>
 
         <VStack spacing={2} mb={3} textAlign="left">

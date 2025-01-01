@@ -1,5 +1,6 @@
 {
   "common": {
+    "noPhase": "No phase",
     "projectAnalysis": "Project analysis",
     "aiContent": "*Based on your suggestions here is the response from AI",
     "numberOfMembers": "Number of members",
@@ -213,7 +214,7 @@
     "overview": "Overview",
     "priority": "Priority",
     "percentageDone": "% Done",
-    "teamLead": "Project leader",
+    "teamLead": "Project manager",
     "estimatedTime": "Estimated time",
     "actualTime": "Actual time",
     "isDone": "Mark as done",
@@ -464,7 +465,7 @@
   },
   "notifications": {
     "assignMember": "{{assignerName}} assigned you to project {{projectName}}",
-    "assignLeader": "{{assignerName}} assigned you as project leader - {{projectName}}",
+    "assignLeader": "{{assignerName}} assigned you as project manager - {{projectName}}",
     "assignIssue": "{{assignerName}} assigned an task to you",
     "updateIssue": "{{updaterName}} updated an task",
     "createComment": "{{commenterName}} commented on task",

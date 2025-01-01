@@ -9,6 +9,7 @@ const ENDPOINT_MUTATIONS = {
   update: (phaseId: StringNumeric) => `phases/${phaseId}`,
   create: 'phases',
   complete: 'phases/complete',
+  completePhase: (phaseId: StringNumeric) => `phases/${phaseId}/complete`,
 } as const;
 
 export const PHASES_ENDPOINT_URL = {

@@ -18,6 +18,7 @@ import {
   CustomSingleValueComponentChakraReactSelect,
   ModalBase,
 } from '@/components/elements';
+import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
 import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetDetailProject } from '@/modules/projects/detail-project/apis/detail-project.api';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
@@ -37,6 +38,12 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
   const [value, setValue] = useState<IOptionUserSelect>();
 
   const { listStatus, isLoading: isLoading2 } = useGetListStatusQuery({
+    params: {
+      projectId: projectId || '',
+    },
+  });
+
+  const { listPhase, isLoading: isLoading8 } = useGetListPhaseQuery({
     params: {
       projectId: projectId || '',
     },
@@ -140,7 +147,7 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
           form="form-create-issue"
           w={20}
           type="submit"
-          isDisabled={isLoading || isLoading2 || isLoading3}
+          isDisabled={isLoading || isLoading2 || isLoading3 || isLoading8}
         >
           {t('common.save')}
         </Button>
@@ -183,6 +190,16 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
             }))}
             control={control}
             name="statusId"
+          />
+          <CustomChakraReactSelect
+            placeholder={`${t('common.choose')} ${t('common.phase').toLowerCase()}`}
+            label={t('common.phase')}
+            options={listPhase.map((s) => ({
+              label: s.title,
+              value: s.id,
+            }))}
+            control={control}
+            name="phaseId"
           />
           <CustomChakraReactSelect
             isSearchable

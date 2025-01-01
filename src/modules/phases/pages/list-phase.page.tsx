@@ -26,7 +26,7 @@ export function ListPhasePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
-  const { listPhase, phaseStatus, isError, isLoading, isRefetching } = useGetListPhaseQuery({
+  const { listPhase, isError, isLoading, isRefetching } = useGetListPhaseQuery({
     params: {
       projectId: projectId || '',
     },
@@ -36,7 +36,7 @@ export function ListPhasePage() {
     <>
       <Head title="Phase" />
       <StateHandler showLoader={isLoading} showError={!!isError}>
-        <ActionTablePhasesWidget phaseStatus={phaseStatus} />
+        <ActionTablePhasesWidget />
         <Milestones phases={listPhase} isLoading={isLoading || isRefetching} />
       </StateHandler>
     </>

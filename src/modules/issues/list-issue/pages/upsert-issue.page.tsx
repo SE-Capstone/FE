@@ -283,7 +283,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
               />
             </SimpleGrid>
 
-            <SimpleGrid columns={isUpdate ? 2 : 1} spacing={3}>
+            <SimpleGrid columns={2} spacing={3}>
               <Stack gap={5}>
                 <CustomChakraReactSelect
                   isSearchable
@@ -316,18 +316,16 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
                   {t('common.assignToMe')}
                 </Text>
               </Stack>
-              {isUpdate && (
-                <CustomChakraReactSelect
-                  placeholder={`${t('common.choose')} ${t('common.phase').toLowerCase()}`}
-                  label={t('common.phase')}
-                  options={listPhase.map((s) => ({
-                    label: s.title,
-                    value: s.id,
-                  }))}
-                  control={control}
-                  name="phaseId"
-                />
-              )}
+              <CustomChakraReactSelect
+                placeholder={`${t('common.choose')} ${t('common.phase').toLowerCase()}`}
+                label={t('common.phase')}
+                options={listPhase.map((s) => ({
+                  label: s.title,
+                  value: s.id,
+                }))}
+                control={control}
+                name="phaseId"
+              />
             </SimpleGrid>
 
             <SimpleGrid columns={3} spacing={3}>
