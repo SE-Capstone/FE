@@ -62,15 +62,23 @@ export function DetailIssuePage() {
     if (currentUser?.id === assignee?.id || currentUser?.id === reporter?.id) {
       return true;
     }
-    return permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+    return (
+      permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+      !!members?.find((m) => m.id === currentUser?.id)
+    );
   };
-  const canUpdateReporter = () => permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+  const canUpdateReporter = () =>
+    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+    members?.find((m) => m.id === currentUser?.id);
 
   const canDelete = (reporter?: IUpdatedBy) => {
     if (currentUser?.id === reporter?.id) {
       return true;
     }
-    return permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+    return (
+      permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+      members?.find((m) => m.id === currentUser?.id)
+    );
   };
   const canUpdateComment = (assignee?: IUpdatedBy) => {
     if (currentUser?.id === assignee?.id) {
@@ -540,7 +548,7 @@ export function DetailIssuePage() {
                     isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
                   />
                 </Text>
-                {!issue?.parentIssueId && (
+                {!issue?.parentIssueId && !!members?.find((m) => m.id === currentUser?.id) && (
                   <Menu>
                     <MenuButton
                       as={Button}

@@ -100,14 +100,17 @@ function LazyDropdownItems({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { reorderCard } = useBoardContext();
-  const { permissions } = useProjectContext();
+  const { currentUser } = useAuthentication();
+  const { permissions, members } = useProjectContext();
   const { columnId, getCardIndex, getNumCards } = useColumnContext();
   const { handleRemoveIssue } = useRemoveIssueHook(issue.id);
 
   const numCards = getNumCards();
   const startIndex = getCardIndex(id);
 
-  const canMove = permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+  const canMove =
+    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+    !!members?.find((m) => m.id === currentUser?.id);
 
   const moveToTop = useCallback(() => {
     reorderCard({ columnId, startIndex, finishIndex: 0 });
@@ -132,7 +135,7 @@ function LazyDropdownItems({
           </DropdownItem>
         </DropdownItemGroup>
       )}
-      <DropdownItemGroup title={t('fields.actions')} hasSeparator={canMove}>
+      <DropdownItemGroup title={t('fields.actions')} hasSeparator={canMove || false}>
         <DropdownItem onClick={() => navigate(`tasks/${issue.id}`)}>
           {t('actions.viewDetail')}
         </DropdownItem>
@@ -161,10 +164,12 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
   const canUpdate =
     currentUser?.id === issue.assignee?.id ||
     currentUser?.id === issue.reporter?.id ||
-    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+    (permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+      !!members?.find((m) => m.id === currentUser?.id));
   const canDelete =
     currentUser?.id === issue.reporter?.id ||
-    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+    (permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+      !!members?.find((m) => m.id === currentUser?.id));
 
   return (
     <Stack ref={ref} testId={`item-${id}`} xcss={[baseStyles, stateStyles[state.type]]}>

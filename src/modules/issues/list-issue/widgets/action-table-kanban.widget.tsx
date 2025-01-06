@@ -586,9 +586,11 @@ export function ActionTableKanbanWidget({
               ))}
             </MenuList>
           </Menu>
-          <AddNewIssueWidget>
-            <Button leftIcon={<>+</>}>{t('common.create')}</Button>
-          </AddNewIssueWidget>
+          {members?.find((m) => m.id === currentUser?.id) && (
+            <AddNewIssueWidget>
+              <Button leftIcon={<>+</>}>{t('common.create')}</Button>
+            </AddNewIssueWidget>
+          )}
         </Box>
       </HStack>
     </Box>

@@ -40,12 +40,17 @@ export function ListIssuePage() {
   const [issueId, setIssueId] = useState('');
   const { issuesQueryState, resetIssuesQueryState } = useIssuesQueryFilterStateContext();
 
-  const canUpdateReporter = () => permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+  const canUpdateReporter = () =>
+    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+    members?.find((m) => m.id === currentUser?.id);
   const canUpdate = (assignee?: IUpdatedBy, reporter?: IUpdatedBy) => {
     if (currentUser?.id === assignee?.id || currentUser?.id === reporter?.id) {
       return true;
     }
-    return permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+    return (
+      permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+      members?.find((m) => m.id === currentUser?.id)
+    );
   };
 
   const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issueId);

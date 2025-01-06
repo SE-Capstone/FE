@@ -17,11 +17,13 @@ import { ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { getNumericalOrder } from '@/libs/helpers';
 import { BadgeIssue } from '@/modules/issues/list-issue/components';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function ListStatusPage() {
   const { t } = useTranslation();
   const { projectId } = useParams();
-  const { permissions } = useProjectContext();
+  const { currentUser } = useAuthentication();
+  const { permissions, members } = useProjectContext();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const setTab = () => {
@@ -98,7 +100,10 @@ export function ListStatusPage() {
                   title={status?.isDone ? `${t('actions.inactive')}?` : `${t('actions.active')}?`}
                   status={status}
                   isLoading={
-                    !permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) && true
+                    !(
+                      permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
+                      members?.find((m) => m.id === currentUser?.id)
+                    ) && true
                   }
                   description={status?.isDone ? t('actions.markAsUndone') : t('actions.markAsDone')}
                 />
@@ -108,7 +113,7 @@ export function ListStatusPage() {
         ],
       },
     ],
-    [permissions, t]
+    [currentUser?.id, members, permissions, t]
   );
 
   return (
@@ -123,7 +128,8 @@ export function ListStatusPage() {
           isLoading={isLoading || isRefetching}
           isError={!!isError}
           additionalFeature={(status) =>
-            permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) ? (
+            permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
+            members?.find((m) => m.id === currentUser?.id) ? (
               <ActionMenuTableStatuses status={status} listStatus={listStatus} />
             ) : undefined
           }

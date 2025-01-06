@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 
+import type { IIssueDash } from '../widgets/card-stat.widget';
 import type { IResponseApi } from '@/configs/axios';
 
 import { PermissionEnum } from '@/configs';
@@ -18,6 +19,7 @@ export type ReportUserOverview = {
   totalProjects: number;
   totalProjectsLead: number;
   totalCurrentProjects: number;
+  overViewTasks: IIssueDash[];
 };
 
 function queryRequest(id: string) {

@@ -586,12 +586,16 @@ export function ActionTableIssuesWidget({
               ))}
             </MenuList>
           </Menu>
-          <Button as={Link} to="tasks/create">
-            {t('common.create')}
-          </Button>
-          <AddNewIssueWidget>
-            <Button>+</Button>
-          </AddNewIssueWidget>
+          {members?.find((m) => m.id === currentUser?.id) && (
+            <Button as={Link} to="tasks/create">
+              {t('common.create')}
+            </Button>
+          )}
+          {members?.find((m) => m.id === currentUser?.id) && (
+            <AddNewIssueWidget>
+              <Button>+</Button>
+            </AddNewIssueWidget>
+          )}
         </Box>
       </HStack>
     </Box>

@@ -20,16 +20,18 @@ interface ActionMenuTableIssuesProps {
 export function ActionMenuTableIssues({ issue }: ActionMenuTableIssuesProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { members, permissions } = useProjectContext();
   const { currentUser } = useAuthentication();
-  const { permissions } = useProjectContext();
   const { handleRemoveIssue } = useRemoveIssueHook(issue.id);
   const canUpdate =
     currentUser?.id === issue.assignee?.id ||
     currentUser?.id === issue.reporter?.id ||
-    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+    (permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+      members?.find((m) => m.id === currentUser?.id));
   const canDelete =
     currentUser?.id === issue.reporter?.id ||
-    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+    (permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+      members?.find((m) => m.id === currentUser?.id));
   if (!issue || !issue.id) return null;
 
   const menuOptions = [

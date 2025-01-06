@@ -11,11 +11,13 @@ import { useAuthentication } from '@/modules/profile/hooks';
 export function ActionTableStatusesWidget({ isDefault }: { isDefault?: boolean }) {
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const { permissions } = useAuthentication();
+  const { permissions, currentUser } = useAuthentication();
+  const { members } = useProjectContext();
   const { permissions: permissionProject } = useProjectContext();
   const disclosureModal = useDisclosure();
   const canCreate =
     (permissionProject.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
+      members?.find((m) => m.id === currentUser?.id) &&
       pathname.includes('projects')) ||
     (isDefault && permissions[PermissionEnum.ADD_DEFAULT_STATUS] && pathname.includes('settings'));
 

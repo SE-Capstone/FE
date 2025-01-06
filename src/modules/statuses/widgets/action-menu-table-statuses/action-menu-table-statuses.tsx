@@ -28,19 +28,21 @@ export function ActionMenuTableStatuses({
 }: ActionMenuTableStatusesProps) {
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const { permissions } = useAuthentication();
-  const { permissions: projectPermissions } = useProjectContext();
+  const { permissions, currentUser } = useAuthentication();
+  const { members, permissions: projectPermissions } = useProjectContext();
   const disclosureModal = useDisclosure();
   const disclosureModalRemoveStatus = useDisclosure();
   const { handleRemoveStatus } = useRemoveStatusHook(isDefault);
   const canUpdate =
     (projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
+      members?.find((m) => m.id === currentUser?.id) &&
       pathname.includes('projects')) ||
     (isDefault &&
       permissions[PermissionEnum.UPDATE_DEFAULT_STATUS] &&
       pathname.includes('settings'));
   const canDelete =
     (projectPermissions.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
+      members?.find((m) => m.id === currentUser?.id) &&
       pathname.includes('projects')) ||
     (isDefault &&
       permissions[PermissionEnum.DELETE_DEFAULT_STATUS] &&
