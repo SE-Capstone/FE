@@ -57,6 +57,15 @@ export function useRemoveIssueMutation(props: Props) {
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.project['projects/reports/tasks/completion-chart'].queryKey,
       });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.dashboard['dashboard/my-task'].queryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.dashboard['dashboard/overview'].queryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.dashboard.userOverview._def,
+      });
 
       notify({
         type: 'success',

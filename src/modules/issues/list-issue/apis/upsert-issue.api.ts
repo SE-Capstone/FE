@@ -91,6 +91,9 @@ export function useUpsertIssueMutation({ configs, reset, id, isUpdate, isRedirec
         queryKey: allQueryKeysStore.dashboard['dashboard/overview'].queryKey,
       });
       queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.dashboard['dashboard/my-task'].queryKey,
+      });
+      queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.dashboard.userOverview._def,
       });
 
