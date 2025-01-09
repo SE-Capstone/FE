@@ -27,13 +27,14 @@ import { formatDate } from '@/libs/helpers';
 import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
 import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
 import { useAuthentication } from '@/modules/profile/hooks';
+import { ProjectStatusEnum } from '@/modules/projects/list-project/types';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 
 export function ListIssuePage() {
   const { projectId } = useParams();
   const { t } = useTranslation();
   const { currentUser } = useAuthentication();
-  const { members, permissions } = useProjectContext();
+  const { members, permissions, project } = useProjectContext();
   const [labels, setLabels] = useState<ILabel[]>([]);
   const [statuses, setStatuses] = useState<IStatus[]>([]);
   const [phases, setPhases] = useState<IPhase[]>([]);
@@ -42,14 +43,16 @@ export function ListIssuePage() {
 
   const canUpdateReporter = () =>
     permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
-    members?.find((m) => m.id === currentUser?.id);
+    members?.find((m) => m.id === currentUser?.id) &&
+    project?.status === ProjectStatusEnum.InProgress;
   const canUpdate = (assignee?: IUpdatedBy, reporter?: IUpdatedBy) => {
     if (currentUser?.id === assignee?.id || currentUser?.id === reporter?.id) {
       return true;
     }
     return (
       permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
-      members?.find((m) => m.id === currentUser?.id)
+      members?.find((m) => m.id === currentUser?.id) &&
+      project?.status === ProjectStatusEnum.InProgress
     );
   };
 

@@ -45,6 +45,7 @@ import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
 import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
 import { InfoCard } from '@/modules/profile/components';
 import { useAuthentication } from '@/modules/profile/hooks';
+import { ProjectStatusEnum } from '@/modules/projects/list-project/types';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
@@ -59,25 +60,31 @@ export function DetailIssuePage() {
   const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issue?.id || '');
 
   const canUpdate = (assignee?: IUpdatedBy, reporter?: IUpdatedBy) => {
-    if (currentUser?.id === assignee?.id || currentUser?.id === reporter?.id) {
+    if (
+      (currentUser?.id === assignee?.id || currentUser?.id === reporter?.id) &&
+      project?.status === ProjectStatusEnum.InProgress
+    ) {
       return true;
     }
     return (
       permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
-      !!members?.find((m) => m.id === currentUser?.id)
+      !!members?.find((m) => m.id === currentUser?.id) &&
+      project?.status === ProjectStatusEnum.InProgress
     );
   };
   const canUpdateReporter = () =>
     permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
-    members?.find((m) => m.id === currentUser?.id);
+    members?.find((m) => m.id === currentUser?.id) &&
+    project?.status === ProjectStatusEnum.InProgress;
 
   const canDelete = (reporter?: IUpdatedBy) => {
-    if (currentUser?.id === reporter?.id) {
+    if (currentUser?.id === reporter?.id && project?.status === ProjectStatusEnum.InProgress) {
       return true;
     }
     return (
       permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
-      members?.find((m) => m.id === currentUser?.id)
+      members?.find((m) => m.id === currentUser?.id) &&
+      project?.status === ProjectStatusEnum.InProgress
     );
   };
   const canUpdateComment = (assignee?: IUpdatedBy) => {

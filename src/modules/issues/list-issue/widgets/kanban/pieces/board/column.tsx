@@ -42,6 +42,7 @@ import type { IStatus } from '@/modules/statuses/types';
 import { ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { useAuthentication } from '@/modules/profile/hooks';
+import { ProjectStatusEnum } from '@/modules/projects/list-project/types';
 import { useRemoveStatusHook } from '@/modules/statuses/hooks/mutations/use-remove-status.hooks';
 import { RemoveStatusWidget } from '@/modules/statuses/widgets';
 
@@ -255,11 +256,12 @@ export const Column = memo(function Column({
 
   const { instanceId, registerColumn } = useBoardContext();
 
-  const { members, permissions } = useProjectContext();
+  const { members, permissions, project } = useProjectContext();
   const { currentUser } = useAuthentication();
   const canUpdate =
     permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
-    !!members?.find((m) => m.id === currentUser?.id);
+    !!members?.find((m) => m.id === currentUser?.id) &&
+    project?.status === ProjectStatusEnum.InProgress;
 
   useEffect(() => {
     if (!canUpdate) {

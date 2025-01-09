@@ -12,6 +12,7 @@ import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
 import { ProjectPermissionEnum } from '@/configs';
 import { useProjectContext } from '@/contexts/project/project-context';
 import { useAuthentication } from '@/modules/profile/hooks';
+import { ProjectStatusEnum } from '@/modules/projects/list-project/types';
 
 interface ActionMenuTableIssuesProps {
   issue: IIssue;
@@ -20,18 +21,20 @@ interface ActionMenuTableIssuesProps {
 export function ActionMenuTableIssues({ issue }: ActionMenuTableIssuesProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { members, permissions } = useProjectContext();
+  const { members, permissions, project } = useProjectContext();
   const { currentUser } = useAuthentication();
   const { handleRemoveIssue } = useRemoveIssueHook(issue.id);
   const canUpdate =
     currentUser?.id === issue.assignee?.id ||
     currentUser?.id === issue.reporter?.id ||
     (permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
-      members?.find((m) => m.id === currentUser?.id));
+      members?.find((m) => m.id === currentUser?.id) &&
+      project?.status === ProjectStatusEnum.InProgress);
   const canDelete =
     currentUser?.id === issue.reporter?.id ||
     (permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
-      members?.find((m) => m.id === currentUser?.id));
+      members?.find((m) => m.id === currentUser?.id) &&
+      project?.status === ProjectStatusEnum.InProgress);
   if (!issue || !issue.id) return null;
 
   const menuOptions = [

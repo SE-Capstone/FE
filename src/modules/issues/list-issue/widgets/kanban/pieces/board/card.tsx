@@ -44,6 +44,7 @@ import InlineEditWithIcon from '@/modules/issues/list-issue/components/inline-ed
 import { UserWithAvatar } from '@/modules/issues/list-issue/components/user-with-avatar';
 import { useRemoveIssueHook } from '@/modules/issues/list-issue/hooks/mutations/use-remove-issue.hooks';
 import { useAuthentication } from '@/modules/profile/hooks';
+import { ProjectStatusEnum } from '@/modules/projects/list-project/types';
 
 type State =
   | { type: 'idle' }
@@ -159,17 +160,19 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(function Ca
   ref
 ) {
   const { issue, title, index, dueDate, isLate, statusColor, id, isDone } = item;
-  const { members, permissions } = useProjectContext();
+  const { members, permissions, project } = useProjectContext();
   const { currentUser } = useAuthentication();
   const canUpdate =
     currentUser?.id === issue.assignee?.id ||
     currentUser?.id === issue.reporter?.id ||
     (permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
-      !!members?.find((m) => m.id === currentUser?.id));
+      !!members?.find((m) => m.id === currentUser?.id) &&
+      project?.status === ProjectStatusEnum.InProgress);
   const canDelete =
     currentUser?.id === issue.reporter?.id ||
     (permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
-      !!members?.find((m) => m.id === currentUser?.id));
+      !!members?.find((m) => m.id === currentUser?.id) &&
+      project?.status === ProjectStatusEnum.InProgress);
 
   return (
     <Stack ref={ref} testId={`item-${id}`} xcss={[baseStyles, stateStyles[state.type]]}>
@@ -301,8 +304,14 @@ export const Card = memo(function Card({ item, columnId }: { item: Issue; column
   const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
   const [state, setState] = useState<State>(idleState);
 
-  const { permissions } = useProjectContext();
-  const canUpdate = permissions.includes(ProjectPermissionEnum.IsIssueConfigurator);
+  const { members, permissions, project } = useProjectContext();
+  const { currentUser } = useAuthentication();
+  const canUpdate =
+    currentUser?.id === item?.issue?.assignee?.id ||
+    currentUser?.id === item?.issue?.reporter?.id ||
+    (permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+      !!members?.find((m) => m.id === currentUser?.id) &&
+      project?.status === ProjectStatusEnum.InProgress);
 
   const actionMenuTriggerRef = useRef<HTMLButtonElement>(null);
   const { instanceId, registerCard } = useBoardContext();
