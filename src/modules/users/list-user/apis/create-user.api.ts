@@ -23,6 +23,7 @@ interface ICreateUserRequest {
     dob: Date | string;
     phone: string;
     roleId?: string;
+    skills?: string[];
   };
 }
 

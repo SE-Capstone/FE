@@ -10,7 +10,7 @@ import type { UserFormValues } from '../../validations/users.validations';
 import { cleanPhoneNumber, formatDate } from '@/libs/helpers';
 import { useFormWithSchema } from '@/libs/hooks';
 
-export function useCreateUserHook() {
+export function useCreateUserHook(skills?: string[]) {
   const { t } = useTranslation();
   const formCreateUser = useFormWithSchema({
     schema: userFormSchema(t),
@@ -33,11 +33,12 @@ export function useCreateUserHook() {
               date: values.dob,
               format: 'YYYY-MM-DD',
             }),
+            skills,
           },
         });
       } catch (error) {}
     },
-    [mutate, isLoading]
+    [mutate, isLoading, skills]
   );
 
   return {

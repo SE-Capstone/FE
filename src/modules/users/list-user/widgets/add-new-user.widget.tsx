@@ -1,7 +1,10 @@
+import { useState } from 'react';
+
 import { Button, HStack, SimpleGrid, Stack } from '@chakra-ui/react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { SkillsAsyncSelect } from '../components/skills-async-select';
 import { useCreateUserHook } from '../hooks/mutations';
 
 import type { IRole } from '@/modules/roles/list-role/types';
@@ -24,8 +27,10 @@ export interface AddNewUserWidgetProps {
 export function AddNewUserWidget(props: AddNewUserWidgetProps) {
   const { t } = useTranslation();
   const { children, roles } = props;
+  const [selectedOptions, setSelectedOptions] = useState<string[] | undefined>();
 
-  const { data, formCreateUser, handleCreateUser, isLoading, reset } = useCreateUserHook();
+  const { data, formCreateUser, handleCreateUser, isLoading, reset } =
+    useCreateUserHook(selectedOptions);
 
   const {
     register,
@@ -128,6 +133,15 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
               }))}
               control={control}
               name="roleId"
+            />
+          </HStack>
+          <HStack align="stretch">
+            <SkillsAsyncSelect
+              isMulti
+              label={t('common.skill')}
+              onChange={(options) => {
+                setSelectedOptions(options.map((opt) => opt.value as string).filter(Boolean));
+              }}
             />
           </HStack>
         </Stack>
