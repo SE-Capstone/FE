@@ -13,6 +13,8 @@ import type { IPhase } from '../../types';
 
 import { ActionMenuTable, AdditionalFeature } from '@/components/elements';
 import { ProjectPermissionEnum } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
+import { ProjectStatusEnum } from '@/modules/projects/list-project/types';
 
 interface ActionMenuTablePhasesProps {
   phase: IPhase;
@@ -22,6 +24,7 @@ interface ActionMenuTablePhasesProps {
 export function ActionMenuTablePhases({ phase, permissions }: ActionMenuTablePhasesProps) {
   const { t } = useTranslation();
   const disclosureModal = useDisclosure();
+  const { project } = useProjectContext();
   const { handleRemovePhase } = useRemovePhaseHook();
   const { handleCompletePhase } = useNewCompletePhaseHook({ phaseId: phase.id });
   const isDone = !!phase?.actualEndDate;
@@ -31,6 +34,7 @@ export function ActionMenuTablePhases({ phase, permissions }: ActionMenuTablePha
 
   const menuOptions = [
     permissions.includes(ProjectPermissionEnum.IsProjectConfigurator) &&
+      project?.status === ProjectStatusEnum.InProgress &&
       !phase.actualEndDate && {
         label: !phase.actualStartDate ? t('common.startPhase') : t('common.completePhase'),
         type: 'warning',
