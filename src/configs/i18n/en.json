@@ -1,5 +1,9 @@
 {
   "common": {
+    "filterDone": "Filter task done",
+    "done2": "Done",
+    "notDone": "Not done yet",
+    "myTasks": "My tasks",
     "noPhase": "No phase",
     "projectAnalysis": "Project analysis",
     "aiContent": "*Based on your suggestions here is the response from AI",

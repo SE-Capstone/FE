@@ -1,5 +1,9 @@
 {
   "common": {
+    "filterDone": "Lọc công việc hoàn thành",
+    "done2": "Hoàn thành",
+    "notDone": "Chưa hoàn thành",
+    "myTasks": "Công việc của tôi",
     "noPhase": "Không có giai đoạn",
     "projectAnalysis": "Phân tích dự án",
     "aiContent": "*Dựa trên những gợi ý của bạn đây là phản hồi từ AI",

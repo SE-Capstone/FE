@@ -29,20 +29,28 @@ import { useGetReportUserOverview } from '../apis/get-report-user-overview.api';
 import type { ColumnsProps } from '@/components/elements';
 
 import { CustomLink, TableComponent } from '@/components/elements';
+import { formatDate } from '@/libs/helpers';
 import { BadgeIssue } from '@/modules/issues/list-issue/components';
+import InlineEditableField from '@/modules/issues/list-issue/components/inline-edit-field';
+import { UserWithAvatar } from '@/modules/issues/list-issue/components/user-with-avatar';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export type IIssueDash = {
   id: string;
-  color: string;
-  index: number;
   projectId: string;
-  projectName: string;
-  statusName: string;
   taskId: string;
+  projectName: string;
   taskName: string;
   userId: string;
   userName: string;
+  statusName: string;
+  color: string;
+  index: number;
+  avatar?: string;
+  startDate?: string;
+  dueDate?: string;
+  actualDate?: string;
+  statusId: string;
 };
 
 interface StatData {
@@ -79,7 +87,7 @@ export const Card = ({ data }: { data: StatData }) => {
           },
           {
             key: 'projectName',
-            title: t('fields.title'),
+            title: `${t('fields.title')} ${t('common.project')}`,
             hasSort: false,
             Cell({ projectName, projectId }) {
               return (
@@ -105,7 +113,7 @@ export const Card = ({ data }: { data: StatData }) => {
           },
           {
             key: 'title',
-            title: t('fields.title'),
+            title: `${t('fields.title')} ${t('common.issue')}`,
             hasSort: false,
             Cell({ projectId, taskId, taskName }) {
               return (
@@ -118,6 +126,71 @@ export const Card = ({ data }: { data: StatData }) => {
                 >
                   {taskName || ''}
                 </CustomLink>
+              );
+            },
+          },
+          {
+            key: 'assignee',
+            title: `${t('fields.assignee')}`,
+            hasSort: false,
+            Cell({ userName, avatar }) {
+              return <UserWithAvatar image={avatar || ''} size2="sm" label={userName || ''} />;
+            },
+          },
+          {
+            key: 'startDate',
+            title: t('fields.startDate'),
+            hasSort: false,
+            Cell({ startDate }) {
+              return (
+                <InlineEditableField
+                  fieldValue={
+                    startDate ? formatDate({ date: startDate, format: 'YYYY-MM-DD' }) || '' : ''
+                  }
+                  callback={() => {}}
+                  fieldName="startDate"
+                  issueId=""
+                  type="date"
+                  isViewOnly
+                />
+              );
+            },
+          },
+          {
+            key: 'dueDate',
+            title: t('fields.dueDate'),
+            hasSort: false,
+            Cell({ dueDate }) {
+              return (
+                <InlineEditableField
+                  fieldValue={
+                    dueDate ? formatDate({ date: dueDate, format: 'YYYY-MM-DD' }) || '' : ''
+                  }
+                  callback={() => {}}
+                  fieldName="dueDate"
+                  issueId=""
+                  type="date"
+                  isViewOnly
+                />
+              );
+            },
+          },
+          {
+            key: 'actualDate',
+            title: t('fields.actualDate'),
+            hasSort: false,
+            Cell({ actualDate }) {
+              return (
+                <InlineEditableField
+                  fieldValue={
+                    actualDate ? formatDate({ date: actualDate, format: 'YYYY-MM-DD' }) || '' : ''
+                  }
+                  callback={() => {}}
+                  fieldName="actualDate"
+                  issueId=""
+                  type="date"
+                  isViewOnly
+                />
               );
             },
           },
