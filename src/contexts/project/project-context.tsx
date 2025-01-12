@@ -43,7 +43,11 @@ export function ProjectProvider({ children }) {
 
   const setProjectContext = (state: IProjectState) => {
     setProjectState((prevState) => {
-      if (prevState.projectId !== state.projectId || !isEqual(prevState.members, state.members)) {
+      if (
+        prevState.projectId !== state.projectId ||
+        !isEqual(prevState.members, state.members) ||
+        JSON.stringify(prevState.project) !== JSON.stringify(state.project)
+      ) {
         return {
           permissions: state.permissions,
           members: state.members,

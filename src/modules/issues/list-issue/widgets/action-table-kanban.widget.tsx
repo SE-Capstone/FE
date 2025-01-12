@@ -30,7 +30,6 @@ import { useKanbanQueryFilterStateContext } from '../contexts/kanban-query-filte
 
 import type { ILabel } from '@/modules/labels/types';
 import type { IPhase } from '@/modules/phases/types';
-import type { ProjectMember } from '@/modules/projects/list-project/types';
 import type { IStatus } from '@/modules/statuses/types';
 
 import {
@@ -40,7 +39,9 @@ import {
   SearchInput,
 } from '@/components/elements';
 import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { useAuthentication } from '@/modules/profile/hooks';
+import { ProjectStatusEnum, type ProjectMember } from '@/modules/projects/list-project/types';
 
 export function ActionTableKanbanWidget({
   listLabel,
@@ -55,6 +56,7 @@ export function ActionTableKanbanWidget({
 }) {
   const { t } = useTranslation();
   const { currentUser } = useAuthentication();
+  const { project } = useProjectContext();
   const prevMembersRef = useRef<ProjectMember[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [labelChecked, setLabelChecked] = useState<string[]>(
@@ -586,7 +588,9 @@ export function ActionTableKanbanWidget({
               ))}
             </MenuList>
           </Menu>
-          {members?.find((m) => m.id === currentUser?.id) && (
+          {members?.find(
+            (m) => m.id === currentUser?.id && project?.status === ProjectStatusEnum.InProgress
+          ) && (
             <AddNewIssueWidget>
               <Button leftIcon={<>+</>}>{t('common.create')}</Button>
             </AddNewIssueWidget>

@@ -1,13 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import type { IProject, ProjectStatusEnum } from '../types';
+import type { IProject, ProjectMember, ProjectStatusEnum } from '../types';
 import type { IResponseApi } from '@/configs/axios';
 import type { MutationConfig } from '@/libs/react-query';
 
 import { DEFAULT_MESSAGE } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { getErrorMessage, notify } from '@/libs/helpers';
 import { makeRequest } from '@/libs/react-query';
+import { useAuthentication } from '@/modules/profile/hooks';
 import { ALL_ENDPOINT_URL_STORE } from '@/services/endpoint-url-store';
 import { allQueryKeysStore } from '@/services/query-keys-store';
 
@@ -48,6 +50,9 @@ interface Props {
 export function useUpsertProjectMutation({ configs, reset, id, isUpdate, onClose }: Props) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
+  const { currentUser } = useAuthentication();
+  const { setProjectContext } = useProjectContext();
+
   return useMutation({
     mutationFn: (req) => mutation(req, id, isUpdate),
 
@@ -75,10 +80,52 @@ export function useUpsertProjectMutation({ configs, reset, id, isUpdate, onClose
       queryClient.invalidateQueries({
         queryKey: allQueryKeysStore.project['projects/reports/tasks/overview'].queryKey,
       });
+      queryClient.invalidateQueries({
+        queryKey: allQueryKeysStore.project.members._def,
+      });
       notify({
         type: 'success',
         message: isUpdate ? DEFAULT_MESSAGE(t).UPDATE_SUCCESS : DEFAULT_MESSAGE(t).CREATE_SUCCESS,
       });
+
+      // setProjectInfoContext(data?.data);
+      const members: ProjectMember[] = [];
+      const project = data?.data;
+
+      project?.members?.map((member) =>
+        members.push({
+          id: member.id,
+          fullName: member.fullName,
+          userName:
+            currentUser?.id === member.id
+              ? `${member.userName} (${t('common.me')})`
+              : member.userName,
+          roleName: member.roleName,
+          positionName: member.positionName,
+          avatar: member.avatar || '',
+        })
+      );
+      if (project?.leadId) {
+        members.push({
+          id: project.leadId,
+          fullName: project.leadName || '',
+          userName:
+            currentUser?.id === project.leadId
+              ? `${project.leadName} (${t('common.me')})`
+              : project.leadName || '',
+          roleName: 'Project lead',
+          positionName: project.leadPosition || '',
+          avatar: project.leadAvatar || '',
+        });
+      }
+
+      setProjectContext({
+        permissions: data?.data?.myPermissions || [],
+        members,
+        project: data?.data || null,
+        projectId: data?.data?.id || '',
+      });
+
       reset && reset();
       onClose && onClose();
     },

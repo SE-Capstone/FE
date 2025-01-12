@@ -30,7 +30,6 @@ import { useIssuesQueryFilterStateContext } from '../contexts';
 
 import type { ILabel } from '@/modules/labels/types';
 import type { IPhase } from '@/modules/phases/types';
-import type { ProjectMember } from '@/modules/projects/list-project/types';
 import type { IStatus } from '@/modules/statuses/types';
 
 import {
@@ -40,7 +39,9 @@ import {
   SearchInput,
 } from '@/components/elements';
 import { ISSUE_PRIORITY_OPTIONS } from '@/configs';
+import { useProjectContext } from '@/contexts/project/project-context';
 import { useAuthentication } from '@/modules/profile/hooks';
+import { ProjectStatusEnum, type ProjectMember } from '@/modules/projects/list-project/types';
 
 export function ActionTableIssuesWidget({
   listLabel,
@@ -54,6 +55,7 @@ export function ActionTableIssuesWidget({
   projectId: string;
 }) {
   const { t } = useTranslation();
+  const { project } = useProjectContext();
   const { currentUser } = useAuthentication();
   const prevMembersRef = useRef<ProjectMember[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -591,7 +593,9 @@ export function ActionTableIssuesWidget({
               {t('common.create')}
             </Button>
           )}
-          {members?.find((m) => m.id === currentUser?.id) && (
+          {members?.find(
+            (m) => m.id === currentUser?.id && project?.status === ProjectStatusEnum.InProgress
+          ) && (
             <AddNewIssueWidget>
               <Button>+</Button>
             </AddNewIssueWidget>

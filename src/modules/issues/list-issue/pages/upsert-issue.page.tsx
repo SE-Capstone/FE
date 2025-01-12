@@ -328,7 +328,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
               />
             </SimpleGrid>
 
-            <SimpleGrid columns={3} spacing={3}>
+            <SimpleGrid columns={isUpdate ? 3 : 2} spacing={3}>
               <CustomInput
                 label={t('fields.startDate')}
                 type="date"
@@ -341,12 +341,14 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
                 registration={register('dueDate')}
                 error={errors.dueDate}
               />
-              <CustomInput
-                label={t('fields.actualDate')}
-                type="date"
-                registration={register('actualDate')}
-                error={errors.actualDate}
-              />
+              {isUpdate && (
+                <CustomInput
+                  label={t('fields.actualDate')}
+                  type="date"
+                  registration={register('actualDate')}
+                  error={errors.actualDate}
+                />
+              )}
             </SimpleGrid>
 
             <SimpleGrid columns={isUpdate ? 4 : 2} spacing={3}>
