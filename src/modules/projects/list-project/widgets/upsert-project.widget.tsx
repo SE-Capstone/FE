@@ -17,9 +17,10 @@ import {
   CustomTextArea,
   ModalBase,
 } from '@/components/elements';
-import { PROJECT_STATUS_OPTIONS, UserStatusEnum } from '@/configs';
+import { PermissionEnum, PROJECT_STATUS_OPTIONS, UserStatusEnum } from '@/configs';
 import { formatDate } from '@/libs/helpers';
 import { useDebounce } from '@/libs/hooks';
+import { useAuthentication } from '@/modules/profile/hooks';
 import { useGetInfiniteUserQuery } from '@/modules/users/list-user/hooks/queries';
 
 export interface UpsertProjectWidgetProps {
@@ -31,7 +32,9 @@ export interface UpsertProjectWidgetProps {
 
 export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
   const { t } = useTranslation();
+  const { permissions } = useAuthentication();
   const { isUpdate, project, isOpen, onClose } = props;
+  const canUpdateLead = permissions[PermissionEnum.UPDATE_PROJECT];
 
   const { formUpsertProject, handleUpsertProject, isLoading, reset } = useUpsertProjectHook({
     id: project?.id,
@@ -187,6 +190,7 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
             />
             <CustomChakraReactSelect
               isSearchable
+              isDisabled={!canUpdateLead}
               placeholder={`${t('common.choose')} ${t('fields.teamLead').toLowerCase()}`}
               label={t('fields.teamLead')}
               size="md"

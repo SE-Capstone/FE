@@ -18,6 +18,7 @@ import { UserWithAvatar } from '@/modules/issues/list-issue/components/user-with
 import { InlineEditCustomSelectInfinity } from '@/modules/issues/list-issue/widgets/editable-dropdown-infinity.widget';
 import { InlineEditCustomSelect } from '@/modules/issues/list-issue/widgets/editable-dropdown.widget';
 import { InfoCard } from '@/modules/profile/components';
+import { useAuthentication } from '@/modules/profile/hooks';
 
 export function BaseInformationProjectWidget({
   project,
@@ -27,7 +28,12 @@ export function BaseInformationProjectWidget({
   permissions: Record<string, boolean>;
 }) {
   const { t } = useTranslation();
-  const canUpdate = permissions[PermissionEnum.UPDATE_PROJECT];
+  const { currentUser } = useAuthentication();
+  const canUpdate =
+    permissions[PermissionEnum.UPDATE_PROJECT] || currentUser?.id === project?.leadId;
+  const canToggle = permissions[PermissionEnum.TOGGLE_VISIBLE_PROJECT];
+  const canUpdateLead = permissions[PermissionEnum.UPDATE_PROJECT];
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const setTab = () => {
@@ -147,7 +153,7 @@ export function BaseInformationProjectWidget({
         },
         {
           label: t('fields.teamLead'),
-          text: canUpdate ? (
+          text: canUpdateLead ? (
             <InlineEditCustomSelectInfinity
               defaultValue={
                 project?.leadId && project?.leadName
@@ -185,7 +191,7 @@ export function BaseInformationProjectWidget({
             <BadgeStatus status={project?.status as ProjectStatusEnum} />
           ),
         },
-        canUpdate && {
+        canToggle && {
           label: t('fields.visible'),
           text: (
             <ChangeStatus
@@ -196,7 +202,7 @@ export function BaseInformationProjectWidget({
                   ? `${t('actions.archive')} ${t('common.project').toLowerCase()}?`
                   : `${t('actions.unarchive')} ${t('common.project').toLowerCase()}?`
               }
-              isLoading={!canUpdate && true}
+              isLoading={!canToggle && true}
               description={
                 project?.isVisible ? t('actions.archiveProject') : t('actions.unarchiveProject')
               }
