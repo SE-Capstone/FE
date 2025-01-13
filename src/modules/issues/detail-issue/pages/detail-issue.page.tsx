@@ -555,35 +555,37 @@ export function DetailIssuePage() {
                     isViewOnly={!canUpdate(issue?.assignee, issue?.reporter)}
                   />
                 </Text>
-                {!issue?.parentIssueId && !!members?.find((m) => m.id === currentUser?.id) && (
-                  <Menu>
-                    <MenuButton
-                      as={Button}
-                      w="fit-content"
-                      aria-label="Options"
-                      leftIcon={<>+</>}
-                      variant="solid"
-                      bg="primary"
-                    >
-                      {t('common.add')}
-                    </MenuButton>
+                {!issue?.parentIssueId &&
+                  !!members?.find((m) => m.id === currentUser?.id) &&
+                  project?.status === ProjectStatusEnum.InProgress && (
+                    <Menu>
+                      <MenuButton
+                        as={Button}
+                        w="fit-content"
+                        aria-label="Options"
+                        leftIcon={<>+</>}
+                        variant="solid"
+                        bg="primary"
+                      >
+                        {t('common.add')}
+                      </MenuButton>
 
-                    <MenuList borderColor="#E2E8F0">
-                      {!issue?.parentIssueId && (
-                        <AddNewIssueWidget parentIssueId={issue?.id || ''}>
-                          <MenuItem>
-                            <SubtaskIcon label="Subtask" />
-                            <Text ml={2}>{t('common.subTask')}</Text>
-                          </MenuItem>
-                        </AddNewIssueWidget>
-                      )}
-                      {/* <MenuItem>
+                      <MenuList borderColor="#E2E8F0">
+                        {!issue?.parentIssueId && (
+                          <AddNewIssueWidget parentIssueId={issue?.id || ''}>
+                            <MenuItem>
+                              <SubtaskIcon label="Subtask" />
+                              <Text ml={2}>{t('common.subTask')}</Text>
+                            </MenuItem>
+                          </AddNewIssueWidget>
+                        )}
+                        {/* <MenuItem>
                       <IssuesIcon label="LinkedIssue" />
                       <Text ml={2}>{t('common.linkedIssue')}</Text>
                     </MenuItem> */}
-                    </MenuList>
-                  </Menu>
-                )}
+                      </MenuList>
+                    </Menu>
+                  )}
                 <InlineEditRichtext
                   issue={issue!}
                   isEditable={canUpdate(issue?.assignee, issue?.reporter)}

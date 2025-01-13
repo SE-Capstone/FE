@@ -102,7 +102,7 @@ function LazyDropdownItems({
   const navigate = useNavigate();
   const { reorderCard } = useBoardContext();
   const { currentUser } = useAuthentication();
-  const { permissions, members } = useProjectContext();
+  const { permissions, members, project } = useProjectContext();
   const { columnId, getCardIndex, getNumCards } = useColumnContext();
   const { handleRemoveIssue } = useRemoveIssueHook(issue.id);
 
@@ -111,6 +111,7 @@ function LazyDropdownItems({
 
   const canMove =
     permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+    project?.status === ProjectStatusEnum.InProgress &&
     !!members?.find((m) => m.id === currentUser?.id);
 
   const moveToTop = useCallback(() => {

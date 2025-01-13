@@ -31,23 +31,24 @@ export function getInfiniteUserRequest(req: IGetInfiniteUserRequest) {
 interface UseGetInfiniteUserQueryProps {
   configs?: QueryConfig<typeof getInfiniteUserRequest>;
   params?: DeepPartial<QueryListUserInput>;
+  pageSize?: number;
 }
 
 export function useGetInfiniteUserQuery(props: UseGetInfiniteUserQueryProps = {}) {
   const { pageIndex, setPaginate } = usePaginateReq();
-  const { configs, params } = props;
+  const { configs, params, pageSize } = props;
 
   const currentParams = useMemo(
     () =>
       merge(
         {
           pageIndex,
-          pageSize: 20,
+          pageSize: pageSize || 20,
           orderBy: 'createDate',
         },
         params
       ),
-    [pageIndex, params]
+    [pageIndex, params, pageSize]
   );
 
   const queryKey = useMemo(

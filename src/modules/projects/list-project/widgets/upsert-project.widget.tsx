@@ -97,6 +97,7 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
     isRefetching,
   } = useGetInfiniteUserQuery({
     params: variables.filter,
+    pageSize: 1000000,
   });
 
   const handleInputChange = (inputValue: string) => {
