@@ -288,7 +288,7 @@ export function DetailIssuePage() {
               issue={issue!}
             />
           ) : (
-            <PriorityIssue priority={issue?.priority || IssuePriorityEnum.Medium} />
+            <Text>{issue?.phase?.title}</Text>
           ),
         },
         {

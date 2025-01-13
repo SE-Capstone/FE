@@ -243,7 +243,7 @@
     "passwordMax": "Mật khẩu phải có ít nhất 255 ký tự",
     "passwordDiff": "Mật khẩu mới phải khác so với mật khẩu cũ",
     "passwordComplexity": "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 chữ số và 1 ký tự đặc biệt",
-    "passwordSame": "Mật khẩu không khớp",
+    "passwordSame": "Mật khẩu mới và mật khẩu xác nhận phải giống nhau",
     "titleRequired": "Tiêu đề là bắt buộc",
     "descriptionRequired": "Mô tả là bắt buộc",
     "descriptionMax": "Mô tả không được quá 500 ký tự",
