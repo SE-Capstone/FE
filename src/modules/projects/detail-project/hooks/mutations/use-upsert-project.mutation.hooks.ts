@@ -55,6 +55,18 @@ export function useUpsertProjectHook({
                   format: 'YYYY-MM-DD',
                 })
               : undefined,
+            actualStartDate: values.actualStartDate
+              ? formatDate({
+                  date: values.actualStartDate,
+                  format: 'YYYY-MM-DD',
+                })
+              : undefined,
+            actualEndDate: values.actualEndDate
+              ? formatDate({
+                  date: values.actualEndDate,
+                  format: 'YYYY-MM-DD',
+                })
+              : undefined,
           },
         });
       } catch (error) {}

@@ -49,6 +49,8 @@ export type IProject = IBaseEntity & {
   description: string;
   startDate?: Date;
   endDate?: Date;
+  actualStartDate?: Date;
+  actualEndDate?: Date;
   status: ProjectStatusEnum;
   isVisible: boolean;
   leadId?: string;

@@ -24,6 +24,8 @@ export const projectFormSchema = (t: any) =>
         .min(1, { message: t('validation.descriptionRequired') }),
       startDate: getOptionalDateField(),
       endDate: getOptionalDateField(),
+      actualStartDate: getOptionalDateField(),
+      actualEndDate: getOptionalDateField(),
       status: z
         .nativeEnum(ProjectStatusEnum, { message: t('validation.project.invalidStatus') })
         .optional(),
@@ -70,6 +72,8 @@ export const projectUpdateFormSchema = (t: any) =>
         .min(1, { message: t('validation.descriptionRequired') }),
       startDate: getDateField(t),
       endDate: getDateField(t),
+      actualStartDate: getOptionalDateField(),
+      actualEndDate: getOptionalDateField(),
       status: z.nativeEnum(ProjectStatusEnum, { message: t('validation.project.invalidStatus') }),
       leadId: z.string().trim().min(1).uuid().optional(),
       // totalEffort: z

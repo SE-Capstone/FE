@@ -107,6 +107,32 @@ export function BaseInformationProjectWidget({
                 }) as unknown as Date)
               : undefined),
         }),
+        ...(fieldName === 'actualStartDate' && {
+          actualStartDate:
+            (formatDate({
+              date: value,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date) ||
+            (project.actualStartDate
+              ? (formatDate({
+                  date: project.actualStartDate,
+                  format: 'YYYY-MM-DD',
+                }) as unknown as Date)
+              : undefined),
+        }),
+        ...(fieldName === 'actualEndDate' && {
+          actualEndDate:
+            (formatDate({
+              date: value,
+              format: 'YYYY-MM-DD',
+            }) as unknown as Date) ||
+            (project.actualEndDate
+              ? (formatDate({
+                  date: project.actualEndDate,
+                  format: 'YYYY-MM-DD',
+                }) as unknown as Date)
+              : undefined),
+        }),
       });
     }
   };
@@ -222,7 +248,7 @@ export function BaseInformationProjectWidget({
           ),
         },
         {
-          label: t('fields.startDate'),
+          label: t('fields.expectStartDate'),
           text: canUpdate ? (
             <InlineEditableField
               fieldValue={
@@ -242,7 +268,7 @@ export function BaseInformationProjectWidget({
           ),
         },
         {
-          label: t('fields.endDate'),
+          label: t('fields.expectEndDate'),
           text: canUpdate ? (
             <InlineEditableField
               fieldValue={
@@ -254,8 +280,8 @@ export function BaseInformationProjectWidget({
               fieldName="endDate"
               type="date"
               startDate={
-                project?.startDate
-                  ? formatDate({ date: project?.startDate, format: 'YYYY-MM-DD' }) || ''
+                project?.endDate
+                  ? formatDate({ date: project?.endDate, format: 'YYYY-MM-DD' }) || ''
                   : ''
               }
               styleProps={{ transform: 'translate(0, -4px)' }}
@@ -265,6 +291,60 @@ export function BaseInformationProjectWidget({
           ) : (
             ''
           ),
+        },
+        {
+          label: t('fields.actualStartDate'),
+          text:
+            canUpdate && project?.status === ProjectStatusEnum.InProgress ? (
+              <InlineEditableField
+                fieldValue={
+                  project?.actualStartDate
+                    ? formatDate({ date: project?.actualStartDate, format: 'YYYY-MM-DD' }) || ''
+                    : ''
+                }
+                callback={handleSubmit}
+                fieldName="actualStartDate"
+                type="date"
+                startDate={
+                  project?.actualStartDate
+                    ? formatDate({ date: project?.actualStartDate, format: 'YYYY-MM-DD' }) || ''
+                    : ''
+                }
+                styleProps={{ transform: 'translate(0, -4px)' }}
+              />
+            ) : project?.actualStartDate ? (
+              formatDate({ date: project.actualStartDate, format: 'DD-MM-YYYY' })
+            ) : (
+              ''
+            ),
+        },
+        {
+          label: t('fields.actualEndDate'),
+          text:
+            canUpdate &&
+            (project?.status === ProjectStatusEnum.Completed ||
+              project?.status === ProjectStatusEnum.Canceled) ? (
+              <InlineEditableField
+                fieldValue={
+                  project?.actualEndDate
+                    ? formatDate({ date: project?.actualEndDate, format: 'YYYY-MM-DD' }) || ''
+                    : ''
+                }
+                callback={handleSubmit}
+                fieldName="actualEndDate"
+                type="date"
+                startDate={
+                  project?.actualEndDate
+                    ? formatDate({ date: project?.actualEndDate, format: 'YYYY-MM-DD' }) || ''
+                    : ''
+                }
+                styleProps={{ transform: 'translate(0, -4px)' }}
+              />
+            ) : project?.actualEndDate ? (
+              formatDate({ date: project.actualEndDate, format: 'DD-MM-YYYY' })
+            ) : (
+              ''
+            ),
         },
       ].filter(Boolean),
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -69,6 +69,18 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
                 format: 'YYYY-MM-DD',
               }) as unknown as Date)
             : undefined,
+          actualStartDate: project.actualStartDate
+            ? (formatDate({
+                date: project.actualStartDate,
+                format: 'YYYY-MM-DD',
+              }) as unknown as Date)
+            : undefined,
+          actualEndDate: project.actualEndDate
+            ? (formatDate({
+                date: project.actualEndDate,
+                format: 'YYYY-MM-DD',
+              }) as unknown as Date)
+            : undefined,
           status: project.status,
           leadId: project.leadId || '',
         },
@@ -169,18 +181,34 @@ export function UpsertProjectWidget(props: UpsertProjectWidgetProps) {
           />
           <SimpleGrid columns={2} spacing={3}>
             <CustomInput
-              label={t('fields.startDate')}
+              label={t('fields.expectStartDate')}
               type="date"
               registration={register('startDate')}
               error={errors.startDate}
             />
             <CustomInput
-              label={t('fields.endDate')}
+              label={t('fields.expectEndDate')}
               type="date"
               registration={register('endDate')}
               error={errors.endDate}
             />
           </SimpleGrid>
+          {isUpdate && (
+            <SimpleGrid columns={2} spacing={3}>
+              <CustomInput
+                label={t('fields.actualStartDate')}
+                type="date"
+                registration={register('actualStartDate')}
+                error={errors.actualStartDate}
+              />
+              <CustomInput
+                label={t('fields.actualEndDate')}
+                type="date"
+                registration={register('actualEndDate')}
+                error={errors.actualEndDate}
+              />
+            </SimpleGrid>
+          )}
           <SimpleGrid columns={2} spacing={3}>
             <CustomInput
               label={t('fields.totalEffort')}
