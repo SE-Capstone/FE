@@ -197,6 +197,7 @@ export function AddNewIssueWidget(props: AddNewIssueWidgetProps) {
             options={listPhase.map((s) => ({
               label: s.title,
               value: s.id,
+              isDisabled: !!s.actualEndDate,
             }))}
             control={control}
             name="phaseId"
