@@ -322,6 +322,7 @@ export function UpsertIssuePage({ isUpdate }: { isUpdate?: boolean }) {
                 options={listPhase.map((s) => ({
                   label: s.title,
                   value: s.id,
+                  isDisabled: !!s.actualEndDate,
                 }))}
                 control={control}
                 name="phaseId"

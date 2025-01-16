@@ -371,7 +371,11 @@ export function ListIssuePage() {
               const { phase, assignee, reporter } = issue;
               return canUpdate(assignee, reporter) ? (
                 <InlineEditCustomSelect
-                  options={phases.map((s) => ({ label: s.title, value: s.id }))}
+                  options={phases.map((s) => ({
+                    label: s.title,
+                    value: s.id,
+                    isDisabled: !!s.actualEndDate,
+                  }))}
                   defaultValue={
                     phase && {
                       label: phase.title,

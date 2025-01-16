@@ -277,6 +277,7 @@ export function DetailIssuePage() {
               options={listPhase.map((p) => ({
                 label: p.title,
                 value: p.id,
+                isDisabled: !!p.actualEndDate,
               }))}
               defaultValue={
                 issue?.phase && {
