@@ -1,5 +1,6 @@
 {
   "common": {
+    "level": "Level",
     "filterDone": "Filter task done",
     "done2": "Done",
     "notDone": "Not done yet",
@@ -361,6 +362,13 @@
     "medium": "Medium",
     "high": "High",
     "highest": "Highest"
+  },
+  "skill": {
+    "novice": "Less than 1 year",
+    "advancedBeginner": "1 to 2 years",
+    "competent": "2 to 3 years",
+    "proficient": "3 to 5 years",
+    "expert": "More than 5 years"
   },
   "groupPermissions": {
     "user": "User",

@@ -1,5 +1,6 @@
 {
   "common": {
+    "level": "Trình độ",
     "filterDone": "Lọc công việc hoàn thành",
     "done2": "Hoàn thành",
     "notDone": "Chưa hoàn thành",
@@ -323,6 +324,13 @@
     "medium": "Vừa",
     "high": "Cao",
     "highest": "Cao nhất"
+  },
+  "skill": {
+    "novice": "Ít hơn 1 năm",
+    "advancedBeginner": "1 đến 2 năm",
+    "competent": "2 đến 3 năm",
+    "proficient": "3 đến 5 năm",
+    "expert": "Hơn 5 năm"
   },
   "groupPermissions": {
     "user": "Người dùng",

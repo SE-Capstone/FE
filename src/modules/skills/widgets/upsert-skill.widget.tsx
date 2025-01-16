@@ -7,7 +7,14 @@ import { useUpsertSkillHook } from '../hooks/mutations';
 
 import type { ISkill } from '../types';
 
-import { CustomFormProvider, CustomInput, CustomTextArea, ModalBase } from '@/components/elements';
+import {
+  CustomChakraReactSelect,
+  CustomFormProvider,
+  CustomInput,
+  CustomTextArea,
+  ModalBase,
+} from '@/components/elements';
+import { getSkillLevel, SKILL_LEVEL_OPTIONS } from '@/configs';
 
 export interface UpsertSkillWidgetProps {
   isUpdate?: boolean;
@@ -28,6 +35,7 @@ export function UpsertSkillWidget(props: UpsertSkillWidgetProps) {
 
   const {
     register,
+    control,
     formState: { errors, isDirty },
     reset: resetForm,
   } = formUpsertSkill;
@@ -38,6 +46,7 @@ export function UpsertSkillWidget(props: UpsertSkillWidgetProps) {
         {
           title: skill.title || '',
           description: skill.description || '',
+          level: skill.level || '',
         },
         {
           keepDirty: false,
@@ -81,6 +90,17 @@ export function UpsertSkillWidget(props: UpsertSkillWidgetProps) {
             isRequired
             registration={register('title')}
             error={errors.title}
+          />
+          <CustomChakraReactSelect
+            placeholder={`${t('common.choose')} ${t('common.level').toLowerCase()}`}
+            label={t('common.level')}
+            options={SKILL_LEVEL_OPTIONS.map((s) => ({
+              label: getSkillLevel(t, s),
+              value: s,
+            }))}
+            isRequired
+            control={control}
+            name="level"
           />
           <CustomTextArea
             label={t('fields.description')}

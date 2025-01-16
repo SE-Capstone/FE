@@ -8,6 +8,7 @@ import {
 
 import { IssuePriorityEnum } from '@/modules/issues/list-issue/types';
 import { ProjectStatusEnum } from '@/modules/projects/list-project/types';
+import { SkillLevelEnum } from '@/modules/skills/types';
 
 export const YESTERDAY = new Date(new Date().valueOf() - 1000 * 60 * 60 * 24);
 
@@ -77,6 +78,14 @@ export const PROJECT_STATUS_OPTIONS = [
   ProjectStatusEnum.Canceled,
 ];
 
+export const SKILL_LEVEL_OPTIONS = [
+  SkillLevelEnum.Novice,
+  SkillLevelEnum.AdvancedBeginner,
+  SkillLevelEnum.Competent,
+  SkillLevelEnum.Proficient,
+  SkillLevelEnum.Expert,
+];
+
 export const PROJECT_VISIBILITY_OPTIONS = [
   {
     label: 'Visible',
@@ -134,6 +143,14 @@ export const ISSUE_PRIORITY_VALUES = (t: any): Record<IssuePriorityEnum, string>
   [IssuePriorityEnum.Medium]: t('issue.medium'),
   [IssuePriorityEnum.High]: t('issue.high'),
   [IssuePriorityEnum.Highest]: t('issue.highest'),
+});
+
+export const SKILL_LEVEL_VALUES = (t: any): Record<SkillLevelEnum, string> => ({
+  [SkillLevelEnum.Novice]: t('skill.novice'),
+  [SkillLevelEnum.AdvancedBeginner]: t('skill.advancedBeginner'),
+  [SkillLevelEnum.Competent]: t('skill.competent'),
+  [SkillLevelEnum.Proficient]: t('skill.proficient'),
+  [SkillLevelEnum.Expert]: t('skill.expert'),
 });
 
 export const PERMISSIONS_VALUES = (t: any): Record<PermissionEnum, string> => ({
@@ -219,6 +236,10 @@ export const PROJECT_STATUS_VALUES = (t: any): Record<ProjectStatusEnum, string>
 
 export function getGender(t: any, gender?: GenderEnum) {
   return gender ? GENDER_VALUES(t)[gender] : '';
+}
+
+export function getSkillLevel(t: any, level?: SkillLevelEnum) {
+  return level ? SKILL_LEVEL_VALUES(t)[level] : '';
 }
 
 export function getPermission(t: any, permission?: PermissionEnum) {

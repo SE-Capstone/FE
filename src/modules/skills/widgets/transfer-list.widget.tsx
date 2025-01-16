@@ -29,7 +29,7 @@ import { useUpsertUserSkillsHook } from '../hooks/mutations/use-upsert-user-skil
 import type { ISkill } from '../types';
 
 import { CustomInput } from '@/components/elements';
-import { PermissionEnum } from '@/configs';
+import { getSkillLevel, PermissionEnum } from '@/configs';
 import { notify } from '@/libs/helpers';
 import { useAuthentication } from '@/modules/profile/hooks';
 
@@ -185,7 +185,7 @@ export default function TransferListWidget({
               isChecked={checked.includes(item)}
               onChange={() => handleToggle(setChecked, checked, item)}
             >
-              <Text noOfLines={2}>{item.title}</Text>
+              <Text noOfLines={2}>{`${item.title} - ${getSkillLevel(t, item.level)}`}</Text>
             </Checkbox>
           ))
         )}

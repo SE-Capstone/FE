@@ -11,7 +11,7 @@ import type { ISkill } from '../types';
 import type { ColumnsProps } from '@/components/elements';
 
 import { Head, StateHandler, TableComponent } from '@/components/elements';
-import { PermissionEnum } from '@/configs';
+import { getSkillLevel, PermissionEnum } from '@/configs';
 import { getNumericalOrder } from '@/libs/helpers';
 import { useAuthentication } from '@/modules/profile/hooks';
 
@@ -47,6 +47,14 @@ export function ListSkillPage() {
             hasSort: false,
             Cell({ title }) {
               return <>{title}</>;
+            },
+          },
+          {
+            key: 'level',
+            title: t('common.level'),
+            hasSort: false,
+            Cell({ level }) {
+              return <>{getSkillLevel(t, level)}</>;
             },
           },
           {
