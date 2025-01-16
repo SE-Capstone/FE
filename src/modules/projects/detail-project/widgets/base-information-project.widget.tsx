@@ -262,7 +262,7 @@ export function BaseInformationProjectWidget({
               styleProps={{ transform: 'translate(0, -4px)' }}
             />
           ) : project?.startDate ? (
-            formatDate({ date: project.startDate, format: 'DD-MM-YYYY' })
+            formatDate({ date: project.startDate, format: 'YYYY-MM-DD' })
           ) : (
             ''
           ),
@@ -287,7 +287,7 @@ export function BaseInformationProjectWidget({
               styleProps={{ transform: 'translate(0, -4px)' }}
             />
           ) : project?.endDate ? (
-            formatDate({ date: project.endDate, format: 'DD-MM-YYYY' })
+            formatDate({ date: project.endDate, format: 'YYYY-MM-DD' })
           ) : (
             ''
           ),
@@ -295,7 +295,7 @@ export function BaseInformationProjectWidget({
         {
           label: t('fields.actualStartDate'),
           text:
-            canUpdate && project?.status === ProjectStatusEnum.InProgress ? (
+            canUpdate && project?.status !== ProjectStatusEnum.NotStarted ? (
               <InlineEditableField
                 fieldValue={
                   project?.actualStartDate
@@ -313,7 +313,7 @@ export function BaseInformationProjectWidget({
                 styleProps={{ transform: 'translate(0, -4px)' }}
               />
             ) : project?.actualStartDate ? (
-              formatDate({ date: project.actualStartDate, format: 'DD-MM-YYYY' })
+              formatDate({ date: project.actualStartDate, format: 'YYYY-MM-DD' })
             ) : (
               ''
             ),
@@ -341,7 +341,7 @@ export function BaseInformationProjectWidget({
                 styleProps={{ transform: 'translate(0, -4px)' }}
               />
             ) : project?.actualEndDate ? (
-              formatDate({ date: project.actualEndDate, format: 'DD-MM-YYYY' })
+              formatDate({ date: project.actualEndDate, format: 'YYYY-MM-DD' })
             ) : (
               ''
             ),

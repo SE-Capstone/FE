@@ -67,13 +67,27 @@ const LineWithDot = ({ phase }: { phase?: IPhase }) => {
                 <Text color="white">{isLate ? t('common.late') : t('common.onTime')}</Text>
                 <Text color="white">
                   {formatDate({
+                    date: phase.actualStartDate!,
+                    format: 'MMM DD, YYYY',
+                  })}
+                </Text>
+                <Text color="white">
+                  {formatDate({
                     date: phase.actualEndDate!,
                     format: 'MMM DD, YYYY',
                   })}
                 </Text>
               </Stack>
             ) : isRunning ? (
-              <Text color="white">{t('common.runningPhase')}</Text>
+              <Stack>
+                <Text color="white">{t('common.runningPhase')}</Text>
+                <Text color="white">
+                  {formatDate({
+                    date: phase.actualStartDate!,
+                    format: 'MMM DD, YYYY',
+                  })}
+                </Text>
+              </Stack>
             ) : (
               ''
             )
