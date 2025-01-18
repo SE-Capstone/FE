@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { IconButton } from '@atlaskit/button/new';
 import DropdownMenu, { DropdownItem, DropdownItemGroup } from '@atlaskit/dropdown-menu';
@@ -45,54 +45,85 @@ import { useGetListLabelQuery } from '@/modules/labels/hooks/queries';
 import { useGetListPhaseQuery } from '@/modules/phases/hooks/queries';
 import { InfoCard } from '@/modules/profile/components';
 import { useAuthentication } from '@/modules/profile/hooks';
+import { useGetDetailProject } from '@/modules/projects/detail-project/apis/detail-project.api';
 import { ProjectStatusEnum } from '@/modules/projects/list-project/types';
 import { useGetListStatusQuery } from '@/modules/statuses/hooks/queries';
 import { APP_PATHS } from '@/routes/paths/app.paths';
 
 export function DetailIssuePage() {
   const { t, i18n } = useTranslation();
-  const { members, project, permissions } = useProjectContext();
+  const { members, permissions, project: projectContext } = useProjectContext();
   const { currentUser } = useAuthentication();
   const { projectId, issueId } = useParams();
 
   const { issue, isLoading, isError } = useGetDetailIssue({ issueId: issueId || '' });
+  const { project } = useGetDetailProject({ projectId: projectId || '' });
+  const [projectStatus, setProjectStatus] = useState(false);
 
+  useEffect(() => {
+    if (
+      (project && project?.status === ProjectStatusEnum.InProgress) ||
+      projectContext?.status === ProjectStatusEnum.InProgress
+    ) {
+      setProjectStatus(true);
+    } else {
+      setProjectStatus(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project, projectId]);
   const { handleUpsertIssue } = useUpsertIssueHook(undefined, true, issue?.id || '');
 
-  const canUpdate = (assignee?: IUpdatedBy, reporter?: IUpdatedBy) => {
-    if (
-      (currentUser?.id === assignee?.id || currentUser?.id === reporter?.id) &&
-      project?.status === ProjectStatusEnum.InProgress
-    ) {
-      return true;
-    }
-    return (
-      permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
-      !!members?.find((m) => m.id === currentUser?.id) &&
-      project?.status === ProjectStatusEnum.InProgress
-    );
-  };
-  const canUpdateReporter = () =>
-    permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
-    members?.find((m) => m.id === currentUser?.id) &&
-    project?.status === ProjectStatusEnum.InProgress;
+  const canUpdate = useCallback(
+    (assignee?: IUpdatedBy, reporter?: IUpdatedBy) => {
+      if (
+        (currentUser?.id === assignee?.id || currentUser?.id === reporter?.id) &&
+        (projectStatus || projectContext?.status === ProjectStatusEnum.InProgress)
+      ) {
+        return true;
+      }
 
-  const canDelete = (reporter?: IUpdatedBy) => {
-    if (currentUser?.id === reporter?.id && project?.status === ProjectStatusEnum.InProgress) {
-      return true;
-    }
-    return (
+      return (
+        permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+        !!members?.find((m) => m.id === currentUser?.id) &&
+        (projectStatus || projectContext?.status === ProjectStatusEnum.InProgress)
+      );
+    },
+    [currentUser?.id, projectStatus, permissions, members, projectContext?.status] // Add dependencies
+  );
+  const canUpdateReporter = useCallback(
+    () =>
       permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
       members?.find((m) => m.id === currentUser?.id) &&
-      project?.status === ProjectStatusEnum.InProgress
-    );
-  };
-  const canUpdateComment = (assignee?: IUpdatedBy) => {
-    if (currentUser?.id === assignee?.id) {
-      return true;
-    }
-    return permissions.includes(ProjectPermissionEnum.IsCommentConfigurator);
-  };
+      (projectStatus || projectContext?.status === ProjectStatusEnum.InProgress),
+    [permissions, members, projectStatus, projectContext?.status, currentUser?.id] // Add dependencies
+  );
+
+  const canDelete = useCallback(
+    (reporter?: IUpdatedBy) => {
+      if (
+        currentUser?.id === reporter?.id &&
+        (projectStatus || projectContext?.status === ProjectStatusEnum.InProgress)
+      ) {
+        return true;
+      }
+
+      return (
+        permissions.includes(ProjectPermissionEnum.IsIssueConfigurator) &&
+        members?.find((m) => m.id === currentUser?.id) &&
+        (projectStatus || projectContext?.status === ProjectStatusEnum.InProgress)
+      );
+    },
+    [currentUser?.id, projectStatus, permissions, members, projectContext?.status] // Add dependencies
+  );
+  const canUpdateComment = useCallback(
+    (assignee?: IUpdatedBy) => {
+      if (currentUser?.id === assignee?.id) {
+        return true;
+      }
+      return permissions.includes(ProjectPermissionEnum.IsCommentConfigurator);
+    },
+    [currentUser?.id, permissions] // Add dependencies
+  );
 
   const { listStatus, isLoading: isLoading2 } = useGetListStatusQuery({
     params: {
@@ -326,7 +357,7 @@ export function DetailIssuePage() {
           ),
         },
         {
-          label: t('fields.estimatedTime'),
+          label: `${t('fields.estimatedTime')} (h)`,
           text: (
             <InlineEditableField
               fieldValue={issue?.estimatedTime?.toString() || ''}
@@ -338,7 +369,7 @@ export function DetailIssuePage() {
           ),
         },
         {
-          label: t('fields.actualTime'),
+          label: `${t('fields.actualTime')} (h)`,
           text: (
             <InlineEditableField
               fieldValue={issue?.actualTime?.toString() || ''}
@@ -558,7 +589,7 @@ export function DetailIssuePage() {
                 </Text>
                 {!issue?.parentIssueId &&
                   !!members?.find((m) => m.id === currentUser?.id) &&
-                  project?.status === ProjectStatusEnum.InProgress && (
+                  projectStatus && (
                     <Menu>
                       <MenuButton
                         as={Button}
@@ -814,9 +845,7 @@ export function DetailIssuePage() {
                   >
                     <DropdownItemGroup title={t('fields.actions')}>
                       <DropdownItem
-                        onClick={() =>
-                          navigate(`/projects/${project?.id}/issues/${issue?.id}/edit`)
-                        }
+                        onClick={() => navigate(`/projects/${project?.id}/tasks/${issue?.id}/edit`)}
                       >
                         {t('actions.edit')}
                       </DropdownItem>

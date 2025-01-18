@@ -34,7 +34,7 @@ export function SkillsAsyncSelect<TFormValues extends FieldValues, IsMulti exten
     // const isDisabled = defaultSkillValue?.includes(Skill.id);
     ({
       value: skill.id,
-      label: skill.title,
+      label: `${skill.title} - ${skill.level}`,
       // isDisabled,
     })
   );

@@ -107,8 +107,9 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
     }
   }, [listPhase]);
 
-  const getStartDate = useMemo(
-    () =>
+  const getStartDate = useMemo(() => {
+    const now = new Date();
+    let startDate =
       projectStatisticQueryState.filters.startDate ||
       (projectStatisticQueryState.filters.endDate
         ? new Date(
@@ -116,10 +117,15 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
               new Date(projectStatisticQueryState.filters.endDate).getFullYear() - 1
             )
           )
-        : new Date(new Date().setFullYear(new Date().getFullYear() - 1))),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [projectStatisticQueryState.filters.endDate, projectStatisticQueryState.filters.startDate]
-  );
+        : new Date(new Date().setFullYear(new Date().getFullYear() - 1)));
+
+    // Check if startDate is greater than now, and set it to now if true
+    if (startDate && new Date(startDate).getTime() > now.getTime()) {
+      startDate = new Date(now.getTime() - 360000);
+    }
+
+    return startDate;
+  }, [projectStatisticQueryState.filters.endDate, projectStatisticQueryState.filters.startDate]);
 
   const { statusReport, isLoading, isError, refetch } = useGetStatusReport({
     req: {
@@ -361,11 +367,11 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
             <SearchInput
               placeholder={`${t('common.choose')} ${t('fields.startDate').toLowerCase()}...`}
               type="date"
-              isSetMax={!!projectStatisticQueryState.filters.endDate}
+              isSetMax
               maxDate={
                 projectStatisticQueryState.filters.endDate
                   ? new Date(projectStatisticQueryState.filters.endDate)
-                  : undefined
+                  : new Date()
               }
               initValue={projectStatisticQueryState.filters.startDate || ''}
               inputGroupProps={{
@@ -383,7 +389,7 @@ export function ProjectStatisticPage({ project }: { project?: IProject }) {
               placeholder={`${t('common.choose')} ${t('fields.endDate').toLowerCase()}...`}
               type="date"
               isSetMax
-              // maxDate={new Date()}
+              maxDate={new Date()}
               minDate={
                 projectStatisticQueryState.filters.startDate
                   ? new Date(projectStatisticQueryState.filters.startDate)

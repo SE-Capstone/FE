@@ -55,6 +55,7 @@ export function useGetTaskCompleteByDateReport(params: UseGetTaskCompleteByDateR
     placeholderData: (previousData) => previousData,
     queryKey,
     queryFn: () => query(req),
+    throwOnError: false,
     ...configs,
   });
 
