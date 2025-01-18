@@ -138,6 +138,7 @@ export function AddNewUserWidget(props: AddNewUserWidgetProps) {
           <HStack align="stretch">
             <SkillsAsyncSelect
               isMulti
+              placeholder={`${t('common.choose')} ${t('common.skill').toLowerCase()}`}
               label={t('common.skill')}
               onChange={(options) => {
                 setSelectedOptions(options.map((opt) => opt.value as string).filter(Boolean));

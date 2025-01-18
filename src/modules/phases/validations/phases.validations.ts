@@ -20,7 +20,7 @@ export const phaseFormSchema = (t: any) =>
     })
     .refine((data) => data.expectedEndDate >= data.expectedStartDate, {
       message: t('validation.project.endDateInvalid'),
-      path: ['endDate'],
+      path: ['expectedEndDate'],
     });
 
 export type PhaseFormValues = z.infer<ReturnType<typeof phaseFormSchema>>;
